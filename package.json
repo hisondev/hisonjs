@@ -1,0 +1,35 @@
+{
+  "name": "hisonjs",
+  "version": "1.0.0",
+  "description": "hisondev's client-side development support module",
+  "main": "dist/hisonjs.bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hisondev/hisonjs.git"
+  },
+  "keywords": [
+    "hisondev",
+    "hisonjs",
+    "devtool",
+    "development"
+  ],
+  "author": "Hani Son",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hisondev/hisonjs/issues"
+  },
+  "homepage": "https://hiosndev.github.io/",
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^4.9.5",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.0.0"
+  }
+}
