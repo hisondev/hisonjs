@@ -2,6 +2,7 @@
     "compilerOptions": {
       "target": "ES5",
       "module": "ES6",
+      "lib": ["es2019", "dom"], // es2019 또는 그 이상의 버전 추가
       "strict": false,
       "esModuleInterop": true,
       "skipLibCheck": true,
