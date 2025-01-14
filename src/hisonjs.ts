@@ -10,12 +10,12 @@
  * // When set the hison.data.convertValue
  * hison.data.convertValue = function(value) {
  *     if (value instanceof Date) {
- *          var year = value.getFullYear();
- *          var month = value.getMonth() + 1;
- *          var day = value.getDate();
- *          var hour = value.getHours();
- *          var minute = value.getMinutes();
- *          var second = value.getSeconds();
+ *          let year = value.getFullYear();
+ *          let month = value.getMonth() + 1;
+ *          let day = value.getDate();
+ *          let hour = value.getHours();
+ *          let minute = value.getMinutes();
+ *          let second = value.getSeconds();
  *          month = month < 10 ? '0' + month : month;
  *          day = day < 10 ? '0' + day : day;
  *          hour = hour < 10 ? '0' + hour : hour;
@@ -150,7 +150,7 @@ function createHison() {
             isPossibleOpenDevTool : false,
         };
         data = {
-            convertValue : function(value: any): any {return value;},
+            convertValue(value: any): any {return value;},
         };
         link = {
             protocol : 'http://',
@@ -160,54 +160,220 @@ function createHison() {
             webSocketProtocol : 'ws://',
             webSocketEndPoint : '/hison-caching-websocket-endpoint',
             webSocketlimit : 10,
-            beforeGetRequst : function(resourcePath: string, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforePostRequst : function(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforePutRequst : function(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforePatchRequst : function(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforeDeleteRequst : function(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforeCallbackWorked : function(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
-            beforeCallbackError : function(error: any): boolean | void {return true;},
+            beforeGetRequst(resourcePath: string, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
+            beforePostRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
+            beforePutRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
+            beforePatchRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
+            beforeDeleteRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
+            beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
+            beforeCallbackError(error: any): boolean | void {return true;},
         };
     }
     const option = new Option();
     let _hison: Hison;
 
     class Hison implements Hison{
-        /**
-         * Javascript의 다양한 기능을 가지고있는 object를 반환합니다.
-         * @returns {Object} {function hisonShield}
-         * 
-         * @example
-         * utils.isAlpha();
-         * 
-         * @description
-         * boolean형 utils
-         * Date형 utils
-         * number형 utils
-         * string형 utils
-         * 형변환 utils가 있습니다.
-         */
         utils = {
-            isAlpha: function(str: string):boolean {
+            //for boolean
+            isAlpha(str: string):boolean {
                 return /^[A-Za-z]+$/.test(str);
             },
-        };
-        /**
-         * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
-         * 
-         * @returns {Object} {function hisonShield}
-         * 
-         * @example
-         * sheild.hisonShield(); // Initializes and executes the security measures.
-         * 
-         * @description
-         * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
-         * hison 객체에 대해 Object.freeze()를 처리합니다. desfatched
-         * localhost를 제외한 모든 URL 또는 특정 URL에 대해 개발자 모드 접근을 봉쇄합니다.
-         * localhost를 제외한 모든 URL 또는 특정 URL에 대해 뒤로가기를 봉쇄합니다.
-         */
-        shield = {
+            isNumeric(num) {
+                return !isNaN(num) && isFinite(num);
+            },
 
+            getNumberFormat(value: number, format?: string) {
+                const oriValue = value;
+                if (!_hison.utils.isNumeric(value)) {
+                    throw new Error(`ER0021 Invalid number\n=>${JSON.stringify(oriValue)}`);
+                }
+                format = format ? format : option.utils.numberFormat;
+                const regex = /^(.*?)([#0,.]+)(.*?)$/;
+                const matches = format.match(regex);
+        
+                if (!matches) {
+                    throw new Error(`ER0022 Invalid format\n=>${JSON.stringify(format)}`);
+                }
+        
+                const prefix = matches[1];
+                const numberFormat = matches[2];
+                const suffix = matches[3];
+                const intergerFormat = numberFormat.split('.')[0];
+                const decimalFormat = numberFormat.split('.').length > 1 ? numberFormat.split('.')[1] : '';
+        
+                if (suffix === '%' || suffix === ' %') value = value * 100;
+        
+                let numStr = _hison.utils.getToString(value);
+                const isNegative = numStr[0] === '-';
+                numStr = isNegative ? numStr.substring(1) : numStr;
+                let interger = numStr.split('.')[0];
+                let decimal = numStr.split('.').length > 1 ? numStr.split('.')[1] : '';
+                
+                let result: string;
+        
+                decimal = _hison.utils.getToFloat('0.' + decimal)
+                        .toLocaleString('en',{
+                            minimumFractionDigits: decimalFormat.lastIndexOf('0') + 1,
+                            maximumFractionDigits: decimalFormat.length
+                            });
+                if (decimal === '0') decimal = '';
+                else decimal = decimal.substring(1);
+        
+                switch (intergerFormat) {
+                    case "#,###":
+                        if (_hison.utils.getToNumber(interger) === 0) {
+                            result = decimal;
+                        }
+                        else {
+                            interger = _hison.utils.getToFloat(interger).toLocaleString('en');
+                            result = interger + decimal;
+                        }
+                        break;
+                    case "#,##0":
+                        interger = _hison.utils.getToFloat(interger).toLocaleString('en');
+                        result = interger + decimal;
+                        break;
+                    case "#":
+                        if (_hison.utils.getToNumber(interger) === 0) {
+                            result = decimal;
+                        }
+                        else {
+                            result = interger + decimal;
+                        }
+                        break;
+                    case "0":
+                        result = interger + decimal;
+                        break;
+                    default:
+                        throw new Error(`ER0023 Invalid format\n=>${JSON.stringify(format)}`);
+                }
+            
+                result = isNegative ? '-' + result : result;
+                return prefix + result + suffix;
+            },
+            //for Date
+
+            //for number
+
+            //for string
+
+            //for convertor
+            getToNumber(val: any, impossibleValue?: number) {
+                impossibleValue = impossibleValue === undefined ? 0 : impossibleValue;
+                if (!_hison.utils.isNumeric(val)) {
+                    return impossibleValue;
+                }
+                return Number(val);
+            },
+            getToFloat(val: any, impossibleValue?: number) {
+                impossibleValue = impossibleValue === undefined ? 0 : impossibleValue;
+                if (!_hison.utils.isNumeric(val)) {
+                    return impossibleValue;
+                }
+                return parseFloat(val);
+            },
+            getToString(str: any, impossibleValue?: string) {
+                impossibleValue = impossibleValue === undefined ? '' : impossibleValue;
+                if (typeof str === 'string') {
+                } else if (typeof str === 'number' || typeof str === 'boolean' || typeof str === 'bigint') {
+                    str = String(str);
+                } else if (typeof str === 'symbol') {
+                    str = (str as Symbol).description;
+                } else {
+                    str = impossibleValue;
+                }
+                return str;
+            },
+            //etc
+        };
+        shield = {
+            excute(hison: Hison) {
+                const deepFreeze = function(object: any) {
+                    var propNames = Object.getOwnPropertyNames(object);
+                
+                    propNames.forEach(function(name) {
+                        var prop = object[name];
+                
+                        if (typeof prop == 'object' && prop !== null) {
+                            deepFreeze(prop);
+                        }
+                    });
+                    
+                    return Object.freeze(object);
+                };
+                const shieldFuncGetIp = function(func: Function) {
+                    var httpRequest = new XMLHttpRequest();
+                    httpRequest.onreadystatechange = () => {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                var result = httpRequest.response;
+                                func(result);
+                            } else {
+                                func(null);
+                            }
+                        }
+                    };
+                    httpRequest.open('get', '/ajax/getIp');
+                    httpRequest.responseType = 'json';
+                    httpRequest.send();
+                }
+                const shieldFuncCreateBlockDevMode = function() {
+                    var msg = "Developer mode is not available.";
+                    document.onkeydown = function(event) {
+                        if (event.key === "F12") {
+                            alert(msg);
+                            event.preventDefault();
+                            return false;
+                        }
+                    };
+                    
+                    function detectDevTool(allow?: any) {
+                        if (isNaN(+allow)) allow = 100;
+                        var start = +new Date();
+                        debugger;
+                        var end = +new Date();
+                        if (isNaN(start) || isNaN(end) || end - start > allow) {
+                            alert(msg);
+                            document.write(msg);
+                        }
+                    }
+                    
+                    window.addEventListener('load', detectDevTool);
+                    window.addEventListener('resize', detectDevTool);
+                    window.addEventListener('mousemove', detectDevTool);
+                    window.addEventListener('focus', detectDevTool);
+                    window.addEventListener('blur', detectDevTool);
+                }
+                //excute
+                if (option.shield.isFreeze) {
+                    deepFreeze(hison);
+                }
+                
+                if (option.shield.isSheld && location.href.indexOf('localhost') < 0){
+                    if (option.shield.shieldURL && location.href.indexOf(option.shield.shieldURL) < 0 ){
+                        return;
+                    }
+    
+                    shieldFuncGetIp(function(response: any) {
+                        var ip = response && response.ip ? response.ip : '';
+                        if (ip && option.shield.exposeIpList.indexOf(ip) >= 0) {
+                            return;
+                        }
+    
+                        if (!option.shield.isPossibleGoBack) {
+                            history.pushState(null, document.title, location.href);//현재 URL push
+                            window.addEventListener('popstate', function() {  //뒤로가기 이벤트 등록
+                                history.pushState(null, document.title, location.href); //다시 push함으로 뒤로가기 방지
+                            });
+                        }
+                        
+                        if (!option.shield.isPossibleOpenDevTool) {
+                            shieldFuncCreateBlockDevMode();
+                            return;
+                        }
+                    });
+                }
+            }
         };
         data = {
             /**
@@ -253,59 +419,59 @@ function createHison() {
         //option utils set
         //====================================================================================
         //set
-        setDateFormat : function(str: string) {option.utils.dateFormat = str;},
-        setTimeFormat : function(str: string) {option.utils.timeFormat = str;},
-        setDatetimeFormat : function(str: string) {option.utils.datetimeFormat = str;},
-        setYearFormat : function(str: string) {option.utils.yearFormat = str;},
-        setMonthFormat : function(str: string) {option.utils.monthFormat = str;},
-        setMonthNameFormat : function(str: string) {option.utils.monthNameFormat = str;},
-        setYearMonthFormat : function(str: string) {option.utils.yearMonthFormat = str;},
-        setDayFormat : function(str: string) {option.utils.dayFormat = str;},
-        setDayOfWeekFormat : function(str: string) {option.utils.dayOfWeekFormat = str;},
-        setHourFormat : function(str: string) {option.utils.hourFormat = str;},
-        setHourMinuteFormat : function(str: string) {option.utils.hourMinuteFormat = str;},
-        setMinuteFormat : function(str: string) {option.utils.minuteFormat = str;},
-        setSecondFormat : function(str: string) {option.utils.secondFormat = str;},
-        setNumberFormat : function(str: string) {option.utils.numberFormat = str;},
-        setLESSOREQ_0X7FF_BYTE : function(num: number) {option.utils.LESSOREQ_0X7FF_BYTE = num;},
-        setLESSOREQ_0XFFFF_BYTE : function(num: number) {option.utils.LESSOREQ_0XFFFF_BYTE = num;},
-        setGREATER_0XFFFF_BYTE : function(num: number) {option.utils.GREATER_0XFFFF_BYTE = num;},
+        setDateFormat(str: string) {option.utils.dateFormat = str;},
+        setTimeFormat(str: string) {option.utils.timeFormat = str;},
+        setDatetimeFormat(str: string) {option.utils.datetimeFormat = str;},
+        setYearFormat(str: string) {option.utils.yearFormat = str;},
+        setMonthFormat(str: string) {option.utils.monthFormat = str;},
+        setMonthNameFormat(str: string) {option.utils.monthNameFormat = str;},
+        setYearMonthFormat(str: string) {option.utils.yearMonthFormat = str;},
+        setDayFormat(str: string) {option.utils.dayFormat = str;},
+        setDayOfWeekFormat(str: string) {option.utils.dayOfWeekFormat = str;},
+        setHourFormat(str: string) {option.utils.hourFormat = str;},
+        setHourMinuteFormat(str: string) {option.utils.hourMinuteFormat = str;},
+        setMinuteFormat(str: string) {option.utils.minuteFormat = str;},
+        setSecondFormat(str: string) {option.utils.secondFormat = str;},
+        setNumberFormat(str: string) {option.utils.numberFormat = str;},
+        setLESSOREQ_0X7FF_BYTE(num: number) {option.utils.LESSOREQ_0X7FF_BYTE = num;},
+        setLESSOREQ_0XFFFF_BYTE(num: number) {option.utils.LESSOREQ_0XFFFF_BYTE = num;},
+        setGREATER_0XFFFF_BYTE(num: number) {option.utils.GREATER_0XFFFF_BYTE = num;},
         //get
-        getDateFormat : function() {return option.utils.dateFormat;},
-        getTimeFormat : function() {return option.utils.timeFormat;},
-        getDatetimeFormat : function() {return option.utils.datetimeFormat;},
-        getYearFormat : function() {return option.utils.yearFormat;},
-        getMonthFormat : function() {return option.utils.monthFormat;},
-        getMonthNameFormat : function() {return option.utils.monthNameFormat;},
-        getYearMonthFormat : function() {return option.utils.yearMonthFormat;},
-        getDayFormat : function() {return option.utils.dayFormat;},
-        getDayOfWeekFormat : function() {return option.utils.dayOfWeekFormat;},
-        getHourFormat : function() {return option.utils.hourFormat;},
-        getHourMinuteFormat : function() {return option.utils.hourMinuteFormat;},
-        getMinuteFormat : function() {return option.utils.minuteFormat;},
-        getSecondFormat : function() {return option.utils.secondFormat;},
-        getNumberFormat : function() {return option.utils.numberFormat;},
-        getLESSOREQ_0X7FF_BYTE : function() {return option.utils.LESSOREQ_0X7FF_BYTE;},
-        getLESSOREQ_0XFFFF_BYTE : function() {return option.utils.LESSOREQ_0XFFFF_BYTE;},
-        getGREATER_0XFFFF_BYTE : function() {return option.utils.GREATER_0XFFFF_BYTE;},
+        getDateFormat() {return option.utils.dateFormat;},
+        getTimeFormat() {return option.utils.timeFormat;},
+        getDatetimeFormat() {return option.utils.datetimeFormat;},
+        getYearFormat() {return option.utils.yearFormat;},
+        getMonthFormat() {return option.utils.monthFormat;},
+        getMonthNameFormat() {return option.utils.monthNameFormat;},
+        getYearMonthFormat() {return option.utils.yearMonthFormat;},
+        getDayFormat() {return option.utils.dayFormat;},
+        getDayOfWeekFormat() {return option.utils.dayOfWeekFormat;},
+        getHourFormat() {return option.utils.hourFormat;},
+        getHourMinuteFormat() {return option.utils.hourMinuteFormat;},
+        getMinuteFormat() {return option.utils.minuteFormat;},
+        getSecondFormat() {return option.utils.secondFormat;},
+        getNumberFormat() {return option.utils.numberFormat;},
+        getLESSOREQ_0X7FF_BYTE() {return option.utils.LESSOREQ_0X7FF_BYTE;},
+        getLESSOREQ_0XFFFF_BYTE() {return option.utils.LESSOREQ_0XFFFF_BYTE;},
+        getGREATER_0XFFFF_BYTE() {return option.utils.GREATER_0XFFFF_BYTE;},
 
         //====================================================================================
-        //option sheild set
+        //option shield set
         //====================================================================================
         //set
-        setShieldURL : function(str: string) {option.shield.shieldURL = str;},
-        setExposeIpList : function(arr: []) {option.shield.exposeIpList = arr;},
-        setIsFreeze : function(bool: boolean) {option.shield.isFreeze = bool;},
-        setIsSheld : function(bool: boolean) {option.shield.isSheld = bool;},
-        setIsPossibleGoBack : function(bool: boolean) {option.shield.isPossibleGoBack = bool;},
-        setIsPossibleOpenDevTool : function(bool: boolean) {option.shield.isPossibleOpenDevTool = bool;},
+        setShieldURL(str: string) {option.shield.shieldURL = str;},
+        setExposeIpList(arr: []) {option.shield.exposeIpList = arr;},
+        setIsFreeze(bool: boolean) {option.shield.isFreeze = bool;},
+        setIsSheld(bool: boolean) {option.shield.isSheld = bool;},
+        setIsPossibleGoBack(bool: boolean) {option.shield.isPossibleGoBack = bool;},
+        setIsPossibleOpenDevTool(bool: boolean) {option.shield.isPossibleOpenDevTool = bool;},
         //get
-        getShieldURL : function() {return option.shield.shieldURL;},
-        getExposeIpList : function() {return option.shield.exposeIpList;},
-        getIsFreeze : function() {return option.shield.isFreeze;},
-        getIsSheld : function() {return option.shield.isSheld;},
-        getIsPossibleGoBack : function() {return option.shield.isPossibleGoBack;},
-        getIsPossibleOpenDevTool : function() {return option.shield.isPossibleOpenDevTool;},
+        getShieldURL() {return option.shield.shieldURL;},
+        getExposeIpList() {return option.shield.exposeIpList;},
+        getIsFreeze() {return option.shield.isFreeze;},
+        getIsSheld() {return option.shield.isSheld;},
+        getIsPossibleGoBack() {return option.shield.isPossibleGoBack;},
+        getIsPossibleOpenDevTool() {return option.shield.isPossibleOpenDevTool;},
 
         //====================================================================================
         //option data set
@@ -338,56 +504,108 @@ function createHison() {
          *   data insertions will utilize the custom logic provided in the function.
          * - The default `convertValue` function simply returns the input value unchanged.
          */
-        setConvertValue : function (func: ConvertValue) {option.data.convertValue = func;},
+        setConvertValue(func: ConvertValue) {option.data.convertValue = func;},
 
         //====================================================================================
         //option link set
         //====================================================================================
         //set
-        setProtocol : function(str: string) {option.link.protocol = str;},
-        setDomain : function(str: string) {option.link.domain = str;},
-        setControllerPath : function(str: string) {option.link.controllerPath = str;},
-        setTimeout : function(num: number) {option.link.timeout = num;},
-        setWebSocketProtocol : function(str: string) {option.link.webSocketProtocol = str;},
-        setWebSocketEndPoint : function(str: string) {option.link.webSocketEndPoint = str;},
-        setWebSocketlimit : function(num: number) {option.link.webSocketlimit = num;},
+        setProtocol(str: string) {option.link.protocol = str;},
+        setDomain(str: string) {option.link.domain = str;},
+        setControllerPath(str: string) {option.link.controllerPath = str;},
+        setTimeout(num: number) {option.link.timeout = num;},
+        setWebSocketProtocol(str: string) {option.link.webSocketProtocol = str;},
+        setWebSocketEndPoint(str: string) {option.link.webSocketEndPoint = str;},
+        setWebSocketlimit(num: number) {option.link.webSocketlimit = num;},
         //get
-        getProtocol : function() {return option.link.protocol;},
-        getDomain : function() {return option.link.domain;},
-        getControllerPath : function() {return option.link.controllerPath;},
-        getTimeout : function() {return option.link.timeout;},
-        getWebSocketProtocol : function() {return option.link.webSocketProtocol;},
-        getWebSocketEndPoint : function() {return option.link.webSocketEndPoint;},
-        getWebSocketlimit : function() {return option.link.webSocketlimit;},
+        getProtocol() {return option.link.protocol;},
+        getDomain() {return option.link.domain;},
+        getControllerPath() {return option.link.controllerPath;},
+        getTimeout() {return option.link.timeout;},
+        getWebSocketProtocol() {return option.link.webSocketProtocol;},
+        getWebSocketEndPoint() {return option.link.webSocketEndPoint;},
+        getWebSocketlimit() {return option.link.webSocketlimit;},
         //function set
-        setBeforeGetRequst : function(func: BeforeGetRequst) {option.link.beforeGetRequst = func;},
-        setBeforePostRequst : function(func: BeforePostRequst) {option.link.beforePostRequst = func},
-        setBeforePutRequst : function(func: BeforePutRequst) {option.link.beforePutRequst = func},
-        setBeforePatchRequst : function(func: BeforePatchRequst) {option.link.beforePatchRequst = func},
-        setBeforeDeleteRequst : function(func: BeforeDeleteRequst) {option.link.beforeDeleteRequst = func},
-        setBeforeCallbackWorked : function(func: BeforeCallbackWorked) {option.link.beforeCallbackWorked = func},
-        setBeforeCallbackError : function(func: BeforeCallbackError) {option.link.beforeCallbackError = func},
+        setBeforeGetRequst(func: BeforeGetRequst) {option.link.beforeGetRequst = func;},
+        setBeforePostRequst(func: BeforePostRequst) {option.link.beforePostRequst = func},
+        setBeforePutRequst(func: BeforePutRequst) {option.link.beforePutRequst = func},
+        setBeforePatchRequst(func: BeforePatchRequst) {option.link.beforePatchRequst = func},
+        setBeforeDeleteRequst(func: BeforeDeleteRequst) {option.link.beforeDeleteRequst = func},
+        setBeforeCallbackWorked(func: BeforeCallbackWorked) {option.link.beforeCallbackWorked = func},
+        setBeforeCallbackError(func: BeforeCallbackError) {option.link.beforeCallbackError = func},
 
         //====================================================================================
-        //option link set
+        //utils
         //====================================================================================
         /**
-         * Checks if the given string consists only of English alphabet characters.
-         * This method uses a regular expression to test whether the input string contains
-         * only letters (both uppercase and lowercase) from A to Z.
-         *
-         * @param {string} str - The string to be tested.
-         * @returns {boolean} Returns true if the string consists only of English alphabet characters; otherwise, false.
-         *
+         * Javascript의 다양한 기능을 가지고있는 object를 반환합니다.
+         * @returns {Object} {utils}
+         * 
          * @example
-         * // returns true
-         * hison.utils.isAlpha("HelloWorld");
-         *
-         * @example
-         * // returns false
-         * hison.utils.isAlpha("Hello World! 123");
+         * utils.isAlpha();
+         * 
+         * @description
+         * boolean형 utils
+         * Date형 utils
+         * number형 utils
+         * string형 utils
+         * 형변환 utils가 있습니다.
          */
-        isAlpha: hison.utils.isAlpha,
+        utils : {
+            // for boolean
+            /**
+             * Checks if the given string consists only of English alphabet characters.
+             * This method uses a regular expression to test whether the input string contains
+             * only letters (both uppercase and lowercase) from A to Z.
+             *
+             * @param {string} str - The string to be tested.
+             * @returns {boolean} Returns true if the string consists only of English alphabet characters; otherwise, false.
+             *
+             * @example
+             * // returns true
+             * hison.utils.isAlpha("HelloWorld");
+             *
+             * @example
+             * // returns false
+             * hison.utils.isAlpha("Hello World! 123");
+             */
+            isAlpha: hison.utils.isAlpha,
+            isNumeric: hison.utils.isNumeric,
+            // for Date
+            // for number
+            // for string
+            getNumberFormat: hison.utils.getNumberFormat,
+            // for convertor
+            getToNumber: hison.utils.getToNumber,
+            getToFloat: hison.utils.getToFloat,
+            getToString: hison.utils.getToString,
+            // etc
+        },
+
+        //====================================================================================
+        //shield
+        //====================================================================================
+        /**
+         * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
+         * 
+         * @returns {Object} {function hisonShield}
+         * 
+         * @example
+         * shield.hisonShield(); // Initializes and executes the security measures.
+         * 
+         * @description
+         * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
+         * hison 객체에 대해 Object.freeze()를 처리합니다. desfatched
+         * localhost를 제외한 모든 URL 또는 특정 URL에 대해 개발자 모드 접근을 봉쇄합니다.
+         * localhost를 제외한 모든 URL 또는 특정 URL에 대해 뒤로가기를 봉쇄합니다.
+         */
+        shield : {
+            excute: hison.shield.excute,
+        },
+        
+        //====================================================================================
+        //data
+        //====================================================================================
         /**
          * DataWrapper와 DataModel 생성자를 가진 객체입니다.
          * 
@@ -415,6 +633,10 @@ function createHison() {
          * hisondev 플랫폼의 api-link와 통신을 지원하는 javasctript 통신 인스턴스인 ApiLink와.
          * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
          */
+        
+        //====================================================================================
+        //link
+        //====================================================================================
         link: hison.link,
     }
 }
@@ -422,10 +644,8 @@ function createHison() {
 
 const hison = createHison();
 
-console.log(hison);
 const dw = new hison.data.DataWrapper();
 const cm = new hison.link.CachingModule();
-console.log(dw);
-console.log(cm);
+hison.shield.excute(hison);
 
 export default createHison();
