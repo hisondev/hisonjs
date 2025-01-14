@@ -1,4 +1,48 @@
 /**
+ * The hison object is a container for configuration values and methods required for using the hisondev solution.
+ * It includes the following sub-objects:
+ * 
+ * - hison.const: Contains constants required for overall configuration.
+ * - hison.data: Provides functionalities for DataWrapper and DataModel.
+ * - hison.link: Offers features necessary for ApiLink.
+ * - hison.caching: Includes functionalities for the caching module.
+ * - hison.utils: A collection of various common utility methods.
+ * 
+ * The hison object is finally defined in the shield.js file through the finalDefinehison() method.
+ * After its definition, it is frozen and hidden to prevent external access and modification.
+ * All utils' methods have no dependency on each other.
+ * When an error occurs, null is usually returned and the cause of the error is displayed on the console. This is to ensure that logic progresses continuously without errors occurring in the client for user UI/UX experience.
+ * 
+ * @namespace Hison
+ */
+interface Hison {
+    utils: {};
+    shield: {};
+    data: {
+        DataWrapper: new () => DataWrapper;
+        DataModel: new () => DataModel;
+    };
+    link: {
+        CachingModule: new () => any;
+        ApiLink: new () => any;
+    }
+}
+//====================================================================================
+//utils interface, type
+//====================================================================================
+interface DateObject {
+    y: number | null;
+    M: number | null;
+    d: number | null;
+}
+//====================================================================================
+//shield interface, type
+//====================================================================================
+
+//====================================================================================
+//datamodel interface, type
+//====================================================================================
+/**
  * Converts special values into a predefined format before they are inserted into the DataModel.
  * This function allows for custom handling of values like Date, or other special values, to ensure
  * they are stored in the DataModel in a consistent and predictable format. By default, it returns the value as is.
@@ -38,6 +82,15 @@
 interface ConvertValue {
     (value: any): any; // return은 무조건 있어야함을 어떻게 정의? return null이든 뭐든
 };
+interface DataWrapper {
+
+};
+interface DataModel {
+
+};
+//====================================================================================
+//link interface, type
+//====================================================================================
 /** hison.link.protocol is the protocol value for the URL used to call APIs in apiLink. */
 type Protocol = string;
 /** hison.link.domain is the domain value for the URL used to call APIs in apiLink. */
@@ -83,25 +136,6 @@ interface BeforePatchRequst {(requestDw: DataWrapper, callbackWorkedFunc: callba
 interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;};
 interface BeforeCallbackWorked extends callbackWorked {};
 interface BeforeCallbackError extends callbackError {};
-interface DataWrapper {
-
-};
-interface DataModel {
-
-};
-interface Hison {
-    utils: {};
-    shield: {};
-    data: {
-        DataWrapper: new () => DataWrapper;
-        DataModel: new () => DataModel;
-    };
-    link: {
-        CachingModule: new () => any;
-        ApiLink: new () => any;
-    }
-}
-
 
 /**
  * The hison object is a container for configuration values and methods required for using the hisondev solution.
@@ -117,6 +151,8 @@ interface Hison {
  * After its definition, it is frozen and hidden to prevent external access and modification.
  * All utils' methods have no dependency on each other.
  * When an error occurs, null is usually returned and the cause of the error is displayed on the console. This is to ensure that logic progresses continuously without errors occurring in the client for user UI/UX experience.
+ * 
+ * 어떻게 사용하는지 명시
  * 
  * @namespace Hison
  */
@@ -145,7 +181,6 @@ function createHison() {
             shieldURL : "",
             exposeIpList : ["0:0:0:0:0:0:0:1"],
             isFreeze : true,
-            isSheld : true,
             isPossibleGoBack : false,
             isPossibleOpenDevTool : false,
         };
@@ -175,13 +210,211 @@ function createHison() {
     class Hison implements Hison{
         utils = {
             //for boolean
-            isAlpha(str: string):boolean {
+            isAlpha(str: string): boolean {
                 return /^[A-Za-z]+$/.test(str);
             },
-            isNumeric(num) {
+            isAlphaNumber(str: string): boolean {
+                return /^[A-Za-z0-9]+$/.test(str);
+            },
+            isNumber(str: string): boolean {
+                return /^[0-9]+$/.test(str);
+            },
+            isNumberSymbols(str: string): boolean {
+                return /^[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]+$/.test(str);
+            },
+            isIncludeSymbols(str: string): boolean {
+                return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(str);
+            },
+            isLowerAlpha(str: string): boolean {
+                return /^[a-z]+$/.test(str);
+            },
+            isLowerAlphaAndNumber(str: string): boolean {
+                return /^[a-z0-9]+$/.test(str);
+            },
+            isUpperAlpha(str: string): boolean {
+                return /^[A-Z]+$/.test(str);
+            },
+            isUpperAlphaNumber(str: string): boolean {
+                return /^[A-Z0-9]+$/.test(str);
+            },
+            isNumeric(num: any): boolean {
                 return !isNaN(num) && isFinite(num);
             },
+            isInteger(num: any): boolean {
+                if(!_hison.utils.isNumeric(num)) return false;
+                num = Number(num);
+                return Number.isInteger(num);
+            },
+            isPositiveInteger(num: any): boolean {
+                if(!_hison.utils.isNumeric(num)) return false;
+                num = Number(num);
+                return Number.isInteger(num) && num > 0;
+            },
+            isNegativeInteger(num: any): boolean {
+                if (!_hison.utils.isNumeric(num)) return false;
+                num = Number(num);
+                return Number.isInteger(num) && num < 0;
+            },
+            isArray(arr: any): boolean {
+                return Array.isArray(arr) && arr.constructor === Array;
+            },
+            isObject(obj: any): boolean {
+                return obj !== null && typeof obj === 'object' && !Array.isArray(obj) && obj.constructor === Object;
+            },
+            getDateObject(dateStr: string): DateObject {
+                dateStr = hison.utils.getToString(dateStr);
+                dateStr = dateStr.split(' ')[0];
+                let year: number, month: number, day: number;
+                if (dateStr.includes('-')) {
+                    [year, month, day] = dateStr.split('-').map(num => parseInt(num, 10));
+                } else if (dateStr.includes('/')) {
+                    [year, month, day] = dateStr.split('/').map(num => parseInt(num, 10));
+                } else if (dateStr.length === 8) {
+                    year = parseInt(dateStr.substring(0, 4), 10);
+                    month = parseInt(dateStr.substring(4, 6), 10);
+                    day = parseInt(dateStr.substring(6, 8), 10);
+                } else {
+                    return {y: null, M: null, d: null};
+                }
+            
+                return { y: year, M: month, d: day };
+            },
+            isDate(date: DateObject | string): boolean {
+                const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
+        
+                let yyyy: string = _hison.utils.getToString(dateObj.y);
+                let MM: string = _hison.utils.getToString(dateObj.M);
+                let dd: string = _hison.utils.getToString(dateObj.d);
+        
+                let result = true;
+                try {
+                    if(!_hison.utils.isInteger(yyyy) || !_hison.utils.isInteger(MM) || !_hison.utils.isInteger(dd)) {
+                        return false;
+                    }
+        
+                    if(!yyyy) {
+                        return false;
+                    }
+                    if(!MM) {
+                        MM = "01";
+                    } else if (MM.length === 1) {
+                        MM = "0" + MM;
+                    }
+                    if(!dd) {
+                        dd = "01";
+                    } else if (dd.length === 1) {
+                        dd = "0" + dd;
+                    }
+        
+                    if(_hison.utils.getToNumber(yyyy+MM+dd) < 16000101) {
+                        const date = new Date(_hison.utils.getToNumber(yyyy), _hison.utils.getToNumber(MM) - 1, _hison.utils.getToNumber(dd));
+                        if (date.getFullYear() !== _hison.utils.getToNumber(yyyy) || date.getMonth() !== _hison.utils.getToNumber(MM) - 1 || date.getDate() !== _hison.utils.getToNumber(dd)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                    else {
+                        const dateRegex = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-.\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
+                        result = dateRegex.test(dd+'-'+MM+'-'+yyyy);
+                    }
+                    
+                } catch (err) {
+                    result = false;
+                }    
+                return result;
+            },
+            getTimeObject(timeStr) {
+                timeStr = _hison.utils.getToString(timeStr);
+                var dateArr = timeStr.split(' ');
+                timeStr = dateArr.length > 1 ? dateArr[1] : timeStr;
+                var hours, minutes, seconds;
+        
+                if (timeStr.includes(':')) {
+                    [hours, minutes, seconds] = timeStr.split(':').map(num => parseInt(num, 10));
+                } else if (timeStr.length === 6) {
+                    hours = parseInt(timeStr.substring(0, 2), 10);
+                    minutes = parseInt(timeStr.substring(2, 4), 10);
+                    seconds = parseInt(timeStr.substring(4, 6), 10);
+                } else {
+                    return {};
+                }
+            
+                return { h: hours, m: minutes, s: seconds };
+            },
+            isTime(timeObj_or_timeStr) {
+                var timeObj = _hison.utils.isObject(timeObj_or_timeStr) ? timeObj_or_timeStr : _hison.utils.getTimeObject(timeObj_or_timeStr);
+        
+                var hh = timeObj.h;
+                var mm = timeObj.m;
+                var ss = timeObj.s;
+        
+                if(!_hison.utils.isInteger(hh) || !_hison.utils.isInteger(mm) || !_hison.utils.isInteger(ss)) {
+                    return false;
+                }
+                hh = parseInt(hh, 10);
+                mm = parseInt(mm, 10);
+                ss = parseInt(ss, 10);
+        
+                function isValidTimePart(time, max) {
+                    return !isNaN(time) && time >= 0 && time <= max;
+                }
+            
+                return isValidTimePart(hh, 23) && isValidTimePart(mm, 59) && isValidTimePart(ss, 59);
+            },
+            getDatetimeObject(datetimeStr) {
+                datetimeStr = _hison.utils.getToString(datetimeStr);
+                var datetimeArr = datetimeStr.split(' ');
+                var dateObj = datetimeArr[0];
+                var timeObj = datetimeArr.length > 1 ? datetimeArr[1] : {};
+        
+                console.log(Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj)));
+                return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
+            },
+            isDatetime(datetimeObj_or_datetimeStr) {
+                var datetimeObj = _hison.utils.isObject(datetimeObj_or_datetimeStr) ? datetimeObj_or_datetimeStr : _hison.utils.getDatetimeObject(datetimeObj_or_datetimeStr);
+                if(!_hison.utils.isDate(datetimeObj)) return false;
+                if(!_hison.utils.isTime(datetimeObj)) return false;
+                return true;
+            },
+            isEmail(emailStr) {
+                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,}$/;
+                return emailPattern.test(emailStr);
+            },
+            isURL(urlStr) {
+                var urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+                return urlPattern.test(urlStr);
+            },
+            isValidMask(str, maskStr) {
+                if (str.length !== maskStr.length) {
+                    return false;
+                }
+            
+                for (var i = 0; i < str.length; i++) {
+                    var char = str.charAt(i);
+                    var maskChar = maskStr.charAt(i);
+            
+                    switch (maskChar) {
+                        case 'A':
+                            if (char < 'A' || char > 'Z') return false;
+                            break;
+                        case 'a':
+                            if (char < 'a' || char > 'z') return false;
+                            break;
+                        case '9':
+                            if (isNaN(parseInt(char))) return false;
+                            break;
+                        default:
+                            if (char !== maskChar) return false;
+                    }
+                }
+                return true;
+            },
 
+            //for Date
+
+            //for number
+
+            //for string
             getNumberFormat(value: number, format?: string) {
                 const oriValue = value;
                 if (!_hison.utils.isNumeric(value)) {
@@ -251,11 +484,6 @@ function createHison() {
                 result = isNegative ? '-' + result : result;
                 return prefix + result + suffix;
             },
-            //for Date
-
-            //for number
-
-            //for string
 
             //for convertor
             getToNumber(val: any, impossibleValue?: number) {
@@ -349,7 +577,7 @@ function createHison() {
                     deepFreeze(hison);
                 }
                 
-                if (option.shield.isSheld && location.href.indexOf('localhost') < 0){
+                if (location.href.indexOf('localhost') < 0){
                     if (option.shield.shieldURL && location.href.indexOf(option.shield.shieldURL) < 0 ){
                         return;
                     }
@@ -462,14 +690,12 @@ function createHison() {
         setShieldURL(str: string) {option.shield.shieldURL = str;},
         setExposeIpList(arr: []) {option.shield.exposeIpList = arr;},
         setIsFreeze(bool: boolean) {option.shield.isFreeze = bool;},
-        setIsSheld(bool: boolean) {option.shield.isSheld = bool;},
         setIsPossibleGoBack(bool: boolean) {option.shield.isPossibleGoBack = bool;},
         setIsPossibleOpenDevTool(bool: boolean) {option.shield.isPossibleOpenDevTool = bool;},
         //get
         getShieldURL() {return option.shield.shieldURL;},
         getExposeIpList() {return option.shield.exposeIpList;},
         getIsFreeze() {return option.shield.isFreeze;},
-        getIsSheld() {return option.shield.isSheld;},
         getIsPossibleGoBack() {return option.shield.isPossibleGoBack;},
         getIsPossibleOpenDevTool() {return option.shield.isPossibleOpenDevTool;},
 
@@ -588,10 +814,10 @@ function createHison() {
         /**
          * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
          * 
-         * @returns {Object} {function hisonShield}
+         * @returns {Object} {function excute}
          * 
          * @example
-         * shield.hisonShield(); // Initializes and executes the security measures.
+         * shield.excute(); // Initializes and executes the security measures.
          * 
          * @description
          * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
@@ -600,6 +826,44 @@ function createHison() {
          * localhost를 제외한 모든 URL 또는 특정 URL에 대해 뒤로가기를 봉쇄합니다.
          */
         shield : {
+            /**
+             * Executes the specified functionality for the given `Hison` object with additional security measures.
+             * This function applies deep freezing, IP-based shielding, and developer mode restrictions based on the provided options.
+             *
+             * @param {Hison} hison - The main object to be processed and optionally frozen for immutability.
+             *
+             * @remarks
+             * This function incorporates multiple layers of security, including:
+             * - Freezing objects to prevent tampering.
+             * - Blocking unauthorized access based on the user's IP.
+             * - Preventing the use of browser developer tools.
+             *
+             * ### Related:
+             * - hison.setShieldURL
+             * - hison.setExposeIpList
+             * - hison.setIsFreeze
+             * - hison.setIsPossibleGoBack
+             * - hison.setIsPossibleOpenDevTool
+             *
+             * #### Logic Breakdown:
+             * 1. **Object Freezing**:
+             *    - If `option.shield.isFreeze` is enabled, the `hison` object is deeply frozen using the `deepFreeze` function.
+             *    - Prevents runtime modification of the object or its nested properties.
+             *
+             * 2. **Access Control by URL and IP**:
+             *    - If not on `localhost`:
+             *        - Ensures the current URL matches `option.shield.shieldURL`.
+             *        - Fetches the user's IP via `/ajax/getIp`.
+             *        - Verifies the IP against `option.shield.exposeIpList`.
+             *        - If the IP is not allowed:
+             *            - Prevents navigating back using the browser's back button.
+             *            - Restricts developer tool access.
+             *
+             * 3. **Developer Tool Restrictions**:
+             *    - Blocks `F12` key to prevent opening developer tools.
+             *    - Detects and alerts when developer tools are opened using browser resizing, focus, or mouse events.
+             *    - Displays a warning message and halts further actions if developer tools are detected.
+             */
             excute: hison.shield.excute,
         },
         
