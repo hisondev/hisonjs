@@ -16,8 +16,110 @@
  * @namespace Hison
  */
 interface Hison {
-    utils: {};
-    shield: {};
+    setDateFormat(str: string): void;
+    setTimeFormat(str: string): void;
+    setDatetimeFormat(str: string): void;
+    setYearFormat(str: string): void;
+    setMonthFormat(str: string): void;
+    setMonthNameFormat(str: string): void;
+    setYearMonthFormat(str: string): void;
+    setDayFormat(str: string): void;
+    setDayOfWeekFormat(str: string): void;
+    setHourFormat(str: string): void;
+    setHourMinuteFormat(str: string): void;
+    setMinuteFormat(str: string): void;
+    setSecondFormat(str: string): void;
+    setNumberFormat(str: string): void;
+    setLESSOREQ_0X7FF_BYTE(num: number): void;
+    setLESSOREQ_0XFFFF_BYTE(num: number): void;
+    setGREATER_0XFFFF_BYTE(num: number): void;
+    getDateFormat(): string;
+    getTimeFormat(): string;
+    getDatetimeFormat(): string;
+    getYearFormat(): string;
+    getMonthFormat(): string;
+    getMonthNameFormat(): string;
+    getYearMonthFormat(): string;
+    getDayFormat(): string;
+    getDayOfWeekFormat(): string;
+    getHourFormat(): string;
+    getHourMinuteFormat(): string;
+    getMinuteFormat(): string;
+    getSecondFormat(): string;
+    getNumberFormat(): string;
+    getLESSOREQ_0X7FF_BYTE(): number;
+    getLESSOREQ_0XFFFF_BYTE(): number;
+    getGREATER_0XFFFF_BYTE(): number;
+    setShieldURL(str: string): void;
+    setExposeIpList(arr: []): void;
+    setIsFreeze(bool: boolean): void;
+    setIsPossibleGoBack(bool: boolean): void;
+    setIsPossibleOpenDevTool(bool: boolean): void;
+    getShieldURL(): string;
+    getExposeIpList(): string[];
+    getIsFreeze(): boolean;
+    getIsPossibleGoBack(): boolean;
+    getIsPossibleOpenDevTool(): boolean;
+    setConvertValue(func: ConvertValue): void;
+    setProtocol(str: string): void;
+    setDomain(str: string): void;
+    setControllerPath(str: string): void;
+    setTimeout(num: number): void;
+    setWebSocketProtocol(str: string): void;
+    setWebSocketEndPoint(str: string): void;
+    setWebSocketlimit(num: number): void;
+    getProtocol(): string;
+    getDomain(): string;
+    getControllerPath(): string;
+    getTimeout(): number;
+    getWebSocketProtocol(): string;
+    getWebSocketEndPoint(): string;
+    getWebSocketlimit(): number;
+    setBeforeGetRequst(func: BeforeGetRequst): void;
+    setBeforePostRequst(func: BeforePostRequst): void;
+    setBeforePutRequst(func: BeforePutRequst): void;
+    setBeforePatchRequst(func: BeforePatchRequst): void;
+    setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
+    setBeforeCallbackWorked(func: BeforeCallbackWorked): void;
+    setBeforeCallbackError(func: BeforeCallbackError): void;
+    
+    utils: {
+        isAlpha(str: string): boolean
+        isAlphaNumber(str: string): boolean
+        isNumber(str: string): boolean
+        isNumberSymbols(str: string): boolean
+        isIncludeSymbols(str: string): boolean
+        isLowerAlpha(str: string): boolean
+        isLowerAlphaAndNumber(str: string): boolean
+        isUpperAlpha(str: string): boolean
+        isUpperAlphaNumber(str: string): boolean
+        isNumeric(num: any): boolean;
+        isInteger(num: any): boolean;
+        isPositiveInteger(num: any): boolean;
+        isNegativeInteger(num: any): boolean;
+        isArray(arr: any): boolean;
+        isObject(obj: any): boolean;
+        isDate(date: DateObject | string): boolean;
+        isTime(time: TimeObject | string): boolean;
+        isDatetime(datetime: DateTimeObject | string): boolean;
+        isEmail(str: string): boolean;
+        isURL(urlStr: string): boolean;
+        isValidMask(str: string, mask: string): boolean;
+        
+        getDateObject(dateStr: string): DateObject;
+        getTimeObject(str: string): TimeObject;
+        getDatetimeObject(datetime: string): DateTimeObject;
+
+
+
+        getNumberFormat: Function;
+        getToNumber: Function;
+        getToFloat: Function;
+        getToString: Function;
+    }
+    shield: {
+        excute: Function;
+    };
     data: {
         DataWrapper: new () => DataWrapper;
         DataModel: new () => DataModel;
@@ -34,6 +136,76 @@ interface DateObject {
     y: number | null;
     M: number | null;
     d: number | null;
+}
+interface TimeObject {
+    h: number | null;
+    m: number | null;
+    s: number | null;
+}
+interface DateTimeObject extends DateObject, TimeObject {}
+enum MonthFullName {
+    January = 1,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    September,
+    October,
+    November,
+    December
+}
+enum MonthShortName {
+    Jan = 1,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Nov,
+    Dec
+}
+enum DayOfWeekFullName {
+    Sun = 0,
+    Mon,
+    Tue,
+    Wed,
+    Thu,
+    Fri,
+    Sat
+}
+enum DayOfWeekShortName {
+    Sunday = 0,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+}
+enum DayOfWeekFullNameKR {
+    일 = 0,
+    월,
+    화,
+    수,
+    목,
+    금,
+    토
+}
+enum DayOfWeekShortNameKR {
+    일요일 = 0,
+    월요일,
+    화요일,
+    수요일,
+    목요일,
+    금요일,
+    토요일
 }
 //====================================================================================
 //shield interface, type
@@ -91,14 +263,6 @@ interface DataModel {
 //====================================================================================
 //link interface, type
 //====================================================================================
-/** hison.link.protocol is the protocol value for the URL used to call APIs in apiLink. */
-type Protocol = string;
-/** hison.link.domain is the domain value for the URL used to call APIs in apiLink. */
-type Domain = string;
-/** hison.link.controllerPath is the RequestMapping value for calling APIs in apiLink. */
-type ControllerPath = string;
-/** hison.link.timeout is the default value for the timeout after making an API request, measured in milliseconds. */
-type Timeout = number;
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
  * This function can be customized to perform actions or checks before the actual GET request is sent.
@@ -137,6 +301,9 @@ interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: callb
 interface BeforeCallbackWorked extends callbackWorked {};
 interface BeforeCallbackError extends callbackError {};
 
+//====================================================================================
+//createHison
+//====================================================================================
 /**
  * The hison object is a container for configuration values and methods required for using the hisondev solution.
  * It includes the following sub-objects:
@@ -156,7 +323,7 @@ interface BeforeCallbackError extends callbackError {};
  * 
  * @namespace Hison
  */
-function createHison() {
+function createHison(): Hison {
     class Option {
         utils = {
             dateFormat : 'yyyy-MM-dd',
@@ -261,24 +428,6 @@ function createHison() {
             isObject(obj: any): boolean {
                 return obj !== null && typeof obj === 'object' && !Array.isArray(obj) && obj.constructor === Object;
             },
-            getDateObject(dateStr: string): DateObject {
-                dateStr = hison.utils.getToString(dateStr);
-                dateStr = dateStr.split(' ')[0];
-                let year: number, month: number, day: number;
-                if (dateStr.includes('-')) {
-                    [year, month, day] = dateStr.split('-').map(num => parseInt(num, 10));
-                } else if (dateStr.includes('/')) {
-                    [year, month, day] = dateStr.split('/').map(num => parseInt(num, 10));
-                } else if (dateStr.length === 8) {
-                    year = parseInt(dateStr.substring(0, 4), 10);
-                    month = parseInt(dateStr.substring(4, 6), 10);
-                    day = parseInt(dateStr.substring(6, 8), 10);
-                } else {
-                    return {y: null, M: null, d: null};
-                }
-            
-                return { y: year, M: month, d: day };
-            },
             isDate(date: DateObject | string): boolean {
                 const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
         
@@ -323,75 +472,50 @@ function createHison() {
                 }    
                 return result;
             },
-            getTimeObject(timeStr) {
-                timeStr = _hison.utils.getToString(timeStr);
-                var dateArr = timeStr.split(' ');
-                timeStr = dateArr.length > 1 ? dateArr[1] : timeStr;
-                var hours, minutes, seconds;
+            isTime(time: TimeObject | string): boolean {
+                const timeObj: TimeObject = _hison.utils.isObject(time) ? time as TimeObject : _hison.utils.getTimeObject(time as string);
         
-                if (timeStr.includes(':')) {
-                    [hours, minutes, seconds] = timeStr.split(':').map(num => parseInt(num, 10));
-                } else if (timeStr.length === 6) {
-                    hours = parseInt(timeStr.substring(0, 2), 10);
-                    minutes = parseInt(timeStr.substring(2, 4), 10);
-                    seconds = parseInt(timeStr.substring(4, 6), 10);
-                } else {
-                    return {};
-                }
-            
-                return { h: hours, m: minutes, s: seconds };
-            },
-            isTime(timeObj_or_timeStr) {
-                var timeObj = _hison.utils.isObject(timeObj_or_timeStr) ? timeObj_or_timeStr : _hison.utils.getTimeObject(timeObj_or_timeStr);
-        
-                var hh = timeObj.h;
-                var mm = timeObj.m;
-                var ss = timeObj.s;
+                let hh: number = timeObj.h;
+                let mm: number = timeObj.m;
+                let ss: number = timeObj.s;
         
                 if(!_hison.utils.isInteger(hh) || !_hison.utils.isInteger(mm) || !_hison.utils.isInteger(ss)) {
                     return false;
                 }
+                /*
                 hh = parseInt(hh, 10);
                 mm = parseInt(mm, 10);
                 ss = parseInt(ss, 10);
+                */
         
-                function isValidTimePart(time, max) {
+                function isValidTimePart(time: number, max: number): boolean {
                     return !isNaN(time) && time >= 0 && time <= max;
                 }
             
                 return isValidTimePart(hh, 23) && isValidTimePart(mm, 59) && isValidTimePart(ss, 59);
             },
-            getDatetimeObject(datetimeStr) {
-                datetimeStr = _hison.utils.getToString(datetimeStr);
-                var datetimeArr = datetimeStr.split(' ');
-                var dateObj = datetimeArr[0];
-                var timeObj = datetimeArr.length > 1 ? datetimeArr[1] : {};
-        
-                console.log(Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj)));
-                return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
-            },
-            isDatetime(datetimeObj_or_datetimeStr) {
-                var datetimeObj = _hison.utils.isObject(datetimeObj_or_datetimeStr) ? datetimeObj_or_datetimeStr : _hison.utils.getDatetimeObject(datetimeObj_or_datetimeStr);
+            isDatetime(datetime: DateTimeObject | string): boolean {
+                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? datetime as DateTimeObject : _hison.utils.getDatetimeObject(datetime as string);
                 if(!_hison.utils.isDate(datetimeObj)) return false;
                 if(!_hison.utils.isTime(datetimeObj)) return false;
                 return true;
             },
-            isEmail(emailStr) {
-                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,}$/;
-                return emailPattern.test(emailStr);
+            isEmail(str: string): boolean {
+                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,}$/;
+                return emailPattern.test(str);
             },
-            isURL(urlStr) {
-                var urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+            isURL(urlStr: string): boolean {
+                const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
                 return urlPattern.test(urlStr);
             },
-            isValidMask(str, maskStr) {
-                if (str.length !== maskStr.length) {
+            isValidMask(str: string, mask: string): boolean {
+                if (str.length !== mask.length) {
                     return false;
                 }
             
-                for (var i = 0; i < str.length; i++) {
-                    var char = str.charAt(i);
-                    var maskChar = maskStr.charAt(i);
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charAt(i);
+                    const maskChar = mask.charAt(i);
             
                     switch (maskChar) {
                         case 'A':
@@ -411,7 +535,587 @@ function createHison() {
             },
 
             //for Date
+            getDateObject(dateStr: string): DateObject {
+                dateStr = hison.utils.getToString(dateStr);
+                dateStr = dateStr.split(' ')[0];
+                let year: number, month: number, day: number;
+                if (dateStr.includes('-')) {
+                    [year, month, day] = dateStr.split('-').map(num => parseInt(num, 10));
+                } else if (dateStr.includes('/')) {
+                    [year, month, day] = dateStr.split('/').map(num => parseInt(num, 10));
+                } else if (dateStr.length === 8) {
+                    year = parseInt(dateStr.substring(0, 4), 10);
+                    month = parseInt(dateStr.substring(4, 6), 10);
+                    day = parseInt(dateStr.substring(6, 8), 10);
+                } else {
+                    return {y: null, M: null, d: null};
+                }
+            
+                return { y: year, M: month, d: day };
+            },
+            getTimeObject(str: string): TimeObject {
+                str = _hison.utils.getToString(str);
+                const dateArr = str.split(' ');
+                str = dateArr.length > 1 ? dateArr[1] : str;
+                let hours: number, minutes: number, seconds: number;
+        
+                if (str.includes(':')) {
+                    [hours, minutes, seconds] = str.split(':').map(num => parseInt(num, 10));
+                } else if (str.length === 6) {
+                    hours = parseInt(str.substring(0, 2), 10);
+                    minutes = parseInt(str.substring(2, 4), 10);
+                    seconds = parseInt(str.substring(4, 6), 10);
+                } else {
+                    return { h: 0, m: 0, s: 0 };
+                }
+            
+                return { h: hours, m: minutes, s: seconds };
+            },
+            getDatetimeObject(datetime: string): DateTimeObject {
+                datetime = _hison.utils.getToString(datetime);
+                const datetimeArr = datetime.split(' ');
+                const dateObj = datetimeArr[0];
+                const timeObj = datetimeArr.length > 1 ? datetimeArr[1] as string : '';
+        
+                return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
+            },
+            addDate(datetime: DateTimeObject | string, addValue: string | number = 0, addType: string = "", format: string = ""): DateTimeObject | string {
+                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopy(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+                
+                if(!_hison.utils.isInteger(addValue)) throw new Error(`ER0001 Please enter a valid value.\n=>${JSON.stringify(addValue)}`);
+                addValue = _hison.utils.getToNumber(addValue);
 
+                datetimeObj.M = datetimeObj.M === null || datetimeObj.M === undefined ? 1 : datetimeObj.M;
+                datetimeObj.d = datetimeObj.d === null || datetimeObj.d === undefined ? 1 : datetimeObj.d;
+                datetimeObj.h = datetimeObj.h === null || datetimeObj.h === undefined ? 0 : datetimeObj.h;
+                datetimeObj.m = datetimeObj.m === null || datetimeObj.m === undefined ? 0 : datetimeObj.m;
+                datetimeObj.s = datetimeObj.s === null || datetimeObj.s === undefined ? 0 : datetimeObj.s;
+        
+                if(!_hison.utils.isDate(datetimeObj)) throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if(!_hison.utils.isTime(datetimeObj)) throw new Error(`ER0003 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+            
+                const d = new Date(datetimeObj.y, datetimeObj.M - 1, datetimeObj.d, datetimeObj.h, datetimeObj.m, datetimeObj.s);
+            
+                switch (addType) {
+                    case 'y':
+                        d.setFullYear(d.getFullYear() + addValue);
+                        if(!format) format = option.utils.dateFormat;
+                        break;
+                    case 'M':
+                        d.setMonth(d.getMonth() + addValue);
+                        if(!format) format = option.utils.dateFormat;
+                        break;
+                    case 'd':
+                        d.setDate(d.getDate() + addValue);
+                        if(!format) format = option.utils.dateFormat;
+                        break;
+                    case 'h':
+                        d.setHours(d.getHours() + addValue);
+                        if(!format) format = option.utils.datetimeFormat;
+                        break;
+                    case 'm':
+                        d.setMinutes(d.getMinutes() + addValue);
+                        if(!format) format = option.utils.datetimeFormat;
+                        break;
+                    case 's':
+                        d.setSeconds(d.getSeconds() + addValue);
+                        if(!format) format = option.utils.datetimeFormat;
+                        break;
+                    default:
+                        d.setDate(d.getDate() + addValue);
+                        if(!format) format = option.utils.dateFormat;
+                }
+        
+                const rtnObj = {
+                    y: d.getFullYear(),
+                    M: (d.getMonth() + 1),
+                    d: d.getDate(),
+                    h: d.getHours(),
+                    m: d.getMinutes(),
+                    s: d.getSeconds()
+                }
+        
+                return _hison.utils.isObject(datetime) ? rtnObj : _hison.utils.getDateWithFormat(rtnObj, format);
+            },
+            getDateDiff(datetime1: DateTimeObject | string, datetime2: DateTimeObject | string, diffType: string = ""): number {
+                const datetimeObj1: DateTimeObject = _hison.utils.isObject(datetime1) ? _hison.utils.deepCopy(datetime1) : _hison.utils.getDatetimeObject(datetime1 as string);
+                const datetimeObj2: DateTimeObject = _hison.utils.isObject(datetime2) ? _hison.utils.deepCopy(datetime2) : _hison.utils.getDatetimeObject(datetime2 as string);
+                            
+                datetimeObj1.M = datetimeObj1.M || 1; datetimeObj2.M = datetimeObj2.M || 1;
+                datetimeObj1.d = datetimeObj1.d || 1; datetimeObj2.d = datetimeObj2.d || 1;
+                datetimeObj1.h = datetimeObj1.h || 0; datetimeObj2.h = datetimeObj2.h || 0;
+                datetimeObj1.m = datetimeObj1.m || 0; datetimeObj2.m = datetimeObj2.m || 0;
+                datetimeObj1.s = datetimeObj1.s || 0; datetimeObj2.s = datetimeObj2.s || 0;
+        
+                if(!_hison.utils.isDate(datetimeObj1)) throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if(!_hison.utils.isTime(datetimeObj1)) throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if(!_hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if(!_hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+            
+                const d1 = new Date(datetimeObj1.y, datetimeObj1.M - 1, datetimeObj1.d, datetimeObj1.h, datetimeObj1.m, datetimeObj1.s);
+                const d2 = new Date(datetimeObj2.y, datetimeObj2.M - 1, datetimeObj2.d, datetimeObj2.h, datetimeObj2.m, datetimeObj2.s);
+            
+                switch (diffType) {
+                    case 'y':
+                        return d2.getFullYear() - d1.getFullYear();
+                    case 'M':
+                        return (d2.getFullYear() - d1.getFullYear()) * 12 + d2.getMonth() - d1.getMonth();
+                    case 'd':
+                        return Math.floor((d2.getTime() - d1.getTime()) / (24 * 60 * 60 * 1000));
+                    case 'h':
+                        return Math.floor((d2.getTime() - d1.getTime()) / (60 * 60 * 1000));
+                    case 'm':
+                        return Math.floor((d2.getTime() - d1.getTime()) / (60 * 1000));
+                    case 's':
+                        return Math.floor((d2.getTime() - d1.getTime()) / 1000);
+                    default:
+                        return Math.floor((d2.getTime() - d1.getTime()) / (24 * 60 * 60 * 1000));
+                }
+            },
+            getMonthName(month: number | string, isFullName: boolean = true) {
+                if(typeof month === 'string') month = parseInt(month, 10);
+        
+                if (month < 1 || month > 12) {
+                    throw new Error(`ER0008 Month must be between 1 and 12`);
+                }
+
+                if (isFullName) {
+                    return MonthFullName[month];
+                } else {
+                    return MonthShortName[month];
+                }
+            },
+            getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = option.utils.dateFormat): string {
+                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopy(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+                
+                if(!_hison.utils.isDate(datetimeObj)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if(!_hison.utils.isTime(datetimeObj)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+
+                const y = datetimeObj.y.toString();
+                const M = (datetimeObj.M || 1).toString().padStart(2, '0');
+                const d = (datetimeObj.d || 1).toString().padStart(2, '0');
+                const h = (datetimeObj.h || 0).toString().padStart(2, '0');
+                const m = (datetimeObj.m || 0).toString().padStart(2, '0');
+                const s = (datetimeObj.s || 0).toString().padStart(2, '0');
+                const MMMM = _hison.utils.getMonthName(datetimeObj.M);
+                const MMM = _hison.utils.getMonthName(datetimeObj.M, false);
+            
+                switch (format) {
+                    case 'yyyy':
+                        return y;
+                        
+                    case 'yyyyMM':
+                        return y + M;
+                    case 'yyyy-MM':
+                        return y + '-' + M;
+                    case 'yyyy/MM':
+                        return y + '/' + M;
+                    case 'yyyy. MM':
+                        return y + '. ' + M;
+                    case 'yyyy MM':
+                        return y + ' ' + M;
+            
+                    case 'yyyyMMdd':
+                        return y + M + d;
+                    case 'yyyy-MM-dd':
+                        return y + '-' + M + '-' + d;
+                    case 'yyyy/MM/dd':
+                        return y + '/' + M + '/' + d;
+                    case 'yyyy. MM. dd':
+                        return y + '. ' + M + '. ' + d;
+                    case 'yyyy MM dd':
+                        return y + ' ' + M + ' ' + d;
+            
+                    case 'yyyyMMdd hh':
+                        return y + M + d + ' ' + h;
+                    case 'yyyyMMdd hhmm':
+                        return y + M + d + ' ' + h + m;
+                    case 'yyyyMMdd hhmmss':
+                        return y + M + d + ' ' + h + m + s;
+                    case 'yyyyMMdd hh:mm':
+                        return y + M + d + ' ' + h + ':' + m;
+                    case 'yyyyMMdd hh:mm:ss':
+                        return y + M + d + ' ' + h + ':' + m + ':' + s;
+                    case 'yyyy-MM-dd hh':
+                        return y + '-' + M + '-' + d + ' ' + h;
+                    case 'yyyy-MM-dd hhmm':
+                        return y + '-' + M + '-' + d + ' ' + h + m;
+                    case 'yyyy-MM-dd hhmmss':
+                        return y + '-' + M + '-' + d + ' ' + h + m + s;
+                    case 'yyyy-MM-dd hh:mm':
+                        return y + '-' + M + '-' + d + ' ' + h + ':' + m;
+                    case 'yyyy-MM-dd hh:mm:ss':
+                        return y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s;
+                    case 'yyyy/MM/dd hh':
+                        return y + '/' + M + '/' + d + ' ' + h;
+                    case 'yyyy/MM/dd hhmm':
+                        return y + '/' + M + '/' + d + ' ' + h + m;
+                    case 'yyyy/MM/dd hhmmss':
+                        return y + '/' + M + '/' + d + ' ' + h + m + s;
+                    case 'yyyy/MM/dd hh:mm':
+                        return y + '/' + M + '/' + d + ' ' + h + ':' + m;
+                    case 'yyyy/MM/dd hh:mm:ss':
+                        return y + '/' + M + '/' + d + ' ' + h + ':' + m + ':' + s;
+                    case 'yyyy. MM. dd hh':
+                        return y + '. ' + M + '. ' + d + ' ' + h;
+                    case 'yyyy. MM. dd hhmm':
+                        return y + '. ' + M + '. ' + d + ' ' + h + m;
+                    case 'yyyy. MM. dd hhmmss':
+                        return y + '. ' + M + '. ' + d + ' ' + h + m + s;
+                    case 'yyyy. MM. dd hh:mm':
+                        return y + '. ' + M + '. ' + d + ' ' + h + ':' + m;
+                    case 'yyyy. MM. dd hh:mm:ss':
+                        return y + '. ' + M + '. ' + d + ' ' + h + ':' + m + ':' + s;
+                    case 'yyyy MM dd hh':
+                        return y + ' ' + M + ' ' + d + ' ' + h;
+                    case 'yyyy MM dd hhmm':
+                        return y + ' ' + M + ' ' + d + ' ' + h + m;
+                    case 'yyyy MM dd hhmmss':
+                        return y + ' ' + M + ' ' + d + ' ' + h + m + s;
+                    case 'yyyy MM dd hh:mm':
+                        return y + ' ' + M + ' ' + d + ' ' + h + ':' + m;
+                    case 'yyyy MM dd hh:mm:ss':
+                        return y + ' ' + M + ' ' + d + ' ' + h + ':' + m + ':' + s;
+            
+                    case 'MMyyyy':
+                        return M + y;
+                    case 'MM-yyyy':
+                        return M + '-' + y;
+                    case 'MM/yyyy':
+                        return M + '/' + y;
+                    case 'MM. yyyy':
+                        return M + '/' + y;
+                    case 'MM yyyy':
+                        return M + '/' + y;
+                    case 'MMMM yyyy':
+                        return MMMM + ' ' + y;
+                    case 'MMMM, yyyy':
+                        return MMMM + ', ' + y;
+                    case 'MMM yyyy':
+                        return MMM + ' ' + y;
+                    case 'MMM, yyyy':
+                        return MMM + ', ' + y;
+            
+                    case 'MMddyyyy':
+                        return M + d + y;
+                    case 'MM-dd-yyyy':
+                        return M + '-' + d + '-' + y;
+                    case 'MM/dd/yyyy':
+                        return M + '/' + d + '/' + y;
+                    case 'MM. dd. yyyy':
+                        return M + '. ' + d + '. ' + y;
+                    case 'MMMM dd yyyy':
+                        return MMMM + ' ' + d + ' ' + y;
+                    case 'MMMM dd, yyyy':
+                        return MMMM + ' ' + d + ', ' + y;
+                    case 'MMM dd yyyy':
+                        return MMM + ' ' + d + ' ' + y;
+                    case 'MMM dd, yyyy':
+                        return MMM + ' ' + d + ', ' + y;
+            
+                    case 'MMddyyyy hh':
+                        return M + d + y + ' ' + h;
+                    case 'MMddyyyy hhmm':
+                        return M + d + y + ' ' + h + m;
+                    case 'MMddyyyy hhmmss':
+                        return M + d + y + ' ' + h + m + s;
+                    case 'MMddyyyy hh:mm':
+                        return M + d + y + ' ' + h + ':' + m;
+                    case 'MMddyyyy hh:mm:ss':
+                        return M + d + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MM-dd-yyyy hh':
+                        return M + '-' + d + '-' + y + ' ' + h;
+                    case 'MM-dd-yyyy hhmm':
+                        return M + '-' + d + '-' + y + ' ' + h + m;
+                    case 'MM-dd-yyyy hhmmss':
+                        return M + '-' + d + '-' + y + ' ' + h + m + s;
+                    case 'MM-dd-yyyy hh:mm':
+                        return M + '-' + d + '-' + y + ' ' + h + ':' + m;
+                    case 'MM-dd-yyyy hh:mm:ss':
+                        return M + '-' + d + '-' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MM/dd/yyyy hh':
+                        return M + '/' + d + '/' + y + ' ' + h;
+                    case 'MM/dd/yyyy hhmm':
+                        return M + '/' + d + '/' + y + ' ' + h + m;
+                    case 'MM/dd/yyyy hhmmss':
+                        return M + '/' + d + '/' + y + ' ' + h + m + s;
+                    case 'MM/dd/yyyy hh:mm':
+                        return M + '/' + d + '/' + y + ' ' + h + ':' + m;
+                    case 'MM/dd/yyyy hh:mm:ss':
+                        return M + '/' + d + '/' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MM. dd. yyyy hh':
+                        return M + '. ' + d + '. ' + y + ' ' + h;
+                    case 'MM. dd. yyyy hhmm':
+                        return M + '. ' + d + '. ' + y + ' ' + h + m;
+                    case 'MM. dd. yyyy hhmmss':
+                        return M + '. ' + d + '. ' + y + ' ' + h + m + s;
+                    case 'MM. dd. yyyy hh:mm':
+                        return M + '. ' + d + '. ' + y + ' ' + h + ':' + m;
+                    case 'MM. dd. yyyy hh:mm:ss':
+                        return M + '. ' + d + '. ' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MMMM dd yyyy hh':
+                        return MMMM + ' ' + d + ' ' + y + ' ' + h;
+                    case 'MMMM dd yyyy hhmm':
+                        return MMMM + ' ' + d + ' ' + y + ' ' + h + m;
+                    case 'MMMM dd yyyy hhmmss':
+                        return MMMM + ' ' + d + ' ' + y + ' ' + h + m + s;
+                    case 'MMMM dd yyyy hh:mm':
+                        return MMMM + ' ' + d + ' ' + y + ' ' + h + ':' + m;
+                    case 'MMMM dd yyyy hh:mm:ss':
+                        return MMMM + ' ' + d + ' ' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MMMM dd, yyyy hh':
+                        return MMMM + ' ' + d + ', ' + y + ' ' + h;
+                    case 'MMMM dd, yyyy hhmm':
+                        return MMMM + ' ' + d + ', ' + y + ' ' + h + m;
+                    case 'MMMM dd, yyyy hhmmss':
+                        return MMMM + ' ' + d + ', ' + y + ' ' + h + m + s;
+                    case 'MMMM dd, yyyy hh:mm':
+                        return MMMM + ' ' + d + ', ' + y + ' ' + h + ':' + m;
+                    case 'MMMM dd, yyyy hh:mm:ss':
+                        return MMMM + ' ' + d + ', ' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MMM dd yyyy hh':
+                        return MMM + ' ' + d + ' ' + y + ' ' + h;
+                    case 'MMM dd yyyy hhmm':
+                        return MMM + ' ' + d + ' ' + y + ' ' + h + m;
+                    case 'MMM dd yyyy hhmmss':
+                        return MMM + ' ' + d + ' ' + y + ' ' + h + m + s;
+                    case 'MMM dd yyyy hh:mm':
+                        return MMM + ' ' + d + ' ' + y + ' ' + h + ':' + m;
+                    case 'MMM dd yyyy hh:mm:ss':
+                        return MMM + ' ' + d + ' ' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'MMM dd, yyyy hh':
+                        return MMM + ' ' + d + ', ' + y + ' ' + h;
+                    case 'MMM dd, yyyy hhmm':
+                        return MMM + ' ' + d + ', ' + y + ' ' + h + m;
+                    case 'MMM dd, yyyy hhmmss':
+                        return MMM + ' ' + d + ', ' + y + ' ' + h + m + s;
+                    case 'MMM dd, yyyy hh:mm':
+                        return MMM + ' ' + d + ', ' + y + ' ' + h + ':' + m;
+                    case 'MMM dd, yyyy hh:mm:ss':
+                        return MMM + ' ' + d + ', ' + y + ' ' + h + ':' + m + ':' + s;
+            
+                    case 'ddMMyyyy':
+                        return d + M + y;
+                    case 'dd-MM-yyyy':
+                        return d + '-' + M + '-' + y;
+                    case 'dd/MM/yyyy':
+                        return d + '/' + M + '/' + y;
+                    case 'dd. MM. yyyy':
+                        return d + '. ' + M + '. ' + y;
+                    case 'dd MMMM yyyy':
+                        return d + ' ' + MMMM + ' ' + y;
+                    case 'dd MMM yyyy':
+                        return d + ' ' + MMM + ' ' + y;
+            
+                    case 'ddMMyyyy hh':
+                        return d + M + y + ' ' + h;
+                    case 'ddMMyyyy hhmm':
+                        return d + M + y + ' ' + h + m;
+                    case 'ddMMyyyy hhmmss':
+                        return d + M + y + ' ' + h + m + s;
+                    case 'ddMMyyyy hh:mm':
+                        return d + M + y + ' ' + h + ':' + m;
+                    case 'ddMMyyyy hh:mm:ss':
+                        return d + M + y + ' ' + h + ':' + m + ':' + s;
+                    case 'dd-MM-yyyy hh':
+                        return d + '-' + M + '-' + y + ' ' + h;
+                    case 'dd-MM-yyyy hhmm':
+                        return d + '-' + M + '-' + y + ' ' + h + m;
+                    case 'dd-MM-yyyy hhmmss':
+                        return d + '-' + M + '-' + y + ' ' + h + m + s;
+                    case 'dd-MM-yyyy hh:mm':
+                        return d + '-' + M + '-' + y + ' ' + h + ':' + m;
+                    case 'dd-MM-yyyy hh:mm:ss':
+                        return d + '-' + M + '-' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'dd/MM/yyyy hh':
+                        return d + '/' + M + '/' + y + ' ' + h;
+                    case 'dd/MM/yyyy hhmm':
+                        return d + '/' + M + '/' + y + ' ' + h + m;
+                    case 'dd/MM/yyyy hhmmss':
+                        return d + '/' + M + '/' + y + ' ' + h + m + s;
+                    case 'dd/MM/yyyy hh:mm':
+                        return d + '/' + M + '/' + y + ' ' + h + ':' + m;
+                    case 'dd/MM/yyyy hh:mm:ss':
+                        return d + '/' + M + '/' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'dd. MM. yyyy hh':
+                        return d + '. ' + M + '. ' + y + ' ' + h;
+                    case 'dd. MM. yyyy hhmm':
+                        return d + '. ' + M + '. ' + y + ' ' + h + m;
+                    case 'dd. MM. yyyy hhmmss':
+                        return d + '. ' + M + '. ' + y + ' ' + h + m + s;
+                    case 'dd. MM. yyyy hh:mm':
+                        return d + '. ' + M + '. ' + y + ' ' + h + ':' + m;
+                    case 'dd. MM. yyyy hh:mm:ss':
+                        return d + '. ' + M + '. ' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'dd MMMM yyyy hh':
+                        return d + ' ' + MMMM + ' ' + y + ' ' + h;
+                    case 'dd MMMM yyyy hhmm':
+                        return d + ' ' + MMMM + ' ' + y + ' ' + h + m;
+                    case 'dd MMMM yyyy hhmmss':
+                        return d + ' ' + MMMM + ' ' + y + ' ' + h + m + s;
+                    case 'dd MMMM yyyy hh:mm':
+                        return d + ' ' + MMMM + ' ' + y + ' ' + h + ':' + m;
+                    case 'dd MMMM yyyy hh:mm:ss':
+                        return d + ' ' + MMMM + ' ' + y + ' ' + h + ':' + m + ':' + s;
+                    case 'dd MMM yyyy hh':
+                        return d + ' ' + MMM + ' ' + y + ' ' + h;
+                    case 'dd MMM yyyy hhmm':
+                        return d + ' ' + MMM + ' ' + y + ' ' + h + m;
+                    case 'dd MMM yyyy hhmmss':
+                        return d + ' ' + MMM + ' ' + y + ' ' + h + m + s;
+                    case 'dd MMM yyyy hh:mm':
+                        return d + ' ' + MMM + ' ' + y + ' ' + h + ':' + m;
+                    case 'dd MMM yyyy hh:mm:ss':
+                        return d + ' ' + MMM + ' ' + y + ' ' + h + ':' + m + ':' + s;
+            
+                    default:
+                        throw new Error(`ER0010 Invalid format.\n=>${JSON.stringify(format)}`);
+                }
+            },
+            getDayOfWeek(date: DateObject | string, dayType: string = option.utils.dayOfWeekFormat): string {
+                const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
+                if(!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                
+                const d = new Date(dateObj.y, dateObj.M - 1, dateObj.d);
+                const dayOfWeek = d.getDay();
+                switch (dayType.toLowerCase()) {
+                    case 'd':
+                        return dayOfWeek.toString();    // 0 ~ 6
+                    case 'dy':
+                        return DayOfWeekShortName[dayOfWeek];
+                    case 'day':
+                        return DayOfWeekFullName[dayOfWeek];
+                    case 'kdy':
+                        return DayOfWeekShortNameKR[dayOfWeek];
+                    case 'kday':
+                        return DayOfWeekFullNameKR[dayOfWeek];
+                    default:
+                        return dayOfWeek.toString();
+                }
+            },
+            getLastDay(date: DateObject | string): number {
+                let dateObj: DateObject;
+                if(_hison.utils.isObject(date)) {
+                    dateObj = _hison.utils.deepCopy(date);
+                    dateObj.d = 1;
+                }
+                else {
+                    if ((date as string).includes('-')) {
+                        date = date + '-01'
+                    }
+                    else if ((date as string).includes('/')) {
+                        date = date + '/01'
+                    }
+                    else {
+                        date = date + '01'
+                    }
+                    dateObj = _hison.utils.getDateObject(date);
+                }
+                if(!_hison.utils.isDate(dateObj))  throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+        
+                const nextMonthFirstDay = new Date(dateObj.y, dateObj.M, 1);
+                nextMonthFirstDay.setDate(0);
+                return nextMonthFirstDay.getDate();
+            },
+            getSysYear(format: string = option.utils.yearFormat): string {
+                const currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'yy':
+                        return currentDate.getFullYear().toString().substring(2);
+                    default:
+                        return currentDate.getFullYear().toString();
+                }
+            },
+            getSysMonth(format: string = option.utils.monthFormat): string {
+                const currentDate = new Date();
+                const sysMonth = currentDate.getMonth() + 1;
+                switch (format.toLowerCase()) {
+                    case 'mm':
+                        return sysMonth.toString().padStart(2, '0');
+                    case 'mmmm':
+                        return _hison.utils.getMonthName(sysMonth);
+                    case 'mmm':
+                        return _hison.utils.getMonthName(sysMonth, false);
+                    default:
+                        return sysMonth.toString();
+                }
+            },
+            getSysYearMonth(format: string = option.utils.yearMonthFormat): string {
+                const currentDate = new Date();
+                return _hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M:currentDate.getMonth() + 1, d : 1 }, format);
+            },
+            getSysDay(format: string = option.utils.dayFormat): string {
+                const currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'dd':
+                        return currentDate.getDate().toString().padStart(2, '0');
+                    default:
+                        return currentDate.getDate().toString();
+                }
+            },
+            getSysDayOfWeek(dayType: string = option.utils.dayOfWeekFormat) {
+                var currentDate = new Date();
+                return _hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
+            },
+            getSysHour(format) {
+                if(!format) format = option.utils.hourFormat;
+                var currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'hh':
+                        return currentDate.getHours().toString().padStart(2, '0');
+                    default:
+                        return currentDate.getHours().toString();
+                }
+            },
+            getSysHourMinute(format: string = option.utils.hourMinuteFormat): string {
+                var currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'hhmm':
+                        return currentDate.getHours().toString().padStart(2, '0') + "" + currentDate.getMinutes().toString().padStart(2, '0');
+                    default:
+                        return currentDate.getHours().toString().padStart(2, '0') + ":" + currentDate.getMinutes().toString().padStart(2, '0');
+                }
+            },
+            getSysMinute(format: string = option.utils.minuteFormat): string {
+                var currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'mm':
+                        return currentDate.getMinutes().toString().padStart(2, '0');
+                    default:
+                        return currentDate.getMinutes().toString();
+                }
+            },
+            getSysSecond(format: string = option.utils.secondFormat): string {
+                var currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'ss':
+                        return currentDate.getSeconds().toString().padStart(2, '0');
+                    default:
+                        return currentDate.getSeconds().toString();
+                }
+            },
+            getSysTime(format: string = option.utils.timeFormat): string {
+                var currentDate = new Date();
+                switch (format.toLowerCase()) {
+                    case 'hhmmss':
+                        return currentDate.getHours().toString().padStart(2, '0') + currentDate.getMinutes().toString().padStart(2, '0') + currentDate.getSeconds().toString().padStart(2, '0');
+                    default:
+                        return currentDate.getHours().toString().padStart(2, '0') + ":" + currentDate.getMinutes().toString().padStart(2, '0') + ":" + currentDate.getSeconds().toString().padStart(2, '0');
+                }
+            },
+            getSysDate(format: string = option.utils.datetimeFormat): string {
+                var currentDate = new Date();
+                return _hison.utils.getDateWithFormat(
+                    {
+                        y:currentDate.getFullYear(),
+                        M:currentDate.getMonth() + 1,
+                        d:currentDate.getDate(),
+                        h:currentDate.getHours(),
+                        m:currentDate.getMinutes(),
+                        s:currentDate.getSeconds(),
+                    }
+                    , format);
+            },
             //for number
 
             //for string
@@ -513,6 +1217,42 @@ function createHison() {
                 return str;
             },
             //etc
+            deepCopy(object: any, visited?: { source: any, copy: any }[]) {
+                if (object === null || typeof object !== 'object') {
+                    return object;
+                }
+                if (object.utils.defaultsructor !== Object && object.utils.defaultsructor !== Array) {
+                    if(object.isDataWrapper || object.isDataModel) {
+                        return object.clone();
+                    }
+                    return object;
+                }
+                if (!visited) visited = [];
+                for (let i = 0; i < visited.length; i++) {
+                    if (visited[i].source === object) {
+                        return visited[i].copy;
+                    }
+                }
+                let copy: [] | {};
+                if (Array.isArray(object)) {
+                    copy = [];
+                    visited.push({ source: object, copy: copy });
+            
+                    for (let j = 0; j < object.length; j++) {
+                        copy[j] = _hison.utils.deepCopy(object[j], visited);
+                    }
+                } else {
+                    copy = {};
+                    visited.push({ source: object, copy: copy });
+            
+                    for (let key in object) {
+                        if (object.hasOwnProperty(key)) {
+                            copy[key] = _hison.utils.deepCopy(object[key], visited);
+                        }
+                    }
+                }
+                return copy;
+            },
         };
         shield = {
             excute(hison: Hison) {
@@ -796,8 +1536,32 @@ function createHison() {
              * hison.utils.isAlpha("Hello World! 123");
              */
             isAlpha: hison.utils.isAlpha,
+            isAlphaNumber: hison.utils.isAlphaNumber,
+            isNumber: hison.utils.isNumber,
+            isNumberSymbols: hison.utils.isNumberSymbols,
+            isIncludeSymbols: hison.utils.isIncludeSymbols,
+            isLowerAlpha: hison.utils.isLowerAlpha,
+            isLowerAlphaAndNumber: hison.utils.isLowerAlphaAndNumber,
+            isUpperAlpha: hison.utils.isUpperAlpha,
+            isUpperAlphaNumber: hison.utils.isUpperAlphaNumber,
             isNumeric: hison.utils.isNumeric,
+            isInteger: hison.utils.isInteger,
+            isPositiveInteger: hison.utils.isPositiveInteger,
+            isNegativeInteger: hison.utils.isNegativeInteger,
+            isArray: hison.utils.isArray,
+            isObject: hison.utils.isObject,
+            isDate: hison.utils.isDate,
+            isTime: hison.utils.isTime,
+            isDatetime: hison.utils.isDatetime,
+            isEmail: hison.utils.isEmail,
+            isURL: hison.utils.isURL,
+            isValidMask: hison.utils.isValidMask,
+
             // for Date
+            getDateObject: hison.utils.getDateObject,
+            getTimeObject: hison.utils.getTimeObject,
+            getDatetimeObject: hison.utils.getDatetimeObject,
+
             // for number
             // for string
             getNumberFormat: hison.utils.getNumberFormat,
@@ -910,6 +1674,26 @@ const hison = createHison();
 
 const dw = new hison.data.DataWrapper();
 const cm = new hison.link.CachingModule();
+console.log(dw, cm);
+hison.setIsPossibleOpenDevTool(true);
 hison.shield.excute(hison);
+
+const $ = (str: any) => {
+    console.log(str);
+}
+
+const t1 = hison.utils.getDatetimeObject('2024-02-29 12:12:12');
+const t2 = hison.utils.getDatetimeObject('2025-02-29 121212');
+const t3 = hison.utils.getDatetimeObject('2024-12-12 ');
+const t4 = hison.utils.getDatetimeObject('2025-13-01 1111111');
+
+$(t1);
+$(t2);
+$(t3);
+$(t4);
+$(hison.utils.isDatetime(t1));
+$(hison.utils.isDatetime(t2));
+$(hison.utils.isDatetime(t3));
+$(hison.utils.isDatetime(t4));
 
 export default createHison();
