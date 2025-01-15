@@ -109,8 +109,23 @@ interface Hison {
         getDateObject(dateStr: string): DateObject;
         getTimeObject(str: string): TimeObject;
         getDatetimeObject(datetime: string): DateTimeObject;
-
-
+        addDate(datetime: DateTimeObject | string, addValue: string | number, addType?: string, format?: string): DateTimeObject | string;
+        getDateDiff(datetime1: DateTimeObject | string, datetime2: DateTimeObject | string, diffType?: string): number;
+        getMonthName(month: number | string, isFullName?: boolean): string;
+        getDateWithFormat(datetime: DateTimeObject | DateObject | string, format?: string): string;
+        getDayOfWeek(date: DateObject | string, dayType?: string): string;
+        getLastDay(date: DateObject | string): number;
+        getSysYear(format?: string): string;
+        getSysMonth(format?: string): string;
+        getSysYearMonth(format?: string): string;
+        getSysDay(format?: string): string;
+        getSysDayOfWeek(dayType?: string): string;
+        getSysHour(format?: string): string;
+        getSysHourMinute(format?: string): string;
+        getSysMinute(format?: string): string;
+        getSysSecond(format?: string): string;
+        getSysTime(format?: string): string;
+        getSysDate(format?: string): string;
 
         getNumberFormat: Function;
         getToNumber: Function;
@@ -144,68 +159,22 @@ interface TimeObject {
 }
 interface DateTimeObject extends DateObject, TimeObject {}
 enum MonthFullName {
-    January = 1,
-    February,
-    March,
-    April,
-    May,
-    June,
-    July,
-    August,
-    September,
-    October,
-    November,
-    December
+    January = 1, February, March, April, May, June, July, August, September, October, November, December
 }
 enum MonthShortName {
-    Jan = 1,
-    Feb,
-    Mar,
-    Apr,
-    May,
-    Jun,
-    Jul,
-    Aug,
-    Sep,
-    Oct,
-    Nov,
-    Dec
+    Jan = 1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
 }
 enum DayOfWeekFullName {
-    Sun = 0,
-    Mon,
-    Tue,
-    Wed,
-    Thu,
-    Fri,
-    Sat
+    Sun = 0, Mon, Tue, Wed, Thu, Fri, Sat
 }
 enum DayOfWeekShortName {
-    Sunday = 0,
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday
+    Sunday = 0, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 }
 enum DayOfWeekFullNameKR {
-    일 = 0,
-    월,
-    화,
-    수,
-    목,
-    금,
-    토
+    일 = 0, 월, 화, 수, 목, 금, 토
 }
 enum DayOfWeekShortNameKR {
-    일요일 = 0,
-    월요일,
-    화요일,
-    수요일,
-    목요일,
-    금요일,
-    토요일
+    일요일 = 0, 월요일, 화요일, 수요일, 목요일, 금요일, 토요일
 }
 //====================================================================================
 //shield interface, type
@@ -672,7 +641,7 @@ function createHison(): Hison {
                         return Math.floor((d2.getTime() - d1.getTime()) / (24 * 60 * 60 * 1000));
                 }
             },
-            getMonthName(month: number | string, isFullName: boolean = true) {
+            getMonthName(month: number | string, isFullName: boolean = true): string {
                 if(typeof month === 'string') month = parseInt(month, 10);
         
                 if (month < 1 || month > 12) {
@@ -687,19 +656,19 @@ function createHison(): Hison {
             },
             getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = option.utils.dateFormat): string {
                 const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopy(datetime) : _hison.utils.getDatetimeObject(datetime as string);
-                
-                if(!_hison.utils.isDate(datetimeObj)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-                if(!_hison.utils.isTime(datetimeObj)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-
                 const y = datetimeObj.y.toString();
                 const M = (datetimeObj.M || 1).toString().padStart(2, '0');
                 const d = (datetimeObj.d || 1).toString().padStart(2, '0');
                 const h = (datetimeObj.h || 0).toString().padStart(2, '0');
                 const m = (datetimeObj.m || 0).toString().padStart(2, '0');
                 const s = (datetimeObj.s || 0).toString().padStart(2, '0');
+
+                if(!_hison.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if(!_hison.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+
                 const MMMM = _hison.utils.getMonthName(datetimeObj.M);
                 const MMM = _hison.utils.getMonthName(datetimeObj.M, false);
-            
+
                 switch (format) {
                     case 'yyyy':
                         return y;
@@ -1011,7 +980,7 @@ function createHison(): Hison {
                     }
                     dateObj = _hison.utils.getDateObject(date);
                 }
-                if(!_hison.utils.isDate(dateObj))  throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                if(!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
         
                 const nextMonthFirstDay = new Date(dateObj.y, dateObj.M, 1);
                 nextMonthFirstDay.setDate(0);
@@ -1042,7 +1011,7 @@ function createHison(): Hison {
             },
             getSysYearMonth(format: string = option.utils.yearMonthFormat): string {
                 const currentDate = new Date();
-                return _hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M:currentDate.getMonth() + 1, d : 1 }, format);
+                return _hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : 1 }, format);
             },
             getSysDay(format: string = option.utils.dayFormat): string {
                 const currentDate = new Date();
@@ -1053,12 +1022,11 @@ function createHison(): Hison {
                         return currentDate.getDate().toString();
                 }
             },
-            getSysDayOfWeek(dayType: string = option.utils.dayOfWeekFormat) {
+            getSysDayOfWeek(dayType: string = option.utils.dayOfWeekFormat): string {
                 var currentDate = new Date();
                 return _hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
             },
-            getSysHour(format) {
-                if(!format) format = option.utils.hourFormat;
+            getSysHour(format: string = option.utils.hourFormat): string {
                 var currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hh':
@@ -1117,9 +1085,104 @@ function createHison(): Hison {
                     , format);
             },
             //for number
-
+            getCeil(num: number, precision: number): number {
+                if(!_hison.utils.isInteger(precision)) precision = 0;
+                var factor = Math.pow(10, precision);
+                return Math.ceil(num * factor) / factor;
+            },
+            getFloor(num: number, precision: number): number {
+                if(!_hison.utils.isInteger(precision)) precision = 0;
+                var factor = Math.pow(10, precision);
+                return Math.floor(num * factor) / factor;
+            },
+            getRound(num: number, precision: number): number {
+                if(!_hison.utils.isInteger(precision)) precision = 0;
+                var factor = Math.pow(10, precision);
+                return Math.round(num * factor) / factor;
+            },
+            getTrunc(num: number, precision: number): number {
+                if(!_hison.utils.isInteger(precision)) precision = 0;
+                var factor = Math.pow(10, precision);
+                return Math.trunc(num * factor) / factor;
+            },
             //for string
-            getNumberFormat(value: number, format?: string) {
+            getByteLength(str: string): number {
+                var byteLength = 0;
+                for (var i = 0; i < str.length; i++) {
+                    var charCode = str.charCodeAt(i);
+                    if (charCode <= 0x7F) {
+                        byteLength += 1;
+                    } else if (charCode <= 0x7FF) {
+                        byteLength += option.utils.LESSOREQ_0X7FF_BYTE;
+                    } else if (charCode <= 0xFFFF) {
+                        byteLength += option.utils.LESSOREQ_0XFFFF_BYTE;
+                    } else {
+                        byteLength += option.utils.GREATER_0XFFFF_BYTE;
+                    }
+                }
+                return byteLength;
+            },
+            getCutByteLength(str: string, cutByte: number): string {
+                var byteLength = 0;
+                var cutIndex = str.length;
+            
+                for (var i = 0; i < str.length; i++) {
+                    var charCode = str.charCodeAt(i);
+                    if (charCode <= 0x7F) {
+                        byteLength += 1;
+                    } else if (charCode <= 0x7FF) {
+                        byteLength += option.utils.LESSOREQ_0X7FF_BYTE;
+                    } else if (charCode <= 0xFFFF) {
+                        byteLength += option.utils.LESSOREQ_0XFFFF_BYTE;
+                    } else {
+                        byteLength += option.utils.GREATER_0XFFFF_BYTE;
+                    }
+                    if (byteLength > cutByte) {
+                        cutIndex = i;
+                        break;
+                    }
+                }
+                return str.substring(0, cutIndex);
+            },
+            getStringLenForm(str: string, length: number): string {
+                var strLength = str.length;
+                if (strLength >= length) {
+                    return str;
+                }
+                var totalSpaces = length - strLength;
+                var gaps = strLength - 1;
+                var spacePerGap = Math.floor(totalSpaces / gaps);
+                var extraSpaces = totalSpaces % gaps;
+                var result = '';
+                for (var i = 0; i < gaps; i++) {
+                    result += str[i];
+                    result += ' '.repeat(spacePerGap + (i < extraSpaces ? 1 : 0));
+                }
+                result += str[strLength - 1];
+                return result;
+            },
+            getLpad(str: string, padStr: string, length: number): string {
+                var pad = padStr.repeat((length - str.length) / padStr.length);
+                return pad + str;
+            },
+            getRpad(str: string, padStr: string, length: number): string {
+                var pad = padStr.repeat((length - str.length) / padStr.length);
+                return str + pad;
+            },
+            getTrim(str: string): string {
+                str = _hison.utils.getToString(str);
+                return str.trim();
+            },
+            getReplaceAll(str: string, targetStr: string, replaceStr: string): string {
+                str = _hison.utils.getToString(str);
+                targetStr = _hison.utils.getToString(targetStr);
+                replaceStr = _hison.utils.getToString(replaceStr);
+                return str.split(targetStr).join(replaceStr);
+            },
+            nvl(val: any, defaultValue: any): any {
+                return (val === null || val === undefined) ? defaultValue : val;
+            },
+            getNumberFormat(value: number, format?: string): string {
                 const oriValue = value;
                 if (!_hison.utils.isNumeric(value)) {
                     throw new Error(`ER0021 Invalid number\n=>${JSON.stringify(oriValue)}`);
@@ -1188,6 +1251,18 @@ function createHison(): Hison {
                 result = isNegative ? '-' + result : result;
                 return prefix + result + suffix;
             },
+            getRemoveExceptNumbers(str: string): string {
+                str = _hison.utils.getToString(str);
+                return str.replace(/[^0-9]/g, '');
+            },
+            getRemoveNumbers(str: string): string {
+                str = _hison.utils.getToString(str);
+                return str.replace(/[0-9]/g, '');
+            },
+            getReverse(str: string): string {
+                str = _hison.utils.getToString(str);
+                return str.split('').reverse().join('');
+            },
 
             //for convertor
             getToNumber(val: any, impossibleValue?: number) {
@@ -1221,31 +1296,31 @@ function createHison(): Hison {
                 if (object === null || typeof object !== 'object') {
                     return object;
                 }
-                if (object.utils.defaultsructor !== Object && object.utils.defaultsructor !== Array) {
+                if (object.constructor !== Object && object.constructor !== Array) {
                     if(object.isDataWrapper || object.isDataModel) {
                         return object.clone();
                     }
                     return object;
                 }
                 if (!visited) visited = [];
-                for (let i = 0; i < visited.length; i++) {
+                for (var i = 0; i < visited.length; i++) {
                     if (visited[i].source === object) {
                         return visited[i].copy;
                     }
                 }
-                let copy: [] | {};
+                var copy;
                 if (Array.isArray(object)) {
                     copy = [];
                     visited.push({ source: object, copy: copy });
             
-                    for (let j = 0; j < object.length; j++) {
+                    for (var j = 0; j < object.length; j++) {
                         copy[j] = _hison.utils.deepCopy(object[j], visited);
                     }
                 } else {
                     copy = {};
                     visited.push({ source: object, copy: copy });
             
-                    for (let key in object) {
+                    for (var key in object) {
                         if (object.hasOwnProperty(key)) {
                             copy[key] = _hison.utils.deepCopy(object[key], visited);
                         }
@@ -1312,7 +1387,7 @@ function createHison(): Hison {
                     window.addEventListener('focus', detectDevTool);
                     window.addEventListener('blur', detectDevTool);
                 }
-                //excute
+
                 if (option.shield.isFreeze) {
                     deepFreeze(hison);
                 }
@@ -1561,6 +1636,23 @@ function createHison(): Hison {
             getDateObject: hison.utils.getDateObject,
             getTimeObject: hison.utils.getTimeObject,
             getDatetimeObject: hison.utils.getDatetimeObject,
+            addDate: hison.utils.addDate,
+            getDateDiff: hison.utils.getDateDiff,
+            getMonthName: hison.utils.getMonthName,
+            getDateWithFormat: hison.utils.getDateWithFormat,
+            getDayOfWeek: hison.utils.getDayOfWeek,
+            getLastDay: hison.utils.getLastDay,
+            getSysYear: hison.utils.getSysYear,
+            getSysMonth: hison.utils.getSysMonth,
+            getSysYearMonth: hison.utils.getSysYearMonth,
+            getSysDay: hison.utils.getSysDay,
+            getSysDayOfWeek: hison.utils.getSysDayOfWeek,
+            getSysHour: hison.utils.getSysHour,
+            getSysHourMinute: hison.utils.getSysHourMinute,
+            getSysMinute: hison.utils.getSysMinute,
+            getSysSecond: hison.utils.getSysSecond,
+            getSysTime: hison.utils.getSysTime,
+            getSysDate: hison.utils.getSysDate,
 
             // for number
             // for string
@@ -1671,29 +1763,15 @@ function createHison(): Hison {
 
 
 const hison = createHison();
-
-const dw = new hison.data.DataWrapper();
-const cm = new hison.link.CachingModule();
-console.log(dw, cm);
 hison.setIsPossibleOpenDevTool(true);
 hison.shield.excute(hison);
 
-const $ = (str: any) => {
-    console.log(str);
+const $ = (...str: any[]) => {
+    console.log(...str);
 }
 
-const t1 = hison.utils.getDatetimeObject('2024-02-29 12:12:12');
-const t2 = hison.utils.getDatetimeObject('2025-02-29 121212');
-const t3 = hison.utils.getDatetimeObject('2024-12-12 ');
-const t4 = hison.utils.getDatetimeObject('2025-13-01 1111111');
+const t = hison.utils;
 
-$(t1);
-$(t2);
-$(t3);
-$(t4);
-$(hison.utils.isDatetime(t1));
-$(hison.utils.isDatetime(t2));
-$(hison.utils.isDatetime(t3));
-$(hison.utils.isDatetime(t4));
+$('1', t.getDateObject('2024-01-01'));
 
 export default createHison();
