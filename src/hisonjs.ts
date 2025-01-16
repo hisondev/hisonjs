@@ -436,7 +436,6 @@ interface ConvertValue {
  */
 interface DataWrapper {
     getIsDataWrapper(): boolean;
-    getIsDataWrapper(): boolean;
     clone(): DataWrapper;
     clear(): DataWrapper;
     getSerialized(): string;
@@ -446,13 +445,13 @@ interface DataWrapper {
     put(key: string, value: any): DataWrapper;
     putString(key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper;
     putDataModel(key: string, value: DataModel): DataWrapper;
-    getObject();
-    containsKey(key);
-    isEmpty();
-    remove(key);
-    size();
-    keys();
-    values();
+    getObject(): {};
+    containsKey(key: string): boolean;
+    isEmpty(): boolean;
+    remove(key: string): { data: DataWrapper, result: boolean };
+    size(): number;
+    keys(): string[];
+    values(): any[];
 };
 
 /**
@@ -468,7 +467,55 @@ interface DataWrapper {
 interface DataModel {
     getIsDataModel(): boolean;
     clone(): DataModel;
+    clear(): DataModel;
+    getSerialized(): string;
+    isDeclare(): boolean;
+    getColumns(): [];
+    getColumnValues(column: string): any[];
+    addColumn(column: string): DataModel;
+    addColumns(columns: string[]): DataModel;
+    setColumnSameValue(column: string, value: any): DataModel;
+    setColumnSameFormat(column: string, formatter: DataModelFormatter): DataModel;
+    getRow(rowIndex: number): {};
+    getRowAsDataModel(rowIndex: number): DataModel;
+    addRow(rowIndexOrRow?: number | {}, row?: {}): DataModel;
+    getRows(): {}[];
+    addRows(rows: {}[]): DataModel;
+    getObject(): {};
+    getValue(rowIndex: number, column: string): any;
+    setValue(rowIndex: number, column: string, value: any): DataModel;
+    removeColumn(column: string): DataModel;
+    removeColumns(columns: string[]): DataModel;
+    removeRow(rowIndex?: number): {};
+    getColumnCount(): number;
+    getRowCount(): number;
+    hasColumn(column: string): boolean;
+    setValidColumns(columns: string[]): DataModel;
+    isNotNullColumn(column: string): boolean;
+    findFirstRowNullColumn(column: string): {};
+    isNotDuplColumn(column: string): boolean;
+    findFirstRowDuplColumn(column: string): {};
+    isValidValue(column: string, vaildator: DataModelValidator): boolean;
+    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): {};
+    searchRowIndexes(condition: {}, isNegative?: boolean): number[];
+    searchRows(condition: {}, isNegative?: boolean): {}[];
+    searchRowsAsDataModel(condition: {}, isNegative?: boolean): DataModel;
+    searchAndModify(condition: {}, isNegative?: boolean): DataModel;
+    filterRowIndexes(filter: DataModelFillter): number[];
+    filterRows(filter: DataModelFillter): {}[];
+    filterRowsAsDataModel(filter: DataModelFillter): DataModel;
+    filterAndModify(filter: DataModelFillter): DataModel;
+    setColumnSorting(columns: string[]): DataModel;
+    sortColumnAscending(): DataModel;
+    sortColumnDescending(): DataModel;
+    sortColumnReverse(): DataModel;
+    sortRowAscending(column: string, isIntegerOrder?: boolean): DataModel;
+    sortRowDescending(column: string, isIntegerOrder?: boolean): DataModel;
+    sortRowReverse(): DataModel;
 };
+interface DataModelFormatter{(value: any): any;};
+interface DataModelValidator{(value: any): boolean;};
+interface DataModelFillter{(row: {}): boolean;};
 //====================================================================================
 //link interface, type
 //====================================================================================
@@ -1748,7 +1795,7 @@ function createHison(): Hison {
                         return object;
                     }
                     if (object.constructor !== Object && object.constructor !== Array) {
-                        if (object.getIsDataModel()) {
+                        if (object.getIsDataModel && object.getIsDataModel()) {
                             return object.clone();
                         } else {
                             return object;
@@ -1822,7 +1869,7 @@ function createHison(): Hison {
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
                             // DataModel 객체인 경우
-                            if (this._data[key] && this._data[key].getIsDataModel()) {
+                            if (this._data[key] && this._data[key].getIsDataMode && this._data[key].getIsDataModel()) {
                                 data[key] = this._data[key].getRows();
                             } else {
                                 // 그 외의 경우는 정상적으로 값을 할당
@@ -1833,18 +1880,17 @@ function createHison(): Hison {
                     return JSON.stringify(data);
                 };
                 get = (key: string): DataModel | string | null => {
-                    return this._deepCopy(this._data[key]);
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    return this._data[key] ? this._deepCopy(this._data[key]) : null;
                 };
-                getString = (key: string): string => {
-                    if (typeof this._data[key] !== 'string') {
-                        throw new Error("The data does not contain the specified string value.");
-                    }
-                    return this._data[key];
+                getString = (key: string): string | null => {
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (typeof this._data[key] !== 'string') throw new Error("The data does not contain the specified string value.");
+                    return this._data[key] ? this._data[key] : null;
                 };
                 getDataModel = (key: string): DataModel => {
-                    if (!this._data[key].getIsDataModel()) {
-                        throw new Error("The data does not contain the specified data-model value.");
-                    }
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (!this._data[key].getIsDataMode || !this._data[key].getIsDataModel()) throw new Error("The data does not contain the specified data-model value.");
                     return this._data[key].clone();
                 };
                 put = (key: string, value: any): DataWrapper => {
@@ -1852,6 +1898,7 @@ function createHison(): Hison {
                     return this;
                 };
                 putString = (key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper => {
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
                     if (typeof value !== 'string'
                         && typeof value !== 'number'
                         && typeof value !== 'boolean'
@@ -1864,7 +1911,8 @@ function createHison(): Hison {
                     return this;
                 };
                 putDataModel = (key: string, value: DataModel): DataWrapper => {
-                    if (value !== null && !value.getIsDataModel()) {
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (value === null || !value.getIsDataModel || !value.getIsDataModel()) {
                         throw new Error("Please insert only values of data-model type.");
                     }
                     this._put(key, value);
@@ -1873,31 +1921,37 @@ function createHison(): Hison {
                 getObject = (): {} => {
                     const result = {};
                     for(let key in this._data) {
-                        if (this._data[key] && this._data[key].getIsDataModel()) {
+                        if (this._data[key] && this._data[key].getIsDataModel && this._data[key].getIsDataModel()) {
                             result[key] = this._data[key].getObject();
                         } else {
-                            result[key] = this._deepCopy(this._data[key]);
+                            result[key] = this._data[key];
                         }
                     }
                     return result;
                 };
                 containsKey = (key: string): boolean => {
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
                     return this._data.hasOwnProperty(key);
                 };
-                isEmpty = () => {
+                isEmpty = (): boolean => {
                     return Object.keys(this._data).length === 0;
                 };
-                remove = (key) => {
-                    delete this._data[key];
-                    return this;
+                remove = (key: string): { data: DataWrapper, result: boolean } => {
+                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    let result = false;
+                    if (this._data.hasOwnProperty(key)) {
+                        result = true;
+                        delete this._data[key];
+                    }
+                    return { data: this, result };
                 };
-                size = () => {
+                size = (): number => {
                     return Object.keys(this._data).length;
                 };
-                keys = () => {
+                keys = (): string[] => {
                     return Object.keys(this._data);
                 };
-                values = () => {
+                values = (): any[] => {
                     const values = [];
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
@@ -1908,9 +1962,688 @@ function createHison(): Hison {
                 };
             },
             DataModel : class implements DataModel {
+                constructor(data?: {}[] | {}) {
+                    if(!data) return;
+                    this._put(data);
+                }
+                private _cols: string[] = [];
+                private _rows: any[] = [];
                 private _isDataModel = true;
-                getIsDataModel = () => { return this._isDataModel; };
-                clone = () => {return this};
+                private _deepCopy = (object: any, visited?: { source: any, copy: any }[]): any => {
+                    if (object === null || typeof object !== 'object') {
+                        return object;
+                    }
+                    if (object.constructor !== Object && object.constructor !== Array) {
+                        return option.data.convertValue ? option.data.convertValue(object) : object;
+                    }
+                    if (!visited) visited = [];
+                    for (let i = 0; i < visited.length; i++) {
+                        if (visited[i].source === object) {
+                            return visited[i].copy;
+                        }
+                    }
+                    let copy: any;
+                    if (Array.isArray(object)) {
+                        copy = [];
+                        visited.push({ source: object, copy: copy });
+                
+                        for (let j = 0; j < object.length; j++) {
+                            copy[j] = this._deepCopy(object[j], visited);
+                        }
+                    } else {
+                        copy = {};
+                        visited.push({ source: object, copy: copy });
+                
+                        for (let key in object) {
+                            if (object.hasOwnProperty(key)) {
+                                copy[key] = this._deepCopy(object[key], visited);
+                            }
+                        }
+                    }
+                    return copy;
+                };
+                private _isPositiveIntegerIncludingZero = (value: string | number | bigint): boolean => {
+                    if (typeof value !== 'number' && typeof value !== 'string' && typeof value !== 'bigint') {
+                        return false;
+                    }
+                    value = String(value);
+                    const intNum = parseInt(value, 10);
+                    const floatNum = parseFloat(value);
+                    if (intNum !== floatNum || isNaN(intNum) || intNum < 0) {
+                        return false;
+                    }
+                    return true;
+                };
+                private _getValidRowIndex = (rowIndex: number): number => {
+                    if(!this._isPositiveIntegerIncludingZero(rowIndex)) {
+                        throw new Error("Invalid number type. It should be a number or a string that can be converted to a number.");
+                    }
+                    const index = Number(rowIndex);
+                    if (index < 0 || index >= this._rows.length) {
+                        throw new Error("Invalid rowIndex value. It should be within the range of the rows.");
+                    }
+                    return index;
+                }
+                private _isConvertibleString = (value: any): boolean => {
+                    if(value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if(value === null) return true;
+                    if(['string','number','boolean','bigint','symbol'].indexOf(typeof value) >= 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                };
+                private _hasColumn = (column: string): boolean => {
+                    return this._cols.indexOf(column) >= 0
+                };
+                private _checkColumn = (column: string) => {
+                    if(!this._hasColumn(column)) {
+                        throw new Error("The column does not exist. column : " + column);
+                    }
+                };
+                private _checkValidFunction = (func: Function) => {
+                    if(!func || typeof func !== 'function') {
+                        throw new Error("Please insert the valid function.");
+                    }
+                };
+                private _checkBoolean = (value: boolean) => {
+                    if(typeof value !== 'boolean') {
+                        throw new Error("Please pass an boolean as a parameter.");
+                    }
+                };
+                private _checkOriginObject = (value: {}) => {
+                    if(value.constructor !== Object) {
+                        throw new Error("Please pass an object with its own key-value pairs as a parameter.");
+                    }
+                };
+                private _checkArray = (value: any[]) => {
+                    if(value.constructor !== Array) {
+                        throw new Error("Please pass an array.");
+                    }
+                };
+                private _getColumnType = (col: string): string => {
+                    for(const row of this._rows) {
+                        if(row[col]) {
+                            if(typeof row[col] === 'object') {
+                                if (row.constructor === Array) {
+                                    return 'array';
+                                }
+                                return 'object';
+                            }
+                            return typeof row[col];
+                        }
+                    }
+                    return 'null';
+                };
+                private _makeValue = (value: any): any => {
+                    let result: any;
+                    if (typeof value === 'string') {
+                        result = value;
+                    } else if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+                        result = String(value);
+                    } else if (typeof value === 'symbol') {
+                        result = value.description;
+                    } else if (value === null) {
+                        result = null;
+                    } else if (typeof value === 'object') {
+                        if(value.getIsDataWrapper || value.getIsDataModel
+                            || value.getIsDataWrapper() || value.getIsDataModel()
+                        ) {
+                            throw new Error("You cannot insert a datawrapper or datamodel within a datamodel.");
+                        }
+                        result = this._deepCopy(value);
+                    }
+                    return result;
+                };
+                private _getValidColValue = (value: string): string => {
+                    value = this._makeValue(value);
+                    if(!this._isConvertibleString(value)) {
+                        throw new Error("Only strings can be inserted into columns.");
+                    }
+                    if(!value) {
+                        throw new Error("Column cannot be null.");
+                    }
+                    return value;
+                }
+                private _getValidRowValue = (col: string, value: any): any => {
+                    value = this._makeValue(value);
+                    const chkType = this._getColumnType(col);
+                    if(chkType !== 'null' && value !== null && chkType !== (typeof value)) {
+                        throw new Error("Data of the same type must be inserted into the same column. column : " + col);
+                    }
+                    return value;
+                }
+                private _addCol = (value: string) => {
+                    value = this._getValidColValue(value);
+                    if (this._cols.indexOf(value) === -1) {
+                        this._cols.push(value);
+                    } else {
+                        throw new Error("There are duplicate columns to add. column : " + value);
+                    }
+                }
+                private _addRow = (row: {}) => {
+                    if(!row) {
+                        throw new Error("Please insert vaild object");
+                    }
+                    if(row.constructor !== Object) {
+                        throw new Error("Please insert object with their own key-value pairs.");
+                    }
+                    if(Object.keys(row).length === 0) return;
+                    const tempRow = {};
+                    const tempkeys = Object.keys(row);
+                    if(this._cols.length === 0) {
+                        for (const key in row) {
+                            this._addCol(key);
+                        }
+                    }
+                    for (let i = 0; i < tempkeys.length; i++) {
+                        if (this._hasColumn(tempkeys[i])) {
+                            tempRow[tempkeys[i]] = this._getValidRowValue(tempkeys[i], row[tempkeys[i]]);
+                        }
+                    }
+                    for (const col of this._cols) {
+                        if(!tempRow.hasOwnProperty(col)) {
+                            tempRow[col] = null;
+                        }
+                    }
+                    this._rows.push(tempRow);
+                }
+                private _put = (data: {}[] | {}) => {
+                    if(Array.isArray(data)) {
+                        if(data.length === 0) return;
+                        if(this._isConvertibleString(data[0])) {
+                            for(const col of data) {
+                                this._addCol(col);
+                            }
+                            return;
+                        } else {
+                            for(const row of data) {
+                                this._addRow(row);
+                            }
+                            return;
+                        }
+                    } else if (typeof data === 'object') {
+                        if((data as DataWrapper).getIsDataWrapper || (data as DataWrapper).getIsDataWrapper()) {
+                            throw new Error("You cannot construct a datamodel with datawrapper.");
+                        } else if ((data as DataModel).getIsDataModel || (data as DataModel).getIsDataModel()){
+                            for(const row of (data as DataModel).getRows()) {
+                                this._addRow(row);
+                            }
+                            return;
+                        } else if (data.constructor === Object) {
+                            this._addRow(data);
+                            return;
+                        }
+                    }
+                    throw new Error("Please insert array contains objects with their own key-value pairs, array contains strings or only object of key-value pairs.");
+                };
+                private _getNullColumnFirstRowIndex = (column: string): number => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    for(var i = 0; i < this._rows.length; i++) {
+                        if(this._rows[i][column] === null) return i;
+                    }
+                    return -1;
+                };
+                private _getDuplColumnFirstRowIndex = (column: string): number => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    var checkedValues = [];
+                    for(var i = 0; i < this._rows.length; i++) {
+                        if(checkedValues.includes(this._rows[i][column])) {
+                            return i;
+                        }
+                        if(this._rows[i][column] !== null) {
+                            checkedValues.push(this._rows[i][column]);
+                        }
+                    }
+                    return -1;
+                };
+                private _getInValidColumnFirstRowIndex = (column: string, validator: DataModelValidator): number => {
+                    this._checkValidFunction(validator);
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    
+                    for(var i = 0; i < this._rows.length; i++) {
+                        if(!validator(this._rows[i][column])) {
+                            return i;
+                        }
+                    }
+                    return -1;
+                };
+                getIsDataModel = (): boolean => {
+                    return this._isDataModel;
+                };
+                clone = (): DataModel => {
+                    return new _hison.data.DataModel(this._rows);
+                };
+                clear = (): DataModel => {
+                    this._cols = [];
+                    this._rows = [];
+                    return this;
+                };
+                getSerialized = (): string => {
+                    return JSON.stringify(this._rows);
+                };
+                isDeclare = (): boolean => {
+                    return this._cols.length > 0;
+                };
+                getColumns = (): [] => {
+                    return this._deepCopy(this._cols);
+                };
+                getColumnValues = (column: string): any[] => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    const result = [];
+                    for(const row of this._rows) {
+                        result.push(this._deepCopy(row[column]));
+                    }
+                    return result;
+                };
+                addColumn = (column: string): DataModel => {
+                    this._addCol(column);
+                    for(const row of this._rows) {
+                        if(!row.hasOwnProperty(column)) {
+                            row[column] = null;
+                        }
+                    }
+                    return this;
+                };
+                addColumns = (columns: string[]): DataModel => {
+                    if(!Array.isArray(columns)) {
+                        throw new Error("Only array contains strings can be inserted into columns.");
+                    }
+                    for(const column of columns) {
+                        this._addCol(column);
+                        for(const row of this._rows) {
+                            if(!row.hasOwnProperty(column)) {
+                                row[column] = null;
+                            }
+                        }
+                    }
+                    return this;
+                };
+                setColumnSameValue = (column: string, value: any): DataModel => {
+                    if(value === undefined) throw new Error("You can not put a value of undefined type.");
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    for(const row of this._rows) {
+                        row[column] = this._getValidRowValue(column, value);
+                    }
+                    return this;
+                };
+                setColumnSameFormat = (column: string, formatter: DataModelFormatter): DataModel => {
+                    this._checkValidFunction(formatter);
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    for(const row of this._rows) {
+                        row[column] = this._getValidRowValue(column, formatter(row[column]));
+                    }
+                    return this;
+                };
+                getRow = (rowIndex: number): {} => {
+                    return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)]);
+                };
+                getRowAsDataModel = (rowIndex: number): DataModel => {
+                    return new _hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
+                };
+                addRow = (rowIndexOrRow?: number, row?: {}): DataModel => {
+                    if (rowIndexOrRow === undefined && row === undefined) {
+                        if(this._cols.length <= 0) {
+                            throw new Error("Please define the column first.");
+                        }
+                        const emptyRow = {};
+                        for (const col of this._cols) {
+                            emptyRow[col] = null;
+                        }
+                        this._rows.push(emptyRow);
+                    } else if (typeof rowIndexOrRow === 'number' && row === undefined) {
+                        if(this._cols.length <= 0) {
+                            throw new Error("Please define the column first.");
+                        }
+                        const validIndex = this._getValidRowIndex(rowIndexOrRow);
+                        const emptyRow = {};
+                        for (const col of this._cols) {
+                            emptyRow[col] = null;
+                        }
+                        this._rows.splice(validIndex, 0, emptyRow);
+                    } else if (typeof rowIndexOrRow === 'object' && row === undefined) {
+                        this._addRow(rowIndexOrRow);
+                    } else if (typeof rowIndexOrRow === 'number' && typeof row === 'object') {
+                        const validIndex = this._getValidRowIndex(rowIndexOrRow);
+                        this._addRow(row);
+                        const newRow = this._rows.pop();
+                        this._rows.splice(validIndex, 0, newRow);
+                    } else {
+                        throw new Error("Invalid parameters for addRow method.");
+                    }
+                    return this;
+                };
+                getRows = (): {}[] => {
+                    return this._deepCopy(this._rows);
+                }
+                addRows = (rows: {}[]): DataModel => {
+                    this._put(rows);
+                    return this;
+                }
+                getObject = (): {} => {
+                    const result = {};
+                    const copyCol = this._deepCopy(this._cols);
+                    const copyRow = this._deepCopy(this._rows);
+        
+                    result['cols'] = copyCol;
+                    result['rows'] = copyRow;
+                    result['colCount'] = copyCol.length;
+                    result['rowCount'] = copyRow.length;
+                    result['isDeclare'] = this.isDeclare();
+                    return result;
+                };
+                getValue = (rowIndex: number, column: string): any => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)][column]);
+                };
+                setValue = (rowIndex: number, column: string, value: any): DataModel => {
+                    if(value === undefined) throw new Error("You can not put a value of undefined type.");
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(column, value);
+                    return this;
+                };
+                removeColumn = (column: string): DataModel => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    for(const row of this._rows) {
+                        delete row[column]
+                    }
+                    this._cols = this._cols.filter(oriColumn => oriColumn !== column);
+                    return this;
+                };
+                removeColumns = (columns: string[]): DataModel => {
+                    for(const column of columns) {
+                        this.removeColumn(column);
+                    }
+                    return this;
+                };
+                removeRow = (rowIndex: number = 0): {} => {
+                    return this._rows.splice(this._getValidRowIndex(rowIndex), 1)[0];
+                };
+                getColumnCount = (): number => {
+                    return this._cols.length;
+                };
+                getRowCount = (): number => {
+                    return this._rows.length;
+                };
+                hasColumn = (column: string): boolean => {
+                    return this._hasColumn(column);
+                };
+                setValidColumns = (columns: string[]): DataModel => {
+                    columns = this._cols.filter(oriColumn => !columns.includes(oriColumn));
+                    this.removeColumns(columns);
+                    return this;
+                };
+                isNotNullColumn = (column: string): boolean => {
+                    return this._getNullColumnFirstRowIndex(column) === -1;
+                };
+                findFirstRowNullColumn = (column: string): {} => {
+                    var nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column);
+                    if (nullColumnFirstRowIndex === -1) {
+                        return null
+                    } else {
+                        return this.getRow(nullColumnFirstRowIndex);
+                    }
+                };
+                isNotDuplColumn = (column: string): boolean => {
+                    return this._getDuplColumnFirstRowIndex(column) === -1;
+                };
+                findFirstRowDuplColumn = (column: string): {} => {
+                    var duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column);
+                    if (duplColumnFirstRowIndex === -1) {
+                        return null
+                    } else {
+                        return this.getRow(duplColumnFirstRowIndex);
+                    }
+                };
+                isValidValue = (column: string, vaildator: DataModelValidator): boolean => {
+                    return this._getInValidColumnFirstRowIndex(column, vaildator) === -1;
+                };
+                findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): {} => {
+                    var inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column, vaildator);
+                    if (inValidColumnFirstRowIndex === -1) {
+                        return null
+                    } else {
+                        return this.getRow(inValidColumnFirstRowIndex);
+                    }
+                };
+                searchRowIndexes = (condition: {}, isNegative: boolean = false): number[] => {
+                    this._checkOriginObject(condition);
+                    this._checkBoolean(isNegative);
+                    var matched = [];
+                    this._rows.forEach(function(row, index) {
+                        var matchesCondition = true;
+                        for (var key in condition) {
+                            this._checkColumn(key);
+                            if ((row[key] !== condition[key])) {
+                                matchesCondition = false;
+                                break;
+                            }
+                        }
+                        if(isNegative) {
+                            if(!matchesCondition) matched.push(index);
+                        } else {
+                            if(matchesCondition) matched.push(index);
+                        }
+                    });
+                    return matched;
+                };
+                searchRows = (condition: {}, isNegative: boolean = false): {}[] => {
+                    this._checkOriginObject(condition);
+                    this._checkBoolean(isNegative);
+                    var matched = [];
+                    this._rows.forEach(function(row) {
+                        var matchesCondition = true;
+                        for (var key in condition) {
+                            this._checkColumn(key);
+                            if ((row[key] !== condition[key])) {
+                                matchesCondition = false;
+                                break;
+                            }
+                        }
+                        if(isNegative) {
+                            if(!matchesCondition) matched.push(this._deepCopy(row));
+                        } else {
+                            if(matchesCondition) matched.push(this._deepCopy(row));
+                        }
+                    });
+                    return matched;
+                };
+                searchRowsAsDataModel = (condition: {}, isNegative: boolean = false): DataModel => {
+                    this._checkOriginObject(condition);
+                    this._checkBoolean(isNegative);
+                    var matched = [];
+                    this._rows.forEach(function(row) {
+                        var matchesCondition = true;
+                        for (var key in condition) {
+                            this._checkColumn(key);
+                            if ((row[key] !== condition[key])) {
+                                matchesCondition = false;
+                                break;
+                            }
+                        }
+                        if(isNegative) {
+                            if(!matchesCondition) matched.push(row);
+                        } else {
+                            if(matchesCondition) matched.push(row);
+                        }
+                    });
+                    return new _hison.data.DataModel(matched);
+                };
+                searchAndModify = (condition: {}, isNegative: boolean = false): DataModel => {
+                    this._checkOriginObject(condition);
+                    this._checkBoolean(isNegative);
+                    for (var i = 0; i < this._rows.length; i++ ){
+                        var matchesCondition = true;
+                        for (var key in condition) {
+                            this._checkColumn(key);
+                            if ((this._rows[i][key] !== condition[key])) {
+                                matchesCondition = false;
+                                break;
+                            }
+                        }
+                        if(isNegative) {
+                            if(matchesCondition) {
+                                this._rows.splice(i, 1);
+                                i--;
+                            }
+                        } else {
+                            if(!matchesCondition) {
+                                this._rows.splice(i, 1);
+                                i--;
+                            }
+                        }
+                    }
+                    return this;
+                };
+                filterRowIndexes = (filter: DataModelFillter): number[] => {
+                    this._checkValidFunction(filter);
+                    var matched = [];
+                    this._rows.forEach(function(row: {}, index) {
+                        if(filter(row)) {
+                            matched.push(index);
+                        }
+                    });
+                    return matched;
+                };
+                filterRows = (filter: DataModelFillter): {}[] => {
+                    this._checkValidFunction(filter);
+                    var matched = [];
+                    this._rows.forEach(function(row) {
+                        if(filter(row)) {
+                            matched.push(this._deepCopy(row));
+                        }
+                    });
+                    return matched;
+                };
+                filterRowsAsDataModel = (filter: DataModelFillter): DataModel => {
+                    this._checkValidFunction(filter);
+                    var matched = [];
+                    this._rows.forEach(function(row) {
+                        if(filter(row)) {
+                            matched.push(row);
+                        }
+                    });
+                    return new _hison.data.DataModel(matched);
+                };
+                filterAndModify = (filter: DataModelFillter): DataModel => {
+                    this._checkValidFunction(filter);
+                    for (var i = 0; i < this._rows.length; i++ ){
+                        if(!filter(this._rows[i])) {
+                            this._rows.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    return this;
+                };
+                setColumnSorting = (columns: string[]): DataModel => {
+                    this._checkArray(columns);
+                    var newColumns = [];
+                    for(var column of columns) {
+                        column = this._getValidColValue(column);
+                        this._checkColumn(column);
+                        newColumns.push(column);
+                    }
+                    for(var column of this._cols) {
+                        if(!newColumns.includes(column)) {
+                            newColumns.push(column)
+                        }
+                    }
+                    this._cols = newColumns;
+                    return this;
+                };
+                sortColumnAscending = (): DataModel => {
+                    this._cols.sort();
+                    return this;
+                };
+                sortColumnDescending = (): DataModel => {
+                    this._cols.sort(function(a, b) {
+                        if (a > b) {
+                            return -1;
+                        }
+                        if (a < b) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    return this;
+                };
+                sortColumnReverse = (): DataModel => {
+                    this._cols.reverse();
+                    return this;
+                };
+                sortRowAscending = (column: string, isIntegerOrder: boolean = true): DataModel => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    this._checkBoolean(isIntegerOrder);
+                    this._rows.sort(function(a, b) {
+                        var valueA = a[column];
+                        var valueB = b[column];
+                        if (valueA === null || valueB === null) {
+                            return valueA === null ? 1 : -1;
+                        }
+                        if (typeof valueA === 'object' || typeof valueB === 'object') {
+                            throw new Error("Cannot sort rows: value is an object.");
+                        }
+                        if (isIntegerOrder) {
+                            valueA = parseInt(valueA, 10);
+                            valueB = parseInt(valueB, 10);
+                            if (isNaN(valueA) || isNaN(valueB)) {
+                                throw new Error("Cannot sort rows: non-integer value encountered.");
+                            }
+                        }
+                        if (valueA < valueB) {
+                            return -1;
+                        }
+                        if (valueA > valueB) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    return this;
+                };
+                sortRowDescending = (column: string, isIntegerOrder: boolean = false): DataModel => {
+                    column = this._getValidColValue(column);
+                    this._checkColumn(column);
+                    this._checkBoolean(isIntegerOrder);
+                    this._rows.sort(function(a, b) {
+                        var valueA = a[column];
+                        var valueB = b[column];
+                        if (valueA === null || valueB === null) {
+                            return valueA === null ? -1 : 1;
+                        }
+                        if (typeof valueA === 'object' || typeof valueB === 'object') {
+                            throw new Error("Cannot sort rows: value is an object.");
+                        }
+                        if (isIntegerOrder) {
+                            valueA = parseInt(valueA, 10);
+                            valueB = parseInt(valueB, 10);
+                            if (isNaN(valueA) || isNaN(valueB)) {
+                                throw new Error("Cannot sort rows: non-integer value encountered.");
+                            }
+                        }
+                        if (valueA < valueB) {
+                            return 1;
+                        }
+                        if (valueA > valueB) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                    return this;
+                };
+                sortRowReverse = (): DataModel => {
+                    this._rows.reverse();
+                    return this;
+                };
             },
         };
         link = {
@@ -2085,11 +2818,8 @@ const $ = (...str: any[]) => {
     console.log(...str);
 }
 
-const dw1 = new hison.data.DataWrapper();
-const dw2 = new hison.data.DataWrapper({key1: 'value', key2: 3, key3: null, key4: new hison.data.DataModel()});
-const dw3 = new hison.data.DataWrapper('key', 'value');
-$('#### 1', dw1);
-$('#### 2', dw2);
-$('#### 3', dw3);
+const dm1 = new hison.data.DataModel();
+dm1.addRows([{key1: 'value11'},{key1: 'value12'},{key1: 'value13'},{key2: 'value21'}]);
+$(dm1.getObject());
 
 export default createHison();
