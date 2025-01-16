@@ -16,6 +16,9 @@
  * @namespace Hison
  */
 interface Hison {
+    //====================================================================================
+    //option utils set
+    //====================================================================================
     setDateFormat(str: string): void;
     setTimeFormat(str: string): void;
     setDatetimeFormat(str: string): void;
@@ -50,6 +53,10 @@ interface Hison {
     getLESSOREQ_0X7FF_BYTE(): number;
     getLESSOREQ_0XFFFF_BYTE(): number;
     getGREATER_0XFFFF_BYTE(): number;
+
+    //====================================================================================
+    //option shield set
+    //====================================================================================
     setShieldURL(str: string): void;
     setExposeIpList(arr: []): void;
     setIsFreeze(bool: boolean): void;
@@ -60,7 +67,43 @@ interface Hison {
     getIsFreeze(): boolean;
     getIsPossibleGoBack(): boolean;
     getIsPossibleOpenDevTool(): boolean;
+    
+    //====================================================================================
+    //option data set
+    //====================================================================================
+    //function set
+    /**
+     * Sets a custom function for the `convertValue` method, which is responsible for converting
+     * special values into a predefined format before they are inserted into the DataModel.
+     * This method allows users to override the default behavior of `convertValue`.
+     *
+     * @param {ConvertValue} func - A function that takes a value of any type and 
+     * returns the converted value. This function can handle specific value types (e.g., `Date`) 
+     * to ensure consistent and predictable storage in the DataModel.
+     *
+     * ### Related:
+     * - **`convertValue`**:
+     *   - Default implementation: `function(value: any): any { return value; }`
+     *
+     * @example
+     * //Customizing the `convertValue` function to format Date objects as ISO strings
+     * Hison.setConvertValue((value) => {
+     *     if (value instanceof Date) {
+     *         return value.toISOString(); //Convert Date to ISO 8601 format
+     *     }
+     *     return value; //Return other values as-is
+     * });
+     *
+     * @remarks
+     * - When a new `convertValue` function is set using `setConvertValue`, all future
+     *   data insertions will utilize the custom logic provided in the function.
+     * - The default `convertValue` function simply returns the input value unchanged.
+     */
     setConvertValue(func: ConvertValue): void;
+
+    //====================================================================================
+    //option link set
+    //====================================================================================
     setProtocol(str: string): void;
     setDomain(str: string): void;
     setControllerPath(str: string): void;
@@ -83,7 +126,38 @@ interface Hison {
     setBeforeCallbackWorked(func: BeforeCallbackWorked): void;
     setBeforeCallbackError(func: BeforeCallbackError): void;
     
+    /**
+     * Javascript의 다양한 기능을 가지고있는 object를 반환합니다.
+     * @returns {Object} {utils}
+     * 
+     * @example
+     * utils.isAlpha();
+     * 
+     * @description
+     * boolean형 utils
+     * Date형 utils
+     * number형 utils
+     * string형 utils
+     * 형변환 utils가 있습니다.
+     */
     utils: {
+        //for boolean
+        /**
+         * Checks if the given string consists only of English alphabet characters.
+         * This method uses a regular expression to test whether the input string contains
+         * only letters (both uppercase and lowercase) from A to Z.
+         *
+         * @param {string} str - The string to be tested.
+         * @returns {boolean} Returns true if the string consists only of English alphabet characters; otherwise, false.
+         *
+         * @example
+         * //returns true
+         * hison.utils.isAlpha("HelloWorld");
+         *
+         * @example
+         * //returns false
+         * hison.utils.isAlpha("Hello World! 123");
+         */
         isAlpha(str: string): boolean
         isAlphaNumber(str: string): boolean
         isNumber(str: string): boolean
@@ -105,7 +179,7 @@ interface Hison {
         isEmail(str: string): boolean;
         isURL(urlStr: string): boolean;
         isValidMask(str: string, mask: string): boolean;
-        
+        //for Date
         getDateObject(dateStr: string): DateObject;
         getTimeObject(str: string): TimeObject;
         getDatetimeObject(datetime: string): DateTimeObject;
@@ -126,19 +200,150 @@ interface Hison {
         getSysSecond(format?: string): string;
         getSysTime(format?: string): string;
         getSysDate(format?: string): string;
-
-        getNumberFormat: Function;
-        getToNumber: Function;
-        getToFloat: Function;
-        getToString: Function;
+        //for number
+        getCeil(num: number, precision?: number): number;
+        getFloor(num: number, precision?: number): number;
+        getRound(num: number, precision?: number): number;
+        getTrunc(num: number, precision?: number): number;
+        //for string
+        getByteLength(str: string): number;
+        getCutByteLength(str: string, cutByte: number): string;
+        getStringLenForm(str: string, length: number): string;
+        getLpad(str: string, padStr: string, length: number): string;
+        getRpad(str: string, padStr: string, length: number): string;
+        getTrim(str: string): string;
+        getReplaceAll(str: string, targetStr: string, replaceStr?: string): string;
+        nvl(val: any, defaultValue: any): any;
+        getNumberFormat(value: number, format?: string): string;
+        getRemoveExceptNumbers(str: string): string;
+        getRemoveNumbers(str: string): string;
+        getReverse(str: string): string;
+        //for convertor
+        getToBoolean(value: any): boolean;
+        getToNumber(value: any, impossibleValue?: number): number;
+        getToFloat(value: any, impossibleValue?: number): number;
+        getToInteger(value: any, impossibleValue?: number): number;
+        getToString(str: any, impossibleValue?: string): string;
+        //etc
+        getFileExtension(str: string): string;
+        getFileName(str: string): string;
+        getDecodeBase64(str: string): string;
+        getEncodeBase64(str: string): string;
+        deepCopyArrOrObject(object: any, visited?: { source: any, copy: any }[]): any;
     }
+    
+    //====================================================================================
+    //shield
+    //====================================================================================
+    /**
+     * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
+     * 
+     * @returns {Object} {function excute}
+     * 
+     * @example
+     * shield.excute(); //Initializes and executes the security measures.
+     * 
+     * @description
+     * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
+     * hison 객체에 대해 Object.freeze()를 처리합니다. desfatched
+     * localhost를 제외한 모든 URL 또는 특정 URL에 대해 개발자 모드 접근을 봉쇄합니다.
+     * localhost를 제외한 모든 URL 또는 특정 URL에 대해 뒤로가기를 봉쇄합니다.
+     */
     shield: {
+        /**
+         * Executes the specified functionality for the given `Hison` object with additional security measures.
+         * This function applies deep freezing, IP-based shielding, and developer mode restrictions based on the provided options.
+         *
+         * @param {Hison} hison - The main object to be processed and optionally frozen for immutability.
+         *
+         * @remarks
+         * This function incorporates multiple layers of security, including:
+         * - Freezing objects to prevent tampering.
+         * - Blocking unauthorized access based on the user's IP.
+         * - Preventing the use of browser developer tools.
+         *
+         * ### Related:
+         * - hison.setShieldURL
+         * - hison.setExposeIpList
+         * - hison.setIsFreeze
+         * - hison.setIsPossibleGoBack
+         * - hison.setIsPossibleOpenDevTool
+         *
+         * #### Logic Breakdown:
+         * 1. **Object Freezing**:
+         *    - If `option.shield.isFreeze` is enabled, the `hison` object is deeply frozen using the `deepFreeze` function.
+         *    - Prevents runtime modification of the object or its nested properties.
+         *
+         * 2. **Access Control by URL and IP**:
+         *    - If not on `localhost`:
+         *        - Ensures the current URL matches `option.shield.shieldURL`.
+         *        - Fetches the user's IP via `/ajax/getIp`.
+         *        - Verifies the IP against `option.shield.exposeIpList`.
+         *        - If the IP is not allowed:
+         *            - Prevents navigating back using the browser's back button.
+         *            - Restricts developer tool access.
+         *
+         * 3. **Developer Tool Restrictions**:
+         *    - Blocks `F12` key to prevent opening developer tools.
+         *    - Detects and alerts when developer tools are opened using browser resizing, focus, or mouse events.
+         *    - Displays a warning message and halts further actions if developer tools are detected.
+         */
         excute: Function;
     };
+    
+    //====================================================================================
+    //data
+    //====================================================================================
+    /**
+     * DataWrapper와 DataModel 생성자를 가진 객체입니다.
+     * 
+     * @returns {Object} { DataWrapper class, DataModel class }
+     * 
+     * @example
+     * new hison.data.DataWrapper(); DataWrapper 인스턴스를 생성합니다.
+     * new hison.data.DataModel(); DataModel 인스턴스를 생성합니다.
+     * 
+     * @description
+     * DataModel을 감싸는 wrapper객체인 DataWrapper 생성자와
+     * JavaScript object for managing and manipulating a table-like data structure인 DataModel 생성자를 갖고있는 객체입니다.
+     */
     data: {
-        DataWrapper: new () => DataWrapper;
+        /**
+         * DataWrapper constructor.
+         * @constructor
+         * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
+         * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
+         */
+        DataWrapper: new (keyOrObject?: {} | '', value?: any) => DataWrapper;
+        /**
+         * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
+         * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
+         *
+         * @constructor
+         * @param {Array|Object} ArrayOrObject - An array or object to initialize the DataModel. 
+         *                                       If an array of objects is provided, each object represents a row, and the keys represent the columns.
+         *                                       If an array of strings is provided, it initializes the column names.
+         *                                       If an object is provided, it initializes a single row with the object's key-value pairs.
+         */
         DataModel: new () => DataModel;
     };
+
+    //====================================================================================
+    //link
+    //====================================================================================
+    /**
+     * ApiLink와 CachingModule 생성자를 가진 객체입니다.
+     * 
+     * @returns {Object} { ApiLink와 class, CachingModule class }
+     * 
+     * @example
+     * new hison.link.ApiLink(); ApiLink 인스턴스를 생성합니다.
+     * new hison.link.CachingModule(); CachingModule 인스턴스를 생성합니다.
+     * 
+     * @description
+     * hisondev 플랫폼의 api-link와 통신을 지원하는 javasctript 통신 인스턴스인 ApiLink와.
+     * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
+     */
     link: {
         CachingModule: new () => any;
         ApiLink: new () => any;
@@ -192,7 +397,7 @@ enum DayOfWeekShortNameKR {
  * @returns {any} Returns the converted value.
  *
  * @example
- * // When set the hison.data.convertValue
+ * //When set the hison.data.convertValue
  * hison.data.convertValue = function(value) {
  *     if (value instanceof Date) {
  *          let year = value.getFullYear();
@@ -210,9 +415,9 @@ enum DayOfWeekShortNameKR {
  *     }
  *     return value;
  * };
- * // Inserting a Date object into DataModel
+ * //Inserting a Date object into DataModel
  * const dm = newDataModel([{key:"key1",value:new Date()},{key:"key2",value:new Date()}]);
- * // The value will be in 'yyyy-MM-dd hh:mm:ss' format
+ * //The value will be in 'yyyy-MM-dd hh:mm:ss' format
  * 
  * Note: 
  * 1. Special values not processed by convertValue are stored in the DataModel as references. 
@@ -221,13 +426,48 @@ enum DayOfWeekShortNameKR {
  *    This ensures that undefined values are still stored in the DataModel.
  */
 interface ConvertValue {
-    (value: any): any; // return은 무조건 있어야함을 어떻게 정의? return null이든 뭐든
+    (value: any): any;
 };
+/**
+ * DataWrapper constructor.
+ * @constructor
+ * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
+ * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
+ */
 interface DataWrapper {
-
+    getIsDataWrapper(): boolean;
+    getIsDataWrapper(): boolean;
+    clone(): DataWrapper;
+    clear(): DataWrapper;
+    getSerialized(): string;
+    get(key: string): DataModel | string | null;
+    getString(key: string): string;
+    getDataModel(key: string): DataModel;
+    put(key: string, value: any): DataWrapper;
+    putString(key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper;
+    putDataModel(key: string, value: DataModel): DataWrapper;
+    getObject();
+    containsKey(key);
+    isEmpty();
+    remove(key);
+    size();
+    keys();
+    values();
 };
-interface DataModel {
 
+/**
+ * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
+ * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
+ *
+ * @constructor
+ * @param {Array|Object} ArrayOrObject - An array or object to initialize the DataModel. 
+ *                                       If an array of objects is provided, each object represents a row, and the keys represent the columns.
+ *                                       If an array of strings is provided, it initializes the column names.
+ *                                       If an object is provided, it initializes a single row with the object's key-value pairs.
+ */
+interface DataModel {
+    getIsDataModel(): boolean;
+    clone(): DataModel;
 };
 //====================================================================================
 //link interface, type
@@ -246,15 +486,15 @@ interface DataModel {
  *
  * @example
  * hison.link.beforeGetRequst = function(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) {
- *     // Custom logic before sending a GET request
- *     return true; // Proceed with the GET request
+ *     //Custom logic before sending a GET request
+ *     return true; //Proceed with the GET request
  * };
  *
  * @example
- * // Preventing a GET request
+ * //Preventing a GET request
  * hison.link.beforeGetRequst = function(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) {
- *     // Custom logic to determine whether to proceed
- *     return false; // Prevent the GET request
+ *     //Custom logic to determine whether to proceed
+ *     return false; //Prevent the GET request
  * };
  *
  * Note: This function is useful for implementing pre-request validations, logging, or any setup required before 
@@ -377,12 +617,12 @@ function createHison(): Hison {
                 return !isNaN(num) && isFinite(num);
             },
             isInteger(num: any): boolean {
-                if(!_hison.utils.isNumeric(num)) return false;
+                if (!_hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num);
             },
             isPositiveInteger(num: any): boolean {
-                if(!_hison.utils.isNumeric(num)) return false;
+                if (!_hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num) && num > 0;
             },
@@ -406,25 +646,25 @@ function createHison(): Hison {
         
                 let result = true;
                 try {
-                    if(!_hison.utils.isInteger(yyyy) || !_hison.utils.isInteger(MM) || !_hison.utils.isInteger(dd)) {
+                    if (!_hison.utils.isInteger(yyyy) || !_hison.utils.isInteger(MM) || !_hison.utils.isInteger(dd)) {
                         return false;
                     }
         
-                    if(!yyyy) {
+                    if (!yyyy) {
                         return false;
                     }
-                    if(!MM) {
+                    if (!MM) {
                         MM = "01";
                     } else if (MM.length === 1) {
                         MM = "0" + MM;
                     }
-                    if(!dd) {
+                    if (!dd) {
                         dd = "01";
                     } else if (dd.length === 1) {
                         dd = "0" + dd;
                     }
         
-                    if(_hison.utils.getToNumber(yyyy+MM+dd) < 16000101) {
+                    if (_hison.utils.getToNumber(yyyy+MM+dd) < 16000101) {
                         const date = new Date(_hison.utils.getToNumber(yyyy), _hison.utils.getToNumber(MM) - 1, _hison.utils.getToNumber(dd));
                         if (date.getFullYear() !== _hison.utils.getToNumber(yyyy) || date.getMonth() !== _hison.utils.getToNumber(MM) - 1 || date.getDate() !== _hison.utils.getToNumber(dd)) {
                             return false;
@@ -448,7 +688,7 @@ function createHison(): Hison {
                 let mm: number = timeObj.m;
                 let ss: number = timeObj.s;
         
-                if(!_hison.utils.isInteger(hh) || !_hison.utils.isInteger(mm) || !_hison.utils.isInteger(ss)) {
+                if (!_hison.utils.isInteger(hh) || !_hison.utils.isInteger(mm) || !_hison.utils.isInteger(ss)) {
                     return false;
                 }
                 /*
@@ -465,8 +705,8 @@ function createHison(): Hison {
             },
             isDatetime(datetime: DateTimeObject | string): boolean {
                 const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? datetime as DateTimeObject : _hison.utils.getDatetimeObject(datetime as string);
-                if(!_hison.utils.isDate(datetimeObj)) return false;
-                if(!_hison.utils.isTime(datetimeObj)) return false;
+                if (!_hison.utils.isDate(datetimeObj)) return false;
+                if (!_hison.utils.isTime(datetimeObj)) return false;
                 return true;
             },
             isEmail(str: string): boolean {
@@ -535,7 +775,7 @@ function createHison(): Hison {
                     minutes = parseInt(str.substring(2, 4), 10);
                     seconds = parseInt(str.substring(4, 6), 10);
                 } else {
-                    return { h: 0, m: 0, s: 0 };
+                    return { h: null, m: null, s: null };
                 }
             
                 return { h: hours, m: minutes, s: seconds };
@@ -548,10 +788,18 @@ function createHison(): Hison {
         
                 return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
             },
-            addDate(datetime: DateTimeObject | string, addValue: string | number = 0, addType: string = "", format: string = ""): DateTimeObject | string {
-                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopy(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+            addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = "", format: string = ""): DateTimeObject | string {
+                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+                if (!format) {
+                    if (datetimeObj.h === undefined || datetimeObj.h === null) {
+                        format = option.utils.dateFormat
+                    }
+                    else {
+                        format = option.utils.datetimeFormat;
+                    }
+                }
                 
-                if(!_hison.utils.isInteger(addValue)) throw new Error(`ER0001 Please enter a valid value.\n=>${JSON.stringify(addValue)}`);
+                if (!_hison.utils.isInteger(addValue)) throw new Error(`ER0001 Please enter a valid value.\n=>${JSON.stringify(addValue)}`);
                 addValue = _hison.utils.getToNumber(addValue);
 
                 datetimeObj.M = datetimeObj.M === null || datetimeObj.M === undefined ? 1 : datetimeObj.M;
@@ -560,39 +808,32 @@ function createHison(): Hison {
                 datetimeObj.m = datetimeObj.m === null || datetimeObj.m === undefined ? 0 : datetimeObj.m;
                 datetimeObj.s = datetimeObj.s === null || datetimeObj.s === undefined ? 0 : datetimeObj.s;
         
-                if(!_hison.utils.isDate(datetimeObj)) throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-                if(!_hison.utils.isTime(datetimeObj)) throw new Error(`ER0003 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!_hison.utils.isDate(datetimeObj)) throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!_hison.utils.isTime(datetimeObj)) throw new Error(`ER0003 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
             
                 const d = new Date(datetimeObj.y, datetimeObj.M - 1, datetimeObj.d, datetimeObj.h, datetimeObj.m, datetimeObj.s);
             
                 switch (addType) {
                     case 'y':
                         d.setFullYear(d.getFullYear() + addValue);
-                        if(!format) format = option.utils.dateFormat;
                         break;
                     case 'M':
                         d.setMonth(d.getMonth() + addValue);
-                        if(!format) format = option.utils.dateFormat;
                         break;
                     case 'd':
                         d.setDate(d.getDate() + addValue);
-                        if(!format) format = option.utils.dateFormat;
                         break;
                     case 'h':
                         d.setHours(d.getHours() + addValue);
-                        if(!format) format = option.utils.datetimeFormat;
                         break;
                     case 'm':
                         d.setMinutes(d.getMinutes() + addValue);
-                        if(!format) format = option.utils.datetimeFormat;
                         break;
                     case 's':
                         d.setSeconds(d.getSeconds() + addValue);
-                        if(!format) format = option.utils.datetimeFormat;
                         break;
                     default:
                         d.setDate(d.getDate() + addValue);
-                        if(!format) format = option.utils.dateFormat;
                 }
         
                 const rtnObj = {
@@ -606,9 +847,9 @@ function createHison(): Hison {
         
                 return _hison.utils.isObject(datetime) ? rtnObj : _hison.utils.getDateWithFormat(rtnObj, format);
             },
-            getDateDiff(datetime1: DateTimeObject | string, datetime2: DateTimeObject | string, diffType: string = ""): number {
-                const datetimeObj1: DateTimeObject = _hison.utils.isObject(datetime1) ? _hison.utils.deepCopy(datetime1) : _hison.utils.getDatetimeObject(datetime1 as string);
-                const datetimeObj2: DateTimeObject = _hison.utils.isObject(datetime2) ? _hison.utils.deepCopy(datetime2) : _hison.utils.getDatetimeObject(datetime2 as string);
+            getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType: string = ""): number {
+                const datetimeObj1: DateTimeObject = _hison.utils.isObject(datetime1) ? _hison.utils.deepCopyArrOrObject(datetime1) : _hison.utils.getDatetimeObject(datetime1 as string);
+                const datetimeObj2: DateTimeObject = _hison.utils.isObject(datetime2) ? _hison.utils.deepCopyArrOrObject(datetime2) : _hison.utils.getDatetimeObject(datetime2 as string);
                             
                 datetimeObj1.M = datetimeObj1.M || 1; datetimeObj2.M = datetimeObj2.M || 1;
                 datetimeObj1.d = datetimeObj1.d || 1; datetimeObj2.d = datetimeObj2.d || 1;
@@ -616,10 +857,10 @@ function createHison(): Hison {
                 datetimeObj1.m = datetimeObj1.m || 0; datetimeObj2.m = datetimeObj2.m || 0;
                 datetimeObj1.s = datetimeObj1.s || 0; datetimeObj2.s = datetimeObj2.s || 0;
         
-                if(!_hison.utils.isDate(datetimeObj1)) throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if(!_hison.utils.isTime(datetimeObj1)) throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if(!_hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if(!_hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!_hison.utils.isDate(datetimeObj1)) throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!_hison.utils.isTime(datetimeObj1)) throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!_hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!_hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
             
                 const d1 = new Date(datetimeObj1.y, datetimeObj1.M - 1, datetimeObj1.d, datetimeObj1.h, datetimeObj1.m, datetimeObj1.s);
                 const d2 = new Date(datetimeObj2.y, datetimeObj2.M - 1, datetimeObj2.d, datetimeObj2.h, datetimeObj2.m, datetimeObj2.s);
@@ -642,7 +883,7 @@ function createHison(): Hison {
                 }
             },
             getMonthName(month: number | string, isFullName: boolean = true): string {
-                if(typeof month === 'string') month = parseInt(month, 10);
+                if (typeof month === 'string') month = parseInt(month, 10);
         
                 if (month < 1 || month > 12) {
                     throw new Error(`ER0008 Month must be between 1 and 12`);
@@ -654,8 +895,17 @@ function createHison(): Hison {
                     return MonthShortName[month];
                 }
             },
-            getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = option.utils.dateFormat): string {
-                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopy(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+            getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = ""): string {
+                const datetimeObj = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+                if (!format) {
+                    if (datetimeObj.h === undefined || datetimeObj.h === null) {
+                        format = option.utils.dateFormat
+                    }
+                    else {
+                        format = option.utils.datetimeFormat;
+                    }
+                }
+
                 const y = datetimeObj.y.toString();
                 const M = (datetimeObj.M || 1).toString().padStart(2, '0');
                 const d = (datetimeObj.d || 1).toString().padStart(2, '0');
@@ -663,8 +913,8 @@ function createHison(): Hison {
                 const m = (datetimeObj.m || 0).toString().padStart(2, '0');
                 const s = (datetimeObj.s || 0).toString().padStart(2, '0');
 
-                if(!_hison.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-                if(!_hison.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!_hison.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!_hison.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
 
                 const MMMM = _hison.utils.getMonthName(datetimeObj.M);
                 const MMM = _hison.utils.getMonthName(datetimeObj.M, false);
@@ -943,13 +1193,13 @@ function createHison(): Hison {
             },
             getDayOfWeek(date: DateObject | string, dayType: string = option.utils.dayOfWeekFormat): string {
                 const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
-                if(!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                if (!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
                 
                 const d = new Date(dateObj.y, dateObj.M - 1, dateObj.d);
                 const dayOfWeek = d.getDay();
                 switch (dayType.toLowerCase()) {
                     case 'd':
-                        return dayOfWeek.toString();    // 0 ~ 6
+                        return dayOfWeek.toString();    //0 ~ 6
                     case 'dy':
                         return DayOfWeekShortName[dayOfWeek];
                     case 'day':
@@ -964,8 +1214,8 @@ function createHison(): Hison {
             },
             getLastDay(date: DateObject | string): number {
                 let dateObj: DateObject;
-                if(_hison.utils.isObject(date)) {
-                    dateObj = _hison.utils.deepCopy(date);
+                if (_hison.utils.isObject(date)) {
+                    dateObj = _hison.utils.deepCopyArrOrObject(date);
                     dateObj.d = 1;
                 }
                 else {
@@ -980,7 +1230,7 @@ function createHison(): Hison {
                     }
                     dateObj = _hison.utils.getDateObject(date);
                 }
-                if(!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                if (!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
         
                 const nextMonthFirstDay = new Date(dateObj.y, dateObj.M, 1);
                 nextMonthFirstDay.setDate(0);
@@ -1023,11 +1273,11 @@ function createHison(): Hison {
                 }
             },
             getSysDayOfWeek(dayType: string = option.utils.dayOfWeekFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 return _hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
             },
             getSysHour(format: string = option.utils.hourFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hh':
                         return currentDate.getHours().toString().padStart(2, '0');
@@ -1036,7 +1286,7 @@ function createHison(): Hison {
                 }
             },
             getSysHourMinute(format: string = option.utils.hourMinuteFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmm':
                         return currentDate.getHours().toString().padStart(2, '0') + "" + currentDate.getMinutes().toString().padStart(2, '0');
@@ -1045,7 +1295,7 @@ function createHison(): Hison {
                 }
             },
             getSysMinute(format: string = option.utils.minuteFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'mm':
                         return currentDate.getMinutes().toString().padStart(2, '0');
@@ -1054,7 +1304,7 @@ function createHison(): Hison {
                 }
             },
             getSysSecond(format: string = option.utils.secondFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'ss':
                         return currentDate.getSeconds().toString().padStart(2, '0');
@@ -1063,7 +1313,7 @@ function createHison(): Hison {
                 }
             },
             getSysTime(format: string = option.utils.timeFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmmss':
                         return currentDate.getHours().toString().padStart(2, '0') + currentDate.getMinutes().toString().padStart(2, '0') + currentDate.getSeconds().toString().padStart(2, '0');
@@ -1072,7 +1322,7 @@ function createHison(): Hison {
                 }
             },
             getSysDate(format: string = option.utils.datetimeFormat): string {
-                var currentDate = new Date();
+                const currentDate = new Date();
                 return _hison.utils.getDateWithFormat(
                     {
                         y:currentDate.getFullYear(),
@@ -1085,31 +1335,36 @@ function createHison(): Hison {
                     , format);
             },
             //for number
-            getCeil(num: number, precision: number): number {
-                if(!_hison.utils.isInteger(precision)) precision = 0;
-                var factor = Math.pow(10, precision);
+            getCeil(num: number, precision: number = 0): number {
+                num = _hison.utils.getToNumber(num);
+                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                const factor = Math.pow(10, precision);
                 return Math.ceil(num * factor) / factor;
             },
-            getFloor(num: number, precision: number): number {
-                if(!_hison.utils.isInteger(precision)) precision = 0;
-                var factor = Math.pow(10, precision);
+            getFloor(num: number, precision: number = 0): number {
+                num = _hison.utils.getToNumber(num);
+                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                const factor = Math.pow(10, precision);
                 return Math.floor(num * factor) / factor;
             },
-            getRound(num: number, precision: number): number {
-                if(!_hison.utils.isInteger(precision)) precision = 0;
-                var factor = Math.pow(10, precision);
+            getRound(num: number, precision: number = 0): number {
+                num = _hison.utils.getToNumber(num);
+                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                const factor = Math.pow(10, precision);
                 return Math.round(num * factor) / factor;
             },
-            getTrunc(num: number, precision: number): number {
-                if(!_hison.utils.isInteger(precision)) precision = 0;
-                var factor = Math.pow(10, precision);
+            getTrunc(num: number, precision: number = 0): number {
+                num = _hison.utils.getToNumber(num);
+                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                const factor = Math.pow(10, precision);
                 return Math.trunc(num * factor) / factor;
             },
             //for string
             getByteLength(str: string): number {
-                var byteLength = 0;
-                for (var i = 0; i < str.length; i++) {
-                    var charCode = str.charCodeAt(i);
+                str = _hison.utils.getToString(str);
+                let byteLength = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const charCode = str.charCodeAt(i);
                     if (charCode <= 0x7F) {
                         byteLength += 1;
                     } else if (charCode <= 0x7FF) {
@@ -1123,11 +1378,12 @@ function createHison(): Hison {
                 return byteLength;
             },
             getCutByteLength(str: string, cutByte: number): string {
-                var byteLength = 0;
-                var cutIndex = str.length;
-            
-                for (var i = 0; i < str.length; i++) {
-                    var charCode = str.charCodeAt(i);
+                str = _hison.utils.getToString(str);
+                cutByte = _hison.utils.getToNumber(cutByte);
+                let byteLength = 0;
+                let cutIndex = str.length;
+                for (let i = 0; i < str.length; i++) {
+                    const charCode = str.charCodeAt(i);
                     if (charCode <= 0x7F) {
                         byteLength += 1;
                     } else if (charCode <= 0x7FF) {
@@ -1145,16 +1401,18 @@ function createHison(): Hison {
                 return str.substring(0, cutIndex);
             },
             getStringLenForm(str: string, length: number): string {
-                var strLength = str.length;
+                str = _hison.utils.getToString(str);
+                length = _hison.utils.getToNumber(length);
+                const strLength = str.length;
                 if (strLength >= length) {
                     return str;
                 }
-                var totalSpaces = length - strLength;
-                var gaps = strLength - 1;
-                var spacePerGap = Math.floor(totalSpaces / gaps);
-                var extraSpaces = totalSpaces % gaps;
-                var result = '';
-                for (var i = 0; i < gaps; i++) {
+                const totalSpaces = length - strLength;
+                const gaps = strLength - 1;
+                const spacePerGap = Math.floor(totalSpaces / gaps);
+                const extraSpaces = totalSpaces % gaps;
+                let result = '';
+                for (let i = 0; i < gaps; i++) {
                     result += str[i];
                     result += ' '.repeat(spacePerGap + (i < extraSpaces ? 1 : 0));
                 }
@@ -1162,18 +1420,26 @@ function createHison(): Hison {
                 return result;
             },
             getLpad(str: string, padStr: string, length: number): string {
-                var pad = padStr.repeat((length - str.length) / padStr.length);
+                str = _hison.utils.getToString(str);
+                padStr = _hison.utils.getToString(padStr);
+                length = _hison.utils.getToNumber(length);
+                if (str.length >= length) return str.substring(str.length, length - 1);
+                const pad = padStr.repeat((length - str.length) / padStr.length);
                 return pad + str;
             },
             getRpad(str: string, padStr: string, length: number): string {
-                var pad = padStr.repeat((length - str.length) / padStr.length);
+                str = _hison.utils.getToString(str);
+                padStr = _hison.utils.getToString(padStr);
+                length = _hison.utils.getToNumber(length);
+                if (str.length >= length) return str.substring(0, length);
+                const pad = padStr.repeat((length - str.length) / padStr.length);
                 return str + pad;
             },
             getTrim(str: string): string {
                 str = _hison.utils.getToString(str);
                 return str.trim();
             },
-            getReplaceAll(str: string, targetStr: string, replaceStr: string): string {
+            getReplaceAll(str: string, targetStr: string, replaceStr: string = ''): string {
                 str = _hison.utils.getToString(str);
                 targetStr = _hison.utils.getToString(targetStr);
                 replaceStr = _hison.utils.getToString(replaceStr);
@@ -1183,6 +1449,9 @@ function createHison(): Hison {
                 return (val === null || val === undefined) ? defaultValue : val;
             },
             getNumberFormat(value: number, format?: string): string {
+                value = _hison.utils.getToNumber(value);
+                format = _hison.utils.getToString(format);
+
                 const oriValue = value;
                 if (!_hison.utils.isNumeric(value)) {
                     throw new Error(`ER0021 Invalid number\n=>${JSON.stringify(oriValue)}`);
@@ -1247,7 +1516,6 @@ function createHison(): Hison {
                     default:
                         throw new Error(`ER0023 Invalid format\n=>${JSON.stringify(format)}`);
                 }
-            
                 result = isNegative ? '-' + result : result;
                 return prefix + result + suffix;
             },
@@ -1263,24 +1531,37 @@ function createHison(): Hison {
                 str = _hison.utils.getToString(str);
                 return str.split('').reverse().join('');
             },
-
             //for convertor
-            getToNumber(val: any, impossibleValue?: number) {
-                impossibleValue = impossibleValue === undefined ? 0 : impossibleValue;
-                if (!_hison.utils.isNumeric(val)) {
+            getToBoolean(value: any): boolean {
+                if (_hison.utils.isNumeric(value)) {
+                    return Number(value) != 0;
+                }
+                else if (typeof value === 'boolean'){
+                    return value
+                }
+                else if (typeof value === "string"){
+                    return ['t','true','y','yes','check','c','checked','selected','참'].indexOf(value.toLowerCase()) >= 0;
+                }
+                else {
+                    return false;
+                }
+            },
+            getToNumber(value: any, impossibleValue: number = 0) {
+                return _hison.utils.getToFloat(value, impossibleValue);
+            },
+            getToFloat(value: any, impossibleValue: number = 0) {
+                if (!_hison.utils.isNumeric(value)) {
                     return impossibleValue;
                 }
-                return Number(val);
+                return parseFloat(value);
             },
-            getToFloat(val: any, impossibleValue?: number) {
-                impossibleValue = impossibleValue === undefined ? 0 : impossibleValue;
-                if (!_hison.utils.isNumeric(val)) {
-                    return impossibleValue;
+            getToInteger(value: any, impossibleValue: number = 0): number {
+                if (!_hison.utils.isNumeric(value)) {
+                    return Math.trunc(impossibleValue);
                 }
-                return parseFloat(val);
+                return Math.trunc(parseInt(value, 10));
             },
-            getToString(str: any, impossibleValue?: string) {
-                impossibleValue = impossibleValue === undefined ? '' : impossibleValue;
+            getToString(str: any, impossibleValue: string = ''): string {
                 if (typeof str === 'string') {
                 } else if (typeof str === 'number' || typeof str === 'boolean' || typeof str === 'bigint') {
                     str = String(str);
@@ -1292,37 +1573,64 @@ function createHison(): Hison {
                 return str;
             },
             //etc
-            deepCopy(object: any, visited?: { source: any, copy: any }[]) {
+            getFileExtension(str: string): string {
+                str = _hison.utils.getToString(str);
+            
+                const extension = str.split('.').pop();
+                if (extension === str) {
+                    return '';
+                }
+                return extension;
+            },
+            getFileName(str: string): string {
+                str = _hison.utils.getToString(str);
+            
+                const fileName = str.split('/').pop();
+                const lastDotIndex = fileName.lastIndexOf('.');
+            
+                if (lastDotIndex === -1) return fileName;
+                return fileName.substring(0, lastDotIndex);
+            },
+            getDecodeBase64(str: string): string {
+                str = _hison.utils.getToString(str);
+                return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            },
+            getEncodeBase64(str: string): string {
+                str = _hison.utils.getToString(str);
+                return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(_, p1:string) {
+                    return String.fromCharCode(parseInt(p1, 16));
+                }));
+            },
+            deepCopyArrOrObject(object: any, visited?: { source: any, copy: any }[]): any {
                 if (object === null || typeof object !== 'object') {
                     return object;
                 }
                 if (object.constructor !== Object && object.constructor !== Array) {
-                    if(object.isDataWrapper || object.isDataModel) {
-                        return object.clone();
-                    }
                     return object;
                 }
                 if (!visited) visited = [];
-                for (var i = 0; i < visited.length; i++) {
+                for (let i = 0; i < visited.length; i++) {
                     if (visited[i].source === object) {
                         return visited[i].copy;
                     }
                 }
-                var copy;
+                let copy: any;
                 if (Array.isArray(object)) {
                     copy = [];
                     visited.push({ source: object, copy: copy });
             
-                    for (var j = 0; j < object.length; j++) {
-                        copy[j] = _hison.utils.deepCopy(object[j], visited);
+                    for (let j = 0; j < object.length; j++) {
+                        copy[j] = _hison.utils.deepCopyArrOrObject(object[j], visited);
                     }
                 } else {
                     copy = {};
                     visited.push({ source: object, copy: copy });
             
-                    for (var key in object) {
+                    for (let key in object) {
                         if (object.hasOwnProperty(key)) {
-                            copy[key] = _hison.utils.deepCopy(object[key], visited);
+                            copy[key] = _hison.utils.deepCopyArrOrObject(object[key], visited);
                         }
                     }
                 }
@@ -1332,10 +1640,10 @@ function createHison(): Hison {
         shield = {
             excute(hison: Hison) {
                 const deepFreeze = function(object: any) {
-                    var propNames = Object.getOwnPropertyNames(object);
+                    const propNames = Object.getOwnPropertyNames(object);
                 
                     propNames.forEach(function(name) {
-                        var prop = object[name];
+                        const prop = object[name];
                 
                         if (typeof prop == 'object' && prop !== null) {
                             deepFreeze(prop);
@@ -1345,11 +1653,11 @@ function createHison(): Hison {
                     return Object.freeze(object);
                 };
                 const shieldFuncGetIp = function(func: Function) {
-                    var httpRequest = new XMLHttpRequest();
+                    const httpRequest = new XMLHttpRequest();
                     httpRequest.onreadystatechange = () => {
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
                             if (httpRequest.status === 200) {
-                                var result = httpRequest.response;
+                                const result = httpRequest.response;
                                 func(result);
                             } else {
                                 func(null);
@@ -1361,7 +1669,7 @@ function createHison(): Hison {
                     httpRequest.send();
                 }
                 const shieldFuncCreateBlockDevMode = function() {
-                    var msg = "Developer mode is not available.";
+                    const msg = "Developer mode is not available.";
                     document.onkeydown = function(event) {
                         if (event.key === "F12") {
                             alert(msg);
@@ -1372,9 +1680,9 @@ function createHison(): Hison {
                     
                     function detectDevTool(allow?: any) {
                         if (isNaN(+allow)) allow = 100;
-                        var start = +new Date();
+                        const start = +new Date();
                         debugger;
-                        var end = +new Date();
+                        const end = +new Date();
                         if (isNaN(start) || isNaN(end) || end - start > allow) {
                             alert(msg);
                             document.write(msg);
@@ -1398,7 +1706,7 @@ function createHison(): Hison {
                     }
     
                     shieldFuncGetIp(function(response: any) {
-                        var ip = response && response.ip ? response.ip : '';
+                        const ip = response && response.ip ? response.ip : '';
                         if (ip && option.shield.exposeIpList.indexOf(ip) >= 0) {
                             return;
                         }
@@ -1419,27 +1727,190 @@ function createHison(): Hison {
             }
         };
         data = {
-            /**
-             * DataWrapper constructor.
-             * @constructor
-             * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
-             * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
-             */
             DataWrapper : class implements DataWrapper {
-                /** private함수 _로 시작 => prototype에 넣어보기!! */
+                constructor(keyOrObject?: {} | string, value?: any) {
+                    this._data = {};
+                    if (keyOrObject === undefined) return;
+                    if (typeof keyOrObject === "object" && keyOrObject !== null) {
+                        for (let key in keyOrObject) {
+                            this._put(key, keyOrObject[key]);
+                        }
+                    } else if (typeof keyOrObject === "string" && value !== undefined) {
+                        this._put(keyOrObject, value);
+                    } else {
+                        throw new Error("Invalid arguments. Provide an object or a key-value pair.");
+                    }
+                }
+                private _data: {};
+                private _isDataWrapper = true;
+                private _deepCopy = (object: any, visited?: { source: any, copy: any }[]): any => {
+                    if (object === null || typeof object !== 'object') {
+                        return object;
+                    }
+                    if (object.constructor !== Object && object.constructor !== Array) {
+                        if (object.getIsDataModel()) {
+                            return object.clone();
+                        } else {
+                            return object;
+                        }
+                    }
+                    if (!visited) visited = [];
+                    for (let i = 0; i < visited.length; i++) {
+                        if (visited[i].source === object) {
+                            return visited[i].copy;
+                        }
+                    }
+                    let copy: any;
+                    if (Array.isArray(object)) {
+                        copy = [];
+                        visited.push({ source: object, copy: copy });
+                
+                        for (let j = 0; j < object.length; j++) {
+                            copy[j] = this._deepCopy(object[j], visited);
+                        }
+                    } else {
+                        copy = {};
+                        visited.push({ source: object, copy: copy });
+                
+                        for (let key in object) {
+                            if (object.hasOwnProperty(key)) {
+                                copy[key] = this._deepCopy(object[key], visited);
+                            }
+                        }
+                    }
+                    return copy;
+                };
+                private _put = (key: string, value: any) => {
+                    if (typeof key !== 'string') {
+                        throw new Error("Keys must always be strings.");
+                    } else if (typeof value === 'string') {
+                        this._data[key] = value;
+                    } else if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+                        this._data[key] = String(value);
+                    } else if (typeof value === 'symbol') {
+                        this._data[key] = value.description;
+                    } else if (value === null) {
+                        this._data[key] = null;
+                    } else if (value === undefined) {
+                        throw new Error("You can not put a value of undefined type.");
+                    } else if (typeof value === 'object') {
+                        if (!value || !value.getIsDataModel || !value.getIsDataModel()) {
+                            throw new Error("Please insert only values convertible to string or of data-model type.");
+                        }
+                        this._data[key] = value.clone();
+                    } else {
+                        throw new Error("Please insert only values convertible to string or of data-model type.");
+                    }
+                };
+                getIsDataWrapper = (): boolean => {
+                    return this._isDataWrapper;
+                };
+                clone = (): DataWrapper => {
+                    const newData = {};
+                    for (let key in this._data) {
+                        newData[key] = this._deepCopy(this._data[key]);
+                    }
+                    return new _hison.data.DataWrapper(newData);
+                };
+                clear = (): DataWrapper => {
+                    this._data = {};
+                    return this;
+                };
+                getSerialized = (): string => {
+                    const data = {};
+                    
+                    for (let key in this._data) {
+                        if (this._data.hasOwnProperty(key)) {
+                            // DataModel 객체인 경우
+                            if (this._data[key] && this._data[key].getIsDataModel()) {
+                                data[key] = this._data[key].getRows();
+                            } else {
+                                // 그 외의 경우는 정상적으로 값을 할당
+                                data[key] = this._data[key];
+                            }
+                        }
+                    }
+                    return JSON.stringify(data);
+                };
+                get = (key: string): DataModel | string | null => {
+                    return this._deepCopy(this._data[key]);
+                };
+                getString = (key: string): string => {
+                    if (typeof this._data[key] !== 'string') {
+                        throw new Error("The data does not contain the specified string value.");
+                    }
+                    return this._data[key];
+                };
+                getDataModel = (key: string): DataModel => {
+                    if (!this._data[key].getIsDataModel()) {
+                        throw new Error("The data does not contain the specified data-model value.");
+                    }
+                    return this._data[key].clone();
+                };
+                put = (key: string, value: any): DataWrapper => {
+                    this._put(key, value);
+                    return this;
+                };
+                putString = (key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper => {
+                    if (typeof value !== 'string'
+                        && typeof value !== 'number'
+                        && typeof value !== 'boolean'
+                        && typeof value !== 'bigint'
+                        && typeof value !== 'symbol'
+                        && value !== null) {
+                        throw new Error("Please insert only values convertible to string type.");
+                    }
+                    this._put(key, value);
+                    return this;
+                };
+                putDataModel = (key: string, value: DataModel): DataWrapper => {
+                    if (value !== null && !value.getIsDataModel()) {
+                        throw new Error("Please insert only values of data-model type.");
+                    }
+                    this._put(key, value);
+                    return this;
+                };
+                getObject = (): {} => {
+                    const result = {};
+                    for(let key in this._data) {
+                        if (this._data[key] && this._data[key].getIsDataModel()) {
+                            result[key] = this._data[key].getObject();
+                        } else {
+                            result[key] = this._deepCopy(this._data[key]);
+                        }
+                    }
+                    return result;
+                };
+                containsKey = (key: string): boolean => {
+                    return this._data.hasOwnProperty(key);
+                };
+                isEmpty = () => {
+                    return Object.keys(this._data).length === 0;
+                };
+                remove = (key) => {
+                    delete this._data[key];
+                    return this;
+                };
+                size = () => {
+                    return Object.keys(this._data).length;
+                };
+                keys = () => {
+                    return Object.keys(this._data);
+                };
+                values = () => {
+                    const values = [];
+                    for (let key in this._data) {
+                        if (this._data.hasOwnProperty(key)) {
+                            values.push(this._deepCopy(this._data[key]));
+                        }
+                    }
+                    return values;
+                };
             },
-            /**
-             * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
-             * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
-             *
-             * @constructor
-             * @param {Array|Object} ArrayOrObject - An array or object to initialize the DataModel. 
-             *                                       If an array of objects is provided, each object represents a row, and the keys represent the columns.
-             *                                       If an array of strings is provided, it initializes the column names.
-             *                                       If an object is provided, it initializes a single row with the object's key-value pairs.
-             */
             DataModel : class implements DataModel {
-
+                private _isDataModel = true;
+                getIsDataModel = () => { return this._isDataModel; };
+                clone = () => {return this};
             },
         };
         link = {
@@ -1458,10 +1929,6 @@ function createHison(): Hison {
 
     const hison = new Hison();
     return {
-        //====================================================================================
-        //option utils set
-        //====================================================================================
-        //set
         setDateFormat(str: string) {option.utils.dateFormat = str;},
         setTimeFormat(str: string) {option.utils.timeFormat = str;},
         setDatetimeFormat(str: string) {option.utils.datetimeFormat = str;},
@@ -1479,7 +1946,6 @@ function createHison(): Hison {
         setLESSOREQ_0X7FF_BYTE(num: number) {option.utils.LESSOREQ_0X7FF_BYTE = num;},
         setLESSOREQ_0XFFFF_BYTE(num: number) {option.utils.LESSOREQ_0XFFFF_BYTE = num;},
         setGREATER_0XFFFF_BYTE(num: number) {option.utils.GREATER_0XFFFF_BYTE = num;},
-        //get
         getDateFormat() {return option.utils.dateFormat;},
         getTimeFormat() {return option.utils.timeFormat;},
         getDatetimeFormat() {return option.utils.datetimeFormat;},
@@ -1497,60 +1963,17 @@ function createHison(): Hison {
         getLESSOREQ_0X7FF_BYTE() {return option.utils.LESSOREQ_0X7FF_BYTE;},
         getLESSOREQ_0XFFFF_BYTE() {return option.utils.LESSOREQ_0XFFFF_BYTE;},
         getGREATER_0XFFFF_BYTE() {return option.utils.GREATER_0XFFFF_BYTE;},
-
-        //====================================================================================
-        //option shield set
-        //====================================================================================
-        //set
         setShieldURL(str: string) {option.shield.shieldURL = str;},
         setExposeIpList(arr: []) {option.shield.exposeIpList = arr;},
         setIsFreeze(bool: boolean) {option.shield.isFreeze = bool;},
         setIsPossibleGoBack(bool: boolean) {option.shield.isPossibleGoBack = bool;},
         setIsPossibleOpenDevTool(bool: boolean) {option.shield.isPossibleOpenDevTool = bool;},
-        //get
         getShieldURL() {return option.shield.shieldURL;},
         getExposeIpList() {return option.shield.exposeIpList;},
         getIsFreeze() {return option.shield.isFreeze;},
         getIsPossibleGoBack() {return option.shield.isPossibleGoBack;},
         getIsPossibleOpenDevTool() {return option.shield.isPossibleOpenDevTool;},
-
-        //====================================================================================
-        //option data set
-        //====================================================================================
-        //function set
-        /**
-         * Sets a custom function for the `convertValue` method, which is responsible for converting
-         * special values into a predefined format before they are inserted into the DataModel.
-         * This method allows users to override the default behavior of `convertValue`.
-         *
-         * @param {ConvertValue} func - A function that takes a value of any type and 
-         * returns the converted value. This function can handle specific value types (e.g., `Date`) 
-         * to ensure consistent and predictable storage in the DataModel.
-         *
-         * ### Related:
-         * - **`convertValue`**:
-         *   - Default implementation: `function(value: any): any { return value; }`
-         *
-         * @example
-         * // Customizing the `convertValue` function to format Date objects as ISO strings
-         * Hison.setConvertValue((value) => {
-         *     if (value instanceof Date) {
-         *         return value.toISOString(); // Convert Date to ISO 8601 format
-         *     }
-         *     return value; // Return other values as-is
-         * });
-         *
-         * @remarks
-         * - When a new `convertValue` function is set using `setConvertValue`, all future
-         *   data insertions will utilize the custom logic provided in the function.
-         * - The default `convertValue` function simply returns the input value unchanged.
-         */
         setConvertValue(func: ConvertValue) {option.data.convertValue = func;},
-
-        //====================================================================================
-        //option link set
-        //====================================================================================
-        //set
         setProtocol(str: string) {option.link.protocol = str;},
         setDomain(str: string) {option.link.domain = str;},
         setControllerPath(str: string) {option.link.controllerPath = str;},
@@ -1558,7 +1981,6 @@ function createHison(): Hison {
         setWebSocketProtocol(str: string) {option.link.webSocketProtocol = str;},
         setWebSocketEndPoint(str: string) {option.link.webSocketEndPoint = str;},
         setWebSocketlimit(num: number) {option.link.webSocketlimit = num;},
-        //get
         getProtocol() {return option.link.protocol;},
         getDomain() {return option.link.domain;},
         getControllerPath() {return option.link.controllerPath;},
@@ -1566,7 +1988,6 @@ function createHison(): Hison {
         getWebSocketProtocol() {return option.link.webSocketProtocol;},
         getWebSocketEndPoint() {return option.link.webSocketEndPoint;},
         getWebSocketlimit() {return option.link.webSocketlimit;},
-        //function set
         setBeforeGetRequst(func: BeforeGetRequst) {option.link.beforeGetRequst = func;},
         setBeforePostRequst(func: BeforePostRequst) {option.link.beforePostRequst = func},
         setBeforePutRequst(func: BeforePutRequst) {option.link.beforePutRequst = func},
@@ -1575,41 +1996,7 @@ function createHison(): Hison {
         setBeforeCallbackWorked(func: BeforeCallbackWorked) {option.link.beforeCallbackWorked = func},
         setBeforeCallbackError(func: BeforeCallbackError) {option.link.beforeCallbackError = func},
 
-        //====================================================================================
-        //utils
-        //====================================================================================
-        /**
-         * Javascript의 다양한 기능을 가지고있는 object를 반환합니다.
-         * @returns {Object} {utils}
-         * 
-         * @example
-         * utils.isAlpha();
-         * 
-         * @description
-         * boolean형 utils
-         * Date형 utils
-         * number형 utils
-         * string형 utils
-         * 형변환 utils가 있습니다.
-         */
         utils : {
-            // for boolean
-            /**
-             * Checks if the given string consists only of English alphabet characters.
-             * This method uses a regular expression to test whether the input string contains
-             * only letters (both uppercase and lowercase) from A to Z.
-             *
-             * @param {string} str - The string to be tested.
-             * @returns {boolean} Returns true if the string consists only of English alphabet characters; otherwise, false.
-             *
-             * @example
-             * // returns true
-             * hison.utils.isAlpha("HelloWorld");
-             *
-             * @example
-             * // returns false
-             * hison.utils.isAlpha("Hello World! 123");
-             */
             isAlpha: hison.utils.isAlpha,
             isAlphaNumber: hison.utils.isAlphaNumber,
             isNumber: hison.utils.isNumber,
@@ -1631,8 +2018,6 @@ function createHison(): Hison {
             isEmail: hison.utils.isEmail,
             isURL: hison.utils.isURL,
             isValidMask: hison.utils.isValidMask,
-
-            // for Date
             getDateObject: hison.utils.getDateObject,
             getTimeObject: hison.utils.getTimeObject,
             getDatetimeObject: hison.utils.getDatetimeObject,
@@ -1653,110 +2038,39 @@ function createHison(): Hison {
             getSysSecond: hison.utils.getSysSecond,
             getSysTime: hison.utils.getSysTime,
             getSysDate: hison.utils.getSysDate,
-
-            // for number
-            // for string
+            getCeil: hison.utils.getCeil,
+            getFloor: hison.utils.getFloor,
+            getRound: hison.utils.getRound,
+            getTrunc: hison.utils.getTrunc,
+            getByteLength: hison.utils.getByteLength,
+            getCutByteLength: hison.utils.getCutByteLength,
+            getStringLenForm: hison.utils.getStringLenForm,
+            getLpad: hison.utils.getLpad,
+            getRpad: hison.utils.getRpad,
+            getTrim: hison.utils.getTrim,
+            getReplaceAll: hison.utils.getReplaceAll,
+            nvl: hison.utils.nvl,
             getNumberFormat: hison.utils.getNumberFormat,
-            // for convertor
+            getRemoveExceptNumbers: hison.utils.getRemoveExceptNumbers,
+            getRemoveNumbers: hison.utils.getRemoveNumbers,
+            getReverse: hison.utils.getReverse,
+            getToBoolean: hison.utils.getToBoolean,
             getToNumber: hison.utils.getToNumber,
             getToFloat: hison.utils.getToFloat,
+            getToInteger: hison.utils.getToInteger,
             getToString: hison.utils.getToString,
-            // etc
+            getFileExtension: hison.utils.getFileExtension,
+            getFileName: hison.utils.getFileName,
+            getDecodeBase64: hison.utils.getDecodeBase64,
+            getEncodeBase64: hison.utils.getEncodeBase64,
+            deepCopyArrOrObject: hison.utils.deepCopyArrOrObject,
         },
 
-        //====================================================================================
-        //shield
-        //====================================================================================
-        /**
-         * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
-         * 
-         * @returns {Object} {function excute}
-         * 
-         * @example
-         * shield.excute(); // Initializes and executes the security measures.
-         * 
-         * @description
-         * 웹 클라이언트에 대한 보안을 강화하는 조치를 합니다.
-         * hison 객체에 대해 Object.freeze()를 처리합니다. desfatched
-         * localhost를 제외한 모든 URL 또는 특정 URL에 대해 개발자 모드 접근을 봉쇄합니다.
-         * localhost를 제외한 모든 URL 또는 특정 URL에 대해 뒤로가기를 봉쇄합니다.
-         */
         shield : {
-            /**
-             * Executes the specified functionality for the given `Hison` object with additional security measures.
-             * This function applies deep freezing, IP-based shielding, and developer mode restrictions based on the provided options.
-             *
-             * @param {Hison} hison - The main object to be processed and optionally frozen for immutability.
-             *
-             * @remarks
-             * This function incorporates multiple layers of security, including:
-             * - Freezing objects to prevent tampering.
-             * - Blocking unauthorized access based on the user's IP.
-             * - Preventing the use of browser developer tools.
-             *
-             * ### Related:
-             * - hison.setShieldURL
-             * - hison.setExposeIpList
-             * - hison.setIsFreeze
-             * - hison.setIsPossibleGoBack
-             * - hison.setIsPossibleOpenDevTool
-             *
-             * #### Logic Breakdown:
-             * 1. **Object Freezing**:
-             *    - If `option.shield.isFreeze` is enabled, the `hison` object is deeply frozen using the `deepFreeze` function.
-             *    - Prevents runtime modification of the object or its nested properties.
-             *
-             * 2. **Access Control by URL and IP**:
-             *    - If not on `localhost`:
-             *        - Ensures the current URL matches `option.shield.shieldURL`.
-             *        - Fetches the user's IP via `/ajax/getIp`.
-             *        - Verifies the IP against `option.shield.exposeIpList`.
-             *        - If the IP is not allowed:
-             *            - Prevents navigating back using the browser's back button.
-             *            - Restricts developer tool access.
-             *
-             * 3. **Developer Tool Restrictions**:
-             *    - Blocks `F12` key to prevent opening developer tools.
-             *    - Detects and alerts when developer tools are opened using browser resizing, focus, or mouse events.
-             *    - Displays a warning message and halts further actions if developer tools are detected.
-             */
             excute: hison.shield.excute,
         },
         
-        //====================================================================================
-        //data
-        //====================================================================================
-        /**
-         * DataWrapper와 DataModel 생성자를 가진 객체입니다.
-         * 
-         * @returns {Object} { DataWrapper class, DataModel class }
-         * 
-         * @example
-         * new hison.data.DataWrapper(); DataWrapper 인스턴스를 생성합니다.
-         * new hison.data.DataModel(); DataModel 인스턴스를 생성합니다.
-         * 
-         * @description
-         * DataModel을 감싸는 wrapper객체인 DataWrapper 생성자와
-         * JavaScript object for managing and manipulating a table-like data structure인 DataModel 생성자를 갖고있는 객체입니다.
-         */
         data: hison.data,
-        /**
-         * ApiLink와 CachingModule 생성자를 가진 객체입니다.
-         * 
-         * @returns {Object} { ApiLink와 class, CachingModule class }
-         * 
-         * @example
-         * new hison.link.ApiLink(); ApiLink 인스턴스를 생성합니다.
-         * new hison.link.CachingModule(); CachingModule 인스턴스를 생성합니다.
-         * 
-         * @description
-         * hisondev 플랫폼의 api-link와 통신을 지원하는 javasctript 통신 인스턴스인 ApiLink와.
-         * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
-         */
-        
-        //====================================================================================
-        //link
-        //====================================================================================
         link: hison.link,
     }
 }
@@ -1766,12 +2080,16 @@ const hison = createHison();
 hison.setIsPossibleOpenDevTool(true);
 hison.shield.excute(hison);
 
+
 const $ = (...str: any[]) => {
     console.log(...str);
 }
 
-const t = hison.utils;
-
-$('1', t.getDateObject('2024-01-01'));
+const dw1 = new hison.data.DataWrapper();
+const dw2 = new hison.data.DataWrapper({key1: 'value', key2: 3, key3: null, key4: new hison.data.DataModel()});
+const dw3 = new hison.data.DataWrapper('key', 'value');
+$('#### 1', dw1);
+$('#### 2', dw2);
+$('#### 3', dw3);
 
 export default createHison();
