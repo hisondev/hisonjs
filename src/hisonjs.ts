@@ -180,9 +180,9 @@ interface Hison {
         isURL(urlStr: string): boolean;
         isValidMask(str: string, mask: string): boolean;
         //for Date
-        getDateObject(dateStr: string): DateObject;
-        getTimeObject(str: string): TimeObject;
-        getDatetimeObject(datetime: string): DateTimeObject;
+        getDateObject(dateStr: Date | string): DateObject;
+        getTimeObject(str: Date | string): TimeObject;
+        getDatetimeObject(datetime: Date | string): DateTimeObject;
         addDate(datetime: DateTimeObject | string, addValue: string | number, addType?: string, format?: string): DateTimeObject | string;
         getDateDiff(datetime1: DateTimeObject | string, datetime2: DateTimeObject | string, diffType?: string): number;
         getMonthName(month: number | string, isFullName?: boolean): string;
@@ -314,7 +314,7 @@ interface Hison {
          * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
          * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
          */
-        DataWrapper: new (keyOrObject?: {} | '', value?: any) => DataWrapper;
+        DataWrapper: new (keyOrObject?: Record<string, any> | '', value?: any) => DataWrapper;
         /**
          * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
          * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
@@ -325,7 +325,7 @@ interface Hison {
          *                                       If an array of strings is provided, it initializes the column names.
          *                                       If an object is provided, it initializes a single row with the object's key-value pairs.
          */
-        DataModel: new () => DataModel;
+        DataModel: new (data?: Record<string, any>[] | Record<string, any>) => DataModel;
     };
 
     //====================================================================================
@@ -476,33 +476,34 @@ interface DataModel {
     addColumns(columns: string[]): DataModel;
     setColumnSameValue(column: string, value: any): DataModel;
     setColumnSameFormat(column: string, formatter: DataModelFormatter): DataModel;
-    getRow(rowIndex: number): {};
+    getRow(rowIndex: number): Record<string, any>;
     getRowAsDataModel(rowIndex: number): DataModel;
-    addRow(rowIndexOrRow?: number | {}, row?: {}): DataModel;
-    getRows(): {}[];
-    addRows(rows: {}[]): DataModel;
+    addRow(rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel;
+    getRows(startRow?: number, endRow?: number): Record<string, any>[];
+    getRowsAsDataModel(startRow?: number, endRow?: number): DataModel;
+    addRows(rows: Record<string, any>[]): DataModel;
     getObject(): {};
     getValue(rowIndex: number, column: string): any;
     setValue(rowIndex: number, column: string, value: any): DataModel;
     removeColumn(column: string): DataModel;
     removeColumns(columns: string[]): DataModel;
-    removeRow(rowIndex?: number): {};
+    removeRow(rowIndex?: number): Record<string, any>;
     getColumnCount(): number;
     getRowCount(): number;
     hasColumn(column: string): boolean;
     setValidColumns(columns: string[]): DataModel;
     isNotNullColumn(column: string): boolean;
-    findFirstRowNullColumn(column: string): {};
+    findFirstRowNullColumn(column: string): Record<string, any>;
     isNotDuplColumn(column: string): boolean;
-    findFirstRowDuplColumn(column: string): {};
+    findFirstRowDuplColumn(column: string): Record<string, any>;
     isValidValue(column: string, vaildator: DataModelValidator): boolean;
-    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): {};
-    searchRowIndexes(condition: {}, isNegative?: boolean): number[];
-    searchRows(condition: {}, isNegative?: boolean): {}[];
-    searchRowsAsDataModel(condition: {}, isNegative?: boolean): DataModel;
-    searchAndModify(condition: {}, isNegative?: boolean): DataModel;
+    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): Record<string, any>;
+    searchRowIndexes(condition: Record<string, any>, isNegative?: boolean): number[];
+    searchRows(condition: Record<string, any>, isNegative?: boolean): Record<string, any>[];
+    searchRowsAsDataModel(condition: Record<string, any>, isNegative?: boolean): DataModel;
+    searchAndModify(condition: Record<string, any>, isNegative?: boolean): DataModel;
     filterRowIndexes(filter: DataModelFillter): number[];
-    filterRows(filter: DataModelFillter): {}[];
+    filterRows(filter: DataModelFillter): Record<string, any>[];
     filterRowsAsDataModel(filter: DataModelFillter): DataModel;
     filterAndModify(filter: DataModelFillter): DataModel;
     setColumnSorting(columns: string[]): DataModel;
@@ -515,7 +516,7 @@ interface DataModel {
 };
 interface DataModelFormatter{(value: any): any;};
 interface DataModelValidator{(value: any): boolean;};
-interface DataModelFillter{(row: {}): boolean;};
+interface DataModelFillter{(row: Record<string, any>): boolean;};
 //====================================================================================
 //link interface, type
 //====================================================================================
@@ -549,11 +550,11 @@ interface DataModelFillter{(row: {}): boolean;};
  */
 interface callbackWorked {(result: DataWrapper | undefined, response: Response): boolean | void;};
 interface callbackError {(error: any/**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;};
-interface BeforeGetRequst {(resourcePath: string, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;};
-interface BeforePostRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;};
-interface BeforePutRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;};
-interface BeforePatchRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;};
-interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;};
+interface BeforeGetRequst {(resourcePath: string, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
+interface BeforePostRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
+interface BeforePutRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
+interface BeforePatchRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
+interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
 interface BeforeCallbackWorked extends callbackWorked {};
 interface BeforeCallbackError extends callbackError {};
 
@@ -618,11 +619,11 @@ function createHison(): Hison {
             webSocketProtocol : 'ws://',
             webSocketEndPoint : '/hison-caching-websocket-endpoint',
             webSocketlimit : 10,
-            beforeGetRequst(resourcePath: string, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforePostRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforePutRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforePatchRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
-            beforeDeleteRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: {}): boolean | void {return true;},
+            beforeGetRequst(resourcePath: string, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
+            beforePostRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
+            beforePutRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
+            beforePatchRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
+            beforeDeleteRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
             beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
             beforeCallbackError(error: any): boolean | void {return true;},
         };
@@ -791,49 +792,79 @@ function createHison(): Hison {
             },
 
             //for Date
-            getDateObject(dateStr: string): DateObject {
-                dateStr = hison.utils.getToString(dateStr);
-                dateStr = dateStr.split(' ')[0];
-                let year: number, month: number, day: number;
-                if (dateStr.includes('-')) {
-                    [year, month, day] = dateStr.split('-').map(num => parseInt(num, 10));
-                } else if (dateStr.includes('/')) {
-                    [year, month, day] = dateStr.split('/').map(num => parseInt(num, 10));
-                } else if (dateStr.length === 8) {
-                    year = parseInt(dateStr.substring(0, 4), 10);
-                    month = parseInt(dateStr.substring(4, 6), 10);
-                    day = parseInt(dateStr.substring(6, 8), 10);
-                } else {
-                    return {y: null, M: null, d: null};
+            getDateObject(date: Date | string): DateObject {
+                const result = {y: null, M: null, d: null};
+                if (typeof date === 'string') {
+                    let year: number = null, month: number = null, day: number = null;
+                    date = _hison.utils.getToString(date);
+                    date = date.split(' ')[0];
+                    if (date.includes('-')) {
+                        [year, month, day] = date.split('-').map(num => parseInt(num, 10));
+                    } else if (date.includes('/')) {
+                        [year, month, day] = date.split('/').map(num => parseInt(num, 10));
+                    } else if (date.length === 8) {
+                        year = parseInt(date.substring(0, 4), 10);
+                        month = parseInt(date.substring(4, 6), 10);
+                        day = parseInt(date.substring(6, 8), 10);
+                    } else {
+                        return result;
+                    }
+                    result.y = year;
+                    result.M = month;
+                    result.d = day;
+                } else if (date instanceof Date) {
+                    result.y = date.getFullYear();
+                    result.M = date.getMonth() + 1;
+                    result.d = date.getDate();
                 }
-            
-                return { y: year, M: month, d: day };
+                return result
             },
-            getTimeObject(str: string): TimeObject {
-                str = _hison.utils.getToString(str);
-                const dateArr = str.split(' ');
-                str = dateArr.length > 1 ? dateArr[1] : str;
-                let hours: number, minutes: number, seconds: number;
-        
-                if (str.includes(':')) {
-                    [hours, minutes, seconds] = str.split(':').map(num => parseInt(num, 10));
-                } else if (str.length === 6) {
-                    hours = parseInt(str.substring(0, 2), 10);
-                    minutes = parseInt(str.substring(2, 4), 10);
-                    seconds = parseInt(str.substring(4, 6), 10);
-                } else {
-                    return { h: null, m: null, s: null };
+            getTimeObject(time: Date | string): TimeObject {
+                const result = {h: null, m: null, s: null};
+                if (typeof time === 'string') {
+                    let hours: number = null, minutes: number = null, seconds: number = null;
+                    time = _hison.utils.getToString(time);
+                    const dateArr = time.split(' ');
+                    time = dateArr.length > 1 ? dateArr[1] : time;
+            
+                    if (time.includes(':')) {
+                        [hours, minutes, seconds] = time.split(':').map(num => parseInt(num, 10));
+                    } else if (time.length === 6) {
+                        hours = parseInt(time.substring(0, 2), 10);
+                        minutes = parseInt(time.substring(2, 4), 10);
+                        seconds = parseInt(time.substring(4, 6), 10);
+                    } else {
+                        return { h: null, m: null, s: null };
+                    }
+                    result.h = hours;
+                    result.m = minutes;
+                    result.s = seconds;
+                } else if (time instanceof Date) {
+                    result.h = time.getHours();
+                    result.m = time.getMinutes();
+                    result.s = time.getSeconds();
                 }
-            
-                return { h: hours, m: minutes, s: seconds };
+                return result;
             },
-            getDatetimeObject(datetime: string): DateTimeObject {
-                datetime = _hison.utils.getToString(datetime);
-                const datetimeArr = datetime.split(' ');
-                const dateObj = datetimeArr[0];
-                const timeObj = datetimeArr.length > 1 ? datetimeArr[1] as string : '';
-        
-                return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
+            getDatetimeObject(datetime: Date | string): DateTimeObject {
+                if (typeof datetime === 'string') {
+                    datetime = _hison.utils.getToString(datetime);
+                    const datetimeArr = datetime.split(' ');
+                    const dateObj = datetimeArr[0];
+                    const timeObj = datetimeArr.length > 1 ? datetimeArr[1] as string : '';
+                    return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
+                }
+                if (datetime instanceof Date) {
+                    return {
+                        y : datetime.getFullYear(),
+                        M : datetime.getMonth() + 1,
+                        d : datetime.getDate(),
+                        h : datetime.getHours(),
+                        m : datetime.getMinutes(),
+                        s : datetime.getSeconds(),
+                    }
+                }
+                return null;
             },
             addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = "", format: string = ""): DateTimeObject | string {
                 const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
@@ -1775,7 +1806,7 @@ function createHison(): Hison {
         };
         data = {
             DataWrapper : class implements DataWrapper {
-                constructor(keyOrObject?: {} | string, value?: any) {
+                constructor(keyOrObject?: Record<string, any> | string, value?: any) {
                     this._data = {};
                     if (keyOrObject === undefined) return;
                     if (typeof keyOrObject === "object" && keyOrObject !== null) {
@@ -1788,14 +1819,14 @@ function createHison(): Hison {
                         throw new Error("Invalid arguments. Provide an object or a key-value pair.");
                     }
                 }
-                private _data: {};
+                private _data: Record<string, DataModel | string | null>;
                 private _isDataWrapper = true;
                 private _deepCopy = (object: any, visited?: { source: any, copy: any }[]): any => {
                     if (object === null || typeof object !== 'object') {
                         return object;
                     }
                     if (object.constructor !== Object && object.constructor !== Array) {
-                        if (object.getIsDataModel && object.getIsDataModel()) {
+                        if (object && object.getIsDataModel && object.getIsDataModel()) {
                             return object.clone();
                         } else {
                             return object;
@@ -1869,8 +1900,8 @@ function createHison(): Hison {
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
                             // DataModel 객체인 경우
-                            if (this._data[key] && this._data[key].getIsDataMode && this._data[key].getIsDataModel()) {
-                                data[key] = this._data[key].getRows();
+                            if (this._data[key] && (this._data[key] as DataModel).getIsDataModel && (this._data[key] as DataModel).getIsDataModel()) {
+                                data[key] = (this._data[key] as DataModel).getRows();
                             } else {
                                 // 그 외의 경우는 정상적으로 값을 할당
                                 data[key] = this._data[key];
@@ -1886,12 +1917,12 @@ function createHison(): Hison {
                 getString = (key: string): string | null => {
                     if (typeof key !== 'string') throw new Error("Keys must always be strings.");
                     if (typeof this._data[key] !== 'string') throw new Error("The data does not contain the specified string value.");
-                    return this._data[key] ? this._data[key] : null;
+                    return this._data[key] ? this._data[key] as string : null;
                 };
                 getDataModel = (key: string): DataModel => {
                     if (typeof key !== 'string') throw new Error("Keys must always be strings.");
-                    if (!this._data[key].getIsDataMode || !this._data[key].getIsDataModel()) throw new Error("The data does not contain the specified data-model value.");
-                    return this._data[key].clone();
+                    if (!this._data[key] || !(this._data[key] as DataModel).getIsDataModel || !(this._data[key] as DataModel).getIsDataModel()) throw new Error("The data does not contain the specified data-model value.");
+                    return (this._data[key] as DataModel).clone();
                 };
                 put = (key: string, value: any): DataWrapper => {
                     this._put(key, value);
@@ -1921,8 +1952,8 @@ function createHison(): Hison {
                 getObject = (): {} => {
                     const result = {};
                     for(let key in this._data) {
-                        if (this._data[key] && this._data[key].getIsDataModel && this._data[key].getIsDataModel()) {
-                            result[key] = this._data[key].getObject();
+                        if (this._data[key] && (this._data[key] as DataModel).getIsDataModel && (this._data[key] as DataModel).getIsDataModel()) {
+                            result[key] = (this._data[key] as DataModel).getObject();
                         } else {
                             result[key] = this._data[key];
                         }
@@ -1962,12 +1993,12 @@ function createHison(): Hison {
                 };
             },
             DataModel : class implements DataModel {
-                constructor(data?: {}[] | {}) {
-                    if(!data) return;
+                constructor(data?: Record<string, any>[] | Record<string, any>) {
+                    if (!data) return;
                     this._put(data);
                 }
                 private _cols: string[] = [];
-                private _rows: any[] = [];
+                private _rows: Record<string, any>[] = [];
                 private _isDataModel = true;
                 private _deepCopy = (object: any, visited?: { source: any, copy: any }[]): any => {
                     if (object === null || typeof object !== 'object') {
@@ -2015,19 +2046,19 @@ function createHison(): Hison {
                     return true;
                 };
                 private _getValidRowIndex = (rowIndex: number): number => {
-                    if(!this._isPositiveIntegerIncludingZero(rowIndex)) {
+                    if (!this._isPositiveIntegerIncludingZero(rowIndex)) {
                         throw new Error("Invalid number type. It should be a number or a string that can be converted to a number.");
                     }
                     const index = Number(rowIndex);
                     if (index < 0 || index >= this._rows.length) {
-                        throw new Error("Invalid rowIndex value. It should be within the range of the rows.");
+                        throw new Error(`Invalid rowIndex value. It should be within the range of the rows.\nrange: between 0 and ${this._rows.length - 1}\ninsert rowIndex : ${index}`);
                     }
                     return index;
                 }
                 private _isConvertibleString = (value: any): boolean => {
-                    if(value === undefined) throw new Error("You can not put a value of undefined type.");
-                    if(value === null) return true;
-                    if(['string','number','boolean','bigint','symbol'].indexOf(typeof value) >= 0) {
+                    if (value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if (value === null) return true;
+                    if (['string','number','boolean','bigint','symbol'].indexOf(typeof value) >= 0) {
                         return true;
                     } else {
                         return false;
@@ -2037,47 +2068,45 @@ function createHison(): Hison {
                     return this._cols.indexOf(column) >= 0
                 };
                 private _checkColumn = (column: string) => {
-                    if(!this._hasColumn(column)) {
+                    if (!this._hasColumn(column)) {
                         throw new Error("The column does not exist. column : " + column);
                     }
                 };
                 private _checkValidFunction = (func: Function) => {
-                    if(!func || typeof func !== 'function') {
+                    if (!func || typeof func !== 'function') {
                         throw new Error("Please insert the valid function.");
                     }
                 };
                 private _checkBoolean = (value: boolean) => {
-                    if(typeof value !== 'boolean') {
+                    if (typeof value !== 'boolean') {
                         throw new Error("Please pass an boolean as a parameter.");
                     }
                 };
                 private _checkOriginObject = (value: {}) => {
-                    if(value.constructor !== Object) {
+                    if (value.constructor !== Object) {
                         throw new Error("Please pass an object with its own key-value pairs as a parameter.");
                     }
                 };
                 private _checkArray = (value: any[]) => {
-                    if(value.constructor !== Array) {
+                    if (value.constructor !== Array) {
                         throw new Error("Please pass an array.");
                     }
                 };
-                private _getColumnType = (col: string): string => {
-                    for(const row of this._rows) {
-                        if(row[col]) {
-                            if(typeof row[col] === 'object') {
-                                if (row.constructor === Array) {
-                                    return 'array';
-                                }
-                                return 'object';
+                private _getColumnType = (rowIndex: number, col: string): string => {
+                    if (rowIndex === 0) return 'null';
+                    for(let index = rowIndex - 1; index >= 0; index--) {
+                        if (this._rows[index][col]) {
+                            if (typeof this._rows[index][col] === 'object') {
+                                return this._rows[index][col].constructor;
                             }
-                            return typeof row[col];
+                            return typeof this._rows[index][col];
                         }
                     }
                     return 'null';
                 };
                 private _makeValue = (value: any): any => {
-                    let result: any;
-                    if (typeof value === 'string') {
+                    let result = value;
+                    /*if (typeof value === 'string') {
                         result = value;
                     } else if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
                         result = String(value);
@@ -2085,9 +2114,9 @@ function createHison(): Hison {
                         result = value.description;
                     } else if (value === null) {
                         result = null;
-                    } else if (typeof value === 'object') {
-                        if(value.getIsDataWrapper || value.getIsDataModel
-                            || value.getIsDataWrapper() || value.getIsDataModel()
+                    } else */if (typeof value === 'object') {
+                        if ((value && value.getIsDataWrapper && value.getIsDataWrapper())
+                            || (value && value.getIsDataModel && value.getIsDataModel())
                         ) {
                             throw new Error("You cannot insert a datawrapper or datamodel within a datamodel.");
                         }
@@ -2097,19 +2126,37 @@ function createHison(): Hison {
                 };
                 private _getValidColValue = (value: string): string => {
                     value = this._makeValue(value);
-                    if(!this._isConvertibleString(value)) {
+                    if (!this._isConvertibleString(value)) {
                         throw new Error("Only strings can be inserted into columns.");
                     }
-                    if(!value) {
+                    if (!value) {
                         throw new Error("Column cannot be null.");
                     }
                     return value;
                 }
-                private _getValidRowValue = (col: string, value: any): any => {
+                private _getValidRowValue = (rowIndex: number, col: string, value: any): any => {
                     value = this._makeValue(value);
-                    const chkType = this._getColumnType(col);
-                    if(chkType !== 'null' && value !== null && chkType !== (typeof value)) {
-                        throw new Error("Data of the same type must be inserted into the same column. column : " + col);
+                    const chkType = this._getColumnType(rowIndex, col);
+                    if (chkType !== 'null' && value !== null) {
+                        if (typeof value === 'object') {
+                            if (value.constructor !== chkType) {
+                                console.log("111")
+                                console.log(value);
+                                console.log("typeof value : ", typeof value);
+                                console.log("value.constructor : ", value.constructor);
+                                console.log("chkType : ", chkType);
+                                throw new Error("Data of the same type must be inserted into the same column. column : " + col);
+                            }
+                        } else {
+                            if (typeof value !== 'object' && typeof value !== chkType) {
+                                console.log("222")
+                                console.log(value);
+                                console.log("typeof value : ", typeof value);
+                                console.log("value.constructor : ", value.constructor);
+                                console.log("chkType : ", chkType);
+                                throw new Error("Data of the same type must be inserted into the same column. column : " + col);
+                            }
+                        }
                     }
                     return value;
                 }
@@ -2121,57 +2168,57 @@ function createHison(): Hison {
                         throw new Error("There are duplicate columns to add. column : " + value);
                     }
                 }
-                private _addRow = (row: {}) => {
-                    if(!row) {
+                private _addRow = (rowIndex: number, row: Record<string, any>) => {
+                    if (!row) {
                         throw new Error("Please insert vaild object");
                     }
-                    if(row.constructor !== Object) {
+                    if (row.constructor !== Object) {
                         throw new Error("Please insert object with their own key-value pairs.");
                     }
-                    if(Object.keys(row).length === 0) return;
-                    const tempRow = {};
-                    const tempkeys = Object.keys(row);
-                    if(this._cols.length === 0) {
+                    if (Object.keys(row).length === 0) return;
+                    if (this._cols.length === 0) {
                         for (const key in row) {
                             this._addCol(key);
                         }
                     }
-                    for (let i = 0; i < tempkeys.length; i++) {
-                        if (this._hasColumn(tempkeys[i])) {
-                            tempRow[tempkeys[i]] = this._getValidRowValue(tempkeys[i], row[tempkeys[i]]);
+                    const tempRow = {};
+                    for(const col of this._cols) {
+                        if (row.hasOwnProperty(col)) {
+                            tempRow[col] = this._getValidRowValue(rowIndex, col, row[col]);
                         }
-                    }
-                    for (const col of this._cols) {
-                        if(!tempRow.hasOwnProperty(col)) {
+                        else {
                             tempRow[col] = null;
                         }
                     }
                     this._rows.push(tempRow);
                 }
-                private _put = (data: {}[] | {}) => {
-                    if(Array.isArray(data)) {
-                        if(data.length === 0) return;
-                        if(this._isConvertibleString(data[0])) {
+                private _put = (data: Record<string, any>[] | Record<string, any>) => {
+                    let rowIndex = this._rows.length;
+                    if (Array.isArray(data)) {
+                        if (data.length === 0) return;
+                        if (this._isConvertibleString(data[0])) {
                             for(const col of data) {
                                 this._addCol(col);
                             }
                             return;
                         } else {
                             for(const row of data) {
-                                this._addRow(row);
+                                this._addRow(rowIndex, row);
+                                rowIndex++;
                             }
                             return;
                         }
                     } else if (typeof data === 'object') {
-                        if((data as DataWrapper).getIsDataWrapper || (data as DataWrapper).getIsDataWrapper()) {
+                        if (data && (data as DataWrapper).getIsDataWrapper && (data as DataWrapper).getIsDataWrapper()) {
                             throw new Error("You cannot construct a datamodel with datawrapper.");
-                        } else if ((data as DataModel).getIsDataModel || (data as DataModel).getIsDataModel()){
-                            for(const row of (data as DataModel).getRows()) {
-                                this._addRow(row);
+                        } else if (data && (data as DataModel).getIsDataModel && (data as DataModel).getIsDataModel()){
+                            for(const row of (data as DataModel).getRows() ) {
+                                this._addRow(rowIndex, row);
+                                rowIndex++;
                             }
                             return;
                         } else if (data.constructor === Object) {
-                            this._addRow(data);
+                            this._addRow(rowIndex, data);
                             return;
                         }
                     }
@@ -2180,21 +2227,21 @@ function createHison(): Hison {
                 private _getNullColumnFirstRowIndex = (column: string): number => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
-                    for(var i = 0; i < this._rows.length; i++) {
-                        if(this._rows[i][column] === null) return i;
+                    for(let i = 0; i < this._rows.length; i++) {
+                        if (this._rows[i][column] === null) return i;
                     }
                     return -1;
                 };
                 private _getDuplColumnFirstRowIndex = (column: string): number => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
-                    var checkedValues = [];
-                    for(var i = 0; i < this._rows.length; i++) {
-                        if(checkedValues.includes(this._rows[i][column])) {
+                    const checkedValues = [];
+                    for(let i = 0; i < this._rows.length; i++) {
+                        if (checkedValues.includes(JSON.stringify(this._rows[i][column]))) {
                             return i;
                         }
-                        if(this._rows[i][column] !== null) {
-                            checkedValues.push(this._rows[i][column]);
+                        if (this._rows[i][column] !== null) {
+                            checkedValues.push(JSON.stringify(this._rows[i][column]));
                         }
                     }
                     return -1;
@@ -2204,8 +2251,8 @@ function createHison(): Hison {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     
-                    for(var i = 0; i < this._rows.length; i++) {
-                        if(!validator(this._rows[i][column])) {
+                    for(let i = 0; i < this._rows.length; i++) {
+                        if (!validator(this._rows[i][column])) {
                             return i;
                         }
                     }
@@ -2243,20 +2290,20 @@ function createHison(): Hison {
                 addColumn = (column: string): DataModel => {
                     this._addCol(column);
                     for(const row of this._rows) {
-                        if(!row.hasOwnProperty(column)) {
+                        if (!row.hasOwnProperty(column)) {
                             row[column] = null;
                         }
                     }
                     return this;
                 };
                 addColumns = (columns: string[]): DataModel => {
-                    if(!Array.isArray(columns)) {
+                    if (!Array.isArray(columns)) {
                         throw new Error("Only array contains strings can be inserted into columns.");
                     }
                     for(const column of columns) {
                         this._addCol(column);
                         for(const row of this._rows) {
-                            if(!row.hasOwnProperty(column)) {
+                            if (!row.hasOwnProperty(column)) {
                                 row[column] = null;
                             }
                         }
@@ -2264,11 +2311,13 @@ function createHison(): Hison {
                     return this;
                 };
                 setColumnSameValue = (column: string, value: any): DataModel => {
-                    if(value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if (value === undefined) throw new Error("You can not put a value of undefined type.");
                     column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                    if (!this._hasColumn(column)) this._addCol(column);
+                    let rowIndex = 0;
                     for(const row of this._rows) {
-                        row[column] = this._getValidRowValue(column, value);
+                        row[column] = this._getValidRowValue(rowIndex, column, value);
+                        rowIndex++;
                     }
                     return this;
                 };
@@ -2276,20 +2325,22 @@ function createHison(): Hison {
                     this._checkValidFunction(formatter);
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
+                    let rowIndex = 0;
                     for(const row of this._rows) {
-                        row[column] = this._getValidRowValue(column, formatter(row[column]));
+                        row[column] = this._getValidRowValue(rowIndex, column, formatter(row[column]));
+                        rowIndex++;
                     }
                     return this;
                 };
-                getRow = (rowIndex: number): {} => {
+                getRow = (rowIndex: number): Record<string, any> => {
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
                 getRowAsDataModel = (rowIndex: number): DataModel => {
                     return new _hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
-                addRow = (rowIndexOrRow?: number, row?: {}): DataModel => {
+                addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel => {
                     if (rowIndexOrRow === undefined && row === undefined) {
-                        if(this._cols.length <= 0) {
+                        if (this._cols.length <= 0) {
                             throw new Error("Please define the column first.");
                         }
                         const emptyRow = {};
@@ -2298,20 +2349,20 @@ function createHison(): Hison {
                         }
                         this._rows.push(emptyRow);
                     } else if (typeof rowIndexOrRow === 'number' && row === undefined) {
-                        if(this._cols.length <= 0) {
+                        if (this._cols.length <= 0) {
                             throw new Error("Please define the column first.");
                         }
-                        const validIndex = this._getValidRowIndex(rowIndexOrRow);
+                        const validIndex = rowIndexOrRow >= this._rows.length ? this._rows.length : this._getValidRowIndex(rowIndexOrRow);
                         const emptyRow = {};
                         for (const col of this._cols) {
                             emptyRow[col] = null;
                         }
                         this._rows.splice(validIndex, 0, emptyRow);
                     } else if (typeof rowIndexOrRow === 'object' && row === undefined) {
-                        this._addRow(rowIndexOrRow);
+                        this._addRow(this._rows.length, rowIndexOrRow);
                     } else if (typeof rowIndexOrRow === 'number' && typeof row === 'object') {
-                        const validIndex = this._getValidRowIndex(rowIndexOrRow);
-                        this._addRow(row);
+                        const validIndex = rowIndexOrRow >= this._rows.length ? this._rows.length : this._getValidRowIndex(rowIndexOrRow);
+                        this._addRow(validIndex, row);
                         const newRow = this._rows.pop();
                         this._rows.splice(validIndex, 0, newRow);
                     } else {
@@ -2319,10 +2370,21 @@ function createHison(): Hison {
                     }
                     return this;
                 };
-                getRows = (): {}[] => {
-                    return this._deepCopy(this._rows);
+                getRows = (startRow: number = 0, endRow: number = null): Record<string, any>[] => {
+                    const sRow = this._getValidRowIndex(startRow);
+                    if(sRow === 0 && endRow === null) return this._deepCopy(this._rows);
+
+                    const eRow = endRow ? this._getValidRowIndex(endRow) : endRow;
+                    const result = [];
+                    for(let i = sRow; i < eRow; i++) {
+                        result.push(this._deepCopy(this._rows[i]));
+                    }
+                    return result;
                 }
-                addRows = (rows: {}[]): DataModel => {
+                getRowsAsDataModel = (startRow: number = 0, endRow: number = null): DataModel => {
+                    return this._deepCopy(this);
+                }
+                addRows = (rows: Record<string, any>[]): DataModel => {
                     this._put(rows);
                     return this;
                 }
@@ -2344,10 +2406,10 @@ function createHison(): Hison {
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)][column]);
                 };
                 setValue = (rowIndex: number, column: string, value: any): DataModel => {
-                    if(value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if (value === undefined) throw new Error("You can not put a value of undefined type.");
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
-                    this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(column, value);
+                    this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(rowIndex, column, value);
                     return this;
                 };
                 removeColumn = (column: string): DataModel => {
@@ -2365,7 +2427,7 @@ function createHison(): Hison {
                     }
                     return this;
                 };
-                removeRow = (rowIndex: number = 0): {} => {
+                removeRow = (rowIndex: number = 0): Record<string, any> => {
                     return this._rows.splice(this._getValidRowIndex(rowIndex), 1)[0];
                 };
                 getColumnCount = (): number => {
@@ -2385,8 +2447,8 @@ function createHison(): Hison {
                 isNotNullColumn = (column: string): boolean => {
                     return this._getNullColumnFirstRowIndex(column) === -1;
                 };
-                findFirstRowNullColumn = (column: string): {} => {
-                    var nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column);
+                findFirstRowNullColumn = (column: string): Record<string, any> => {
+                    const nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column);
                     if (nullColumnFirstRowIndex === -1) {
                         return null
                     } else {
@@ -2396,8 +2458,8 @@ function createHison(): Hison {
                 isNotDuplColumn = (column: string): boolean => {
                     return this._getDuplColumnFirstRowIndex(column) === -1;
                 };
-                findFirstRowDuplColumn = (column: string): {} => {
-                    var duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column);
+                findFirstRowDuplColumn = (column: string): Record<string, any> => {
+                    const duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column);
                     if (duplColumnFirstRowIndex === -1) {
                         return null
                     } else {
@@ -2407,153 +2469,161 @@ function createHison(): Hison {
                 isValidValue = (column: string, vaildator: DataModelValidator): boolean => {
                     return this._getInValidColumnFirstRowIndex(column, vaildator) === -1;
                 };
-                findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): {} => {
-                    var inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column, vaildator);
+                findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): Record<string, any> => {
+                    const inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column, vaildator);
                     if (inValidColumnFirstRowIndex === -1) {
                         return null
                     } else {
                         return this.getRow(inValidColumnFirstRowIndex);
                     }
                 };
-                searchRowIndexes = (condition: {}, isNegative: boolean = false): number[] => {
-                    this._checkOriginObject(condition);
-                    this._checkBoolean(isNegative);
-                    var matched = [];
-                    this._rows.forEach(function(row, index) {
-                        var matchesCondition = true;
-                        for (var key in condition) {
-                            this._checkColumn(key);
-                            if ((row[key] !== condition[key])) {
+                searchRowIndexes = (condition: Record<string, any>, isNegative: boolean = false): number[] => {
+                    const _this = this;
+                    _this._checkOriginObject(condition);
+                    _this._checkBoolean(isNegative);
+                    const matched = [];
+                    _this._rows.forEach(function(row, index) {
+                        let matchesCondition = true;
+                        for (const key in condition) {
+                            _this._checkColumn(key);
+                            if ((JSON.stringify(row[key]) !== JSON.stringify(condition[key]))) {
                                 matchesCondition = false;
                                 break;
                             }
                         }
-                        if(isNegative) {
-                            if(!matchesCondition) matched.push(index);
+                        if (isNegative) {
+                            if (!matchesCondition) matched.push(index);
                         } else {
-                            if(matchesCondition) matched.push(index);
+                            if (matchesCondition) matched.push(index);
                         }
                     });
                     return matched;
                 };
-                searchRows = (condition: {}, isNegative: boolean = false): {}[] => {
-                    this._checkOriginObject(condition);
-                    this._checkBoolean(isNegative);
-                    var matched = [];
-                    this._rows.forEach(function(row) {
-                        var matchesCondition = true;
-                        for (var key in condition) {
-                            this._checkColumn(key);
-                            if ((row[key] !== condition[key])) {
+                searchRows = (condition: Record<string, any>, isNegative: boolean = false): Record<string, any>[] => {
+                    const _this = this;
+                    _this._checkOriginObject(condition);
+                    _this._checkBoolean(isNegative);
+                    const matched = [];
+                    _this._rows.forEach(function(row) {
+                        let matchesCondition = true;
+                        for (const key in condition) {
+                            _this._checkColumn(key);
+                            if ((JSON.stringify(row[key]) !== JSON.stringify(condition[key]))) {
                                 matchesCondition = false;
                                 break;
                             }
                         }
-                        if(isNegative) {
-                            if(!matchesCondition) matched.push(this._deepCopy(row));
+                        if (isNegative) {
+                            if (!matchesCondition) matched.push(_this._deepCopy(row));
                         } else {
-                            if(matchesCondition) matched.push(this._deepCopy(row));
+                            if (matchesCondition) matched.push(_this._deepCopy(row));
                         }
                     });
                     return matched;
                 };
-                searchRowsAsDataModel = (condition: {}, isNegative: boolean = false): DataModel => {
-                    this._checkOriginObject(condition);
-                    this._checkBoolean(isNegative);
-                    var matched = [];
-                    this._rows.forEach(function(row) {
-                        var matchesCondition = true;
-                        for (var key in condition) {
-                            this._checkColumn(key);
-                            if ((row[key] !== condition[key])) {
+                searchRowsAsDataModel = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
+                    const _this = this;
+                    _this._checkOriginObject(condition);
+                    _this._checkBoolean(isNegative);
+                    const matched = [];
+                    _this._rows.forEach(function(row) {
+                        let matchesCondition = true;
+                        for (const key in condition) {
+                            _this._checkColumn(key);
+                            if ((JSON.stringify(row[key]) !== JSON.stringify(condition[key]))) {
                                 matchesCondition = false;
                                 break;
                             }
                         }
-                        if(isNegative) {
-                            if(!matchesCondition) matched.push(row);
+                        if (isNegative) {
+                            if (!matchesCondition) matched.push(row);
                         } else {
-                            if(matchesCondition) matched.push(row);
+                            if (matchesCondition) matched.push(row);
                         }
                     });
                     return new _hison.data.DataModel(matched);
                 };
-                searchAndModify = (condition: {}, isNegative: boolean = false): DataModel => {
-                    this._checkOriginObject(condition);
-                    this._checkBoolean(isNegative);
-                    for (var i = 0; i < this._rows.length; i++ ){
-                        var matchesCondition = true;
-                        for (var key in condition) {
-                            this._checkColumn(key);
-                            if ((this._rows[i][key] !== condition[key])) {
+                searchAndModify = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
+                    const _this = this;
+                    _this._checkOriginObject(condition);
+                    _this._checkBoolean(isNegative);
+                    for (let i = 0; i < _this._rows.length; i++ ){
+                        let matchesCondition = true;
+                        for (const key in condition) {
+                            _this._checkColumn(key);
+                            if ((JSON.stringify(_this._rows[i][key]) !== JSON.stringify(condition[key]))) {
                                 matchesCondition = false;
                                 break;
                             }
                         }
-                        if(isNegative) {
-                            if(matchesCondition) {
-                                this._rows.splice(i, 1);
+                        if (isNegative) {
+                            if (matchesCondition) {
+                                _this._rows.splice(i, 1);
                                 i--;
                             }
                         } else {
-                            if(!matchesCondition) {
-                                this._rows.splice(i, 1);
+                            if (!matchesCondition) {
+                                _this._rows.splice(i, 1);
                                 i--;
                             }
                         }
                     }
-                    return this;
+                    return _this;
                 };
                 filterRowIndexes = (filter: DataModelFillter): number[] => {
-                    this._checkValidFunction(filter);
-                    var matched = [];
-                    this._rows.forEach(function(row: {}, index) {
-                        if(filter(row)) {
+                    const _this = this;
+                    _this._checkValidFunction(filter);
+                    const matched = [];
+                    _this._rows.forEach(function(row: Record<string, any>, index) {
+                        if (filter(row)) {
                             matched.push(index);
                         }
                     });
                     return matched;
                 };
-                filterRows = (filter: DataModelFillter): {}[] => {
-                    this._checkValidFunction(filter);
-                    var matched = [];
-                    this._rows.forEach(function(row) {
-                        if(filter(row)) {
-                            matched.push(this._deepCopy(row));
+                filterRows = (filter: DataModelFillter): Record<string, any>[] => {
+                    const _this = this;
+                    _this._checkValidFunction(filter);
+                    const matched = [];
+                    _this._rows.forEach(function(row) {
+                        if (filter(row)) {
+                            matched.push(_this._deepCopy(row));
                         }
                     });
                     return matched;
                 };
                 filterRowsAsDataModel = (filter: DataModelFillter): DataModel => {
-                    this._checkValidFunction(filter);
-                    var matched = [];
-                    this._rows.forEach(function(row) {
-                        if(filter(row)) {
+                    const _this = this;
+                    _this._checkValidFunction(filter);
+                    const matched = [];
+                    _this._rows.forEach(function(row) {
+                        if (filter(row)) {
                             matched.push(row);
                         }
                     });
                     return new _hison.data.DataModel(matched);
                 };
                 filterAndModify = (filter: DataModelFillter): DataModel => {
-                    this._checkValidFunction(filter);
-                    for (var i = 0; i < this._rows.length; i++ ){
-                        if(!filter(this._rows[i])) {
-                            this._rows.splice(i, 1);
+                    const _this = this;
+                    _this._checkValidFunction(filter);
+                    for (let i = 0; i < _this._rows.length; i++ ){
+                        if (!filter(_this._rows[i])) {
+                            _this._rows.splice(i, 1);
                             i--;
                         }
                     }
-                    return this;
+                    return _this;
                 };
                 setColumnSorting = (columns: string[]): DataModel => {
                     this._checkArray(columns);
-                    var newColumns = [];
-                    for(var column of columns) {
+                    const newColumns = [];
+                    for(let column of columns) {
                         column = this._getValidColValue(column);
                         this._checkColumn(column);
                         newColumns.push(column);
                     }
-                    for(var column of this._cols) {
-                        if(!newColumns.includes(column)) {
+                    for(const column of this._cols) {
+                        if (!newColumns.includes(column)) {
                             newColumns.push(column)
                         }
                     }
@@ -2585,8 +2655,8 @@ function createHison(): Hison {
                     this._checkColumn(column);
                     this._checkBoolean(isIntegerOrder);
                     this._rows.sort(function(a, b) {
-                        var valueA = a[column];
-                        var valueB = b[column];
+                        let valueA = a[column];
+                        let valueB = b[column];
                         if (valueA === null || valueB === null) {
                             return valueA === null ? 1 : -1;
                         }
@@ -2615,8 +2685,8 @@ function createHison(): Hison {
                     this._checkColumn(column);
                     this._checkBoolean(isIntegerOrder);
                     this._rows.sort(function(a, b) {
-                        var valueA = a[column];
-                        var valueB = b[column];
+                        let valueA = a[column];
+                        let valueB = b[column];
                         if (valueA === null || valueB === null) {
                             return valueA === null ? -1 : 1;
                         }
@@ -2818,8 +2888,31 @@ const $ = (...str: any[]) => {
     console.log(...str);
 }
 
-const dm1 = new hison.data.DataModel();
-dm1.addRows([{key1: 'value11'},{key1: 'value12'},{key1: 'value13'},{key2: 'value21'}]);
-$(dm1.getObject());
+
+const data1 = [
+    {id: 'test01', seq: 3, regdate: new Date(2025, 0, 17), arr: [1,2,3,4,5]},
+    {id: 'test02', seq: 2, regdate: new Date(2024, 6, 18), arr: null},
+    {id: 'test03', seq: 4, regdate: new Date(2023, 11, 12), arr: [1,2,3,4,5], check: false},
+    {id: 'test04', seq: 5, regdate: null, arr: [1,2,3,4,5]},
+    {id: 'test05', seq: 4, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5]},
+    {id: 'test05', seq: 6, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5]},
+];
+
+hison.setConvertValue((value) => {
+    if (value instanceof Date) {
+        return hison.utils.getDateWithFormat(hison.utils.getDatetimeObject(value), 'dd MMMM yyyy');
+    }
+    return value;
+})
+
+const dm1 = new hison.data.DataModel(data1);
+const dm2 = dm1.clone();
+dm1.setColumnSameValue('check', true);
+dm1.addRow({id: 'test10', seq: 9, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5], asd: false});
+dm1.addRows([{id: 'test11', seq: 10, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5], check: false}]);
+$('### 1', dm1.searchRowIndexes({regdate: null}));
+$('### 1', dm1.searchRows({arr: [1, 2, 3, 4, 5]}));
+$('### 1', dm1.searchRows({arr: [1, 2, 4, 5]}));
+$('### 1', dm1.searchRows({asdfas: 4}));
 
 export default createHison();
