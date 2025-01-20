@@ -345,8 +345,8 @@ interface Hison {
      * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
      */
     link: {
-        CachingModule: new () => any;
-        ApiLink: new () => any;
+        CachingModule: new () => CachingModule;
+        ApiLink: new (cmd?: string, options?: Record<string, any>) => ApiLink;
     }
 }
 //====================================================================================
@@ -520,6 +520,14 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
 //====================================================================================
 //link interface, type
 //====================================================================================
+interface ApiLink {
+
+}
+interface CachingModule {
+    isWebSocketConnection(): any;
+    get(str: any): any;
+    put(str: any, tt: any): any;
+}
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
  * This function can be customized to perform actions or checks before the actual GET request is sent.
@@ -548,15 +556,15 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
  * Note: This function is useful for implementing pre-request validations, logging, or any setup required before 
  * making a GET request. The function's return value controls whether the GET request should be executed.
  */
-interface callbackWorked {(result: DataWrapper | undefined, response: Response): boolean | void;};
-interface callbackError {(error: any/**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;};
-interface BeforeGetRequst {(resourcePath: string, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
-interface BeforePostRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
-interface BeforePutRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
-interface BeforePatchRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
-interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: Record<string, any>): boolean | void;};
-interface BeforeCallbackWorked extends callbackWorked {};
-interface BeforeCallbackError extends callbackError {};
+interface CallbackWorked {(result: DataWrapper | undefined, response: Response): boolean | void;};
+interface CallbackError {(error: any/**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;};
+interface BeforeGetRequst {(resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
+interface BeforePostRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
+interface BeforePutRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
+interface BeforePatchRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
+interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
+interface BeforeCallbackWorked extends CallbackWorked {};
+interface BeforeCallbackError extends CallbackError {};
 
 //====================================================================================
 //createHison
@@ -581,7 +589,7 @@ interface BeforeCallbackError extends callbackError {};
  * @namespace Hison
  */
 function createHison(): Hison {
-    class Option {
+    class DefaultOption {
         utils = {
             dateFormat : 'yyyy-MM-dd',
             timeFormat : 'hh:mm:ss',
@@ -619,16 +627,34 @@ function createHison(): Hison {
             webSocketProtocol : 'ws://',
             webSocketEndPoint : '/hison-caching-websocket-endpoint',
             webSocketlimit : 10,
-            beforeGetRequst(resourcePath: string, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
-            beforePostRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
-            beforePutRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
-            beforePatchRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
-            beforeDeleteRequst(requestDw: DataWrapper, callbackWorkedFunc: Function, callbackErrorFunc: Function, options: Record<string, any>): boolean | void {return true;},
+            beforeGetRequst(resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
+            beforePostRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
+            beforePutRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
+            beforePatchRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
+            beforeDeleteRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
             beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
             beforeCallbackError(error: any): boolean | void {return true;},
         };
     }
-    const option = new Option();
+    const defaultOption = new DefaultOption();
+
+    class EventEmitter {
+        private events: { [eventName: string]: Array<(...args: any[]) => void> } = {};
+    
+        on = (eventName: string, listener: (...args: any[]) => void): void => {
+            if (!this.events[eventName]) {
+                this.events[eventName] = [];
+            }
+            this.events[eventName].push(listener);
+        };
+    
+        emit = (eventName: string, ...args: any[]): void => {
+            if (this.events[eventName]) {
+                this.events[eventName].forEach(listener => listener(...args));
+            }
+        };
+    }
+
     let _hison: Hison;
 
     class Hison implements Hison{
@@ -870,10 +896,10 @@ function createHison(): Hison {
                 const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
-                        format = option.utils.dateFormat
+                        format = defaultOption.utils.dateFormat
                     }
                     else {
-                        format = option.utils.datetimeFormat;
+                        format = defaultOption.utils.datetimeFormat;
                     }
                 }
                 
@@ -977,10 +1003,10 @@ function createHison(): Hison {
                 const datetimeObj = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
-                        format = option.utils.dateFormat
+                        format = defaultOption.utils.dateFormat
                     }
                     else {
-                        format = option.utils.datetimeFormat;
+                        format = defaultOption.utils.datetimeFormat;
                     }
                 }
 
@@ -1269,7 +1295,7 @@ function createHison(): Hison {
                         throw new Error(`ER0010 Invalid format.\n=>${JSON.stringify(format)}`);
                 }
             },
-            getDayOfWeek(date: DateObject | string, dayType: string = option.utils.dayOfWeekFormat): string {
+            getDayOfWeek(date: DateObject | string, dayType: string = defaultOption.utils.dayOfWeekFormat): string {
                 const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
                 if (!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
                 
@@ -1314,7 +1340,7 @@ function createHison(): Hison {
                 nextMonthFirstDay.setDate(0);
                 return nextMonthFirstDay.getDate();
             },
-            getSysYear(format: string = option.utils.yearFormat): string {
+            getSysYear(format: string = defaultOption.utils.yearFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'yy':
@@ -1323,7 +1349,7 @@ function createHison(): Hison {
                         return currentDate.getFullYear().toString();
                 }
             },
-            getSysMonth(format: string = option.utils.monthFormat): string {
+            getSysMonth(format: string = defaultOption.utils.monthFormat): string {
                 const currentDate = new Date();
                 const sysMonth = currentDate.getMonth() + 1;
                 switch (format.toLowerCase()) {
@@ -1337,11 +1363,11 @@ function createHison(): Hison {
                         return sysMonth.toString();
                 }
             },
-            getSysYearMonth(format: string = option.utils.yearMonthFormat): string {
+            getSysYearMonth(format: string = defaultOption.utils.yearMonthFormat): string {
                 const currentDate = new Date();
                 return _hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : 1 }, format);
             },
-            getSysDay(format: string = option.utils.dayFormat): string {
+            getSysDay(format: string = defaultOption.utils.dayFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'dd':
@@ -1350,11 +1376,11 @@ function createHison(): Hison {
                         return currentDate.getDate().toString();
                 }
             },
-            getSysDayOfWeek(dayType: string = option.utils.dayOfWeekFormat): string {
+            getSysDayOfWeek(dayType: string = defaultOption.utils.dayOfWeekFormat): string {
                 const currentDate = new Date();
                 return _hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
             },
-            getSysHour(format: string = option.utils.hourFormat): string {
+            getSysHour(format: string = defaultOption.utils.hourFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hh':
@@ -1363,7 +1389,7 @@ function createHison(): Hison {
                         return currentDate.getHours().toString();
                 }
             },
-            getSysHourMinute(format: string = option.utils.hourMinuteFormat): string {
+            getSysHourMinute(format: string = defaultOption.utils.hourMinuteFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmm':
@@ -1372,7 +1398,7 @@ function createHison(): Hison {
                         return currentDate.getHours().toString().padStart(2, '0') + ":" + currentDate.getMinutes().toString().padStart(2, '0');
                 }
             },
-            getSysMinute(format: string = option.utils.minuteFormat): string {
+            getSysMinute(format: string = defaultOption.utils.minuteFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'mm':
@@ -1381,7 +1407,7 @@ function createHison(): Hison {
                         return currentDate.getMinutes().toString();
                 }
             },
-            getSysSecond(format: string = option.utils.secondFormat): string {
+            getSysSecond(format: string = defaultOption.utils.secondFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'ss':
@@ -1390,7 +1416,7 @@ function createHison(): Hison {
                         return currentDate.getSeconds().toString();
                 }
             },
-            getSysTime(format: string = option.utils.timeFormat): string {
+            getSysTime(format: string = defaultOption.utils.timeFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmmss':
@@ -1399,7 +1425,7 @@ function createHison(): Hison {
                         return currentDate.getHours().toString().padStart(2, '0') + ":" + currentDate.getMinutes().toString().padStart(2, '0') + ":" + currentDate.getSeconds().toString().padStart(2, '0');
                 }
             },
-            getSysDate(format: string = option.utils.datetimeFormat): string {
+            getSysDate(format: string = defaultOption.utils.datetimeFormat): string {
                 const currentDate = new Date();
                 return _hison.utils.getDateWithFormat(
                     {
@@ -1446,11 +1472,11 @@ function createHison(): Hison {
                     if (charCode <= 0x7F) {
                         byteLength += 1;
                     } else if (charCode <= 0x7FF) {
-                        byteLength += option.utils.LESSOREQ_0X7FF_BYTE;
+                        byteLength += defaultOption.utils.LESSOREQ_0X7FF_BYTE;
                     } else if (charCode <= 0xFFFF) {
-                        byteLength += option.utils.LESSOREQ_0XFFFF_BYTE;
+                        byteLength += defaultOption.utils.LESSOREQ_0XFFFF_BYTE;
                     } else {
-                        byteLength += option.utils.GREATER_0XFFFF_BYTE;
+                        byteLength += defaultOption.utils.GREATER_0XFFFF_BYTE;
                     }
                 }
                 return byteLength;
@@ -1465,11 +1491,11 @@ function createHison(): Hison {
                     if (charCode <= 0x7F) {
                         byteLength += 1;
                     } else if (charCode <= 0x7FF) {
-                        byteLength += option.utils.LESSOREQ_0X7FF_BYTE;
+                        byteLength += defaultOption.utils.LESSOREQ_0X7FF_BYTE;
                     } else if (charCode <= 0xFFFF) {
-                        byteLength += option.utils.LESSOREQ_0XFFFF_BYTE;
+                        byteLength += defaultOption.utils.LESSOREQ_0XFFFF_BYTE;
                     } else {
-                        byteLength += option.utils.GREATER_0XFFFF_BYTE;
+                        byteLength += defaultOption.utils.GREATER_0XFFFF_BYTE;
                     }
                     if (byteLength > cutByte) {
                         cutIndex = i;
@@ -1534,7 +1560,7 @@ function createHison(): Hison {
                 if (!_hison.utils.isNumeric(value)) {
                     throw new Error(`ER0021 Invalid number\n=>${JSON.stringify(oriValue)}`);
                 }
-                format = format ? format : option.utils.numberFormat;
+                format = format ? format : defaultOption.utils.numberFormat;
                 const regex = /^(.*?)([#0,.]+)(.*?)$/;
                 const matches = format.match(regex);
         
@@ -1774,29 +1800,29 @@ function createHison(): Hison {
                     window.addEventListener('blur', detectDevTool);
                 }
 
-                if (option.shield.isFreeze) {
+                if (defaultOption.shield.isFreeze) {
                     deepFreeze(hison);
                 }
                 
                 if (location.href.indexOf('localhost') < 0){
-                    if (option.shield.shieldURL && location.href.indexOf(option.shield.shieldURL) < 0 ){
+                    if (defaultOption.shield.shieldURL && location.href.indexOf(defaultOption.shield.shieldURL) < 0 ){
                         return;
                     }
     
                     shieldFuncGetIp(function(response: any) {
                         const ip = response && response.ip ? response.ip : '';
-                        if (ip && option.shield.exposeIpList.indexOf(ip) >= 0) {
+                        if (ip && defaultOption.shield.exposeIpList.indexOf(ip) >= 0) {
                             return;
                         }
     
-                        if (!option.shield.isPossibleGoBack) {
+                        if (!defaultOption.shield.isPossibleGoBack) {
                             history.pushState(null, document.title, location.href);//현재 URL push
                             window.addEventListener('popstate', function() {  //뒤로가기 이벤트 등록
                                 history.pushState(null, document.title, location.href); //다시 push함으로 뒤로가기 방지
                             });
                         }
                         
-                        if (!option.shield.isPossibleOpenDevTool) {
+                        if (!defaultOption.shield.isPossibleOpenDevTool) {
                             shieldFuncCreateBlockDevMode();
                             return;
                         }
@@ -2005,7 +2031,7 @@ function createHison(): Hison {
                         return object;
                     }
                     if (object.constructor !== Object && object.constructor !== Array) {
-                        return option.data.convertValue ? option.data.convertValue(object) : object;
+                        return defaultOption.data.convertValue ? defaultOption.data.convertValue(object) : object;
                     }
                     if (!visited) visited = [];
                     for (let i = 0; i < visited.length; i++) {
@@ -2373,16 +2399,24 @@ function createHison(): Hison {
                 getRows = (startRow: number = 0, endRow: number = null): Record<string, any>[] => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this._deepCopy(this._rows);
-
-                    const eRow = endRow ? this._getValidRowIndex(endRow) : endRow;
+                    const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
                     const result = [];
-                    for(let i = sRow; i < eRow; i++) {
+                    for(let i = sRow; i <= eRow; i++) {
+                        if(!this._rows[i]) break;
                         result.push(this._deepCopy(this._rows[i]));
                     }
                     return result;
                 }
                 getRowsAsDataModel = (startRow: number = 0, endRow: number = null): DataModel => {
-                    return this._deepCopy(this);
+                    const sRow = this._getValidRowIndex(startRow);
+                    if(sRow === 0 && endRow === null) return this.clone();
+                    const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
+                    const result = [];
+                    for(let i = sRow; i <= eRow; i++) {
+                        if(!this._rows[i]) break;
+                        result.push(this._deepCopy(this._rows[i]));
+                    }
+                    return new _hison.data.DataModel(result);
                 }
                 addRows = (rows: Record<string, any>[]): DataModel => {
                     this._put(rows);
@@ -2650,7 +2684,7 @@ function createHison(): Hison {
                     this._cols.reverse();
                     return this;
                 };
-                sortRowAscending = (column: string, isIntegerOrder: boolean = true): DataModel => {
+                sortRowAscending = (column: string, isIntegerOrder: boolean = false): DataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     this._checkBoolean(isIntegerOrder);
@@ -2661,7 +2695,8 @@ function createHison(): Hison {
                             return valueA === null ? 1 : -1;
                         }
                         if (typeof valueA === 'object' || typeof valueB === 'object') {
-                            throw new Error("Cannot sort rows: value is an object.");
+                            valueA = JSON.stringify(valueA);
+                            valueB = JSON.stringify(valueB);
                         }
                         if (isIntegerOrder) {
                             valueA = parseInt(valueA, 10);
@@ -2691,7 +2726,8 @@ function createHison(): Hison {
                             return valueA === null ? -1 : 1;
                         }
                         if (typeof valueA === 'object' || typeof valueB === 'object') {
-                            throw new Error("Cannot sort rows: value is an object.");
+                            valueA = JSON.stringify(valueA);
+                            valueB = JSON.stringify(valueB);
                         }
                         if (isIntegerOrder) {
                             valueA = parseInt(valueA, 10);
@@ -2717,14 +2753,260 @@ function createHison(): Hison {
             },
         };
         link = {
-            CachingModule: class {
-                test = function() {
-                    //ApiLink에서 DataWrapper를 사용하는데.... 어떤게 구현할 것인가.... (변환된 option의 설정이 적용되도록 해야함..)
-                    const dw = new _hison!.data.DataWrapper();
+            CachingModule: class implements CachingModule {
+                constructor() {
+                };
+                isWebSocketConnection = () => {};
+                get = (str: any) => {};
+                put = (str: any, tt: any) => {};
+            },
+            ApiLink: class implements ApiLink {
+                constructor(cmd: string = '', options: Record<string, any> ={}) {
+                    if (typeof cmd !== 'string') {
+                        throw new Error('type of cmd is only string.');
+                    }
+                    if (options !== Object) {
+                        throw new Error('Please insert options with their own key-value pairs.');
+                    }
+                    this._cmd = cmd;
+                    this._options = options;
+                    if (options.isCachingModule === true) this._cachingModule = new _hison.link.CachingModule();
+                };
+                private _eventEmitter = new EventEmitter();
+                private _cmd: string;
+                private _options: Record<string, any>;
+                private _cachingModule: CachingModule;
+                private _validateParams = (resourcePath: string | DataWrapper
+                    , callbackWorkedFunc: CallbackWorked
+                    , callbackErrorFunc: CallbackError
+                    , options: Record<string, any>
+                    , isGet: boolean) => {
+                    if (!isGet && !this._cmd) {
+                        throw new Error("Command not specified");
+                    }
+                    if (isGet && typeof resourcePath !== 'string') {
+                        throw new Error("Please insert a string as ResourcePath URL.");
+                    }
+                    if (callbackWorkedFunc && typeof callbackWorkedFunc !== 'function') {
+                        throw new Error("Callback Worked Function must be a function.");
+                    }
+                    if (callbackErrorFunc && typeof callbackErrorFunc !== 'function') {
+                        throw new Error("Callback Error Function must be a function.");
+                    }
+                    if (options && options.constructor !== Object) {
+                        throw new Error("obtions must be an object which contains key and value.");
+                    }
+                };
+                private _validateHeaders = (headers: Record<string, any>) => {
+                    if (headers.constructor !== Object) {
+                        throw new Error("Headers must be an object which contains key and value.");
+                    }
+                    Object.keys(headers).forEach(key => {
+                        if (typeof headers[key] !== 'string') {
+                            throw new Error("All header values must be strings.");
+                        }
+                    });
+                };
+                private _validatePositiveInteger = (timeout: number) => {
+                    if (typeof timeout !== 'number' || timeout <= 0 || !Number.isInteger(timeout)) {
+                        throw new Error("Timeout must be a positive integer.");
+                    }
+                };
+                private _validateFetchOptions = (fetchOptions: Record<string, any>) => {
+                    if (fetchOptions.constructor !== Object) {
+                        throw new Error("fetchOptions must be an object which contains key and value.");
+                    }
+                };
+                private _getDataWrapper = (dw: DataWrapper): DataWrapper => {
+                    if(dw) {
+                        dw.putString('cmd', this._cmd);
+                    } else {
+                        dw = new _hison.data.DataWrapper('cmd', this._cmd);
+                    }
+                    return dw;
+                };
+                private _getRsultDataWrapper = (resultData: any): any => {
+                    let data = null;
+                    if(resultData && resultData.constructor === Object) {
+                        data = new _hison.data.DataWrapper();
+                        for(const key of Object.keys(resultData)) {
+                            if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
+                                data.putDataModel(key, new _hison.data.DataWrapper(resultData[key]));
+                            } else {
+                                data.put(key, resultData[key]);
+                            }
+                        }
+                    } else if (resultData && resultData.constructor !== Object) {
+                        data = resultData;
+                    }
+                    return data;
+                };
+                private _request = async (
+                    methodName: string
+                    , requestDwOrResourcePath: string | DataWrapper
+                    , callbackWorkedFunc: CallbackWorked
+                    , callbackErrorFunc: CallbackError
+                    , options: Record<string, any>) => {
+                    switch (methodName.toUpperCase()) {
+                        case 'GET':
+                            this._eventEmitter.emit('requestStarted_GET', requestDwOrResourcePath, options);
+                            break;
+                        case 'POST':
+                            this._eventEmitter.emit('requestStarted_POST', requestDwOrResourcePath, options);
+                            break;
+                        case 'PUT':
+                            this._eventEmitter.emit('requestStarted_PUT', requestDwOrResourcePath, options);
+                            break;
+                        case 'PATCH':
+                            this._eventEmitter.emit('requestStarted_PATCH', requestDwOrResourcePath, options);
+                            break;
+                        case 'DELETE':
+                            this._eventEmitter.emit('requestStarted_DELETE', requestDwOrResourcePath, options);
+                            break;
+                        default:
+                            break;
+                    }
+                    const isGet = methodName.toUpperCase() === 'GET';
+                    this._validateParams(requestDwOrResourcePath, callbackWorkedFunc, callbackErrorFunc, options, isGet);
+        
+                    const ROOTURL = defaultOption.link.protocol + defaultOption.link.domain;
+                    const url = isGet ? ROOTURL + requestDwOrResourcePath : ROOTURL + defaultOption.link.controllerPath;
+                    if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(isGet ? url : this._cmd)) {
+                        const result = this._cachingModule.get(isGet ? url : this._cmd);
+                        if(defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
+                            if(callbackWorkedFunc) callbackWorkedFunc(result.data, result.response);
+                        };
+                        return result;
+                    }
+        
+                    let timeout = defaultOption.link.timeout;
+                    const requestDw = isGet ? null : this._getDataWrapper(requestDwOrResourcePath as DataWrapper);
+                    const fetchOptions = {
+                        method: methodName,
+                        headers: {'Content-Type': 'application/json'},
+                        body: isGet ? null : requestDw.getSerialized(),
+                    }
+                    if(options) {
+                        if(options.headers) {
+                            this._validateHeaders(options.headers);
+                            fetchOptions.headers =  Object.assign({'Content-Type': 'application/json'}, options.headers);
+                        }
+                        if(options.timeout) {
+                            this._validatePositiveInteger(options.timeout);
+                            timeout = options.timeout
+                        }
+                        if(options.fetchOptions) {
+                            this._validateFetchOptions(options.fetchOptions);
+                            Object.keys(options.fetchOptions).forEach(key => {
+                                if(['method','headers','body'].indexOf(key.toLowerCase()) === -1) {
+                                    fetchOptions[key] = options.fetchOptions[key];
+                                }
+                            });
+                        }
+                    }
+        
+                    const timeoutPromise = new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error("Request timed out")), timeout)
+                    );
+                    const fetchPromise = fetch(url, fetchOptions);
+                    const racePromise = Promise.race([fetchPromise, timeoutPromise])
+                    .then((response: Response) => {
+                        this._eventEmitter.emit('requestCompleted_Response', response);
+                        const contentType = response.headers.get('Content-Type');
+                        if (contentType && contentType.includes('application/json')) {
+                            return response.json().then(data => ({ data: data, response: response }));
+                        } else if (contentType) {
+                            return response.text().then(text => ({ data: text ? text : null, response: response }));
+                        } else {
+                            return { data: null, response: response };
+                        }
+                    })
+                    .then(rtn => {
+                        const resultData = rtn.data;
+                        const data = this._getRsultDataWrapper(resultData);
+                        this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
+                        if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(isGet ? url : this._cmd, { data: data, response: rtn.response });
+                        if(defaultOption.link.beforeCallbackWorked(data, rtn.response) !== false) {
+                            if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
+                        }
+                        return { data: data, response: rtn.response };
+                    })
+                    .catch(error => {
+                        this._eventEmitter.emit('requestError', error);
+                        if(defaultOption.link.beforeCallbackError(error) !== false) {
+                            if(callbackErrorFunc) callbackErrorFunc(error);
+                        }
+                        throw error;
+                    });
+                
+                    return racePromise;
+                };
+                get = (resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
+                    if(defaultOption.link.beforeGetRequst(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
+                    return this._request('GET', resourcePath, callbackWorkedFunc, callbackErrorFunc, options);
+                };
+                post = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
+                    if(defaultOption.link.beforePostRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
+                    return this._request('POST', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                };
+                put = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
+                    if(defaultOption.link.beforePutRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
+                    return this._request('PUT', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                };
+                patch = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
+                    if(defaultOption.link.beforePatchRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
+                    return this._request('PATCH', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                };
+                delete = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
+                    if(defaultOption.link.beforeDeleteRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
+                    return this._request('DELETE', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                };
+                setCmd = (cmd: string) => {
+                    if (!cmd) {
+                        throw new Error("cmd is required.");
+                    }
+                    if (typeof cmd !== 'string') {
+                        throw new Error("cmd must be a string.");
+                    }
+                    this._cmd = cmd;
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    if (!eventName) {
+                        throw new Error("Event name is required.");
+                    }
+                    if (!eventFunc) {
+                        throw new Error("Event function is required.");
+                    }
+                    if (typeof eventName !== 'string') {
+                        throw new Error("Event name must be a string.");
+                    }
+                    if (['requestStarted_GET',
+                         'requestStarted_POST',
+                         'requestStarted_PUT',
+                         'requestStarted_PATCH',
+                         'requestStarted_DELETE',
+                         'requestCompleted_Response',
+                         'requestCompleted_Data',
+                         'requestError'].indexOf(eventName) === -1) {
+                        throw new Error("Invalid event name."
+                        + "\nCurrent event name: " + eventName
+                        + "\nValid event names are:"
+                        + "\nrequestStarted_GET"
+                        + "\nrequestStarted_POST"
+                        + "\nrequestStarted_PUT"
+                        + "\nrequestStarted_PATCH"
+                        + "\nrequestStarted_DELETE"
+                        + "\nrequestCompleted_Response"
+                        + "\nrequestCompleted_Data"
+                        + "\nrequestError"
+                        );
+                    }
+                    if (typeof eventFunc !== 'function') {
+                        throw new Error("Event function must be a function.");
+                    }
+                    this._eventEmitter.on(eventName, eventFunc);
                 };
             },
-            ApiLink: class {
-            }
         };
     }
     //내부에서 사용될 hison객체
@@ -2732,72 +3014,72 @@ function createHison(): Hison {
 
     const hison = new Hison();
     return {
-        setDateFormat(str: string) {option.utils.dateFormat = str;},
-        setTimeFormat(str: string) {option.utils.timeFormat = str;},
-        setDatetimeFormat(str: string) {option.utils.datetimeFormat = str;},
-        setYearFormat(str: string) {option.utils.yearFormat = str;},
-        setMonthFormat(str: string) {option.utils.monthFormat = str;},
-        setMonthNameFormat(str: string) {option.utils.monthNameFormat = str;},
-        setYearMonthFormat(str: string) {option.utils.yearMonthFormat = str;},
-        setDayFormat(str: string) {option.utils.dayFormat = str;},
-        setDayOfWeekFormat(str: string) {option.utils.dayOfWeekFormat = str;},
-        setHourFormat(str: string) {option.utils.hourFormat = str;},
-        setHourMinuteFormat(str: string) {option.utils.hourMinuteFormat = str;},
-        setMinuteFormat(str: string) {option.utils.minuteFormat = str;},
-        setSecondFormat(str: string) {option.utils.secondFormat = str;},
-        setNumberFormat(str: string) {option.utils.numberFormat = str;},
-        setLESSOREQ_0X7FF_BYTE(num: number) {option.utils.LESSOREQ_0X7FF_BYTE = num;},
-        setLESSOREQ_0XFFFF_BYTE(num: number) {option.utils.LESSOREQ_0XFFFF_BYTE = num;},
-        setGREATER_0XFFFF_BYTE(num: number) {option.utils.GREATER_0XFFFF_BYTE = num;},
-        getDateFormat() {return option.utils.dateFormat;},
-        getTimeFormat() {return option.utils.timeFormat;},
-        getDatetimeFormat() {return option.utils.datetimeFormat;},
-        getYearFormat() {return option.utils.yearFormat;},
-        getMonthFormat() {return option.utils.monthFormat;},
-        getMonthNameFormat() {return option.utils.monthNameFormat;},
-        getYearMonthFormat() {return option.utils.yearMonthFormat;},
-        getDayFormat() {return option.utils.dayFormat;},
-        getDayOfWeekFormat() {return option.utils.dayOfWeekFormat;},
-        getHourFormat() {return option.utils.hourFormat;},
-        getHourMinuteFormat() {return option.utils.hourMinuteFormat;},
-        getMinuteFormat() {return option.utils.minuteFormat;},
-        getSecondFormat() {return option.utils.secondFormat;},
-        getNumberFormat() {return option.utils.numberFormat;},
-        getLESSOREQ_0X7FF_BYTE() {return option.utils.LESSOREQ_0X7FF_BYTE;},
-        getLESSOREQ_0XFFFF_BYTE() {return option.utils.LESSOREQ_0XFFFF_BYTE;},
-        getGREATER_0XFFFF_BYTE() {return option.utils.GREATER_0XFFFF_BYTE;},
-        setShieldURL(str: string) {option.shield.shieldURL = str;},
-        setExposeIpList(arr: []) {option.shield.exposeIpList = arr;},
-        setIsFreeze(bool: boolean) {option.shield.isFreeze = bool;},
-        setIsPossibleGoBack(bool: boolean) {option.shield.isPossibleGoBack = bool;},
-        setIsPossibleOpenDevTool(bool: boolean) {option.shield.isPossibleOpenDevTool = bool;},
-        getShieldURL() {return option.shield.shieldURL;},
-        getExposeIpList() {return option.shield.exposeIpList;},
-        getIsFreeze() {return option.shield.isFreeze;},
-        getIsPossibleGoBack() {return option.shield.isPossibleGoBack;},
-        getIsPossibleOpenDevTool() {return option.shield.isPossibleOpenDevTool;},
-        setConvertValue(func: ConvertValue) {option.data.convertValue = func;},
-        setProtocol(str: string) {option.link.protocol = str;},
-        setDomain(str: string) {option.link.domain = str;},
-        setControllerPath(str: string) {option.link.controllerPath = str;},
-        setTimeout(num: number) {option.link.timeout = num;},
-        setWebSocketProtocol(str: string) {option.link.webSocketProtocol = str;},
-        setWebSocketEndPoint(str: string) {option.link.webSocketEndPoint = str;},
-        setWebSocketlimit(num: number) {option.link.webSocketlimit = num;},
-        getProtocol() {return option.link.protocol;},
-        getDomain() {return option.link.domain;},
-        getControllerPath() {return option.link.controllerPath;},
-        getTimeout() {return option.link.timeout;},
-        getWebSocketProtocol() {return option.link.webSocketProtocol;},
-        getWebSocketEndPoint() {return option.link.webSocketEndPoint;},
-        getWebSocketlimit() {return option.link.webSocketlimit;},
-        setBeforeGetRequst(func: BeforeGetRequst) {option.link.beforeGetRequst = func;},
-        setBeforePostRequst(func: BeforePostRequst) {option.link.beforePostRequst = func},
-        setBeforePutRequst(func: BeforePutRequst) {option.link.beforePutRequst = func},
-        setBeforePatchRequst(func: BeforePatchRequst) {option.link.beforePatchRequst = func},
-        setBeforeDeleteRequst(func: BeforeDeleteRequst) {option.link.beforeDeleteRequst = func},
-        setBeforeCallbackWorked(func: BeforeCallbackWorked) {option.link.beforeCallbackWorked = func},
-        setBeforeCallbackError(func: BeforeCallbackError) {option.link.beforeCallbackError = func},
+        setDateFormat(str: string) {defaultOption.utils.dateFormat = str;},
+        setTimeFormat(str: string) {defaultOption.utils.timeFormat = str;},
+        setDatetimeFormat(str: string) {defaultOption.utils.datetimeFormat = str;},
+        setYearFormat(str: string) {defaultOption.utils.yearFormat = str;},
+        setMonthFormat(str: string) {defaultOption.utils.monthFormat = str;},
+        setMonthNameFormat(str: string) {defaultOption.utils.monthNameFormat = str;},
+        setYearMonthFormat(str: string) {defaultOption.utils.yearMonthFormat = str;},
+        setDayFormat(str: string) {defaultOption.utils.dayFormat = str;},
+        setDayOfWeekFormat(str: string) {defaultOption.utils.dayOfWeekFormat = str;},
+        setHourFormat(str: string) {defaultOption.utils.hourFormat = str;},
+        setHourMinuteFormat(str: string) {defaultOption.utils.hourMinuteFormat = str;},
+        setMinuteFormat(str: string) {defaultOption.utils.minuteFormat = str;},
+        setSecondFormat(str: string) {defaultOption.utils.secondFormat = str;},
+        setNumberFormat(str: string) {defaultOption.utils.numberFormat = str;},
+        setLESSOREQ_0X7FF_BYTE(num: number) {defaultOption.utils.LESSOREQ_0X7FF_BYTE = num;},
+        setLESSOREQ_0XFFFF_BYTE(num: number) {defaultOption.utils.LESSOREQ_0XFFFF_BYTE = num;},
+        setGREATER_0XFFFF_BYTE(num: number) {defaultOption.utils.GREATER_0XFFFF_BYTE = num;},
+        getDateFormat() {return defaultOption.utils.dateFormat;},
+        getTimeFormat() {return defaultOption.utils.timeFormat;},
+        getDatetimeFormat() {return defaultOption.utils.datetimeFormat;},
+        getYearFormat() {return defaultOption.utils.yearFormat;},
+        getMonthFormat() {return defaultOption.utils.monthFormat;},
+        getMonthNameFormat() {return defaultOption.utils.monthNameFormat;},
+        getYearMonthFormat() {return defaultOption.utils.yearMonthFormat;},
+        getDayFormat() {return defaultOption.utils.dayFormat;},
+        getDayOfWeekFormat() {return defaultOption.utils.dayOfWeekFormat;},
+        getHourFormat() {return defaultOption.utils.hourFormat;},
+        getHourMinuteFormat() {return defaultOption.utils.hourMinuteFormat;},
+        getMinuteFormat() {return defaultOption.utils.minuteFormat;},
+        getSecondFormat() {return defaultOption.utils.secondFormat;},
+        getNumberFormat() {return defaultOption.utils.numberFormat;},
+        getLESSOREQ_0X7FF_BYTE() {return defaultOption.utils.LESSOREQ_0X7FF_BYTE;},
+        getLESSOREQ_0XFFFF_BYTE() {return defaultOption.utils.LESSOREQ_0XFFFF_BYTE;},
+        getGREATER_0XFFFF_BYTE() {return defaultOption.utils.GREATER_0XFFFF_BYTE;},
+        setShieldURL(str: string) {defaultOption.shield.shieldURL = str;},
+        setExposeIpList(arr: []) {defaultOption.shield.exposeIpList = arr;},
+        setIsFreeze(bool: boolean) {defaultOption.shield.isFreeze = bool;},
+        setIsPossibleGoBack(bool: boolean) {defaultOption.shield.isPossibleGoBack = bool;},
+        setIsPossibleOpenDevTool(bool: boolean) {defaultOption.shield.isPossibleOpenDevTool = bool;},
+        getShieldURL() {return defaultOption.shield.shieldURL;},
+        getExposeIpList() {return defaultOption.shield.exposeIpList;},
+        getIsFreeze() {return defaultOption.shield.isFreeze;},
+        getIsPossibleGoBack() {return defaultOption.shield.isPossibleGoBack;},
+        getIsPossibleOpenDevTool() {return defaultOption.shield.isPossibleOpenDevTool;},
+        setConvertValue(func: ConvertValue) {defaultOption.data.convertValue = func;},
+        setProtocol(str: string) {defaultOption.link.protocol = str;},
+        setDomain(str: string) {defaultOption.link.domain = str;},
+        setControllerPath(str: string) {defaultOption.link.controllerPath = str;},
+        setTimeout(num: number) {defaultOption.link.timeout = num;},
+        setWebSocketProtocol(str: string) {defaultOption.link.webSocketProtocol = str;},
+        setWebSocketEndPoint(str: string) {defaultOption.link.webSocketEndPoint = str;},
+        setWebSocketlimit(num: number) {defaultOption.link.webSocketlimit = num;},
+        getProtocol() {return defaultOption.link.protocol;},
+        getDomain() {return defaultOption.link.domain;},
+        getControllerPath() {return defaultOption.link.controllerPath;},
+        getTimeout() {return defaultOption.link.timeout;},
+        getWebSocketProtocol() {return defaultOption.link.webSocketProtocol;},
+        getWebSocketEndPoint() {return defaultOption.link.webSocketEndPoint;},
+        getWebSocketlimit() {return defaultOption.link.webSocketlimit;},
+        setBeforeGetRequst(func: BeforeGetRequst) {defaultOption.link.beforeGetRequst = func;},
+        setBeforePostRequst(func: BeforePostRequst) {defaultOption.link.beforePostRequst = func},
+        setBeforePutRequst(func: BeforePutRequst) {defaultOption.link.beforePutRequst = func},
+        setBeforePatchRequst(func: BeforePatchRequst) {defaultOption.link.beforePatchRequst = func},
+        setBeforeDeleteRequst(func: BeforeDeleteRequst) {defaultOption.link.beforeDeleteRequst = func},
+        setBeforeCallbackWorked(func: BeforeCallbackWorked) {defaultOption.link.beforeCallbackWorked = func},
+        setBeforeCallbackError(func: BeforeCallbackError) {defaultOption.link.beforeCallbackError = func},
 
         utils : {
             isAlpha: hison.utils.isAlpha,
@@ -2890,12 +3172,12 @@ const $ = (...str: any[]) => {
 
 
 const data1 = [
-    {id: 'test01', seq: 3, regdate: new Date(2025, 0, 17), arr: [1,2,3,4,5]},
-    {id: 'test02', seq: 2, regdate: new Date(2024, 6, 18), arr: null},
-    {id: 'test03', seq: 4, regdate: new Date(2023, 11, 12), arr: [1,2,3,4,5], check: false},
-    {id: 'test04', seq: 5, regdate: null, arr: [1,2,3,4,5]},
-    {id: 'test05', seq: 4, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5]},
-    {id: 'test05', seq: 6, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5]},
+    {id: '1', seq: 3, regdate: new Date(2025, 0, 17), arr: [1,2,3]},
+    {id: '2', seq: 2, regdate: new Date(2024, 6, 18), arr: null},
+    {id: 'sdaf3', seq: 4, regdate: new Date(2023, 11, 12), arr: [3,4,5], check: false},
+    {id: '4', seq: 5, regdate: null, arr: [1,2,3,124,5]},
+    {id: '8', seq: 4, regdate: new Date(2025, 0, 1), arr: [1,122,3,4,5]},
+    {id: 'asd9', seq: 6, regdate: new Date(2025, 0, 1), arr: [1]},
 ];
 
 hison.setConvertValue((value) => {
@@ -2908,11 +3190,11 @@ hison.setConvertValue((value) => {
 const dm1 = new hison.data.DataModel(data1);
 const dm2 = dm1.clone();
 dm1.setColumnSameValue('check', true);
-dm1.addRow({id: 'test10', seq: 9, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5], asd: false});
-dm1.addRows([{id: 'test11', seq: 10, regdate: new Date(2025, 0, 1), arr: [1,2,3,4,5], check: false}]);
-$('### 1', dm1.searchRowIndexes({regdate: null}));
-$('### 1', dm1.searchRows({arr: [1, 2, 3, 4, 5]}));
-$('### 1', dm1.searchRows({arr: [1, 2, 4, 5]}));
-$('### 1', dm1.searchRows({asdfas: 4}));
+dm1.addRow({id: '10', seq: 9, regdate: new Date(2025, 0, 1), arr: [], asd: false});
+dm1.addRows([{id: '11', seq: 10, regdate: new Date(2025, 0, 1), arr: [435], check: false}]);
+
+$('### 1', dm1.sortRowAscending('arr').getRows());
+$('### 2', dm1.sortRowDescending('arr').getRows());
+$('### 3', dm1.sortRowReverse().getRows());
 
 export default createHison();

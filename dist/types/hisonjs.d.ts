@@ -161,9 +161,9 @@ interface Hison {
         isEmail(str: string): boolean;
         isURL(urlStr: string): boolean;
         isValidMask(str: string, mask: string): boolean;
-        getDateObject(dateStr: string): DateObject;
-        getTimeObject(str: string): TimeObject;
-        getDatetimeObject(datetime: string): DateTimeObject;
+        getDateObject(dateStr: Date | string): DateObject;
+        getTimeObject(str: Date | string): TimeObject;
+        getDatetimeObject(datetime: Date | string): DateTimeObject;
         addDate(datetime: DateTimeObject | string, addValue: string | number, addType?: string, format?: string): DateTimeObject | string;
         getDateDiff(datetime1: DateTimeObject | string, datetime2: DateTimeObject | string, diffType?: string): number;
         getMonthName(month: number | string, isFullName?: boolean): string;
@@ -286,7 +286,7 @@ interface Hison {
          * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
          * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
          */
-        DataWrapper: new (keyOrObject?: {} | '', value?: any) => DataWrapper;
+        DataWrapper: new (keyOrObject?: Record<string, any> | '', value?: any) => DataWrapper;
         /**
          * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
          * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
@@ -297,7 +297,7 @@ interface Hison {
          *                                       If an array of strings is provided, it initializes the column names.
          *                                       If an object is provided, it initializes a single row with the object's key-value pairs.
          */
-        DataModel: new () => DataModel;
+        DataModel: new (data?: Record<string, any>[] | Record<string, any>) => DataModel;
     };
     /**
      * ApiLink와 CachingModule 생성자를 가진 객체입니다.
@@ -313,8 +313,8 @@ interface Hison {
      * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
      */
     link: {
-        CachingModule: new () => any;
-        ApiLink: new () => any;
+        CachingModule: new () => CachingModule;
+        ApiLink: new (cmd?: string, options?: Record<string, any>) => ApiLink;
     };
 }
 interface DateObject {
@@ -419,33 +419,34 @@ interface DataModel {
     addColumns(columns: string[]): DataModel;
     setColumnSameValue(column: string, value: any): DataModel;
     setColumnSameFormat(column: string, formatter: DataModelFormatter): DataModel;
-    getRow(rowIndex: number): {};
+    getRow(rowIndex: number): Record<string, any>;
     getRowAsDataModel(rowIndex: number): DataModel;
-    addRow(rowIndexOrRow?: number | {}, row?: {}): DataModel;
-    getRows(): {}[];
-    addRows(rows: {}[]): DataModel;
+    addRow(rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel;
+    getRows(startRow?: number, endRow?: number): Record<string, any>[];
+    getRowsAsDataModel(startRow?: number, endRow?: number): DataModel;
+    addRows(rows: Record<string, any>[]): DataModel;
     getObject(): {};
     getValue(rowIndex: number, column: string): any;
     setValue(rowIndex: number, column: string, value: any): DataModel;
     removeColumn(column: string): DataModel;
     removeColumns(columns: string[]): DataModel;
-    removeRow(rowIndex?: number): {};
+    removeRow(rowIndex?: number): Record<string, any>;
     getColumnCount(): number;
     getRowCount(): number;
     hasColumn(column: string): boolean;
     setValidColumns(columns: string[]): DataModel;
     isNotNullColumn(column: string): boolean;
-    findFirstRowNullColumn(column: string): {};
+    findFirstRowNullColumn(column: string): Record<string, any>;
     isNotDuplColumn(column: string): boolean;
-    findFirstRowDuplColumn(column: string): {};
+    findFirstRowDuplColumn(column: string): Record<string, any>;
     isValidValue(column: string, vaildator: DataModelValidator): boolean;
-    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): {};
-    searchRowIndexes(condition: {}, isNegative?: boolean): number[];
-    searchRows(condition: {}, isNegative?: boolean): {}[];
-    searchRowsAsDataModel(condition: {}, isNegative?: boolean): DataModel;
-    searchAndModify(condition: {}, isNegative?: boolean): DataModel;
+    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): Record<string, any>;
+    searchRowIndexes(condition: Record<string, any>, isNegative?: boolean): number[];
+    searchRows(condition: Record<string, any>, isNegative?: boolean): Record<string, any>[];
+    searchRowsAsDataModel(condition: Record<string, any>, isNegative?: boolean): DataModel;
+    searchAndModify(condition: Record<string, any>, isNegative?: boolean): DataModel;
     filterRowIndexes(filter: DataModelFillter): number[];
-    filterRows(filter: DataModelFillter): {}[];
+    filterRows(filter: DataModelFillter): Record<string, any>[];
     filterRowsAsDataModel(filter: DataModelFillter): DataModel;
     filterAndModify(filter: DataModelFillter): DataModel;
     setColumnSorting(columns: string[]): DataModel;
@@ -463,7 +464,14 @@ interface DataModelValidator {
     (value: any): boolean;
 }
 interface DataModelFillter {
-    (row: {}): boolean;
+    (row: Record<string, any>): boolean;
+}
+interface ApiLink {
+}
+interface CachingModule {
+    isWebSocketConnection(): any;
+    get(str: any): any;
+    put(str: any, tt: any): any;
 }
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
@@ -493,30 +501,30 @@ interface DataModelFillter {
  * Note: This function is useful for implementing pre-request validations, logging, or any setup required before
  * making a GET request. The function's return value controls whether the GET request should be executed.
  */
-interface callbackWorked {
+interface CallbackWorked {
     (result: DataWrapper | undefined, response: Response): boolean | void;
 }
-interface callbackError {
+interface CallbackError {
     (error: any /**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;
 }
 interface BeforeGetRequst {
-    (resourcePath: string, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;
+    (resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
 }
 interface BeforePostRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;
+    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
 }
 interface BeforePutRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;
+    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
 }
 interface BeforePatchRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;
+    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
 }
 interface BeforeDeleteRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: callbackWorked, callbackErrorFunc: callbackError, options: {}): boolean | void;
+    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
 }
-interface BeforeCallbackWorked extends callbackWorked {
+interface BeforeCallbackWorked extends CallbackWorked {
 }
-interface BeforeCallbackError extends callbackError {
+interface BeforeCallbackError extends CallbackError {
 }
 declare const _default: Hison;
 export default _default;
