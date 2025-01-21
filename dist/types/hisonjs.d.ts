@@ -94,14 +94,14 @@ interface Hison {
     setTimeout(num: number): void;
     setWebSocketProtocol(str: string): void;
     setWebSocketEndPoint(str: string): void;
-    setWebSocketlimit(num: number): void;
+    setCachingLimit(num: number): void;
     getProtocol(): string;
     getDomain(): string;
     getControllerPath(): string;
     getTimeout(): number;
     getWebSocketProtocol(): string;
     getWebSocketEndPoint(): string;
-    getWebSocketlimit(): number;
+    getCachingLimit(): number;
     setBeforeGetRequst(func: BeforeGetRequst): void;
     setBeforePostRequst(func: BeforePostRequst): void;
     setBeforePutRequst(func: BeforePutRequst): void;
@@ -206,7 +206,7 @@ interface Hison {
         getFileName(str: string): string;
         getDecodeBase64(str: string): string;
         getEncodeBase64(str: string): string;
-        deepCopyArrOrObject(object: any, visited?: {
+        deepCopyObject(object: any, visited?: {
             source: any;
             copy: any;
         }[]): any;
@@ -313,8 +313,8 @@ interface Hison {
      * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
      */
     link: {
-        CachingModule: new () => CachingModule;
-        ApiLink: new (cmd?: string, options?: Record<string, any>) => ApiLink;
+        CachingModule: new (cachingLimit?: number) => CachingModule;
+        ApiLink: new (cmdOrCachingModule?: string | CachingModule, CachingModule?: CachingModule) => ApiLink<any>;
     };
 }
 interface DateObject {
@@ -466,12 +466,58 @@ interface DataModelValidator {
 interface DataModelFillter {
     (row: Record<string, any>): boolean;
 }
-interface ApiLink {
+interface ApiLink<T> {
+    getIsApiLink(): boolean;
+    get(resourcePath?: string, options?: Record<string, any>): null | Promise<{
+        data: any;
+        response: Response;
+    }>;
+    post(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
+        data: any;
+        response: Response;
+    }>;
+    put(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
+        data: any;
+        response: Response;
+    }>;
+    patch(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
+        data: any;
+        response: Response;
+    }>;
+    delete(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
+        data: any;
+        response: Response;
+    }>;
+    setCmd(cmd: string): void;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+    _get(url: string): any | Promise<any>;
+    _post(url: string, data: any): any | Promise<any>;
+    _put(url: string, data: any): any | Promise<any>;
+    _patch(url: string, data: any): any | Promise<any>;
+    _delete(url: string): any | Promise<any>;
 }
 interface CachingModule {
-    isWebSocketConnection(): any;
-    get(str: any): any;
-    put(str: any, tt: any): any;
+    getIsCachingModule(): boolean;
+    get(key: string): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    put(key: string, value: Promise<{
+        data: any;
+        response: Response;
+    }>): void;
+    remove(key: string): void;
+    getAll(): Record<string, Promise<{
+        data: any;
+        response: Response;
+    }>>;
+    getKeys(): string[];
+    clear(): void;
+    onopen(func: ((this: WebSocket, ev: Event) => any) | null): void;
+    onmessage(func: ((this: WebSocket, ev: MessageEvent) => any) | null): void;
+    onclose(func: ((this: WebSocket, ev: CloseEvent) => any) | null): void;
+    onerror(func: ((this: WebSocket, ev: Event) => any) | null): void;
+    isWebSocketConnection(): number;
 }
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
@@ -480,20 +526,18 @@ interface CachingModule {
  * Returning false from this function will prevent the GET request from being sent.
  *
  * @param {string} resourcePath - The URL address to which the GET request will be sent.
- * @param {function} callbackWorkedFunc - The callback method to be executed if the GET request succeeds.
- * @param {function} callbackErrorFunc - The callback method to be executed if the GET request fails.
  * @param {object} options - Options provided by the user for the GET request.
  * @returns {boolean} Returns true to proceed with the GET request, or false to prevent the request from being sent.
  *
  * @example
- * hison.link.beforeGetRequst = function(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) {
+ * hison.link.beforeGetRequst = function(resourcePath, options) {
  *     //Custom logic before sending a GET request
  *     return true; //Proceed with the GET request
  * };
  *
  * @example
  * //Preventing a GET request
- * hison.link.beforeGetRequst = function(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) {
+ * hison.link.beforeGetRequst = function(resourcePath, options) {
  *     //Custom logic to determine whether to proceed
  *     return false; //Prevent the GET request
  * };
@@ -508,19 +552,19 @@ interface CallbackError {
     (error: any /**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;
 }
 interface BeforeGetRequst {
-    (resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
+    (resourcePath?: string, options?: Record<string, any>): boolean | void;
 }
 interface BeforePostRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
+    (requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;
 }
 interface BeforePutRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
+    (requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;
 }
 interface BeforePatchRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
+    (requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;
 }
 interface BeforeDeleteRequst {
-    (requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;
+    (requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;
 }
 interface BeforeCallbackWorked extends CallbackWorked {
 }

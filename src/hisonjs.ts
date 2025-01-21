@@ -346,7 +346,7 @@ interface Hison {
      */
     link: {
         CachingModule: new (cachingLimit?: number) => CachingModule;
-        ApiLink: new (cmdOrCachingModule?: string | CachingModule, CachingModule?: CachingModule) => ApiLink;
+        ApiLink: new (cmdOrCachingModule?: string | CachingModule, CachingModule?: CachingModule) => ApiLink<any>;
     }
 }
 //====================================================================================
@@ -520,7 +520,7 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
 //====================================================================================
 //link interface, type
 //====================================================================================
-interface ApiLink {
+interface ApiLink<T> {
     getIsApiLink(): boolean;
     get(resourcePath?: string, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
     post(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
@@ -529,6 +529,11 @@ interface ApiLink {
     delete(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
     setCmd(cmd: string): void;
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+    _get(url: string): any | Promise<any>;
+    _post(url: string, data: any): any | Promise<any>;
+    _put(url: string, data: any): any | Promise<any>;
+    _patch(url: string, data: any): any | Promise<any>;
+    _delete(url: string): any | Promise<any>;
 }
 interface CachingModule {
     getIsCachingModule(): boolean;
@@ -709,108 +714,6 @@ function createHison(): Hison {
             }
         };
     };
-    class ApiLinkPromise<T> extends Promise<T> {
-        constructor(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
-            super(executor);
-        }
-      
-        // 비동기 API 호출을 처리하는 내부 함수
-        private async apiCall(method: string, url: string, data?: any): Promise<T> {
-            const options: RequestInit = {
-                method,
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: data ? JSON.stringify(data) : undefined,
-            };
-        
-            const response = await fetch(url, options);
-            const result: T = await response.json();
-            return { data: result, response }; // Example response object is included.
-        }
-      
-        // GET 요청: 동기/비동기 모두 처리
-        get(url: string): T | Promise<T> {
-            return this.handleResponse(this.apiCall('GET', url));
-        }
-      
-        // POST 요청: 동기/비동기 모두 처리
-        post(url: string, data: any): T | Promise<T> {
-            return this.handleResponse(this.apiCall('POST', url, data));
-        }
-      
-        // PUT 요청: 동기/비동기 모두 처리
-        put(url: string, data: any): T | Promise<T> {
-            return this.handleResponse(this.apiCall('PUT', url, data));
-        }
-      
-        // PATCH 요청: 동기/비동기 모두 처리
-        patch(url: string, data: any): T | Promise<T> {
-            return this.handleResponse(this.apiCall('PATCH', url, data));
-        }
-      
-        // DELETE 요청: 동기/비동기 모두 처리
-        delete(url: string): T | Promise<T> {
-            return this.handleResponse(this.apiCall('DELETE', url));
-        }
-      
-        // 동기/비동기 처리를 분리하는 메서드
-        private handleResponse(result: Promise<T>): T | Promise<T> {
-          // 비동기 처리: Promise를 반환
-            if (result instanceof Promise) {
-                return result
-                .then((rtn: any) => {
-                    // 첫 번째 then: 데이터를 처리
-                    const resultData = rtn.data;
-                    const data = this._getRsultDataWrapper(resultData); // 예시로 변환 로직 추가
-                    this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
-        
-                    // 두 번째 then: 특정 조건 체크 및 추가 작업
-                    if (this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
-                    this._cachingModule.put(true, Promise.resolve({ data: data, response: rtn.response }));
-                    }
-        
-                    // 데이터 반환
-                    return { data: data, response: rtn.response };
-                });
-            }
-      
-          // 동기 처리: 즉시 결과 반환
-          // 동기 방식일 때도 동일한 로직을 강제로 실행하려면 Promise.resolve()를 사용하여 then 체인을 실행
-            return Promise.resolve(result).then((rtn: any) => {
-                const resultData = rtn.data;
-                const data = this._getRsultDataWrapper(resultData); // 예시로 변환 로직 추가
-                this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
-        
-                if (this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
-                this._cachingModule.put(true, Promise.resolve({ data: data, response: rtn.response }));
-                }
-        
-                return { data: data, response: rtn.response };
-            }) as T;
-        }
-      
-        // 예시로 _getRsultDataWrapper 메서드와 이벤트를 추가해두었습니다.
-        private _getRsultDataWrapper(data: any) {
-            // 데이터를 래핑하는 예시 로직
-            return { wrappedData: data };
-        }
-      
-        private _eventEmitter = {
-            emit: (event: string, data: any) => {
-                console.log(`${event} emitted with data:`, data);
-            }
-        };
-      
-        private _cachingModule = {
-            isWebSocketConnection: () => 1, // WebSocket 상태를 예시로 반환
-            put: (key: any, value: any) => {
-                console.log('Caching data:', key, value);
-            }
-        };
-    }
-    
-        
     class Hison implements Hison{
         utils = {
             //for boolean
@@ -2953,7 +2856,7 @@ function createHison(): Hison {
                     return this._checkWebSocketConnection();
                 }
             },
-            ApiLink: class implements ApiLink {
+            ApiLink: class implements ApiLink<any> {
                 constructor(cmdOrCachingModule?: string | CachingModule, cachingModule?: CachingModule) {
                     if (cmdOrCachingModule === undefined) {
                         this._cmd = '';
@@ -3132,6 +3035,94 @@ function createHison(): Hison {
                 
                     return racePromise;
                 };
+
+
+                /** 
+                 * 1. apiCall과 handleResponse를 하나로 묶음 => Async, Sync 메소드 만듦
+                 * 2. 공용 Proxy를 생성 (then, catch, finally 호출 시 Promise 반환(Async), 나머지는 Response.data 반환(Sync))
+                 * 3. 반환 시 Proxy를 입혀서 반환
+                 * 
+                // Proxy로 동작을 분기하는 처리
+                 new Proxy(apiLink, {
+                    get: (target, prop) => {
+                    // `then`이나 `catch` 메서드가 호출되면 비동기 처리를 하도록 설정
+                    if (prop === 'then' || prop === 'catch') {
+                        return apiLink.Async(prop);
+                    }
+            
+                    // 그 외의 메서드나 속성은 원래 객체의 메서드로 처리
+                    if (typeof target[prop] === 'function') {
+                        return (...args: any[]) => apiLink.Sync(prop, args);
+                    }
+            
+                    // 속성 접근: 원래 객체에서 값 반환
+                    return target[prop];
+                    }
+                });
+                */
+               
+                // 실제로 사용하는 API 호출을 처리하는 함수
+                private async apiCall(method: string, url: string, data?: any): Promise<{ data: any; response: Response }> {
+                    const options: RequestInit = {
+                        method,
+                        headers: {
+                        'Content-Type': 'application/json',
+                        },
+                        body: data ? JSON.stringify(data) : undefined,
+                    };
+
+                    const response = await fetch(url, options);
+                    const result: any = await response.json();
+                    return { data: result, response }; // API 호출 결과와 응답 객체 반환
+                }
+                // 동기/비동기 처리를 분리하는 메서드
+                private handleResponse(result: Promise<{ data: any; response: Response }>): any | Promise<any> {
+                    console.log('handleResponse', result);
+                    // 비동기 처리: Promise를 반환
+                    if (result instanceof Promise) {
+                        return result.then((rtn) => {
+                        const resultData = rtn.data;
+                        const data = this._getRsultDataWrapper(resultData);
+                        this._eventEmitter.emit('requestCompleted_Data', { data, response: rtn.response });
+                
+                        if (this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
+                            //this._cachingModule.put(true, Promise.resolve({ data, response: rtn.response }));
+                        }
+                
+                        // 비동기적으로 처리된 결과를 반환
+                        return data as any;
+                        });
+                    }
+                
+                    // 동기 처리: 즉시 결과 반환
+                    return result as any;
+                }
+
+                // GET 요청: 동기/비동기 모두 처리
+                _get(url: string): any | Promise<any> {
+                    return this.handleResponse(this.apiCall('GET', url));
+                }
+
+                // POST 요청: 동기/비동기 모두 처리
+                _post(url: string, data: any): any | Promise<any> {
+                    return this.handleResponse(this.apiCall('POST', url, data));
+                }
+
+                // PUT 요청: 동기/비동기 모두 처리
+                _put(url: string, data: any): any | Promise<any> {
+                    return this.handleResponse(this.apiCall('PUT', url, data));
+                }
+
+                // PATCH 요청: 동기/비동기 모두 처리
+                _patch(url: string, data: any): any | Promise<any> {
+                    return this.handleResponse(this.apiCall('PATCH', url, data));
+                }
+
+                // DELETE 요청: 동기/비동기 모두 처리
+                _delete(url: string): any | Promise<any> {
+                    return this.handleResponse(this.apiCall('DELETE', url));
+                }
+
                 getIsApiLink = (): boolean => {
                     return this._isApiLink;
                 };
@@ -3430,7 +3421,13 @@ hison.setControllerPath('');
 const dm = new hison.data.DataModel(data);
 const cm = new hison.link.CachingModule(5);
 const al = new hison.link.ApiLink('users', cm);
+const url = 'https://' + 'jsonplaceholder.typicode.com/' + 'users';
 
-const t = al.get('users').then((rtn) => console.log(rtn));
+const t1 = al._get(url);
+$('t1', t1);
+const t3 = al._get(url).then((rtn) => console.log('########'));
+$('t3', t3);
+al._get(url).then((rtn) => $('t2', rtn));
+
 
 export default createHison();
