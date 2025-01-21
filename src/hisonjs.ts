@@ -110,14 +110,14 @@ interface Hison {
     setTimeout(num: number): void;
     setWebSocketProtocol(str: string): void;
     setWebSocketEndPoint(str: string): void;
-    setWebSocketlimit(num: number): void;
+    setCachingLimit(num: number): void;
     getProtocol(): string;
     getDomain(): string;
     getControllerPath(): string;
     getTimeout(): number;
     getWebSocketProtocol(): string;
     getWebSocketEndPoint(): string;
-    getWebSocketlimit(): number;
+    getCachingLimit(): number;
     setBeforeGetRequst(func: BeforeGetRequst): void;
     setBeforePostRequst(func: BeforePostRequst): void;
     setBeforePutRequst(func: BeforePutRequst): void;
@@ -229,7 +229,7 @@ interface Hison {
         getFileName(str: string): string;
         getDecodeBase64(str: string): string;
         getEncodeBase64(str: string): string;
-        deepCopyArrOrObject(object: any, visited?: { source: any, copy: any }[]): any;
+        deepCopyObject(object: any, visited?: { source: any, copy: any }[]): any;
     }
     
     //====================================================================================
@@ -345,8 +345,8 @@ interface Hison {
      * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
      */
     link: {
-        CachingModule: new () => CachingModule;
-        ApiLink: new (cmd?: string, options?: Record<string, any>) => ApiLink;
+        CachingModule: new (cachingLimit?: number) => CachingModule;
+        ApiLink: new (cmdOrCachingModule?: string | CachingModule, CachingModule?: CachingModule) => ApiLink;
     }
 }
 //====================================================================================
@@ -521,12 +521,28 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
 //link interface, type
 //====================================================================================
 interface ApiLink {
-
+    getIsApiLink(): boolean;
+    get(resourcePath?: string, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
+    post(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
+    put(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
+    patch(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
+    delete(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
+    setCmd(cmd: string): void;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
 }
 interface CachingModule {
-    isWebSocketConnection(): any;
-    get(str: any): any;
-    put(str: any, tt: any): any;
+    getIsCachingModule(): boolean;
+    get(key: string): Promise<{ data: any; response: Response; }>;
+    put(key: string, value: Promise<{ data: any; response: Response; }>): void;
+    remove(key: string): void;
+    getAll(): Record<string, Promise<{ data: any; response: Response; }>>;
+    getKeys(): string[];
+    clear(): void;
+    onopen(func: ((this: WebSocket, ev: Event) => any) | null): void;
+    onmessage(func: ((this: WebSocket, ev: MessageEvent) => any) | null): void;
+    onclose(func: ((this: WebSocket, ev: CloseEvent) => any) | null): void;
+    onerror(func: ((this: WebSocket, ev: Event) => any) | null): void;
+    isWebSocketConnection(): number;
 }
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
@@ -535,20 +551,18 @@ interface CachingModule {
  * Returning false from this function will prevent the GET request from being sent.
  *
  * @param {string} resourcePath - The URL address to which the GET request will be sent.
- * @param {function} callbackWorkedFunc - The callback method to be executed if the GET request succeeds.
- * @param {function} callbackErrorFunc - The callback method to be executed if the GET request fails.
  * @param {object} options - Options provided by the user for the GET request.
  * @returns {boolean} Returns true to proceed with the GET request, or false to prevent the request from being sent.
  *
  * @example
- * hison.link.beforeGetRequst = function(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) {
+ * hison.link.beforeGetRequst = function(resourcePath, options) {
  *     //Custom logic before sending a GET request
  *     return true; //Proceed with the GET request
  * };
  *
  * @example
  * //Preventing a GET request
- * hison.link.beforeGetRequst = function(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) {
+ * hison.link.beforeGetRequst = function(resourcePath, options) {
  *     //Custom logic to determine whether to proceed
  *     return false; //Prevent the GET request
  * };
@@ -558,11 +572,11 @@ interface CachingModule {
  */
 interface CallbackWorked {(result: DataWrapper | undefined, response: Response): boolean | void;};
 interface CallbackError {(error: any/**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;};
-interface BeforeGetRequst {(resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
-interface BeforePostRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
-interface BeforePutRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
-interface BeforePatchRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
-interface BeforeDeleteRequst {(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void;};
+interface BeforeGetRequst {(resourcePath?: string, options?: Record<string, any>): boolean | void;};
+interface BeforePostRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforePutRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforePatchRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforeDeleteRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
 interface BeforeCallbackWorked extends CallbackWorked {};
 interface BeforeCallbackError extends CallbackError {};
 
@@ -626,18 +640,59 @@ function createHison(): Hison {
             timeout : 10000,
             webSocketProtocol : 'ws://',
             webSocketEndPoint : '/hison-caching-websocket-endpoint',
-            webSocketlimit : 10,
-            beforeGetRequst(resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
-            beforePostRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
-            beforePutRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
-            beforePatchRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
-            beforeDeleteRequst(requestDw: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>): boolean | void {return true;},
+            cachingLimit : 10,
+            beforeGetRequst(resourcePath: string, options: Record<string, any>): boolean | void {return true;},
+            beforePostRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
             beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
             beforeCallbackError(error: any): boolean | void {return true;},
         };
     }
-    const defaultOption = new DefaultOption();
-
+    class LRUCache {
+        constructor(limit: number) {
+            this._limit = limit;
+            this._cache = {};
+            this._keys = [];
+        }
+        private _limit: number;
+        private _cache: Record<string, Promise<{ data: any; response: Response; }>>;
+        private _keys: string[];
+        get = (key: string): Promise<{ data: any; response: Response; }> => {
+            if (!this._cache.hasOwnProperty(key)) return null;
+            const value = this._cache[key];
+            this.remove(key);
+            this._keys.push(key);
+            return value;
+        };
+        put = (key: string , value: Promise<{ data: any; response: Response; }>) => {
+            if (this._cache.hasOwnProperty(key)) {
+                this.remove(key);
+            } else if (this._keys.length == this._limit) {
+                const oldestKey = this._keys.shift();
+                delete this._cache[oldestKey];
+            }
+            this._cache[key] = hison.utils.deepCopyObject(value);
+            this._keys.push(key);
+        };
+        remove = (key: string) => {
+            const index = this._keys.indexOf(key);
+            if (index > -1) {
+                this._keys.splice(index, 1);
+            }
+        };
+        getAll = (): Record<string, Promise<{ data: any; response: Response; }>> => {
+            return this._cache;
+        };
+        getKeys = (): string[] => {
+            return this._keys;
+        };
+        clear = () => {
+            this._cache = {};
+            this._keys = [];
+        };
+    };
     class EventEmitter {
         private events: { [eventName: string]: Array<(...args: any[]) => void> } = {};
     
@@ -653,10 +708,109 @@ function createHison(): Hison {
                 this.events[eventName].forEach(listener => listener(...args));
             }
         };
+    };
+    class ApiLinkPromise<T> extends Promise<T> {
+        constructor(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
+            super(executor);
+        }
+      
+        // 비동기 API 호출을 처리하는 내부 함수
+        private async apiCall(method: string, url: string, data?: any): Promise<T> {
+            const options: RequestInit = {
+                method,
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: data ? JSON.stringify(data) : undefined,
+            };
+        
+            const response = await fetch(url, options);
+            const result: T = await response.json();
+            return { data: result, response }; // Example response object is included.
+        }
+      
+        // GET 요청: 동기/비동기 모두 처리
+        get(url: string): T | Promise<T> {
+            return this.handleResponse(this.apiCall('GET', url));
+        }
+      
+        // POST 요청: 동기/비동기 모두 처리
+        post(url: string, data: any): T | Promise<T> {
+            return this.handleResponse(this.apiCall('POST', url, data));
+        }
+      
+        // PUT 요청: 동기/비동기 모두 처리
+        put(url: string, data: any): T | Promise<T> {
+            return this.handleResponse(this.apiCall('PUT', url, data));
+        }
+      
+        // PATCH 요청: 동기/비동기 모두 처리
+        patch(url: string, data: any): T | Promise<T> {
+            return this.handleResponse(this.apiCall('PATCH', url, data));
+        }
+      
+        // DELETE 요청: 동기/비동기 모두 처리
+        delete(url: string): T | Promise<T> {
+            return this.handleResponse(this.apiCall('DELETE', url));
+        }
+      
+        // 동기/비동기 처리를 분리하는 메서드
+        private handleResponse(result: Promise<T>): T | Promise<T> {
+          // 비동기 처리: Promise를 반환
+            if (result instanceof Promise) {
+                return result
+                .then((rtn: any) => {
+                    // 첫 번째 then: 데이터를 처리
+                    const resultData = rtn.data;
+                    const data = this._getRsultDataWrapper(resultData); // 예시로 변환 로직 추가
+                    this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
+        
+                    // 두 번째 then: 특정 조건 체크 및 추가 작업
+                    if (this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
+                    this._cachingModule.put(true, Promise.resolve({ data: data, response: rtn.response }));
+                    }
+        
+                    // 데이터 반환
+                    return { data: data, response: rtn.response };
+                });
+            }
+      
+          // 동기 처리: 즉시 결과 반환
+          // 동기 방식일 때도 동일한 로직을 강제로 실행하려면 Promise.resolve()를 사용하여 then 체인을 실행
+            return Promise.resolve(result).then((rtn: any) => {
+                const resultData = rtn.data;
+                const data = this._getRsultDataWrapper(resultData); // 예시로 변환 로직 추가
+                this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
+        
+                if (this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
+                this._cachingModule.put(true, Promise.resolve({ data: data, response: rtn.response }));
+                }
+        
+                return { data: data, response: rtn.response };
+            }) as T;
+        }
+      
+        // 예시로 _getRsultDataWrapper 메서드와 이벤트를 추가해두었습니다.
+        private _getRsultDataWrapper(data: any) {
+            // 데이터를 래핑하는 예시 로직
+            return { wrappedData: data };
+        }
+      
+        private _eventEmitter = {
+            emit: (event: string, data: any) => {
+                console.log(`${event} emitted with data:`, data);
+            }
+        };
+      
+        private _cachingModule = {
+            isWebSocketConnection: () => 1, // WebSocket 상태를 예시로 반환
+            put: (key: any, value: any) => {
+                console.log('Caching data:', key, value);
+            }
+        };
     }
-
-    let _hison: Hison;
-
+    
+        
     class Hison implements Hison{
         utils = {
             //for boolean
@@ -691,17 +845,17 @@ function createHison(): Hison {
                 return !isNaN(num) && isFinite(num);
             },
             isInteger(num: any): boolean {
-                if (!_hison.utils.isNumeric(num)) return false;
+                if (!hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num);
             },
             isPositiveInteger(num: any): boolean {
-                if (!_hison.utils.isNumeric(num)) return false;
+                if (!hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num) && num > 0;
             },
             isNegativeInteger(num: any): boolean {
-                if (!_hison.utils.isNumeric(num)) return false;
+                if (!hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num) && num < 0;
             },
@@ -712,15 +866,15 @@ function createHison(): Hison {
                 return obj !== null && typeof obj === 'object' && !Array.isArray(obj) && obj.constructor === Object;
             },
             isDate(date: DateObject | string): boolean {
-                const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
+                const dateObj: DateObject = hison.utils.isObject(date) ? date as DateObject : hison.utils.getDateObject(date as string);
         
-                let yyyy: string = _hison.utils.getToString(dateObj.y);
-                let MM: string = _hison.utils.getToString(dateObj.M);
-                let dd: string = _hison.utils.getToString(dateObj.d);
+                let yyyy: string = hison.utils.getToString(dateObj.y);
+                let MM: string = hison.utils.getToString(dateObj.M);
+                let dd: string = hison.utils.getToString(dateObj.d);
         
                 let result = true;
                 try {
-                    if (!_hison.utils.isInteger(yyyy) || !_hison.utils.isInteger(MM) || !_hison.utils.isInteger(dd)) {
+                    if (!hison.utils.isInteger(yyyy) || !hison.utils.isInteger(MM) || !hison.utils.isInteger(dd)) {
                         return false;
                     }
         
@@ -738,9 +892,9 @@ function createHison(): Hison {
                         dd = "0" + dd;
                     }
         
-                    if (_hison.utils.getToNumber(yyyy+MM+dd) < 16000101) {
-                        const date = new Date(_hison.utils.getToNumber(yyyy), _hison.utils.getToNumber(MM) - 1, _hison.utils.getToNumber(dd));
-                        if (date.getFullYear() !== _hison.utils.getToNumber(yyyy) || date.getMonth() !== _hison.utils.getToNumber(MM) - 1 || date.getDate() !== _hison.utils.getToNumber(dd)) {
+                    if (hison.utils.getToNumber(yyyy+MM+dd) < 16000101) {
+                        const date = new Date(hison.utils.getToNumber(yyyy), hison.utils.getToNumber(MM) - 1, hison.utils.getToNumber(dd));
+                        if (date.getFullYear() !== hison.utils.getToNumber(yyyy) || date.getMonth() !== hison.utils.getToNumber(MM) - 1 || date.getDate() !== hison.utils.getToNumber(dd)) {
                             return false;
                         }
                         return true;
@@ -756,13 +910,13 @@ function createHison(): Hison {
                 return result;
             },
             isTime(time: TimeObject | string): boolean {
-                const timeObj: TimeObject = _hison.utils.isObject(time) ? time as TimeObject : _hison.utils.getTimeObject(time as string);
+                const timeObj: TimeObject = hison.utils.isObject(time) ? time as TimeObject : hison.utils.getTimeObject(time as string);
         
                 let hh: number = timeObj.h;
                 let mm: number = timeObj.m;
                 let ss: number = timeObj.s;
         
-                if (!_hison.utils.isInteger(hh) || !_hison.utils.isInteger(mm) || !_hison.utils.isInteger(ss)) {
+                if (!hison.utils.isInteger(hh) || !hison.utils.isInteger(mm) || !hison.utils.isInteger(ss)) {
                     return false;
                 }
                 /*
@@ -778,9 +932,9 @@ function createHison(): Hison {
                 return isValidTimePart(hh, 23) && isValidTimePart(mm, 59) && isValidTimePart(ss, 59);
             },
             isDatetime(datetime: DateTimeObject | string): boolean {
-                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? datetime as DateTimeObject : _hison.utils.getDatetimeObject(datetime as string);
-                if (!_hison.utils.isDate(datetimeObj)) return false;
-                if (!_hison.utils.isTime(datetimeObj)) return false;
+                const datetimeObj: DateTimeObject = hison.utils.isObject(datetime) ? datetime as DateTimeObject : hison.utils.getDatetimeObject(datetime as string);
+                if (!hison.utils.isDate(datetimeObj)) return false;
+                if (!hison.utils.isTime(datetimeObj)) return false;
                 return true;
             },
             isEmail(str: string): boolean {
@@ -822,7 +976,7 @@ function createHison(): Hison {
                 const result = {y: null, M: null, d: null};
                 if (typeof date === 'string') {
                     let year: number = null, month: number = null, day: number = null;
-                    date = _hison.utils.getToString(date);
+                    date = hison.utils.getToString(date);
                     date = date.split(' ')[0];
                     if (date.includes('-')) {
                         [year, month, day] = date.split('-').map(num => parseInt(num, 10));
@@ -849,7 +1003,7 @@ function createHison(): Hison {
                 const result = {h: null, m: null, s: null};
                 if (typeof time === 'string') {
                     let hours: number = null, minutes: number = null, seconds: number = null;
-                    time = _hison.utils.getToString(time);
+                    time = hison.utils.getToString(time);
                     const dateArr = time.split(' ');
                     time = dateArr.length > 1 ? dateArr[1] : time;
             
@@ -874,11 +1028,11 @@ function createHison(): Hison {
             },
             getDatetimeObject(datetime: Date | string): DateTimeObject {
                 if (typeof datetime === 'string') {
-                    datetime = _hison.utils.getToString(datetime);
+                    datetime = hison.utils.getToString(datetime);
                     const datetimeArr = datetime.split(' ');
                     const dateObj = datetimeArr[0];
                     const timeObj = datetimeArr.length > 1 ? datetimeArr[1] as string : '';
-                    return Object.assign({}, _hison.utils.getDateObject(dateObj), _hison.utils.getTimeObject(timeObj));
+                    return Object.assign({}, hison.utils.getDateObject(dateObj), hison.utils.getTimeObject(timeObj));
                 }
                 if (datetime instanceof Date) {
                     return {
@@ -893,7 +1047,7 @@ function createHison(): Hison {
                 return null;
             },
             addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = "", format: string = ""): DateTimeObject | string {
-                const datetimeObj: DateTimeObject = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+                const datetimeObj: DateTimeObject = hison.utils.isObject(datetime) ? hison.utils.deepCopyObject(datetime) : hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
                         format = defaultOption.utils.dateFormat
@@ -903,8 +1057,8 @@ function createHison(): Hison {
                     }
                 }
                 
-                if (!_hison.utils.isInteger(addValue)) throw new Error(`ER0001 Please enter a valid value.\n=>${JSON.stringify(addValue)}`);
-                addValue = _hison.utils.getToNumber(addValue);
+                if (!hison.utils.isInteger(addValue)) throw new Error(`ER0001 Please enter a valid value.\n=>${JSON.stringify(addValue)}`);
+                addValue = hison.utils.getToNumber(addValue);
 
                 datetimeObj.M = datetimeObj.M === null || datetimeObj.M === undefined ? 1 : datetimeObj.M;
                 datetimeObj.d = datetimeObj.d === null || datetimeObj.d === undefined ? 1 : datetimeObj.d;
@@ -912,8 +1066,8 @@ function createHison(): Hison {
                 datetimeObj.m = datetimeObj.m === null || datetimeObj.m === undefined ? 0 : datetimeObj.m;
                 datetimeObj.s = datetimeObj.s === null || datetimeObj.s === undefined ? 0 : datetimeObj.s;
         
-                if (!_hison.utils.isDate(datetimeObj)) throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-                if (!_hison.utils.isTime(datetimeObj)) throw new Error(`ER0003 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!hison.utils.isDate(datetimeObj)) throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!hison.utils.isTime(datetimeObj)) throw new Error(`ER0003 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
             
                 const d = new Date(datetimeObj.y, datetimeObj.M - 1, datetimeObj.d, datetimeObj.h, datetimeObj.m, datetimeObj.s);
             
@@ -949,11 +1103,11 @@ function createHison(): Hison {
                     s: d.getSeconds()
                 }
         
-                return _hison.utils.isObject(datetime) ? rtnObj : _hison.utils.getDateWithFormat(rtnObj, format);
+                return hison.utils.isObject(datetime) ? rtnObj : hison.utils.getDateWithFormat(rtnObj, format);
             },
             getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType: string = ""): number {
-                const datetimeObj1: DateTimeObject = _hison.utils.isObject(datetime1) ? _hison.utils.deepCopyArrOrObject(datetime1) : _hison.utils.getDatetimeObject(datetime1 as string);
-                const datetimeObj2: DateTimeObject = _hison.utils.isObject(datetime2) ? _hison.utils.deepCopyArrOrObject(datetime2) : _hison.utils.getDatetimeObject(datetime2 as string);
+                const datetimeObj1: DateTimeObject = hison.utils.isObject(datetime1) ? hison.utils.deepCopyObject(datetime1) : hison.utils.getDatetimeObject(datetime1 as string);
+                const datetimeObj2: DateTimeObject = hison.utils.isObject(datetime2) ? hison.utils.deepCopyObject(datetime2) : hison.utils.getDatetimeObject(datetime2 as string);
                             
                 datetimeObj1.M = datetimeObj1.M || 1; datetimeObj2.M = datetimeObj2.M || 1;
                 datetimeObj1.d = datetimeObj1.d || 1; datetimeObj2.d = datetimeObj2.d || 1;
@@ -961,10 +1115,10 @@ function createHison(): Hison {
                 datetimeObj1.m = datetimeObj1.m || 0; datetimeObj2.m = datetimeObj2.m || 0;
                 datetimeObj1.s = datetimeObj1.s || 0; datetimeObj2.s = datetimeObj2.s || 0;
         
-                if (!_hison.utils.isDate(datetimeObj1)) throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if (!_hison.utils.isTime(datetimeObj1)) throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if (!_hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if (!_hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!hison.utils.isDate(datetimeObj1)) throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!hison.utils.isTime(datetimeObj1)) throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
             
                 const d1 = new Date(datetimeObj1.y, datetimeObj1.M - 1, datetimeObj1.d, datetimeObj1.h, datetimeObj1.m, datetimeObj1.s);
                 const d2 = new Date(datetimeObj2.y, datetimeObj2.M - 1, datetimeObj2.d, datetimeObj2.h, datetimeObj2.m, datetimeObj2.s);
@@ -1000,7 +1154,7 @@ function createHison(): Hison {
                 }
             },
             getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = ""): string {
-                const datetimeObj = _hison.utils.isObject(datetime) ? _hison.utils.deepCopyArrOrObject(datetime) : _hison.utils.getDatetimeObject(datetime as string);
+                const datetimeObj = hison.utils.isObject(datetime) ? hison.utils.deepCopyObject(datetime) : hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
                         format = defaultOption.utils.dateFormat
@@ -1017,11 +1171,11 @@ function createHison(): Hison {
                 const m = (datetimeObj.m || 0).toString().padStart(2, '0');
                 const s = (datetimeObj.s || 0).toString().padStart(2, '0');
 
-                if (!_hison.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-                if (!_hison.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!hison.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                if (!hison.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
 
-                const MMMM = _hison.utils.getMonthName(datetimeObj.M);
-                const MMM = _hison.utils.getMonthName(datetimeObj.M, false);
+                const MMMM = hison.utils.getMonthName(datetimeObj.M);
+                const MMM = hison.utils.getMonthName(datetimeObj.M, false);
 
                 switch (format) {
                     case 'yyyy':
@@ -1296,8 +1450,8 @@ function createHison(): Hison {
                 }
             },
             getDayOfWeek(date: DateObject | string, dayType: string = defaultOption.utils.dayOfWeekFormat): string {
-                const dateObj: DateObject = _hison.utils.isObject(date) ? date as DateObject : _hison.utils.getDateObject(date as string);
-                if (!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                const dateObj: DateObject = hison.utils.isObject(date) ? date as DateObject : hison.utils.getDateObject(date as string);
+                if (!hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
                 
                 const d = new Date(dateObj.y, dateObj.M - 1, dateObj.d);
                 const dayOfWeek = d.getDay();
@@ -1318,8 +1472,8 @@ function createHison(): Hison {
             },
             getLastDay(date: DateObject | string): number {
                 let dateObj: DateObject;
-                if (_hison.utils.isObject(date)) {
-                    dateObj = _hison.utils.deepCopyArrOrObject(date);
+                if (hison.utils.isObject(date)) {
+                    dateObj = hison.utils.deepCopyObject(date);
                     dateObj.d = 1;
                 }
                 else {
@@ -1332,9 +1486,9 @@ function createHison(): Hison {
                     else {
                         date = date + '01'
                     }
-                    dateObj = _hison.utils.getDateObject(date);
+                    dateObj = hison.utils.getDateObject(date);
                 }
-                if (!_hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                if (!hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
         
                 const nextMonthFirstDay = new Date(dateObj.y, dateObj.M, 1);
                 nextMonthFirstDay.setDate(0);
@@ -1356,16 +1510,16 @@ function createHison(): Hison {
                     case 'mm':
                         return sysMonth.toString().padStart(2, '0');
                     case 'mmmm':
-                        return _hison.utils.getMonthName(sysMonth);
+                        return hison.utils.getMonthName(sysMonth);
                     case 'mmm':
-                        return _hison.utils.getMonthName(sysMonth, false);
+                        return hison.utils.getMonthName(sysMonth, false);
                     default:
                         return sysMonth.toString();
                 }
             },
             getSysYearMonth(format: string = defaultOption.utils.yearMonthFormat): string {
                 const currentDate = new Date();
-                return _hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : 1 }, format);
+                return hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : 1 }, format);
             },
             getSysDay(format: string = defaultOption.utils.dayFormat): string {
                 const currentDate = new Date();
@@ -1378,7 +1532,7 @@ function createHison(): Hison {
             },
             getSysDayOfWeek(dayType: string = defaultOption.utils.dayOfWeekFormat): string {
                 const currentDate = new Date();
-                return _hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
+                return hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
             },
             getSysHour(format: string = defaultOption.utils.hourFormat): string {
                 const currentDate = new Date();
@@ -1427,7 +1581,7 @@ function createHison(): Hison {
             },
             getSysDate(format: string = defaultOption.utils.datetimeFormat): string {
                 const currentDate = new Date();
-                return _hison.utils.getDateWithFormat(
+                return hison.utils.getDateWithFormat(
                     {
                         y:currentDate.getFullYear(),
                         M:currentDate.getMonth() + 1,
@@ -1440,32 +1594,32 @@ function createHison(): Hison {
             },
             //for number
             getCeil(num: number, precision: number = 0): number {
-                num = _hison.utils.getToNumber(num);
-                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                num = hison.utils.getToNumber(num);
+                precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.ceil(num * factor) / factor;
             },
             getFloor(num: number, precision: number = 0): number {
-                num = _hison.utils.getToNumber(num);
-                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                num = hison.utils.getToNumber(num);
+                precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.floor(num * factor) / factor;
             },
             getRound(num: number, precision: number = 0): number {
-                num = _hison.utils.getToNumber(num);
-                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                num = hison.utils.getToNumber(num);
+                precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.round(num * factor) / factor;
             },
             getTrunc(num: number, precision: number = 0): number {
-                num = _hison.utils.getToNumber(num);
-                precision = Math.trunc(_hison.utils.getToNumber(precision));
+                num = hison.utils.getToNumber(num);
+                precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.trunc(num * factor) / factor;
             },
             //for string
             getByteLength(str: string): number {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 let byteLength = 0;
                 for (let i = 0; i < str.length; i++) {
                     const charCode = str.charCodeAt(i);
@@ -1482,8 +1636,8 @@ function createHison(): Hison {
                 return byteLength;
             },
             getCutByteLength(str: string, cutByte: number): string {
-                str = _hison.utils.getToString(str);
-                cutByte = _hison.utils.getToNumber(cutByte);
+                str = hison.utils.getToString(str);
+                cutByte = hison.utils.getToNumber(cutByte);
                 let byteLength = 0;
                 let cutIndex = str.length;
                 for (let i = 0; i < str.length; i++) {
@@ -1505,8 +1659,8 @@ function createHison(): Hison {
                 return str.substring(0, cutIndex);
             },
             getStringLenForm(str: string, length: number): string {
-                str = _hison.utils.getToString(str);
-                length = _hison.utils.getToNumber(length);
+                str = hison.utils.getToString(str);
+                length = hison.utils.getToNumber(length);
                 const strLength = str.length;
                 if (strLength >= length) {
                     return str;
@@ -1524,40 +1678,40 @@ function createHison(): Hison {
                 return result;
             },
             getLpad(str: string, padStr: string, length: number): string {
-                str = _hison.utils.getToString(str);
-                padStr = _hison.utils.getToString(padStr);
-                length = _hison.utils.getToNumber(length);
+                str = hison.utils.getToString(str);
+                padStr = hison.utils.getToString(padStr);
+                length = hison.utils.getToNumber(length);
                 if (str.length >= length) return str.substring(str.length, length - 1);
                 const pad = padStr.repeat((length - str.length) / padStr.length);
                 return pad + str;
             },
             getRpad(str: string, padStr: string, length: number): string {
-                str = _hison.utils.getToString(str);
-                padStr = _hison.utils.getToString(padStr);
-                length = _hison.utils.getToNumber(length);
+                str = hison.utils.getToString(str);
+                padStr = hison.utils.getToString(padStr);
+                length = hison.utils.getToNumber(length);
                 if (str.length >= length) return str.substring(0, length);
                 const pad = padStr.repeat((length - str.length) / padStr.length);
                 return str + pad;
             },
             getTrim(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 return str.trim();
             },
             getReplaceAll(str: string, targetStr: string, replaceStr: string = ''): string {
-                str = _hison.utils.getToString(str);
-                targetStr = _hison.utils.getToString(targetStr);
-                replaceStr = _hison.utils.getToString(replaceStr);
+                str = hison.utils.getToString(str);
+                targetStr = hison.utils.getToString(targetStr);
+                replaceStr = hison.utils.getToString(replaceStr);
                 return str.split(targetStr).join(replaceStr);
             },
             nvl(val: any, defaultValue: any): any {
                 return (val === null || val === undefined) ? defaultValue : val;
             },
             getNumberFormat(value: number, format?: string): string {
-                value = _hison.utils.getToNumber(value);
-                format = _hison.utils.getToString(format);
+                value = hison.utils.getToNumber(value);
+                format = hison.utils.getToString(format);
 
                 const oriValue = value;
-                if (!_hison.utils.isNumeric(value)) {
+                if (!hison.utils.isNumeric(value)) {
                     throw new Error(`ER0021 Invalid number\n=>${JSON.stringify(oriValue)}`);
                 }
                 format = format ? format : defaultOption.utils.numberFormat;
@@ -1576,7 +1730,7 @@ function createHison(): Hison {
         
                 if (suffix === '%' || suffix === ' %') value = value * 100;
         
-                let numStr = _hison.utils.getToString(value);
+                let numStr = hison.utils.getToString(value);
                 const isNegative = numStr[0] === '-';
                 numStr = isNegative ? numStr.substring(1) : numStr;
                 let interger = numStr.split('.')[0];
@@ -1584,7 +1738,7 @@ function createHison(): Hison {
                 
                 let result: string;
         
-                decimal = _hison.utils.getToFloat('0.' + decimal)
+                decimal = hison.utils.getToFloat('0.' + decimal)
                         .toLocaleString('en',{
                             minimumFractionDigits: decimalFormat.lastIndexOf('0') + 1,
                             maximumFractionDigits: decimalFormat.length
@@ -1594,20 +1748,20 @@ function createHison(): Hison {
         
                 switch (intergerFormat) {
                     case "#,###":
-                        if (_hison.utils.getToNumber(interger) === 0) {
+                        if (hison.utils.getToNumber(interger) === 0) {
                             result = decimal;
                         }
                         else {
-                            interger = _hison.utils.getToFloat(interger).toLocaleString('en');
+                            interger = hison.utils.getToFloat(interger).toLocaleString('en');
                             result = interger + decimal;
                         }
                         break;
                     case "#,##0":
-                        interger = _hison.utils.getToFloat(interger).toLocaleString('en');
+                        interger = hison.utils.getToFloat(interger).toLocaleString('en');
                         result = interger + decimal;
                         break;
                     case "#":
-                        if (_hison.utils.getToNumber(interger) === 0) {
+                        if (hison.utils.getToNumber(interger) === 0) {
                             result = decimal;
                         }
                         else {
@@ -1624,20 +1778,20 @@ function createHison(): Hison {
                 return prefix + result + suffix;
             },
             getRemoveExceptNumbers(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 return str.replace(/[^0-9]/g, '');
             },
             getRemoveNumbers(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 return str.replace(/[0-9]/g, '');
             },
             getReverse(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 return str.split('').reverse().join('');
             },
             //for convertor
             getToBoolean(value: any): boolean {
-                if (_hison.utils.isNumeric(value)) {
+                if (hison.utils.isNumeric(value)) {
                     return Number(value) != 0;
                 }
                 else if (typeof value === 'boolean'){
@@ -1651,16 +1805,16 @@ function createHison(): Hison {
                 }
             },
             getToNumber(value: any, impossibleValue: number = 0) {
-                return _hison.utils.getToFloat(value, impossibleValue);
+                return hison.utils.getToFloat(value, impossibleValue);
             },
             getToFloat(value: any, impossibleValue: number = 0) {
-                if (!_hison.utils.isNumeric(value)) {
+                if (!hison.utils.isNumeric(value)) {
                     return impossibleValue;
                 }
                 return parseFloat(value);
             },
             getToInteger(value: any, impossibleValue: number = 0): number {
-                if (!_hison.utils.isNumeric(value)) {
+                if (!hison.utils.isNumeric(value)) {
                     return Math.trunc(impossibleValue);
                 }
                 return Math.trunc(parseInt(value, 10));
@@ -1678,7 +1832,7 @@ function createHison(): Hison {
             },
             //etc
             getFileExtension(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
             
                 const extension = str.split('.').pop();
                 if (extension === str) {
@@ -1687,7 +1841,7 @@ function createHison(): Hison {
                 return extension;
             },
             getFileName(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
             
                 const fileName = str.split('/').pop();
                 const lastDotIndex = fileName.lastIndexOf('.');
@@ -1696,23 +1850,29 @@ function createHison(): Hison {
                 return fileName.substring(0, lastDotIndex);
             },
             getDecodeBase64(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
             },
             getEncodeBase64(str: string): string {
-                str = _hison.utils.getToString(str);
+                str = hison.utils.getToString(str);
                 return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(_, p1:string) {
                     return String.fromCharCode(parseInt(p1, 16));
                 }));
             },
-            deepCopyArrOrObject(object: any, visited?: { source: any, copy: any }[]): any {
+            deepCopyObject(object: any, visited?: { source: any, copy: any }[]): any {
                 if (object === null || typeof object !== 'object') {
                     return object;
                 }
                 if (object.constructor !== Object && object.constructor !== Array) {
-                    return object;
+                    if ((object && object.getIsDataWrapper && object.getIsDataWrapper())
+                        ||(object && object.getIsDataModel && object.getIsDataModel())
+                    ) {
+                        return object.clone();
+                    } else {
+                        return object;
+                    }
                 }
                 if (!visited) visited = [];
                 for (let i = 0; i < visited.length; i++) {
@@ -1726,7 +1886,7 @@ function createHison(): Hison {
                     visited.push({ source: object, copy: copy });
             
                     for (let j = 0; j < object.length; j++) {
-                        copy[j] = _hison.utils.deepCopyArrOrObject(object[j], visited);
+                        copy[j] = hison.utils.deepCopyObject(object[j], visited);
                     }
                 } else {
                     copy = {};
@@ -1734,7 +1894,7 @@ function createHison(): Hison {
             
                     for (let key in object) {
                         if (object.hasOwnProperty(key)) {
-                            copy[key] = _hison.utils.deepCopyArrOrObject(object[key], visited);
+                            copy[key] = hison.utils.deepCopyObject(object[key], visited);
                         }
                     }
                 }
@@ -1847,43 +2007,6 @@ function createHison(): Hison {
                 }
                 private _data: Record<string, DataModel | string | null>;
                 private _isDataWrapper = true;
-                private _deepCopy = (object: any, visited?: { source: any, copy: any }[]): any => {
-                    if (object === null || typeof object !== 'object') {
-                        return object;
-                    }
-                    if (object.constructor !== Object && object.constructor !== Array) {
-                        if (object && object.getIsDataModel && object.getIsDataModel()) {
-                            return object.clone();
-                        } else {
-                            return object;
-                        }
-                    }
-                    if (!visited) visited = [];
-                    for (let i = 0; i < visited.length; i++) {
-                        if (visited[i].source === object) {
-                            return visited[i].copy;
-                        }
-                    }
-                    let copy: any;
-                    if (Array.isArray(object)) {
-                        copy = [];
-                        visited.push({ source: object, copy: copy });
-                
-                        for (let j = 0; j < object.length; j++) {
-                            copy[j] = this._deepCopy(object[j], visited);
-                        }
-                    } else {
-                        copy = {};
-                        visited.push({ source: object, copy: copy });
-                
-                        for (let key in object) {
-                            if (object.hasOwnProperty(key)) {
-                                copy[key] = this._deepCopy(object[key], visited);
-                            }
-                        }
-                    }
-                    return copy;
-                };
                 private _put = (key: string, value: any) => {
                     if (typeof key !== 'string') {
                         throw new Error("Keys must always be strings.");
@@ -1912,9 +2035,9 @@ function createHison(): Hison {
                 clone = (): DataWrapper => {
                     const newData = {};
                     for (let key in this._data) {
-                        newData[key] = this._deepCopy(this._data[key]);
+                        newData[key] = hison.utils.deepCopyObject(this._data[key]);
                     }
-                    return new _hison.data.DataWrapper(newData);
+                    return new hison.data.DataWrapper(newData);
                 };
                 clear = (): DataWrapper => {
                     this._data = {};
@@ -1938,7 +2061,7 @@ function createHison(): Hison {
                 };
                 get = (key: string): DataModel | string | null => {
                     if (typeof key !== 'string') throw new Error("Keys must always be strings.");
-                    return this._data[key] ? this._deepCopy(this._data[key]) : null;
+                    return this._data[key] ? hison.utils.deepCopyObject(this._data[key]) : null;
                 };
                 getString = (key: string): string | null => {
                     if (typeof key !== 'string') throw new Error("Keys must always be strings.");
@@ -2012,7 +2135,7 @@ function createHison(): Hison {
                     const values = [];
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
-                            values.push(this._deepCopy(this._data[key]));
+                            values.push(hison.utils.deepCopyObject(this._data[key]));
                         }
                     }
                     return values;
@@ -2031,7 +2154,8 @@ function createHison(): Hison {
                         return object;
                     }
                     if (object.constructor !== Object && object.constructor !== Array) {
-                        return defaultOption.data.convertValue ? defaultOption.data.convertValue(object) : object;
+                        const convertValue = defaultOption.data.convertValue(object);
+                        return convertValue !== undefined ? convertValue : object;
                     }
                     if (!visited) visited = [];
                     for (let i = 0; i < visited.length; i++) {
@@ -2288,7 +2412,7 @@ function createHison(): Hison {
                     return this._isDataModel;
                 };
                 clone = (): DataModel => {
-                    return new _hison.data.DataModel(this._rows);
+                    return new hison.data.DataModel(this._rows);
                 };
                 clear = (): DataModel => {
                     this._cols = [];
@@ -2362,7 +2486,7 @@ function createHison(): Hison {
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
                 getRowAsDataModel = (rowIndex: number): DataModel => {
-                    return new _hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
+                    return new hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
                 addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel => {
                     if (rowIndexOrRow === undefined && row === undefined) {
@@ -2416,7 +2540,7 @@ function createHison(): Hison {
                         if(!this._rows[i]) break;
                         result.push(this._deepCopy(this._rows[i]));
                     }
-                    return new _hison.data.DataModel(result);
+                    return new hison.data.DataModel(result);
                 }
                 addRows = (rows: Record<string, any>[]): DataModel => {
                     this._put(rows);
@@ -2575,7 +2699,7 @@ function createHison(): Hison {
                             if (matchesCondition) matched.push(row);
                         }
                     });
-                    return new _hison.data.DataModel(matched);
+                    return new hison.data.DataModel(matched);
                 };
                 searchAndModify = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
                     const _this = this;
@@ -2635,7 +2759,7 @@ function createHison(): Hison {
                             matched.push(row);
                         }
                     });
-                    return new _hison.data.DataModel(matched);
+                    return new hison.data.DataModel(matched);
                 };
                 filterAndModify = (filter: DataModelFillter): DataModel => {
                     const _this = this;
@@ -2754,31 +2878,101 @@ function createHison(): Hison {
         };
         link = {
             CachingModule: class implements CachingModule {
-                constructor() {
+                constructor(cachingLimit: number = defaultOption.link.cachingLimit) {
+                    this._webSocket = new WebSocket(defaultOption.link.webSocketProtocol + defaultOption.link.domain + defaultOption.link.webSocketEndPoint);
+                    this._webSocket.onopen = function() {};
+                    this._webSocket.onmessage = function() {};
+                    this._webSocket.onclose = function() {};
+                    this._webSocket.onerror = function() {};
+                    this._LRUCache = new LRUCache(cachingLimit);
+                    this._isCachingModule = true;
                 };
-                isWebSocketConnection = () => {};
-                get = (str: any) => {};
-                put = (str: any, tt: any) => {};
+                private _webSocket: WebSocket;
+                private _LRUCache: LRUCache;
+                private _isCachingModule: boolean;
+                private _checkTypeString = (str: string) => {
+                    if(typeof str !== 'string') {
+                        throw new Error("key is only a string.");
+                    }
+                }
+                private _checkTypeFunction = (func: Function) => {
+                    if (func && typeof func !== 'function') {
+                        throw new Error("Please enter only the function.");
+                    }
+                }
+                private _checkWebSocketConnection = (): number => {
+                    if (this._webSocket.readyState === WebSocket.OPEN) {
+                        return 1;
+                    } else if (this._webSocket.readyState === WebSocket.CONNECTING) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                };
+                getIsCachingModule = (): boolean => {
+                    return this._isCachingModule;
+                };
+                get = (key: string): Promise<{ data: any; response: Response; }> => {
+                    this._checkTypeString(key);
+                    return this._LRUCache.get(key);
+                };
+                put = (key: string, value: Promise<{ data: any; response: Response; }>) => {
+                    this._checkTypeString(key);
+                    this._LRUCache.put(key, value);
+                };
+                remove = (key: string) => {
+                    this._checkTypeString(key);
+                    this._LRUCache.remove(key);
+                };
+                getAll = (): Record<string, Promise<{ data: any; response: Response; }>>  => {
+                    return this._LRUCache.getAll();
+                };
+                getKeys = (): string[] => {
+                    return this._LRUCache.getKeys();
+                }
+                clear = () => {
+                    this._LRUCache.clear();
+                };
+                onopen = (func: ((this: WebSocket, ev: Event) => any) | null) => {
+                    this._checkTypeFunction(func);
+                    this._webSocket.onopen = func;
+                };
+                onmessage = (func: ((this: WebSocket, ev: MessageEvent) => any) | null) => {
+                    this._checkTypeFunction(func);
+                    this._webSocket.onmessage = func;
+                };
+                onclose = (func: ((this: WebSocket, ev: CloseEvent) => any) | null) => {
+                    this._checkTypeFunction(func);
+                    this._webSocket.onclose = func;
+                };
+                onerror = (func: ((this: WebSocket, ev: Event) => any) | null) => {
+                    this._checkTypeFunction(func);
+                    this._webSocket.onclose = func;
+                };
+                isWebSocketConnection = (): number => {
+                    return this._checkWebSocketConnection();
+                }
             },
             ApiLink: class implements ApiLink {
-                constructor(cmd: string = '', options: Record<string, any> ={}) {
-                    if (typeof cmd !== 'string') {
+                constructor(cmdOrCachingModule?: string | CachingModule, cachingModule?: CachingModule) {
+                    if (cmdOrCachingModule === undefined) {
+                        this._cmd = '';
+                    } else if (typeof cmdOrCachingModule === 'string') {
+                        this._cmd = cmdOrCachingModule;
+                    } else if ((cmdOrCachingModule as CachingModule).getIsCachingModule && (cmdOrCachingModule as CachingModule).getIsCachingModule()) {
+                        this._cachingModule = cmdOrCachingModule;
+                    } else if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
+                        this._cachingModule = cachingModule;
+                    }else {
                         throw new Error('type of cmd is only string.');
                     }
-                    if (options !== Object) {
-                        throw new Error('Please insert options with their own key-value pairs.');
-                    }
-                    this._cmd = cmd;
-                    this._options = options;
-                    if (options.isCachingModule === true) this._cachingModule = new _hison.link.CachingModule();
+                    this._isApiLink = true;
                 };
                 private _eventEmitter = new EventEmitter();
                 private _cmd: string;
-                private _options: Record<string, any>;
                 private _cachingModule: CachingModule;
+                private _isApiLink: boolean;
                 private _validateParams = (resourcePath: string | DataWrapper
-                    , callbackWorkedFunc: CallbackWorked
-                    , callbackErrorFunc: CallbackError
                     , options: Record<string, any>
                     , isGet: boolean) => {
                     if (!isGet && !this._cmd) {
@@ -2786,12 +2980,6 @@ function createHison(): Hison {
                     }
                     if (isGet && typeof resourcePath !== 'string') {
                         throw new Error("Please insert a string as ResourcePath URL.");
-                    }
-                    if (callbackWorkedFunc && typeof callbackWorkedFunc !== 'function') {
-                        throw new Error("Callback Worked Function must be a function.");
-                    }
-                    if (callbackErrorFunc && typeof callbackErrorFunc !== 'function') {
-                        throw new Error("Callback Error Function must be a function.");
                     }
                     if (options && options.constructor !== Object) {
                         throw new Error("obtions must be an object which contains key and value.");
@@ -2821,17 +3009,17 @@ function createHison(): Hison {
                     if(dw) {
                         dw.putString('cmd', this._cmd);
                     } else {
-                        dw = new _hison.data.DataWrapper('cmd', this._cmd);
+                        dw = new hison.data.DataWrapper('cmd', this._cmd);
                     }
                     return dw;
                 };
                 private _getRsultDataWrapper = (resultData: any): any => {
                     let data = null;
                     if(resultData && resultData.constructor === Object) {
-                        data = new _hison.data.DataWrapper();
+                        data = new hison.data.DataWrapper();
                         for(const key of Object.keys(resultData)) {
                             if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
-                                data.putDataModel(key, new _hison.data.DataWrapper(resultData[key]));
+                                data.putDataModel(key, new hison.data.DataWrapper(resultData[key]));
                             } else {
                                 data.put(key, resultData[key]);
                             }
@@ -2841,12 +3029,7 @@ function createHison(): Hison {
                     }
                     return data;
                 };
-                private _request = async (
-                    methodName: string
-                    , requestDwOrResourcePath: string | DataWrapper
-                    , callbackWorkedFunc: CallbackWorked
-                    , callbackErrorFunc: CallbackError
-                    , options: Record<string, any>) => {
+                private _request = async (methodName: string, requestDwOrResourcePath: string | DataWrapper, options: Record<string, any>): Promise<{ data: any; response: Response; }> => {
                     switch (methodName.toUpperCase()) {
                         case 'GET':
                             this._eventEmitter.emit('requestStarted_GET', requestDwOrResourcePath, options);
@@ -2867,16 +3050,24 @@ function createHison(): Hison {
                             break;
                     }
                     const isGet = methodName.toUpperCase() === 'GET';
-                    this._validateParams(requestDwOrResourcePath, callbackWorkedFunc, callbackErrorFunc, options, isGet);
+                    this._validateParams(requestDwOrResourcePath, options, isGet);
         
                     const ROOTURL = defaultOption.link.protocol + defaultOption.link.domain;
                     const url = isGet ? ROOTURL + requestDwOrResourcePath : ROOTURL + defaultOption.link.controllerPath;
                     if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(isGet ? url : this._cmd)) {
-                        const result = this._cachingModule.get(isGet ? url : this._cmd);
-                        if(defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
-                            if(callbackWorkedFunc) callbackWorkedFunc(result.data, result.response);
-                        };
-                        return result;
+                        const resultPromise = this._cachingModule.get(isGet ? url : this._cmd); // Promise 반환
+                        if (resultPromise) {
+                            try {
+                                const result = await resultPromise;
+                                if (defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
+                                    return result;
+                                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! then체이닝에 어떻게 녹여낼지!!!!!!!!!!!!!!!!
+                                }
+                                return result;
+                            } catch (error) {
+                                return null;
+                            }
+                        }
                     }
         
                     let timeout = defaultOption.link.timeout;
@@ -2925,41 +3116,54 @@ function createHison(): Hison {
                         const resultData = rtn.data;
                         const data = this._getRsultDataWrapper(resultData);
                         this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
-                        if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(isGet ? url : this._cmd, { data: data, response: rtn.response });
+                        if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(isGet ? url : this._cmd, Promise.resolve({ data: data, response: rtn.response }));
                         if(defaultOption.link.beforeCallbackWorked(data, rtn.response) !== false) {
-                            if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
+                            // if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
                         }
                         return { data: data, response: rtn.response };
                     })
                     .catch(error => {
                         this._eventEmitter.emit('requestError', error);
                         if(defaultOption.link.beforeCallbackError(error) !== false) {
-                            if(callbackErrorFunc) callbackErrorFunc(error);
+                            // if(callbackErrorFunc) callbackErrorFunc(error);
                         }
                         throw error;
                     });
                 
                     return racePromise;
                 };
-                get = (resourcePath: string, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
-                    if(defaultOption.link.beforeGetRequst(resourcePath, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
-                    return this._request('GET', resourcePath, callbackWorkedFunc, callbackErrorFunc, options);
+                getIsApiLink = (): boolean => {
+                    return this._isApiLink;
                 };
-                post = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
-                    if(defaultOption.link.beforePostRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
-                    return this._request('POST', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                get = (resourcePath?: string
+                    , options?: Record<string, any>
+                ): null | Promise<{ data: any; response: Response; }> => {
+                    if(defaultOption.link.beforeGetRequst(resourcePath, options) === false) return null;
+                    return this._request('GET', resourcePath, options);
                 };
-                put = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
-                    if(defaultOption.link.beforePutRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
-                    return this._request('PUT', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                post = (requestDataWrapper?: DataWrapper
+                    , options?: Record<string, any>
+                ): null | Promise<{ data: any; response: Response; }> => {
+                    if(defaultOption.link.beforePostRequst(requestDataWrapper, options) === false) return null;
+                    return this._request('POST', requestDataWrapper, options);
                 };
-                patch = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
-                    if(defaultOption.link.beforePatchRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
-                    return this._request('PATCH', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                put = (requestDataWrapper?: DataWrapper
+                    , options?: Record<string, any>
+                ): null | Promise<{ data: any; response: Response; }> => {
+                    if(defaultOption.link.beforePutRequst(requestDataWrapper, options) === false) return null;
+                    return this._request('PUT', requestDataWrapper, options);
                 };
-                delete = (requestDataWrapper: DataWrapper, callbackWorkedFunc: CallbackWorked, callbackErrorFunc: CallbackError, options: Record<string, any>) => {
-                    if(defaultOption.link.beforeDeleteRequst(requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options) === false) return;
-                    return this._request('DELETE', requestDataWrapper, callbackWorkedFunc, callbackErrorFunc, options);
+                patch = (requestDataWrapper?: DataWrapper
+                    , options?: Record<string, any>
+                ): null | Promise<{ data: any; response: Response; }> => {
+                    if(defaultOption.link.beforePatchRequst(requestDataWrapper, options) === false) return null;
+                    return this._request('PATCH', requestDataWrapper, options);
+                };
+                delete = (requestDataWrapper?: DataWrapper
+                    , options?: Record<string, any>
+                ): null | Promise<{ data: any; response: Response; }> => {
+                    if(defaultOption.link.beforeDeleteRequst(requestDataWrapper, options) === false) return null;
+                    return this._request('DELETE', requestDataWrapper, options);
                 };
                 setCmd = (cmd: string) => {
                     if (!cmd) {
@@ -2989,7 +3193,7 @@ function createHison(): Hison {
                          'requestCompleted_Data',
                          'requestError'].indexOf(eventName) === -1) {
                         throw new Error("Invalid event name."
-                        + "\nCurrent event name: " + eventName
+                        + "\nInserted event name: " + eventName
                         + "\nValid event names are:"
                         + "\nrequestStarted_GET"
                         + "\nrequestStarted_POST"
@@ -3008,11 +3212,11 @@ function createHison(): Hison {
                 };
             },
         };
-    }
-    //내부에서 사용될 hison객체
-    _hison = new Hison();
-
+    };
+    
+    const defaultOption = new DefaultOption();
     const hison = new Hison();
+
     return {
         setDateFormat(str: string) {defaultOption.utils.dateFormat = str;},
         setTimeFormat(str: string) {defaultOption.utils.timeFormat = str;},
@@ -3065,14 +3269,14 @@ function createHison(): Hison {
         setTimeout(num: number) {defaultOption.link.timeout = num;},
         setWebSocketProtocol(str: string) {defaultOption.link.webSocketProtocol = str;},
         setWebSocketEndPoint(str: string) {defaultOption.link.webSocketEndPoint = str;},
-        setWebSocketlimit(num: number) {defaultOption.link.webSocketlimit = num;},
+        setCachingLimit(num: number) {defaultOption.link.cachingLimit = num;},
         getProtocol() {return defaultOption.link.protocol;},
         getDomain() {return defaultOption.link.domain;},
         getControllerPath() {return defaultOption.link.controllerPath;},
         getTimeout() {return defaultOption.link.timeout;},
         getWebSocketProtocol() {return defaultOption.link.webSocketProtocol;},
         getWebSocketEndPoint() {return defaultOption.link.webSocketEndPoint;},
-        getWebSocketlimit() {return defaultOption.link.webSocketlimit;},
+        getCachingLimit() {return defaultOption.link.cachingLimit;},
         setBeforeGetRequst(func: BeforeGetRequst) {defaultOption.link.beforeGetRequst = func;},
         setBeforePostRequst(func: BeforePostRequst) {defaultOption.link.beforePostRequst = func},
         setBeforePutRequst(func: BeforePutRequst) {defaultOption.link.beforePutRequst = func},
@@ -3148,7 +3352,7 @@ function createHison(): Hison {
             getFileName: hison.utils.getFileName,
             getDecodeBase64: hison.utils.getDecodeBase64,
             getEncodeBase64: hison.utils.getEncodeBase64,
-            deepCopyArrOrObject: hison.utils.deepCopyArrOrObject,
+            deepCopyObject: hison.utils.deepCopyObject,
         },
 
         shield : {
@@ -3171,7 +3375,7 @@ const $ = (...str: any[]) => {
 }
 
 
-const data1 = [
+const data = [
     {id: '1', seq: 3, regdate: new Date(2025, 0, 17), arr: [1,2,3]},
     {id: '2', seq: 2, regdate: new Date(2024, 6, 18), arr: null},
     {id: 'sdaf3', seq: 4, regdate: new Date(2023, 11, 12), arr: [3,4,5], check: false},
@@ -3186,15 +3390,47 @@ hison.setConvertValue((value) => {
     }
     return value;
 })
+/*
+protocol : 'http://',
+domain : 'localhost:8081',
+controllerPath : '/hison-api-link',
+timeout : 10000,
+webSocketProtocol : 'ws://',
+webSocketEndPoint : '/hison-caching-websocket-endpoint',
+cachingLimit : 10,
+beforeGetRequst(resourcePath: string, options: Record<string, any>): boolean | void {return true;},
+beforePostRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
+beforeCallbackError(error: any): boolean | void {return true;},
 
-const dm1 = new hison.data.DataModel(data1);
-const dm2 = dm1.clone();
-dm1.setColumnSameValue('check', true);
-dm1.addRow({id: '10', seq: 9, regdate: new Date(2025, 0, 1), arr: [], asd: false});
-dm1.addRows([{id: '11', seq: 10, regdate: new Date(2025, 0, 1), arr: [435], check: false}]);
+setProtocol(str: string): void;
+setDomain(str: string): void;
+setControllerPath(str: string): void;
+setTimeout(num: number): void;
+setWebSocketProtocol(str: string): void;
+setWebSocketEndPoint(str: string): void;
+setCachingLimit(num: number): void;
+setBeforeGetRequst(func: BeforeGetRequst): void;
+setBeforePostRequst(func: BeforePostRequst): void;
+setBeforePutRequst(func: BeforePutRequst): void;
+setBeforePatchRequst(func: BeforePatchRequst): void;
+setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
+setBeforeCallbackWorked(func: BeforeCallbackWorked): void;
+setBeforeCallbackError(func: BeforeCallbackError): void;
 
-$('### 1', dm1.sortRowAscending('arr').getRows());
-$('### 2', dm1.sortRowDescending('arr').getRows());
-$('### 3', dm1.sortRowReverse().getRows());
+https://jsonplaceholder.typicode.com/users
+*/
+hison.setProtocol('https://');
+hison.setDomain('jsonplaceholder.typicode.com/');
+hison.setControllerPath('');
+
+const dm = new hison.data.DataModel(data);
+const cm = new hison.link.CachingModule(5);
+const al = new hison.link.ApiLink('users', cm);
+
+const t = al.get('users').then((rtn) => console.log(rtn));
 
 export default createHison();
