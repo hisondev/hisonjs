@@ -3037,29 +3037,90 @@ function createHison(): Hison {
                 };
 
 
-                /** 
-                 * 1. apiCall과 handleResponse를 하나로 묶음 => Async, Sync 메소드 만듦
-                 * 2. 공용 Proxy를 생성 (then, catch, finally 호출 시 Promise 반환(Async), 나머지는 Response.data 반환(Sync))
-                 * 3. 반환 시 Proxy를 입혀서 반환
-                 * 
-                // Proxy로 동작을 분기하는 처리
-                 new Proxy(apiLink, {
-                    get: (target, prop) => {
-                    // `then`이나 `catch` 메서드가 호출되면 비동기 처리를 하도록 설정
-                    if (prop === 'then' || prop === 'catch') {
-                        return apiLink.Async(prop);
-                    }
-            
-                    // 그 외의 메서드나 속성은 원래 객체의 메서드로 처리
-                    if (typeof target[prop] === 'function') {
-                        return (...args: any[]) => apiLink.Sync(prop, args);
-                    }
-            
-                    // 속성 접근: 원래 객체에서 값 반환
-                    return target[prop];
+
+        var _requestGet = async function (resourcePath, option){
+            _eventEmitter.emit('requestStarted_GET', resourcePath, options);
+            var requestPath = _rootUrl + resourcePath;
+            if(_cachingModule && _cachingModule.isWebSocketConnection() === 1 && _cachingModule.get(resourcePath)) {
+                var result = _cachingModule.get(serviceCmd);
+                if(_beforeCallbackWorked(result.data, result.response) !== false) {
+                    return result;
+                };
+                return null;
+            }
+            var fetchOptions = {
+                method: 'get',
+                headers: {'Content-Type': 'application/json'},
+                body: null,
+            }
+            var timeoutPromise = null;
+            if(options) {
+                Object.keys(options).forEach(key => {
+                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
+                        fetchOptions[key] = options.fetchOptions[key];
                     }
                 });
-                */
+                if(options.timeout) timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
+            }
+        };
+        var _requestPost = async function (serviceCmd, requestData, option){
+            _eventEmitter.emit('requestStarted_POST', serviceCmd, requestData, options);
+            var requestPath = _rootUrl + _controllerPath + serviceCmd;
+            var isDataWrapper = (requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper());
+            if(_cachingModule && _cachingModule.isWebSocketConnection() === 1 && _cachingModule.get(serviceCmd)) {
+                var result = _cachingModule.get(serviceCmd);
+                if(_beforeCallbackWorked(result.data, result.response) !== false) {
+                    return result;
+                };
+                return null;
+            }
+            var fetchOptions = {
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: isDataWrapper ? requestData.getSerialized() : requestData,
+            }
+            var timeoutPromise = null;
+            if(options) {
+                Object.keys(options).forEach(key => {
+                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
+                        fetchOptions[key] = options.fetchOptions[key];
+                    }
+                });
+                if(options.timeout) timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
+            }
+            
+            var fecth = [fetch(requestPath, fetchOptions)];
+            if(timeoutPromise) fecth.push(timeoutPromise);
+            var result = await Promise.race(fecth)
+            .then(response => {
+                _eventEmitter.emit('requestCompleted_Response', response);
+                var contentType = response.headers.get('Content-Type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json().then(data => ({ data: data, response: response }));
+                } else if (contentType) {
+                    return response.text().then(text => ({ data: text ? text : null, response: response }));
+                } else {
+                    return { data: null, response: response };
+                }
+            })
+            .then(rtn => {
+                var resultData = rtn.data;
+                var data = _getRsultDataWrapper(resultData);
+                _eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
+                if(_cachingModule && _cachingModule.isWebSocketConnection() === 1) _cachingModule.put(isGet ? url : _cmd, { data: data, response: rtn.response });
+                if(_beforeCallbackWorked(data, rtn.response) !== false) {
+                    if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
+                }
+                return { data: data, response: rtn.response };
+            })
+            .catch(error => {
+                _eventEmitter.emit('requestError', error);
+                if(_callbackErrorFunc(error) !== false) {
+                    if(callbackErrorFunc) callbackErrorFunc(error);
+                }
+                throw error;
+            });
+        };
                
                 // 실제로 사용하는 API 호출을 처리하는 함수
                 private async apiCall(method: string, url: string, data?: any): Promise<{ data: any; response: Response }> {
