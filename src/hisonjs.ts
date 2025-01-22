@@ -314,7 +314,7 @@ interface Hison {
          * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
          * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
          */
-        DataWrapper: new (keyOrObject?: Record<string, any> | '', value?: any) => DataWrapper;
+        DataWrapper: new (keyOrObject?: Record<string, any> | string, value?: any) => DataWrapper;
         /**
          * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
          * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
@@ -529,11 +529,6 @@ interface ApiLink<T> {
     delete(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
     setCmd(cmd: string): void;
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-    _get(url: string): any | Promise<any>;
-    _post(url: string, data: any): any | Promise<any>;
-    _put(url: string, data: any): any | Promise<any>;
-    _patch(url: string, data: any): any | Promise<any>;
-    _delete(url: string): any | Promise<any>;
 }
 interface CachingModule {
     getIsCachingModule(): boolean;
@@ -664,6 +659,9 @@ function createHison(): Hison {
         private _limit: number;
         private _cache: Record<string, Promise<{ data: any; response: Response; }>>;
         private _keys: string[];
+        hasKey = (key: string) => {
+            return this._cache.hasOwnProperty(key);
+        }
         get = (key: string): Promise<{ data: any; response: Response; }> => {
             if (!this._cache.hasOwnProperty(key)) return null;
             const value = this._cache[key];
@@ -712,6 +710,142 @@ function createHison(): Hison {
             if (this.events[eventName]) {
                 this.events[eventName].forEach(listener => listener(...args));
             }
+        };
+    };
+    class Link {
+        constructor(eventEmitter: EventEmitter, cachingModule?: CachingModule) {
+            if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
+                this._cachingModule = cachingModule;
+            }
+            this._eventEmitter = eventEmitter;
+        };
+        private _eventEmitter: EventEmitter;
+        private _cachingModule: CachingModule;
+        private _validatePositiveInteger = (timeout: number) => {
+            if (typeof timeout !== 'number' || timeout <= 0 || !Number.isInteger(timeout)) {
+                throw new Error("Timeout must be a positive integer.");
+            }
+        };
+        private _validateFetchOptions = (options: Record<string, any>) => {
+            if (options.constructor !== Object) {
+                throw new Error("fetchOptions must be an object which contains key and value.");
+            }
+        };
+        private _getDataWrapper = (dw: DataWrapper, cmd: string): DataWrapper => {
+            if(dw) {
+                dw.putString('cmd', cmd);
+            } else {
+                dw = new hison.data.DataWrapper('cmd', cmd);
+            }
+            return dw;
+        };
+        private _getRsultDataWrapper = (resultData: any): any => {
+            let data = null;
+            if(resultData && resultData.constructor === Object) {
+                data = new hison.data.DataWrapper();
+                for(const key of Object.keys(resultData)) {
+                    if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
+                        data.putDataModel(key, new hison.data.DataWrapper(resultData[key]));
+                    } else {
+                        data.put(key, resultData[key]);
+                    }
+                }
+            } else if (resultData && resultData.constructor !== Object) {
+                data = resultData;
+            }
+            return data;
+        };
+        private _request = async (requestPath, fecth: []) => {
+            const racePromise = Promise.race(fecth)
+            .then((response: Response) => {
+                this._eventEmitter.emit('requestCompleted_Response', response);
+                const contentType = response.headers.get('Content-Type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json().then(data => ({ data: data, response: response }));
+                } else if (contentType) {
+                    return response.text().then(text => ({ data: text ? text : null, response: response }));
+                } else {
+                    return { data: null, response: response };
+                }
+            })
+            .then(rtn => {
+                const resultData = rtn.data;
+                const data = this._getRsultDataWrapper(resultData);
+                this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
+                if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(isGet ? url : this._cmd, Promise.resolve({ data: data, response: rtn.response }));
+                if(defaultOption.link.beforeCallbackWorked(data, rtn.response) !== false) {
+                    // if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
+                }
+                return { data: data, response: rtn.response };
+            })
+            .catch(error => {
+                this._eventEmitter.emit('requestError', error);
+                if(defaultOption.link.beforeCallbackError(error) !== false) {
+                    // if(callbackErrorFunc) callbackErrorFunc(error);
+                }
+                throw error;
+            });
+        
+            return racePromise;
+        };
+        private _getCachingResult = async (resourcePath) => {
+            if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(resourcePath)) {
+                var result = await this._cachingModule.get(resourcePath);
+                if(defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
+                    return result;
+                };
+                return null;
+            }
+        };
+
+        private _requestGet = (resourcePath, options) => {
+            this._eventEmitter.emit('requestStarted_GET', resourcePath, options);
+            var requestPath = defaultOption.link.protocol + defaultOption.link.domain + resourcePath;
+            _getCachingResult(resourcePath);
+            var fetchOptions = {
+                method: 'get',
+                headers: {'Content-Type': 'application/json'},
+                body: null,
+            }
+            var timeoutPromise = null;
+            if(options) {
+                Object.keys(options).forEach(key => {
+                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
+                        fetchOptions[key] = options.fetchOptions[key];
+                    }
+                });
+                if(options.timeout) timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
+            }
+            var fecth = [fetch(requestPath, fetchOptions)];
+            if(timeoutPromise) fecth.push(timeoutPromise);
+        };
+        private _requestPost = async function (serviceCmd, requestData, options){
+            this._eventEmitter.emit('requestStarted_POST', serviceCmd, requestData, options);
+            var requestPath = defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath + serviceCmd;
+            var isDataWrapper = (requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper());
+            if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(serviceCmd)) {
+                var result = this._cachingModule.get(serviceCmd);
+                if(defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
+                    return result;
+                };
+                return null;
+            }
+            var fetchOptions = {
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: isDataWrapper ? requestData.getSerialized() : requestData,
+            }
+            var timeoutPromise = null;
+            if(options) {
+                Object.keys(options).forEach(key => {
+                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
+                        fetchOptions[key] = options.fetchOptions[key];
+                    }
+                });
+                if(options.timeout) timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
+            }
+            var fecth = [fetch(requestPath, fetchOptions)];
+            if(timeoutPromise) fecth.push(timeoutPromise);
         };
     };
     class Hison implements Hison{
@@ -3035,155 +3169,6 @@ function createHison(): Hison {
                 
                     return racePromise;
                 };
-
-
-
-        var _requestGet = async function (resourcePath, option){
-            _eventEmitter.emit('requestStarted_GET', resourcePath, options);
-            var requestPath = _rootUrl + resourcePath;
-            if(_cachingModule && _cachingModule.isWebSocketConnection() === 1 && _cachingModule.get(resourcePath)) {
-                var result = _cachingModule.get(serviceCmd);
-                if(_beforeCallbackWorked(result.data, result.response) !== false) {
-                    return result;
-                };
-                return null;
-            }
-            var fetchOptions = {
-                method: 'get',
-                headers: {'Content-Type': 'application/json'},
-                body: null,
-            }
-            var timeoutPromise = null;
-            if(options) {
-                Object.keys(options).forEach(key => {
-                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
-                        fetchOptions[key] = options.fetchOptions[key];
-                    }
-                });
-                if(options.timeout) timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
-            }
-        };
-        var _requestPost = async function (serviceCmd, requestData, option){
-            _eventEmitter.emit('requestStarted_POST', serviceCmd, requestData, options);
-            var requestPath = _rootUrl + _controllerPath + serviceCmd;
-            var isDataWrapper = (requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper());
-            if(_cachingModule && _cachingModule.isWebSocketConnection() === 1 && _cachingModule.get(serviceCmd)) {
-                var result = _cachingModule.get(serviceCmd);
-                if(_beforeCallbackWorked(result.data, result.response) !== false) {
-                    return result;
-                };
-                return null;
-            }
-            var fetchOptions = {
-                method: 'post',
-                headers: {'Content-Type': 'application/json'},
-                body: isDataWrapper ? requestData.getSerialized() : requestData,
-            }
-            var timeoutPromise = null;
-            if(options) {
-                Object.keys(options).forEach(key => {
-                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
-                        fetchOptions[key] = options.fetchOptions[key];
-                    }
-                });
-                if(options.timeout) timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
-            }
-            
-            var fecth = [fetch(requestPath, fetchOptions)];
-            if(timeoutPromise) fecth.push(timeoutPromise);
-            var result = await Promise.race(fecth)
-            .then(response => {
-                _eventEmitter.emit('requestCompleted_Response', response);
-                var contentType = response.headers.get('Content-Type');
-                if (contentType && contentType.includes('application/json')) {
-                    return response.json().then(data => ({ data: data, response: response }));
-                } else if (contentType) {
-                    return response.text().then(text => ({ data: text ? text : null, response: response }));
-                } else {
-                    return { data: null, response: response };
-                }
-            })
-            .then(rtn => {
-                var resultData = rtn.data;
-                var data = _getRsultDataWrapper(resultData);
-                _eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
-                if(_cachingModule && _cachingModule.isWebSocketConnection() === 1) _cachingModule.put(isGet ? url : _cmd, { data: data, response: rtn.response });
-                if(_beforeCallbackWorked(data, rtn.response) !== false) {
-                    if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
-                }
-                return { data: data, response: rtn.response };
-            })
-            .catch(error => {
-                _eventEmitter.emit('requestError', error);
-                if(_callbackErrorFunc(error) !== false) {
-                    if(callbackErrorFunc) callbackErrorFunc(error);
-                }
-                throw error;
-            });
-        };
-               
-                // 실제로 사용하는 API 호출을 처리하는 함수
-                private async apiCall(method: string, url: string, data?: any): Promise<{ data: any; response: Response }> {
-                    const options: RequestInit = {
-                        method,
-                        headers: {
-                        'Content-Type': 'application/json',
-                        },
-                        body: data ? JSON.stringify(data) : undefined,
-                    };
-
-                    const response = await fetch(url, options);
-                    const result: any = await response.json();
-                    return { data: result, response }; // API 호출 결과와 응답 객체 반환
-                }
-                // 동기/비동기 처리를 분리하는 메서드
-                private handleResponse(result: Promise<{ data: any; response: Response }>): any | Promise<any> {
-                    console.log('handleResponse', result);
-                    // 비동기 처리: Promise를 반환
-                    if (result instanceof Promise) {
-                        return result.then((rtn) => {
-                        const resultData = rtn.data;
-                        const data = this._getRsultDataWrapper(resultData);
-                        this._eventEmitter.emit('requestCompleted_Data', { data, response: rtn.response });
-                
-                        if (this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
-                            //this._cachingModule.put(true, Promise.resolve({ data, response: rtn.response }));
-                        }
-                
-                        // 비동기적으로 처리된 결과를 반환
-                        return data as any;
-                        });
-                    }
-                
-                    // 동기 처리: 즉시 결과 반환
-                    return result as any;
-                }
-
-                // GET 요청: 동기/비동기 모두 처리
-                _get(url: string): any | Promise<any> {
-                    return this.handleResponse(this.apiCall('GET', url));
-                }
-
-                // POST 요청: 동기/비동기 모두 처리
-                _post(url: string, data: any): any | Promise<any> {
-                    return this.handleResponse(this.apiCall('POST', url, data));
-                }
-
-                // PUT 요청: 동기/비동기 모두 처리
-                _put(url: string, data: any): any | Promise<any> {
-                    return this.handleResponse(this.apiCall('PUT', url, data));
-                }
-
-                // PATCH 요청: 동기/비동기 모두 처리
-                _patch(url: string, data: any): any | Promise<any> {
-                    return this.handleResponse(this.apiCall('PATCH', url, data));
-                }
-
-                // DELETE 요청: 동기/비동기 모두 처리
-                _delete(url: string): any | Promise<any> {
-                    return this.handleResponse(this.apiCall('DELETE', url));
-                }
-
                 getIsApiLink = (): boolean => {
                     return this._isApiLink;
                 };
@@ -3483,12 +3468,6 @@ const dm = new hison.data.DataModel(data);
 const cm = new hison.link.CachingModule(5);
 const al = new hison.link.ApiLink('users', cm);
 const url = 'https://' + 'jsonplaceholder.typicode.com/' + 'users';
-
-const t1 = al._get(url);
-$('t1', t1);
-const t3 = al._get(url).then((rtn) => console.log('########'));
-$('t3', t3);
-al._get(url).then((rtn) => $('t2', rtn));
 
 
 export default createHison();
