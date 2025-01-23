@@ -724,16 +724,16 @@ function createHison(): Hison {
         private _cachingModule: CachingModule;
         private _getRsultDataWrapper = (resultData: any): any => {
             let data = null;
-            if(resultData && resultData.constructor === Object) {
+            if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'Y') {
                 data = new hison.data.DataWrapper();
                 for(const key of Object.keys(resultData)) {
                     if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
                         data.putDataModel(key, new hison.data.DataWrapper(resultData[key]));
                     } else {
-                        data.put(key, resultData[key]);
+                        if(key !== 'isDataWrapper') data.put(key, resultData[key]);
                     }
                 }
-            } else if (resultData && resultData.constructor !== Object) {
+            } else {
                 data = resultData;
             }
             return data;
@@ -747,26 +747,18 @@ function createHison(): Hison {
                 return null;
             }
         };
-        private _getFetch = (resourcePath, options, serviceCmd, requestData): any[] => {
-            let requestPath;
-            if (resourcePath) {
-                requestPath = defaultOption.link.protocol + defaultOption.link.domain + resourcePath;
-            } else {
-                requestPath = defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath + serviceCmd;
-            }
-            var isDataWrapper = (requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper());
-            //cmd가 있으면 api controller service 자동 호출 처리
-            if (serviceCmd) {
-                if(isDataWrapper) {
-                    requestData.putString('cmd', serviceCmd);
-                } else {
-                    requestData = new hison.data.DataWrapper('cmd', serviceCmd);
-                }
+        private _getFetch = (methodName, requestPath, options, serviceCmd, requestData): any[] => {
+            if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) {
+                if (serviceCmd) requestData.putString('cmd', serviceCmd);
+                requestData = requestData.getSerialized();
+            } else if (requestData && typeof requestData === 'object'){
+                if (serviceCmd && requestData.constructor === Object) requestData.cmd = serviceCmd;
+                requestData = JSON.parse(requestData);
             }
             var fetchOptions = {
-                method: 'post',
+                method: methodName,
                 headers: {'Content-Type': 'application/json'},
-                body: isDataWrapper ? requestData.getSerialized() : requestData,
+                body: requestData
             }
             if (options.constructor !== Object) {
                 throw new Error("fetchOptions must be an object which contains key and value.");
@@ -789,8 +781,8 @@ function createHison(): Hison {
             if(timeoutPromise) fecthArr.push(timeoutPromise);
             return fecthArr;
         };
-        private _request = async (fecth: any[], cachingKey: string) => {
-            const result = await Promise.race(fecth)
+        private _request = async (fecthInfo: any[], cachingKey: string) => {
+            const result = await Promise.race(fecthInfo)
             .then((response: Response) => {
                 this._eventEmitter.emit('requestCompleted_Response', response);
                 const contentType = response.headers.get('Content-Type');
@@ -822,15 +814,82 @@ function createHison(): Hison {
         
             return result;
         };
-        _requestGet = (resourcePath, options) => {
-            this._eventEmitter.emit('requestStarted_GET', resourcePath, options);
+        get = (resourcePath, options) => {
+            const METHOD_NAME = 'GET';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
             if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
-            return this._request(this._getFetch(resourcePath, options, null, null), resourcePath);
+            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + resourcePath, options, null, null), resourcePath);
         };
-        _requestPost = async (serviceCmd, options, requestData) => {
-            this._eventEmitter.emit('requestStarted_POST', serviceCmd, options, requestData);
+        post = async (requestData, serviceCmd, options) => {
+            const METHOD_NAME = 'POST';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(null, options, serviceCmd, requestData), serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+        };
+        put = async (requestData, serviceCmd, options) => {
+            const METHOD_NAME = 'PUT';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+        };
+        patch = async (requestData, serviceCmd, options) => {
+            const METHOD_NAME = 'PATCH';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+        };
+        delete = async (requestData, serviceCmd, options) => {
+            const METHOD_NAME = 'DELETE';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+        };
+        head = (url, options = {}) => {
+            return fetch(url, { method: 'HEAD', ...options })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HEAD request failed with status: ${response.status}`);
+                    }
+                    // 헤더를 객체 형태로 반환
+                    const headers = {};
+                    response.headers.forEach((value, key) => {
+                        headers[key] = value;
+                    });
+                    return headers;
+                })
+                .catch(error => {
+                    return Promise.reject(error); // 에러를 반환
+                });
+        };
+        options = (url, options = {}) => {
+            return fetch(url, { method: 'OPTIONS', ...options })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`OPTIONS request failed with status: ${response.status}`);
+                    }
+                    // Allow 헤더에서 지원 메서드 추출
+                    const allowHeader = response.headers.get('Allow');
+                    if (allowHeader) {
+                        return allowHeader.split(',').map(method => method.trim());
+                    }
+                    return []; // Allow 헤더가 없는 경우 빈 배열 반환
+                })
+                .catch(error => {
+                    return Promise.reject(error); // 에러를 반환
+                });
+        };
+
+        getURL = (resourcePath, options) => {
+            const METHOD_NAME = 'GET';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
+            if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
+            return this._request(this._getFetch(METHOD_NAME, resourcePath, options, null, null), resourcePath);
+        };
+        postURL = async (resourcePath, requestData, serviceCmd, options) => {
+            const METHOD_NAME = 'POST';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, resourcePath, options, serviceCmd, requestData), serviceCmd);
         };
         
     };
