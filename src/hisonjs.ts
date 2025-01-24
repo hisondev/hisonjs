@@ -58,7 +58,7 @@ interface Hison {
     //option shield set
     //====================================================================================
     setShieldURL(str: string): void;
-    setExposeIpList(arr: []): void;
+    setExposeIpList(arr: string[]): void;
     setIsFreeze(bool: boolean): void;
     setIsPossibleGoBack(bool: boolean): void;
     setIsPossibleOpenDevTool(bool: boolean): void;
@@ -123,8 +123,8 @@ interface Hison {
     setBeforePutRequst(func: BeforePutRequst): void;
     setBeforePatchRequst(func: BeforePatchRequst): void;
     setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
-    setBeforeCallbackWorked(func: BeforeCallbackWorked): void;
-    setBeforeCallbackError(func: BeforeCallbackError): void;
+    setInterceptApiResult(func: InterceptApiResult): void;
+    setInterceptApiError(func: InterceptApiError): void;
     
     /**
      * Javascript의 다양한 기능을 가지고있는 object를 반환합니다.
@@ -346,7 +346,10 @@ interface Hison {
      */
     link: {
         CachingModule: new (cachingLimit?: number) => CachingModule;
-        ApiLink: new (cmdOrCachingModule?: string | CachingModule, CachingModule?: CachingModule) => ApiLink<any>;
+        ApiGet: new (cachingModule: CachingModule) => ApiGet;
+        ApiPost: new (cachingModule: CachingModule) => ApiPost;
+        ApiGetUrl: new (cachingModule: CachingModule) => ApiGetUrl;
+        ApiPostUrl: new (cachingModule: CachingModule) => ApiPostUrl;
     }
 }
 //====================================================================================
@@ -445,7 +448,7 @@ interface DataWrapper {
     put(key: string, value: any): DataWrapper;
     putString(key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper;
     putDataModel(key: string, value: DataModel): DataWrapper;
-    getObject(): {};
+    getObject(): Record<string, any>;
     containsKey(key: string): boolean;
     isEmpty(): boolean;
     remove(key: string): { data: DataWrapper, result: boolean };
@@ -470,7 +473,7 @@ interface DataModel {
     clear(): DataModel;
     getSerialized(): string;
     isDeclare(): boolean;
-    getColumns(): [];
+    getColumns(): string[];
     getColumnValues(column: string): any[];
     addColumn(column: string): DataModel;
     addColumns(columns: string[]): DataModel;
@@ -482,7 +485,7 @@ interface DataModel {
     getRows(startRow?: number, endRow?: number): Record<string, any>[];
     getRowsAsDataModel(startRow?: number, endRow?: number): DataModel;
     addRows(rows: Record<string, any>[]): DataModel;
-    getObject(): {};
+    getObject(): Record<string, any>;
     getValue(rowIndex: number, column: string): any;
     setValue(rowIndex: number, column: string, value: any): DataModel;
     removeColumn(column: string): DataModel;
@@ -520,16 +523,6 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
 //====================================================================================
 //link interface, type
 //====================================================================================
-interface ApiLink<T> {
-    getIsApiLink(): boolean;
-    get(resourcePath?: string, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
-    post(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
-    put(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
-    patch(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
-    delete(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{ data: any; response: Response; }>;
-    setCmd(cmd: string): void;
-    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-}
 interface CachingModule {
     getIsCachingModule(): boolean;
     hasKey(key: string): boolean;
@@ -544,7 +537,19 @@ interface CachingModule {
     onclose(func: ((this: WebSocket, ev: CloseEvent) => any) | null): void;
     onerror(func: ((this: WebSocket, ev: Event) => any) | null): void;
     isWebSocketConnection(): number;
-}
+};
+interface ApiGet {
+
+};
+interface ApiPost {
+
+};
+interface ApiGetUrl {
+
+};
+interface ApiPostUrl {
+
+};
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
  * This function can be customized to perform actions or checks before the actual GET request is sent.
@@ -578,8 +583,8 @@ interface BeforePostRequst {(requestDw?: DataWrapper, options?: Record<string, a
 interface BeforePutRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
 interface BeforePatchRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
 interface BeforeDeleteRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
-interface BeforeCallbackWorked extends CallbackWorked {};
-interface BeforeCallbackError extends CallbackError {};
+interface InterceptApiResult extends CallbackWorked {};
+interface InterceptApiError extends CallbackError {};
 
 //====================================================================================
 //createHison
@@ -647,8 +652,8 @@ function createHison(): Hison {
             beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
             beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
             beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
-            beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
-            beforeCallbackError(error: any): boolean | void {return true;},
+            interceptApiResult(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
+            interceptApiError(error: any): boolean | void {return true;},
         };
     }
     class LRUCache {
@@ -713,12 +718,12 @@ function createHison(): Hison {
             }
         };
     };
-    class Link {
+    class ApiLink {
         constructor(eventEmitter: EventEmitter, cachingModule?: CachingModule) {
+            this._eventEmitter = eventEmitter;
             if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
                 this._cachingModule = cachingModule;
             }
-            this._eventEmitter = eventEmitter;
         };
         private _eventEmitter: EventEmitter;
         private _cachingModule: CachingModule;
@@ -738,16 +743,16 @@ function createHison(): Hison {
             }
             return data;
         };
-        private _getCachingResult = async (resourcePath) => {
+        private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; }> => {
             if(this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(resourcePath)) {
-                var result = await this._cachingModule.get(resourcePath);
-                if(defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
+                const result = await this._cachingModule.get(resourcePath);
+                if(defaultOption.link.interceptApiResult(result.data, result.response) !== false) {
                     return result;
                 };
                 return null;
             }
         };
-        private _getFetch = (methodName, requestPath, options, serviceCmd, requestData): any[] => {
+        private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string, requestData: any): Promise<any>[] => {
             if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) {
                 if (serviceCmd) requestData.putString('cmd', serviceCmd);
                 requestData = requestData.getSerialized();
@@ -755,7 +760,7 @@ function createHison(): Hison {
                 if (serviceCmd && requestData.constructor === Object) requestData.cmd = serviceCmd;
                 requestData = JSON.parse(requestData);
             }
-            var fetchOptions = {
+            const fetchOptions = {
                 method: methodName,
                 headers: {'Content-Type': 'application/json'},
                 body: requestData
@@ -763,21 +768,17 @@ function createHison(): Hison {
             if (options.constructor !== Object) {
                 throw new Error("fetchOptions must be an object which contains key and value.");
             }
-            var timeoutPromise = null;
-            if(options) {
-                Object.keys(options).forEach(key => {
-                    if(['timeout'].indexOf(key.toLowerCase()) === -1) {
-                        fetchOptions[key] = options.fetchOptions[key];
-                    }
-                });
-                if(options.timeout) {
-                    if (typeof options.timeout !== 'number' || options.timeout <= 0 || !Number.isInteger(options.timeout)) {
-                        throw new Error("Timeout must be a positive integer.");
-                    }
-                    timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
+            let timeoutPromise = null;
+            Object.keys(options).forEach(key => {
+                if(key !== 'timeout') fetchOptions[key] = options[key];
+            });
+            if(options.timeout) {
+                if (typeof options.timeout !== 'number' || options.timeout <= 0 || !Number.isInteger(options.timeout)) {
+                    throw new Error("Timeout must be a positive integer.");
                 }
+                timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
             }
-            var fecthArr = [fetch(requestPath, fetchOptions)];
+            const fecthArr = [fetch(requestPath, fetchOptions)];
             if(timeoutPromise) fecthArr.push(timeoutPromise);
             return fecthArr;
         };
@@ -799,58 +800,54 @@ function createHison(): Hison {
                 const data = this._getRsultDataWrapper(resultData);
                 this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
                 if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(cachingKey, Promise.resolve({ data: data, response: rtn.response }));
-                if(defaultOption.link.beforeCallbackWorked(data, rtn.response) !== false) {
-                    // if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
-                }
+                if(defaultOption.link.interceptApiResult(data, rtn.response) === false) return null;
                 return { data: data, response: rtn.response };
             })
             .catch(error => {
                 this._eventEmitter.emit('requestError', error);
-                if(defaultOption.link.beforeCallbackError(error) !== false) {
-                    // if(callbackErrorFunc) callbackErrorFunc(error);
-                }
-                throw error;
+                if(defaultOption.link.interceptApiError(error) === false) return null;
+                return error;
             });
         
             return result;
         };
-        get = (resourcePath, options) => {
+        get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
             if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + resourcePath, options, null, null), resourcePath);
         };
-        post = async (requestData, serviceCmd, options) => {
+        post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        put = async (requestData, serviceCmd, options) => {
+        put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        patch = async (requestData, serviceCmd, options) => {
+        patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        delete = async (requestData, serviceCmd, options) => {
+        delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        head = (url, options = {}) => {
+        head = async (resourcePath: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
+            const url = defaultOption.link.protocol + defaultOption.link.domain + resourcePath;
             return fetch(url, { method: 'HEAD', ...options })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HEAD request failed with status: ${response.status}`);
                     }
-                    // 헤더를 객체 형태로 반환
                     const headers = {};
                     response.headers.forEach((value, key) => {
                         headers[key] = value;
@@ -858,40 +855,125 @@ function createHison(): Hison {
                     return headers;
                 })
                 .catch(error => {
-                    return Promise.reject(error); // 에러를 반환
+                    return Promise.reject(error);
                 });
         };
-        options = (url, options = {}) => {
+        options = async (resourcePath: string, options: Record<string, any> = {}): Promise<string[]> => {
+            const url = defaultOption.link.protocol + defaultOption.link.domain + resourcePath;
             return fetch(url, { method: 'OPTIONS', ...options })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`OPTIONS request failed with status: ${response.status}`);
                     }
-                    // Allow 헤더에서 지원 메서드 추출
                     const allowHeader = response.headers.get('Allow');
                     if (allowHeader) {
                         return allowHeader.split(',').map(method => method.trim());
                     }
-                    return []; // Allow 헤더가 없는 경우 빈 배열 반환
+                    return []
                 })
                 .catch(error => {
-                    return Promise.reject(error); // 에러를 반환
+                    return Promise.reject(error);
                 });
         };
 
-        getURL = (resourcePath, options) => {
+        getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'GET';
-            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
-            if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
-            return this._request(this._getFetch(METHOD_NAME, resourcePath, options, null, null), resourcePath);
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, url, options);
+            if(this._cachingModule && this._cachingModule.hasKey(url)) return this._getCachingResult(url);
+            return this._request(this._getFetch(METHOD_NAME, url, options, null, null), url);
         };
-        postURL = async (resourcePath, requestData, serviceCmd, options) => {
+        postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, resourcePath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
         };
-        
+        putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+            const METHOD_NAME = 'PUT';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+        };
+        patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+            const METHOD_NAME = 'PATCH';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+        };
+        deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+            const METHOD_NAME = 'DELETE';
+            this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+        };
+        headURL = async (url: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
+            return fetch(url, { method: 'HEAD', ...options })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HEAD request failed with status: ${response.status}`);
+                    }
+                    const headers = {};
+                    response.headers.forEach((value, key) => {
+                        headers[key] = value;
+                    });
+                    return headers;
+                })
+                .catch(error => {
+                    return Promise.reject(error);
+                });
+        };
+        optionsURL = async (url: string, options: Record<string, any> = {}): Promise<string[]> => {
+            return fetch(url, { method: 'OPTIONS', ...options })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`OPTIONS request failed with status: ${response.status}`);
+                    }
+                    const allowHeader = response.headers.get('Allow');
+                    if (allowHeader) {
+                        return allowHeader.split(',').map(method => method.trim());
+                    }
+                    return []
+                })
+                .catch(error => {
+                    return Promise.reject(error);
+                });
+        };
+        onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+            if (!eventName) {
+                throw new Error("Event name is required.");
+            }
+            if (!eventFunc) {
+                throw new Error("Event function is required.");
+            }
+            if (typeof eventName !== 'string') {
+                throw new Error("Event name must be a string.");
+            }
+            if (['requestStarted_GET',
+                 'requestStarted_POST',
+                 'requestStarted_PUT',
+                 'requestStarted_PATCH',
+                 'requestStarted_DELETE',
+                 'requestCompleted_Response',
+                 'requestCompleted_Data',
+                 'requestError'].indexOf(eventName) === -1) {
+                throw new Error("Invalid event name."
+                + "\nInserted event name: " + eventName
+                + "\nValid event names are:"
+                + "\nrequestStarted_GET"
+                + "\nrequestStarted_POST"
+                + "\nrequestStarted_PUT"
+                + "\nrequestStarted_PATCH"
+                + "\nrequestStarted_DELETE"
+                + "\nrequestCompleted_Response"
+                + "\nrequestCompleted_Data"
+                + "\nrequestError"
+                );
+            }
+            if (typeof eventFunc !== 'function') {
+                throw new Error("Event function must be a function.");
+            }
+            this._eventEmitter.on(eventName, eventFunc);
+        };
     };
     class Hison implements Hison{
         utils = {
@@ -2180,7 +2262,7 @@ function createHison(): Hison {
                     this._put(key, value);
                     return this;
                 };
-                getObject = (): {} => {
+                getObject = (): Record<string, any> => {
                     const result = {};
                     for(let key in this._data) {
                         if (this._data[key] && (this._data[key] as DataModel).getIsDataModel && (this._data[key] as DataModel).getIsDataModel()) {
@@ -2314,7 +2396,7 @@ function createHison(): Hison {
                         throw new Error("Please pass an boolean as a parameter.");
                     }
                 };
-                private _checkOriginObject = (value: {}) => {
+                private _checkOriginObject = (value: Object) => {
                     if (value.constructor !== Object) {
                         throw new Error("Please pass an object with its own key-value pairs as a parameter.");
                     }
@@ -2507,7 +2589,7 @@ function createHison(): Hison {
                 isDeclare = (): boolean => {
                     return this._cols.length > 0;
                 };
-                getColumns = (): [] => {
+                getColumns = (): string[] => {
                     return this._deepCopy(this._cols);
                 };
                 getColumnValues = (column: string): any[] => {
@@ -2628,7 +2710,7 @@ function createHison(): Hison {
                     this._put(rows);
                     return this;
                 }
-                getObject = (): {} => {
+                getObject = (): Record<string, any> => {
                     const result = {};
                     const copyCol = this._deepCopy(this._cols);
                     const copyRow = this._deepCopy(this._rows);
@@ -3039,263 +3121,56 @@ function createHison(): Hison {
                     return this._checkWebSocketConnection();
                 }
             },
-            ApiLink: class implements ApiLink<any> {
-                constructor(cmdOrCachingModule?: string | CachingModule, cachingModule?: CachingModule) {
-                    if (cmdOrCachingModule === undefined) {
-                        this._cmd = '';
-                    } else if (typeof cmdOrCachingModule === 'string') {
-                        this._cmd = cmdOrCachingModule;
-                    } else if ((cmdOrCachingModule as CachingModule).getIsCachingModule && (cmdOrCachingModule as CachingModule).getIsCachingModule()) {
-                        this._cachingModule = cmdOrCachingModule;
-                    } else if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
-                        this._cachingModule = cachingModule;
-                    }else {
-                        throw new Error('type of cmd is only string.');
-                    }
-                    this._isApiLink = true;
+            ApiGet: class implements ApiGet {
+                constructor(resourcePath: string = '', cachingModule: CachingModule = null) {
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._resourcePath = resourcePath;
                 };
-                private _eventEmitter = new EventEmitter();
-                private _cmd: string;
-                private _cachingModule: CachingModule;
-                private _isApiLink: boolean;
-                private _validateParams = (resourcePath: string | DataWrapper
-                    , options: Record<string, any>
-                    , isGet: boolean) => {
-                    if (!isGet && !this._cmd) {
-                        throw new Error("Command not specified");
-                    }
-                    if (isGet && typeof resourcePath !== 'string') {
-                        throw new Error("Please insert a string as ResourcePath URL.");
-                    }
-                    if (options && options.constructor !== Object) {
-                        throw new Error("obtions must be an object which contains key and value.");
-                    }
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _resourcePath: string;
+                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.get(this._resourcePath, options);
+                }
+                head = (options: Record<string, any> = {}) => {
+                    return this._apiLink.head(this._resourcePath, options);
                 };
-                private _validateHeaders = (headers: Record<string, any>) => {
-                    if (headers.constructor !== Object) {
-                        throw new Error("Headers must be an object which contains key and value.");
-                    }
-                    Object.keys(headers).forEach(key => {
-                        if (typeof headers[key] !== 'string') {
-                            throw new Error("All header values must be strings.");
-                        }
-                    });
-                };
-                private _validatePositiveInteger = (timeout: number) => {
-                    if (typeof timeout !== 'number' || timeout <= 0 || !Number.isInteger(timeout)) {
-                        throw new Error("Timeout must be a positive integer.");
-                    }
-                };
-                private _validateFetchOptions = (fetchOptions: Record<string, any>) => {
-                    if (fetchOptions.constructor !== Object) {
-                        throw new Error("fetchOptions must be an object which contains key and value.");
-                    }
-                };
-                private _getDataWrapper = (dw: DataWrapper): DataWrapper => {
-                    if(dw) {
-                        dw.putString('cmd', this._cmd);
-                    } else {
-                        dw = new hison.data.DataWrapper('cmd', this._cmd);
-                    }
-                    return dw;
-                };
-                private _getRsultDataWrapper = (resultData: any): any => {
-                    let data = null;
-                    if(resultData && resultData.constructor === Object) {
-                        data = new hison.data.DataWrapper();
-                        for(const key of Object.keys(resultData)) {
-                            if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
-                                data.putDataModel(key, new hison.data.DataWrapper(resultData[key]));
-                            } else {
-                                data.put(key, resultData[key]);
-                            }
-                        }
-                    } else if (resultData && resultData.constructor !== Object) {
-                        data = resultData;
-                    }
-                    return data;
-                };
-                private _request = async (methodName: string, requestDwOrResourcePath: string | DataWrapper, options: Record<string, any>): Promise<{ data: any; response: Response; }> => {
-                    switch (methodName.toUpperCase()) {
-                        case 'GET':
-                            this._eventEmitter.emit('requestStarted_GET', requestDwOrResourcePath, options);
-                            break;
-                        case 'POST':
-                            this._eventEmitter.emit('requestStarted_POST', requestDwOrResourcePath, options);
-                            break;
-                        case 'PUT':
-                            this._eventEmitter.emit('requestStarted_PUT', requestDwOrResourcePath, options);
-                            break;
-                        case 'PATCH':
-                            this._eventEmitter.emit('requestStarted_PATCH', requestDwOrResourcePath, options);
-                            break;
-                        case 'DELETE':
-                            this._eventEmitter.emit('requestStarted_DELETE', requestDwOrResourcePath, options);
-                            break;
-                        default:
-                            break;
-                    }
-                    const isGet = methodName.toUpperCase() === 'GET';
-                    this._validateParams(requestDwOrResourcePath, options, isGet);
-        
-                    const ROOTURL = defaultOption.link.protocol + defaultOption.link.domain;
-                    const url = isGet ? ROOTURL + requestDwOrResourcePath : ROOTURL + defaultOption.link.controllerPath;
-                    if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(isGet ? url : this._cmd)) {
-                        const resultPromise = this._cachingModule.get(isGet ? url : this._cmd); // Promise 반환
-                        if (resultPromise) {
-                            try {
-                                const result = await resultPromise;
-                                if (defaultOption.link.beforeCallbackWorked(result.data, result.response) !== false) {
-                                    return result;
-                                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! then체이닝에 어떻게 녹여낼지!!!!!!!!!!!!!!!!
-                                }
-                                return result;
-                            } catch (error) {
-                                return null;
-                            }
-                        }
-                    }
-        
-                    let timeout = defaultOption.link.timeout;
-                    const requestDw = isGet ? null : this._getDataWrapper(requestDwOrResourcePath as DataWrapper);
-                    const fetchOptions = {
-                        method: methodName,
-                        headers: {'Content-Type': 'application/json'},
-                        body: isGet ? null : requestDw.getSerialized(),
-                    }
-                    if(options) {
-                        if(options.headers) {
-                            this._validateHeaders(options.headers);
-                            fetchOptions.headers =  Object.assign({'Content-Type': 'application/json'}, options.headers);
-                        }
-                        if(options.timeout) {
-                            this._validatePositiveInteger(options.timeout);
-                            timeout = options.timeout
-                        }
-                        if(options.fetchOptions) {
-                            this._validateFetchOptions(options.fetchOptions);
-                            Object.keys(options.fetchOptions).forEach(key => {
-                                if(['method','headers','body'].indexOf(key.toLowerCase()) === -1) {
-                                    fetchOptions[key] = options.fetchOptions[key];
-                                }
-                            });
-                        }
-                    }
-        
-                    const timeoutPromise = new Promise((_, reject) =>
-                        setTimeout(() => reject(new Error("Request timed out")), timeout)
-                    );
-                    const fetchPromise = fetch(url, fetchOptions);
-                    const racePromise = Promise.race([fetchPromise, timeoutPromise])
-                    .then((response: Response) => {
-                        this._eventEmitter.emit('requestCompleted_Response', response);
-                        const contentType = response.headers.get('Content-Type');
-                        if (contentType && contentType.includes('application/json')) {
-                            return response.json().then(data => ({ data: data, response: response }));
-                        } else if (contentType) {
-                            return response.text().then(text => ({ data: text ? text : null, response: response }));
-                        } else {
-                            return { data: null, response: response };
-                        }
-                    })
-                    .then(rtn => {
-                        const resultData = rtn.data;
-                        const data = this._getRsultDataWrapper(resultData);
-                        this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
-                        if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(isGet ? url : this._cmd, Promise.resolve({ data: data, response: rtn.response }));
-                        if(defaultOption.link.beforeCallbackWorked(data, rtn.response) !== false) {
-                            // if(callbackWorkedFunc) callbackWorkedFunc(data, rtn.response);
-                        }
-                        return { data: data, response: rtn.response };
-                    })
-                    .catch(error => {
-                        this._eventEmitter.emit('requestError', error);
-                        if(defaultOption.link.beforeCallbackError(error) !== false) {
-                            // if(callbackErrorFunc) callbackErrorFunc(error);
-                        }
-                        throw error;
-                    });
-                
-                    return racePromise;
-                };
-                getIsApiLink = (): boolean => {
-                    return this._isApiLink;
-                };
-                get = (resourcePath?: string
-                    , options?: Record<string, any>
-                ): null | Promise<{ data: any; response: Response; }> => {
-                    if(defaultOption.link.beforeGetRequst(resourcePath, options) === false) return null;
-                    return this._request('GET', resourcePath, options);
-                };
-                post = (requestDataWrapper?: DataWrapper
-                    , options?: Record<string, any>
-                ): null | Promise<{ data: any; response: Response; }> => {
-                    if(defaultOption.link.beforePostRequst(requestDataWrapper, options) === false) return null;
-                    return this._request('POST', requestDataWrapper, options);
-                };
-                put = (requestDataWrapper?: DataWrapper
-                    , options?: Record<string, any>
-                ): null | Promise<{ data: any; response: Response; }> => {
-                    if(defaultOption.link.beforePutRequst(requestDataWrapper, options) === false) return null;
-                    return this._request('PUT', requestDataWrapper, options);
-                };
-                patch = (requestDataWrapper?: DataWrapper
-                    , options?: Record<string, any>
-                ): null | Promise<{ data: any; response: Response; }> => {
-                    if(defaultOption.link.beforePatchRequst(requestDataWrapper, options) === false) return null;
-                    return this._request('PATCH', requestDataWrapper, options);
-                };
-                delete = (requestDataWrapper?: DataWrapper
-                    , options?: Record<string, any>
-                ): null | Promise<{ data: any; response: Response; }> => {
-                    if(defaultOption.link.beforeDeleteRequst(requestDataWrapper, options) === false) return null;
-                    return this._request('DELETE', requestDataWrapper, options);
-                };
-                setCmd = (cmd: string) => {
-                    if (!cmd) {
-                        throw new Error("cmd is required.");
-                    }
-                    if (typeof cmd !== 'string') {
-                        throw new Error("cmd must be a string.");
-                    }
-                    this._cmd = cmd;
+                options = (options: Record<string, any> = {}) => {
+                    return this._apiLink.head(this._resourcePath, options);
                 };
                 onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
-                    if (!eventName) {
-                        throw new Error("Event name is required.");
-                    }
-                    if (!eventFunc) {
-                        throw new Error("Event function is required.");
-                    }
-                    if (typeof eventName !== 'string') {
-                        throw new Error("Event name must be a string.");
-                    }
-                    if (['requestStarted_GET',
-                         'requestStarted_POST',
-                         'requestStarted_PUT',
-                         'requestStarted_PATCH',
-                         'requestStarted_DELETE',
-                         'requestCompleted_Response',
-                         'requestCompleted_Data',
-                         'requestError'].indexOf(eventName) === -1) {
-                        throw new Error("Invalid event name."
-                        + "\nInserted event name: " + eventName
-                        + "\nValid event names are:"
-                        + "\nrequestStarted_GET"
-                        + "\nrequestStarted_POST"
-                        + "\nrequestStarted_PUT"
-                        + "\nrequestStarted_PATCH"
-                        + "\nrequestStarted_DELETE"
-                        + "\nrequestCompleted_Response"
-                        + "\nrequestCompleted_Data"
-                        + "\nrequestError"
-                        );
-                    }
-                    if (typeof eventFunc !== 'function') {
-                        throw new Error("Event function must be a function.");
-                    }
-                    this._eventEmitter.on(eventName, eventFunc);
+                    this._apiLink.onEventEmit(eventName, eventFunc);
                 };
+            },
+            ApiPost: class implements ApiPost {
+                constructor(cachingModule?: CachingModule) {
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
+                        this._cachingModule = cachingModule;
+                    }
+                };
+                private _cachingModule: CachingModule;
+
+            },
+            ApiGetUrl: class implements ApiGetUrl {
+                constructor(cachingModule?: CachingModule) {
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
+                        this._cachingModule = cachingModule;
+                    }
+                };
+                private _cachingModule: CachingModule;
+
+            },
+            ApiPostUrl: class implements ApiPostUrl {
+                constructor(cachingModule?: CachingModule) {
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
+                        this._cachingModule = cachingModule;
+                    }
+                };
+                private _cachingModule: CachingModule;
+
             },
         };
     };
@@ -3339,7 +3214,7 @@ function createHison(): Hison {
         getLESSOREQ_0XFFFF_BYTE() {return defaultOption.utils.LESSOREQ_0XFFFF_BYTE;},
         getGREATER_0XFFFF_BYTE() {return defaultOption.utils.GREATER_0XFFFF_BYTE;},
         setShieldURL(str: string) {defaultOption.shield.shieldURL = str;},
-        setExposeIpList(arr: []) {defaultOption.shield.exposeIpList = arr;},
+        setExposeIpList(arr: string[]) {defaultOption.shield.exposeIpList = arr;},
         setIsFreeze(bool: boolean) {defaultOption.shield.isFreeze = bool;},
         setIsPossibleGoBack(bool: boolean) {defaultOption.shield.isPossibleGoBack = bool;},
         setIsPossibleOpenDevTool(bool: boolean) {defaultOption.shield.isPossibleOpenDevTool = bool;},
@@ -3368,8 +3243,8 @@ function createHison(): Hison {
         setBeforePutRequst(func: BeforePutRequst) {defaultOption.link.beforePutRequst = func},
         setBeforePatchRequst(func: BeforePatchRequst) {defaultOption.link.beforePatchRequst = func},
         setBeforeDeleteRequst(func: BeforeDeleteRequst) {defaultOption.link.beforeDeleteRequst = func},
-        setBeforeCallbackWorked(func: BeforeCallbackWorked) {defaultOption.link.beforeCallbackWorked = func},
-        setBeforeCallbackError(func: BeforeCallbackError) {defaultOption.link.beforeCallbackError = func},
+        setInterceptApiResult(func: InterceptApiResult) {defaultOption.link.interceptApiResult = func},
+        setInterceptApiError(func: InterceptApiError) {defaultOption.link.interceptApiError = func},
 
         utils : {
             isAlpha: hison.utils.isAlpha,
@@ -3489,8 +3364,8 @@ beforePostRequst(requestDw: DataWrapper, options: Record<string, any>): boolean 
 beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
 beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
 beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
-beforeCallbackWorked(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
-beforeCallbackError(error: any): boolean | void {return true;},
+interceptApiResult(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
+interceptApiError(error: any): boolean | void {return true;},
 
 setProtocol(str: string): void;
 setDomain(str: string): void;
@@ -3504,8 +3379,8 @@ setBeforePostRequst(func: BeforePostRequst): void;
 setBeforePutRequst(func: BeforePutRequst): void;
 setBeforePatchRequst(func: BeforePatchRequst): void;
 setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
-setBeforeCallbackWorked(func: BeforeCallbackWorked): void;
-setBeforeCallbackError(func: BeforeCallbackError): void;
+setInterceptApiResult(func: InterceptApiResult): void;
+setInterceptApiError(func: InterceptApiError): void;
 
 https://jsonplaceholder.typicode.com/users
 */
@@ -3515,7 +3390,7 @@ hison.setControllerPath('');
 
 const dm = new hison.data.DataModel(data);
 const cm = new hison.link.CachingModule(5);
-const al = new hison.link.ApiLink('users', cm);
+//const al = new hison.link.ApiLink('users', cm);
 const url = 'https://' + 'jsonplaceholder.typicode.com/' + 'users';
 
 
