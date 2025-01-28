@@ -51,7 +51,7 @@ interface Hison {
     getLESSOREQ_0XFFFF_BYTE(): number;
     getGREATER_0XFFFF_BYTE(): number;
     setShieldURL(str: string): void;
-    setExposeIpList(arr: []): void;
+    setExposeIpList(arr: string[]): void;
     setIsFreeze(bool: boolean): void;
     setIsPossibleGoBack(bool: boolean): void;
     setIsPossibleOpenDevTool(bool: boolean): void;
@@ -107,8 +107,8 @@ interface Hison {
     setBeforePutRequst(func: BeforePutRequst): void;
     setBeforePatchRequst(func: BeforePatchRequst): void;
     setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
-    setBeforeCallbackWorked(func: BeforeCallbackWorked): void;
-    setBeforeCallbackError(func: BeforeCallbackError): void;
+    setInterceptApiResult(func: InterceptApiResult): void;
+    setInterceptApiError(func: InterceptApiError): void;
     /**
      * Javascript의 다양한 기능을 가지고있는 object를 반환합니다.
      * @returns {Object} {utils}
@@ -134,11 +134,11 @@ interface Hison {
          *
          * @example
          * //returns true
-         * hison.utils.isAlpha("HelloWorld");
+         * hison.utils.isAlpha('HelloWorld');
          *
          * @example
          * //returns false
-         * hison.utils.isAlpha("Hello World! 123");
+         * hison.utils.isAlpha('Hello World! 123');
          */
         isAlpha(str: string): boolean;
         isAlphaNumber(str: string): boolean;
@@ -286,7 +286,7 @@ interface Hison {
          * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
          * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
          */
-        DataWrapper: new (keyOrObject?: Record<string, any> | '', value?: any) => DataWrapper;
+        DataWrapper: new (keyOrObject?: Record<string, any> | string, value?: any) => DataWrapper;
         /**
          * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
          * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
@@ -314,7 +314,16 @@ interface Hison {
      */
     link: {
         CachingModule: new (cachingLimit?: number) => CachingModule;
-        ApiLink: new (cmdOrCachingModule?: string | CachingModule, CachingModule?: CachingModule) => ApiLink<any>;
+        ApiGet: new (resourcePath?: string, cachingModule?: CachingModule) => ApiGet;
+        ApiPost: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPost;
+        ApiPut: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPut;
+        ApiPatch: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPatch;
+        ApiDelete: new (serviceCmd: string, cachingModule?: CachingModule) => ApiDelete;
+        ApiGetUrl: new (url: string, cachingModule?: CachingModule) => ApiGetUrl;
+        ApiPostUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPostUrl;
+        ApiPutUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPutUrl;
+        ApiPatchUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPatchUrl;
+        ApiDeleteUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiDeleteUrl;
     };
 }
 interface DateObject {
@@ -352,12 +361,12 @@ interface DateTimeObject extends DateObject, TimeObject {
  *          hour = hour < 10 ? '0' + hour : hour;
  *          minute = minute < 10 ? '0' + minute : minute;
  *          second = second < 10 ? '0' + second : second;
- *          return year + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second;
+ *          return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
  *     }
  *     return value;
  * };
  * //Inserting a Date object into DataModel
- * const dm = newDataModel([{key:"key1",value:new Date()},{key:"key2",value:new Date()}]);
+ * const dm = newDataModel([{key:'key1',value:new Date()},{key:'key2',value:new Date()}]);
  * //The value will be in 'yyyy-MM-dd hh:mm:ss' format
  *
  * Note:
@@ -386,7 +395,7 @@ interface DataWrapper {
     put(key: string, value: any): DataWrapper;
     putString(key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper;
     putDataModel(key: string, value: DataModel): DataWrapper;
-    getObject(): {};
+    getObject(): Record<string, any>;
     containsKey(key: string): boolean;
     isEmpty(): boolean;
     remove(key: string): {
@@ -413,7 +422,7 @@ interface DataModel {
     clear(): DataModel;
     getSerialized(): string;
     isDeclare(): boolean;
-    getColumns(): [];
+    getColumns(): string[];
     getColumnValues(column: string): any[];
     addColumn(column: string): DataModel;
     addColumns(columns: string[]): DataModel;
@@ -425,7 +434,7 @@ interface DataModel {
     getRows(startRow?: number, endRow?: number): Record<string, any>[];
     getRowsAsDataModel(startRow?: number, endRow?: number): DataModel;
     addRows(rows: Record<string, any>[]): DataModel;
-    getObject(): {};
+    getObject(): Record<string, any>;
     getValue(rowIndex: number, column: string): any;
     setValue(rowIndex: number, column: string, value: any): DataModel;
     removeColumn(column: string): DataModel;
@@ -466,38 +475,9 @@ interface DataModelValidator {
 interface DataModelFillter {
     (row: Record<string, any>): boolean;
 }
-interface ApiLink<T> {
-    getIsApiLink(): boolean;
-    get(resourcePath?: string, options?: Record<string, any>): null | Promise<{
-        data: any;
-        response: Response;
-    }>;
-    post(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
-        data: any;
-        response: Response;
-    }>;
-    put(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
-        data: any;
-        response: Response;
-    }>;
-    patch(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
-        data: any;
-        response: Response;
-    }>;
-    delete(requestDataWrapper?: DataWrapper, options?: Record<string, any>): null | Promise<{
-        data: any;
-        response: Response;
-    }>;
-    setCmd(cmd: string): void;
-    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-    _get(url: string): any | Promise<any>;
-    _post(url: string, data: any): any | Promise<any>;
-    _put(url: string, data: any): any | Promise<any>;
-    _patch(url: string, data: any): any | Promise<any>;
-    _delete(url: string): any | Promise<any>;
-}
 interface CachingModule {
     getIsCachingModule(): boolean;
+    hasKey(key: string): boolean;
     get(key: string): Promise<{
         data: any;
         response: Response;
@@ -518,6 +498,96 @@ interface CachingModule {
     onclose(func: ((this: WebSocket, ev: CloseEvent) => any) | null): void;
     onerror(func: ((this: WebSocket, ev: Event) => any) | null): void;
     isWebSocketConnection(): number;
+}
+interface ApiGet {
+    call(options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiPost {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiPut {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiPatch {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiDelete {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiGetUrl {
+    call(options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiPostUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiPutUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiPatchUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+}
+interface ApiDeleteUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: any;
+        response: Response;
+    }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
 }
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
@@ -545,12 +615,6 @@ interface CachingModule {
  * Note: This function is useful for implementing pre-request validations, logging, or any setup required before
  * making a GET request. The function's return value controls whether the GET request should be executed.
  */
-interface CallbackWorked {
-    (result: DataWrapper | undefined, response: Response): boolean | void;
-}
-interface CallbackError {
-    (error: any /**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;
-}
 interface BeforeGetRequst {
     (resourcePath?: string, options?: Record<string, any>): boolean | void;
 }
@@ -566,9 +630,11 @@ interface BeforePatchRequst {
 interface BeforeDeleteRequst {
     (requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;
 }
-interface BeforeCallbackWorked extends CallbackWorked {
+interface InterceptApiResult {
+    (result: DataWrapper | undefined, response: Response): boolean | void;
 }
-interface BeforeCallbackError extends CallbackError {
+interface InterceptApiError {
+    (error: any /**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;
 }
 declare const _default: Hison;
 export default _default;

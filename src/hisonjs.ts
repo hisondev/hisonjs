@@ -152,11 +152,11 @@ interface Hison {
          *
          * @example
          * //returns true
-         * hison.utils.isAlpha("HelloWorld");
+         * hison.utils.isAlpha('HelloWorld');
          *
          * @example
          * //returns false
-         * hison.utils.isAlpha("Hello World! 123");
+         * hison.utils.isAlpha('Hello World! 123');
          */
         isAlpha(str: string): boolean
         isAlphaNumber(str: string): boolean
@@ -346,10 +346,16 @@ interface Hison {
      */
     link: {
         CachingModule: new (cachingLimit?: number) => CachingModule;
-        ApiGet: new (cachingModule: CachingModule) => ApiGet;
-        ApiPost: new (cachingModule: CachingModule) => ApiPost;
-        ApiGetUrl: new (cachingModule: CachingModule) => ApiGetUrl;
-        ApiPostUrl: new (cachingModule: CachingModule) => ApiPostUrl;
+        ApiGet: new (resourcePath?: string, cachingModule?: CachingModule) => ApiGet;
+        ApiPost: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPost;
+        ApiPut: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPut;
+        ApiPatch: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPatch;
+        ApiDelete: new (serviceCmd: string, cachingModule?: CachingModule) => ApiDelete;
+        ApiGetUrl: new (url: string, cachingModule?: CachingModule) => ApiGetUrl;
+        ApiPostUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPostUrl;
+        ApiPutUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPutUrl;
+        ApiPatchUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPatchUrl;
+        ApiDeleteUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiDeleteUrl;
     }
 }
 //====================================================================================
@@ -414,12 +420,12 @@ enum DayOfWeekShortNameKR {
  *          hour = hour < 10 ? '0' + hour : hour;
  *          minute = minute < 10 ? '0' + minute : minute;
  *          second = second < 10 ? '0' + second : second;
- *          return year + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second;
+ *          return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
  *     }
  *     return value;
  * };
  * //Inserting a Date object into DataModel
- * const dm = newDataModel([{key:"key1",value:new Date()},{key:"key2",value:new Date()}]);
+ * const dm = newDataModel([{key:'key1',value:new Date()},{key:'key2',value:new Date()}]);
  * //The value will be in 'yyyy-MM-dd hh:mm:ss' format
  * 
  * Note: 
@@ -539,16 +545,64 @@ interface CachingModule {
     isWebSocketConnection(): number;
 };
 interface ApiGet {
-
+    call(options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
 };
 interface ApiPost {
-
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+};
+interface ApiPut {
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+};
+interface ApiPatch {
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+};
+interface ApiDelete {
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
 };
 interface ApiGetUrl {
-
+    call(options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
 };
 interface ApiPostUrl {
-
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+};
+interface ApiPutUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+};
+interface ApiPatchUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
+};
+interface ApiDeleteUrl {
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    head(options?: Record<string, any>): Promise<Record<string, string>>;
+    options(options?: Record<string, any>): Promise<string[]>;
+    onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
 };
 /**
  * Defines the behavior to be executed before making a GET request in apiLink.
@@ -576,15 +630,13 @@ interface ApiPostUrl {
  * Note: This function is useful for implementing pre-request validations, logging, or any setup required before 
  * making a GET request. The function's return value controls whether the GET request should be executed.
  */
-interface CallbackWorked {(result: DataWrapper | undefined, response: Response): boolean | void;};
-interface CallbackError {(error: any/**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;};
 interface BeforeGetRequst {(resourcePath?: string, options?: Record<string, any>): boolean | void;};
 interface BeforePostRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
 interface BeforePutRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
 interface BeforePatchRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
 interface BeforeDeleteRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
-interface InterceptApiResult extends CallbackWorked {};
-interface InterceptApiError extends CallbackError {};
+interface InterceptApiResult {(result: DataWrapper | undefined, response: Response): boolean | void;};
+interface InterceptApiError {(error: any/**promise에서 던지는 error는 어떤 값이든 가능하다 */): boolean | void;};
 
 //====================================================================================
 //createHison
@@ -630,8 +682,8 @@ function createHison(): Hison {
             GREATER_0XFFFF_BYTE : 4,    //charCode > 0xFFFF
         };
         shield = {
-            shieldURL : "",
-            exposeIpList : ["0:0:0:0:0:0:0:1"],
+            shieldURL : '',
+            exposeIpList : ['0:0:0:0:0:0:0:1'],
             isFreeze : true,
             isPossibleGoBack : false,
             isPossibleOpenDevTool : false,
@@ -665,18 +717,24 @@ function createHison(): Hison {
         private _limit: number;
         private _cache: Record<string, Promise<{ data: any; response: Response; }>>;
         private _keys: string[];
-        hasKey = (key: string) => {
+        private _removeKey = (key: string) => {
+            const index = this._keys.indexOf(key);
+            if (index > -1) {
+                this._keys.splice(index, 1);
+            }
+        }
+        hasKey = (key: string): boolean => {
             return this._cache.hasOwnProperty(key);
         }
         get = (key: string): Promise<{ data: any; response: Response; }> => {
-            if (!this._cache.hasOwnProperty(key)) return null;
-            const value = this._cache[key];
-            this.remove(key);
+            if(!this.hasKey(key)) return null;
+            const value = hison.utils.deepCopyObject(this._cache[key]);
+            this._removeKey(key);
             this._keys.push(key);
             return value;
         };
         put = (key: string , value: Promise<{ data: any; response: Response; }>) => {
-            if (this._cache.hasOwnProperty(key)) {
+            if (this.hasKey(key)) {
                 this.remove(key);
             } else if (this._keys.length == this._limit) {
                 const oldestKey = this._keys.shift();
@@ -685,17 +743,26 @@ function createHison(): Hison {
             this._cache[key] = hison.utils.deepCopyObject(value);
             this._keys.push(key);
         };
-        remove = (key: string) => {
-            const index = this._keys.indexOf(key);
-            if (index > -1) {
-                this._keys.splice(index, 1);
-            }
+        remove = (key: string): Promise<{ data: any; response: Response; }> => {
+            if(!this.hasKey(key)) return null;
+            this._removeKey(key);
+            const result = hison.utils.deepCopyObject(this._cache[key])
+            delete this._cache[key];
+            return result;
         };
         getAll = (): Record<string, Promise<{ data: any; response: Response; }>> => {
-            return this._cache;
+            const result = {}
+            Object.keys(this._cache).forEach((key) => {
+                result[key] = hison.utils.deepCopyObject(this._cache[key]);
+            });
+            return result;
         };
         getKeys = (): string[] => {
-            return this._keys;
+            const result =[];
+            this._keys.forEach((key) => {
+                result.push(key);
+            })
+            return result;
         };
         clear = () => {
             this._cache = {};
@@ -729,11 +796,11 @@ function createHison(): Hison {
         private _cachingModule: CachingModule;
         private _getRsultDataWrapper = (resultData: any): any => {
             let data = null;
-            if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'Y') {
+            if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'true') {
                 data = new hison.data.DataWrapper();
                 for(const key of Object.keys(resultData)) {
                     if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
-                        data.putDataModel(key, new hison.data.DataWrapper(resultData[key]));
+                        data.putDataModel(key, new hison.data.DataModel(resultData[key]));
                     } else {
                         if(key !== 'isDataWrapper') data.put(key, resultData[key]);
                     }
@@ -746,7 +813,7 @@ function createHison(): Hison {
         private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; }> => {
             if(this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(resourcePath)) {
                 const result = await this._cachingModule.get(resourcePath);
-                if(defaultOption.link.interceptApiResult(result.data, result.response) !== false) {
+                if(result && defaultOption.link.interceptApiResult(result.data, result.response) !== false) {
                     return result;
                 };
                 return null;
@@ -766,7 +833,7 @@ function createHison(): Hison {
                 body: requestData
             }
             if (options.constructor !== Object) {
-                throw new Error("fetchOptions must be an object which contains key and value.");
+                throw new Error('fetchOptions must be an object which contains key and value.');
             }
             let timeoutPromise = null;
             Object.keys(options).forEach(key => {
@@ -774,9 +841,9 @@ function createHison(): Hison {
             });
             if(options.timeout) {
                 if (typeof options.timeout !== 'number' || options.timeout <= 0 || !Number.isInteger(options.timeout)) {
-                    throw new Error("Timeout must be a positive integer.");
+                    throw new Error('Timeout must be a positive integer.');
                 }
-                timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), options.timeout));
+                timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), options.timeout));
             }
             const fecthArr = [fetch(requestPath, fetchOptions)];
             if(timeoutPromise) fecthArr.push(timeoutPromise);
@@ -875,7 +942,6 @@ function createHison(): Hison {
                     return Promise.reject(error);
                 });
         };
-
         getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, url, options);
@@ -885,26 +951,26 @@ function createHison(): Hison {
         postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
-            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
-            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
-            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
-            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), serviceCmd);
+            if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         headURL = async (url: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
             return fetch(url, { method: 'HEAD', ...options })
@@ -938,39 +1004,32 @@ function createHison(): Hison {
                     return Promise.reject(error);
                 });
         };
-        onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+        onEventEmit = (methodName: string, eventName: string, eventFunc: (...args: any[]) => void) => {
             if (!eventName) {
-                throw new Error("Event name is required.");
+                throw new Error('Event name is required.');
             }
             if (!eventFunc) {
-                throw new Error("Event function is required.");
+                throw new Error('Event function is required.');
             }
             if (typeof eventName !== 'string') {
-                throw new Error("Event name must be a string.");
+                throw new Error('Event name must be a string.');
             }
-            if (['requestStarted_GET',
-                 'requestStarted_POST',
-                 'requestStarted_PUT',
-                 'requestStarted_PATCH',
-                 'requestStarted_DELETE',
+            const requestEventName = 'requestStarted_' + methodName;
+            if ([requestEventName,
                  'requestCompleted_Response',
                  'requestCompleted_Data',
                  'requestError'].indexOf(eventName) === -1) {
-                throw new Error("Invalid event name."
-                + "\nInserted event name: " + eventName
-                + "\nValid event names are:"
-                + "\nrequestStarted_GET"
-                + "\nrequestStarted_POST"
-                + "\nrequestStarted_PUT"
-                + "\nrequestStarted_PATCH"
-                + "\nrequestStarted_DELETE"
-                + "\nrequestCompleted_Response"
-                + "\nrequestCompleted_Data"
-                + "\nrequestError"
+                throw new Error('Invalid event name.'
+                + '\nInserted event name: ' + eventName
+                + '\nValid event names are:'
+                + `\n${requestEventName}`
+                + '\nrequestCompleted_Response'
+                + '\nrequestCompleted_Data'
+                + '\nrequestError'
                 );
             }
             if (typeof eventFunc !== 'function') {
-                throw new Error("Event function must be a function.");
+                throw new Error('Event function must be a function.');
             }
             this._eventEmitter.on(eventName, eventFunc);
         };
@@ -988,10 +1047,10 @@ function createHison(): Hison {
                 return /^[0-9]+$/.test(str);
             },
             isNumberSymbols(str: string): boolean {
-                return /^[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]+$/.test(str);
+                return /^[0-9!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?~]+$/.test(str);
             },
             isIncludeSymbols(str: string): boolean {
-                return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(str);
+                return /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?~]/.test(str);
             },
             isLowerAlpha(str: string): boolean {
                 return /^[a-z]+$/.test(str);
@@ -1046,14 +1105,14 @@ function createHison(): Hison {
                         return false;
                     }
                     if (!MM) {
-                        MM = "01";
+                        MM = '01';
                     } else if (MM.length === 1) {
-                        MM = "0" + MM;
+                        MM = '0' + MM;
                     }
                     if (!dd) {
-                        dd = "01";
+                        dd = '01';
                     } else if (dd.length === 1) {
-                        dd = "0" + dd;
+                        dd = '0' + dd;
                     }
         
                     if (hison.utils.getToNumber(yyyy+MM+dd) < 16000101) {
@@ -1210,7 +1269,7 @@ function createHison(): Hison {
                 }
                 return null;
             },
-            addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = "", format: string = ""): DateTimeObject | string {
+            addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = '', format: string = ''): DateTimeObject | string {
                 const datetimeObj: DateTimeObject = hison.utils.isObject(datetime) ? hison.utils.deepCopyObject(datetime) : hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
@@ -1269,7 +1328,7 @@ function createHison(): Hison {
         
                 return hison.utils.isObject(datetime) ? rtnObj : hison.utils.getDateWithFormat(rtnObj, format);
             },
-            getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType: string = ""): number {
+            getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType: string = ''): number {
                 const datetimeObj1: DateTimeObject = hison.utils.isObject(datetime1) ? hison.utils.deepCopyObject(datetime1) : hison.utils.getDatetimeObject(datetime1 as string);
                 const datetimeObj2: DateTimeObject = hison.utils.isObject(datetime2) ? hison.utils.deepCopyObject(datetime2) : hison.utils.getDatetimeObject(datetime2 as string);
                             
@@ -1317,7 +1376,7 @@ function createHison(): Hison {
                     return MonthShortName[month];
                 }
             },
-            getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = ""): string {
+            getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = ''): string {
                 const datetimeObj = hison.utils.isObject(datetime) ? hison.utils.deepCopyObject(datetime) : hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
@@ -1711,9 +1770,9 @@ function createHison(): Hison {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmm':
-                        return currentDate.getHours().toString().padStart(2, '0') + "" + currentDate.getMinutes().toString().padStart(2, '0');
+                        return currentDate.getHours().toString().padStart(2, '0') + '' + currentDate.getMinutes().toString().padStart(2, '0');
                     default:
-                        return currentDate.getHours().toString().padStart(2, '0') + ":" + currentDate.getMinutes().toString().padStart(2, '0');
+                        return currentDate.getHours().toString().padStart(2, '0') + ':' + currentDate.getMinutes().toString().padStart(2, '0');
                 }
             },
             getSysMinute(format: string = defaultOption.utils.minuteFormat): string {
@@ -1740,7 +1799,7 @@ function createHison(): Hison {
                     case 'hhmmss':
                         return currentDate.getHours().toString().padStart(2, '0') + currentDate.getMinutes().toString().padStart(2, '0') + currentDate.getSeconds().toString().padStart(2, '0');
                     default:
-                        return currentDate.getHours().toString().padStart(2, '0') + ":" + currentDate.getMinutes().toString().padStart(2, '0') + ":" + currentDate.getSeconds().toString().padStart(2, '0');
+                        return currentDate.getHours().toString().padStart(2, '0') + ':' + currentDate.getMinutes().toString().padStart(2, '0') + ':' + currentDate.getSeconds().toString().padStart(2, '0');
                 }
             },
             getSysDate(format: string = defaultOption.utils.datetimeFormat): string {
@@ -1911,7 +1970,7 @@ function createHison(): Hison {
                 else decimal = decimal.substring(1);
         
                 switch (intergerFormat) {
-                    case "#,###":
+                    case '#,###':
                         if (hison.utils.getToNumber(interger) === 0) {
                             result = decimal;
                         }
@@ -1920,11 +1979,11 @@ function createHison(): Hison {
                             result = interger + decimal;
                         }
                         break;
-                    case "#,##0":
+                    case '#,##0':
                         interger = hison.utils.getToFloat(interger).toLocaleString('en');
                         result = interger + decimal;
                         break;
-                    case "#":
+                    case '#':
                         if (hison.utils.getToNumber(interger) === 0) {
                             result = decimal;
                         }
@@ -1932,7 +1991,7 @@ function createHison(): Hison {
                             result = interger + decimal;
                         }
                         break;
-                    case "0":
+                    case '0':
                         result = interger + decimal;
                         break;
                     default:
@@ -1961,7 +2020,7 @@ function createHison(): Hison {
                 else if (typeof value === 'boolean'){
                     return value
                 }
-                else if (typeof value === "string"){
+                else if (typeof value === 'string'){
                     return ['t','true','y','yes','check','c','checked','selected','참'].indexOf(value.toLowerCase()) >= 0;
                 }
                 else {
@@ -2028,6 +2087,9 @@ function createHison(): Hison {
             deepCopyObject(object: any, visited?: { source: any, copy: any }[]): any {
                 if (object === null || typeof object !== 'object') {
                     return object;
+                }
+                if (object instanceof Response) {
+                    return object.clone();
                 }
                 if (object.constructor !== Object && object.constructor !== Array) {
                     if ((object && object.getIsDataWrapper && object.getIsDataWrapper())
@@ -2097,9 +2159,9 @@ function createHison(): Hison {
                     httpRequest.send();
                 }
                 const shieldFuncCreateBlockDevMode = function() {
-                    const msg = "Developer mode is not available.";
+                    const msg = 'Developer mode is not available.';
                     document.onkeydown = function(event) {
-                        if (event.key === "F12") {
+                        if (event.key === 'F12') {
                             alert(msg);
                             event.preventDefault();
                             return false;
@@ -2159,21 +2221,21 @@ function createHison(): Hison {
                 constructor(keyOrObject?: Record<string, any> | string, value?: any) {
                     this._data = {};
                     if (keyOrObject === undefined) return;
-                    if (typeof keyOrObject === "object" && keyOrObject !== null) {
+                    if (typeof keyOrObject === 'object' && keyOrObject !== null) {
                         for (let key in keyOrObject) {
                             this._put(key, keyOrObject[key]);
                         }
-                    } else if (typeof keyOrObject === "string" && value !== undefined) {
+                    } else if (typeof keyOrObject === 'string' && value !== undefined) {
                         this._put(keyOrObject, value);
                     } else {
-                        throw new Error("Invalid arguments. Provide an object or a key-value pair.");
+                        throw new Error('Invalid arguments. Provide an object or a key-value pair.');
                     }
                 }
                 private _data: Record<string, DataModel | string | null>;
                 private _isDataWrapper = true;
                 private _put = (key: string, value: any) => {
                     if (typeof key !== 'string') {
-                        throw new Error("Keys must always be strings.");
+                        throw new Error('Keys must always be strings.');
                     } else if (typeof value === 'string') {
                         this._data[key] = value;
                     } else if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
@@ -2183,14 +2245,14 @@ function createHison(): Hison {
                     } else if (value === null) {
                         this._data[key] = null;
                     } else if (value === undefined) {
-                        throw new Error("You can not put a value of undefined type.");
+                        throw new Error('You can not put a value of undefined type.');
                     } else if (typeof value === 'object') {
                         if (!value || !value.getIsDataModel || !value.getIsDataModel()) {
-                            throw new Error("Please insert only values convertible to string or of data-model type.");
+                            throw new Error('Please insert only values convertible to string or of data-model type.');
                         }
                         this._data[key] = value.clone();
                     } else {
-                        throw new Error("Please insert only values convertible to string or of data-model type.");
+                        throw new Error('Please insert only values convertible to string or of data-model type.');
                     }
                 };
                 getIsDataWrapper = (): boolean => {
@@ -2224,17 +2286,17 @@ function createHison(): Hison {
                     return JSON.stringify(data);
                 };
                 get = (key: string): DataModel | string | null => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     return this._data[key] ? hison.utils.deepCopyObject(this._data[key]) : null;
                 };
                 getString = (key: string): string | null => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
-                    if (typeof this._data[key] !== 'string') throw new Error("The data does not contain the specified string value.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
+                    if (typeof this._data[key] !== 'string') throw new Error('The data does not contain the specified string value.');
                     return this._data[key] ? this._data[key] as string : null;
                 };
                 getDataModel = (key: string): DataModel => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
-                    if (!this._data[key] || !(this._data[key] as DataModel).getIsDataModel || !(this._data[key] as DataModel).getIsDataModel()) throw new Error("The data does not contain the specified data-model value.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
+                    if (!this._data[key] || !(this._data[key] as DataModel).getIsDataModel || !(this._data[key] as DataModel).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
                     return (this._data[key] as DataModel).clone();
                 };
                 put = (key: string, value: any): DataWrapper => {
@@ -2242,22 +2304,22 @@ function createHison(): Hison {
                     return this;
                 };
                 putString = (key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (typeof value !== 'string'
                         && typeof value !== 'number'
                         && typeof value !== 'boolean'
                         && typeof value !== 'bigint'
                         && typeof value !== 'symbol'
                         && value !== null) {
-                        throw new Error("Please insert only values convertible to string type.");
+                        throw new Error('Please insert only values convertible to string type.');
                     }
                     this._put(key, value);
                     return this;
                 };
                 putDataModel = (key: string, value: DataModel): DataWrapper => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (value === null || !value.getIsDataModel || !value.getIsDataModel()) {
-                        throw new Error("Please insert only values of data-model type.");
+                        throw new Error('Please insert only values of data-model type.');
                     }
                     this._put(key, value);
                     return this;
@@ -2274,14 +2336,14 @@ function createHison(): Hison {
                     return result;
                 };
                 containsKey = (key: string): boolean => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     return this._data.hasOwnProperty(key);
                 };
                 isEmpty = (): boolean => {
                     return Object.keys(this._data).length === 0;
                 };
                 remove = (key: string): { data: DataWrapper, result: boolean } => {
-                    if (typeof key !== 'string') throw new Error("Keys must always be strings.");
+                    if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     let result = false;
                     if (this._data.hasOwnProperty(key)) {
                         result = true;
@@ -2361,7 +2423,7 @@ function createHison(): Hison {
                 };
                 private _getValidRowIndex = (rowIndex: number): number => {
                     if (!this._isPositiveIntegerIncludingZero(rowIndex)) {
-                        throw new Error("Invalid number type. It should be a number or a string that can be converted to a number.");
+                        throw new Error('Invalid number type. It should be a number or a string that can be converted to a number.');
                     }
                     const index = Number(rowIndex);
                     if (index < 0 || index >= this._rows.length) {
@@ -2370,7 +2432,7 @@ function createHison(): Hison {
                     return index;
                 }
                 private _isConvertibleString = (value: any): boolean => {
-                    if (value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     if (value === null) return true;
                     if (['string','number','boolean','bigint','symbol'].indexOf(typeof value) >= 0) {
                         return true;
@@ -2383,27 +2445,27 @@ function createHison(): Hison {
                 };
                 private _checkColumn = (column: string) => {
                     if (!this._hasColumn(column)) {
-                        throw new Error("The column does not exist. column : " + column);
+                        throw new Error('The column does not exist. column : ' + column);
                     }
                 };
                 private _checkValidFunction = (func: Function) => {
                     if (!func || typeof func !== 'function') {
-                        throw new Error("Please insert the valid function.");
+                        throw new Error('Please insert the valid function.');
                     }
                 };
                 private _checkBoolean = (value: boolean) => {
                     if (typeof value !== 'boolean') {
-                        throw new Error("Please pass an boolean as a parameter.");
+                        throw new Error('Please pass an boolean as a parameter.');
                     }
                 };
                 private _checkOriginObject = (value: Object) => {
                     if (value.constructor !== Object) {
-                        throw new Error("Please pass an object with its own key-value pairs as a parameter.");
+                        throw new Error('Please pass an object with its own key-value pairs as a parameter.');
                     }
                 };
                 private _checkArray = (value: any[]) => {
                     if (value.constructor !== Array) {
-                        throw new Error("Please pass an array.");
+                        throw new Error('Please pass an array.');
                     }
                 };
                 private _getColumnType = (rowIndex: number, col: string): string => {
@@ -2432,7 +2494,7 @@ function createHison(): Hison {
                         if ((value && value.getIsDataWrapper && value.getIsDataWrapper())
                             || (value && value.getIsDataModel && value.getIsDataModel())
                         ) {
-                            throw new Error("You cannot insert a datawrapper or datamodel within a datamodel.");
+                            throw new Error('You cannot insert a datawrapper or datamodel within a datamodel.');
                         }
                         result = this._deepCopy(value);
                     }
@@ -2441,10 +2503,10 @@ function createHison(): Hison {
                 private _getValidColValue = (value: string): string => {
                     value = this._makeValue(value);
                     if (!this._isConvertibleString(value)) {
-                        throw new Error("Only strings can be inserted into columns.");
+                        throw new Error('Only strings can be inserted into columns.');
                     }
                     if (!value) {
-                        throw new Error("Column cannot be null.");
+                        throw new Error('Column cannot be null.');
                     }
                     return value;
                 }
@@ -2454,21 +2516,11 @@ function createHison(): Hison {
                     if (chkType !== 'null' && value !== null) {
                         if (typeof value === 'object') {
                             if (value.constructor !== chkType) {
-                                console.log("111")
-                                console.log(value);
-                                console.log("typeof value : ", typeof value);
-                                console.log("value.constructor : ", value.constructor);
-                                console.log("chkType : ", chkType);
-                                throw new Error("Data of the same type must be inserted into the same column. column : " + col);
+                                throw new Error('Data of the same type must be inserted into the same column. column : ' + col);
                             }
                         } else {
                             if (typeof value !== 'object' && typeof value !== chkType) {
-                                console.log("222")
-                                console.log(value);
-                                console.log("typeof value : ", typeof value);
-                                console.log("value.constructor : ", value.constructor);
-                                console.log("chkType : ", chkType);
-                                throw new Error("Data of the same type must be inserted into the same column. column : " + col);
+                                throw new Error('Data of the same type must be inserted into the same column. column : ' + col);
                             }
                         }
                     }
@@ -2479,15 +2531,15 @@ function createHison(): Hison {
                     if (this._cols.indexOf(value) === -1) {
                         this._cols.push(value);
                     } else {
-                        throw new Error("There are duplicate columns to add. column : " + value);
+                        throw new Error('There are duplicate columns to add. column : ' + value);
                     }
                 }
                 private _addRow = (rowIndex: number, row: Record<string, any>) => {
                     if (!row) {
-                        throw new Error("Please insert vaild object");
+                        throw new Error('Please insert vaild object');
                     }
                     if (row.constructor !== Object) {
-                        throw new Error("Please insert object with their own key-value pairs.");
+                        throw new Error('Please insert object with their own key-value pairs.');
                     }
                     if (Object.keys(row).length === 0) return;
                     if (this._cols.length === 0) {
@@ -2524,7 +2576,7 @@ function createHison(): Hison {
                         }
                     } else if (typeof data === 'object') {
                         if (data && (data as DataWrapper).getIsDataWrapper && (data as DataWrapper).getIsDataWrapper()) {
-                            throw new Error("You cannot construct a datamodel with datawrapper.");
+                            throw new Error('You cannot construct a datamodel with datawrapper.');
                         } else if (data && (data as DataModel).getIsDataModel && (data as DataModel).getIsDataModel()){
                             for(const row of (data as DataModel).getRows() ) {
                                 this._addRow(rowIndex, row);
@@ -2536,7 +2588,7 @@ function createHison(): Hison {
                             return;
                         }
                     }
-                    throw new Error("Please insert array contains objects with their own key-value pairs, array contains strings or only object of key-value pairs.");
+                    throw new Error('Please insert array contains objects with their own key-value pairs, array contains strings or only object of key-value pairs.');
                 };
                 private _getNullColumnFirstRowIndex = (column: string): number => {
                     column = this._getValidColValue(column);
@@ -2612,7 +2664,7 @@ function createHison(): Hison {
                 };
                 addColumns = (columns: string[]): DataModel => {
                     if (!Array.isArray(columns)) {
-                        throw new Error("Only array contains strings can be inserted into columns.");
+                        throw new Error('Only array contains strings can be inserted into columns.');
                     }
                     for(const column of columns) {
                         this._addCol(column);
@@ -2625,7 +2677,7 @@ function createHison(): Hison {
                     return this;
                 };
                 setColumnSameValue = (column: string, value: any): DataModel => {
-                    if (value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     column = this._getValidColValue(column);
                     if (!this._hasColumn(column)) this._addCol(column);
                     let rowIndex = 0;
@@ -2655,7 +2707,7 @@ function createHison(): Hison {
                 addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel => {
                     if (rowIndexOrRow === undefined && row === undefined) {
                         if (this._cols.length <= 0) {
-                            throw new Error("Please define the column first.");
+                            throw new Error('Please define the column first.');
                         }
                         const emptyRow = {};
                         for (const col of this._cols) {
@@ -2664,7 +2716,7 @@ function createHison(): Hison {
                         this._rows.push(emptyRow);
                     } else if (typeof rowIndexOrRow === 'number' && row === undefined) {
                         if (this._cols.length <= 0) {
-                            throw new Error("Please define the column first.");
+                            throw new Error('Please define the column first.');
                         }
                         const validIndex = rowIndexOrRow >= this._rows.length ? this._rows.length : this._getValidRowIndex(rowIndexOrRow);
                         const emptyRow = {};
@@ -2680,7 +2732,7 @@ function createHison(): Hison {
                         const newRow = this._rows.pop();
                         this._rows.splice(validIndex, 0, newRow);
                     } else {
-                        throw new Error("Invalid parameters for addRow method.");
+                        throw new Error('Invalid parameters for addRow method.');
                     }
                     return this;
                 };
@@ -2728,7 +2780,7 @@ function createHison(): Hison {
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)][column]);
                 };
                 setValue = (rowIndex: number, column: string, value: any): DataModel => {
-                    if (value === undefined) throw new Error("You can not put a value of undefined type.");
+                    if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(rowIndex, column, value);
@@ -2990,7 +3042,7 @@ function createHison(): Hison {
                             valueA = parseInt(valueA, 10);
                             valueB = parseInt(valueB, 10);
                             if (isNaN(valueA) || isNaN(valueB)) {
-                                throw new Error("Cannot sort rows: non-integer value encountered.");
+                                throw new Error('Cannot sort rows: non-integer value encountered.');
                             }
                         }
                         if (valueA < valueB) {
@@ -3021,7 +3073,7 @@ function createHison(): Hison {
                             valueA = parseInt(valueA, 10);
                             valueB = parseInt(valueB, 10);
                             if (isNaN(valueA) || isNaN(valueB)) {
-                                throw new Error("Cannot sort rows: non-integer value encountered.");
+                                throw new Error('Cannot sort rows: non-integer value encountered.');
                             }
                         }
                         if (valueA < valueB) {
@@ -3056,12 +3108,12 @@ function createHison(): Hison {
                 private _isCachingModule: boolean;
                 private _checkTypeString = (str: string) => {
                     if(typeof str !== 'string') {
-                        throw new Error("key is only a string.");
+                        throw new Error('key is only a string.');
                     }
                 }
                 private _checkTypeFunction = (func: Function) => {
                     if (func && typeof func !== 'function') {
-                        throw new Error("Please enter only the function.");
+                        throw new Error('Please enter only the function.');
                     }
                 }
                 private _checkWebSocketConnection = (): number => {
@@ -3135,42 +3187,248 @@ function createHison(): Hison {
                 call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
                     return this._apiLink.get(this._resourcePath, options);
                 }
-                head = (options: Record<string, any> = {}) => {
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
                     return this._apiLink.head(this._resourcePath, options);
                 };
-                options = (options: Record<string, any> = {}) => {
-                    return this._apiLink.head(this._resourcePath, options);
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(this._resourcePath, options);
                 };
                 onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
-                    this._apiLink.onEventEmit(eventName, eventFunc);
+                    this._apiLink.onEventEmit('GET', eventName, eventFunc);
                 };
             },
             ApiPost: class implements ApiPost {
-                constructor(cachingModule?: CachingModule) {
-                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
-                        this._cachingModule = cachingModule;
-                    }
+                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule;
-
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.post(requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('POST', eventName, eventFunc);
+                };
+            },
+            ApiPut: class implements ApiPut {
+                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._serviceCmd = serviceCmd;
+                };
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.put(requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('PUT', eventName, eventFunc);
+                };
+            },
+            ApiPatch: class implements ApiPatch {
+                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._serviceCmd = serviceCmd;
+                };
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.patch(requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('PATCH', eventName, eventFunc);
+                };
+            },
+            ApiDelete: class implements ApiDelete {
+                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._serviceCmd = serviceCmd;
+                };
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.delete(requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('DELETE', eventName, eventFunc);
+                };
             },
             ApiGetUrl: class implements ApiGetUrl {
-                constructor(cachingModule?: CachingModule) {
-                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
-                        this._cachingModule = cachingModule;
-                    }
+                constructor(url: string, cachingModule: CachingModule = null) {
+                    if (!url) throw new Error('Please enter the request URL.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._url = url;
                 };
-                private _cachingModule: CachingModule;
-
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _url: string;
+                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.getURL(this._url, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.head(this._url, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(this._url, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('GET', eventName, eventFunc);
+                };
             },
             ApiPostUrl: class implements ApiPostUrl {
-                constructor(cachingModule?: CachingModule) {
-                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
-                        this._cachingModule = cachingModule;
-                    }
+                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                    if (!url) throw new Error('Please enter the request URL.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._url = url;
+                    this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule;
-
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                private _url: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.postURL(this._url, requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.headURL(this._url, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(this._url, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('POST', eventName, eventFunc);
+                };
+            },
+            ApiPutUrl: class implements ApiPutUrl {
+                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                    if (!url) throw new Error('Please enter the request URL.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._url = url;
+                    this._serviceCmd = serviceCmd;
+                };
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                private _url: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.putURL(this._url, requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.headURL(this._url, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(this._url, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('PUT', eventName, eventFunc);
+                };
+            },
+            ApiPatchUrl: class implements ApiPatchUrl {
+                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                    if (!url) throw new Error('Please enter the request URL.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._url = url;
+                    this._serviceCmd = serviceCmd;
+                };
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                private _url: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.patchURL(this._url, requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.headURL(this._url, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(this._url, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('PATCH', eventName, eventFunc);
+                };
+            },
+            ApiDeleteUrl: class implements ApiDeleteUrl {
+                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                    if (!url) throw new Error('Please enter the request URL.');
+                    if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
+                    this._eventEmitter = new EventEmitter();
+                    this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
+                    this._url = url;
+                    this._serviceCmd = serviceCmd;
+                };
+                private _cachingModule: CachingModule = null;
+                private _eventEmitter: EventEmitter;
+                private _apiLink: ApiLink;
+                private _serviceCmd: string;
+                private _url: string;
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                    return this._apiLink.deleteURL(this._url, requestData, this._serviceCmd, options);
+                }
+                head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
+                    return this._apiLink.headURL(this._url, options);
+                };
+                options = (options: Record<string, any> = {}): Promise<string[]> => {
+                    return this._apiLink.options(this._url, options);
+                };
+                onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
+                    this._apiLink.onEventEmit('DELETE', eventName, eventFunc);
+                };
             },
         };
     };
@@ -3324,74 +3582,5 @@ function createHison(): Hison {
         link: hison.link,
     }
 }
-
-
-const hison = createHison();
-hison.setIsPossibleOpenDevTool(true);
-hison.shield.excute(hison);
-
-
-const $ = (...str: any[]) => {
-    console.log(...str);
-}
-
-
-const data = [
-    {id: '1', seq: 3, regdate: new Date(2025, 0, 17), arr: [1,2,3]},
-    {id: '2', seq: 2, regdate: new Date(2024, 6, 18), arr: null},
-    {id: 'sdaf3', seq: 4, regdate: new Date(2023, 11, 12), arr: [3,4,5], check: false},
-    {id: '4', seq: 5, regdate: null, arr: [1,2,3,124,5]},
-    {id: '8', seq: 4, regdate: new Date(2025, 0, 1), arr: [1,122,3,4,5]},
-    {id: 'asd9', seq: 6, regdate: new Date(2025, 0, 1), arr: [1]},
-];
-
-hison.setConvertValue((value) => {
-    if (value instanceof Date) {
-        return hison.utils.getDateWithFormat(hison.utils.getDatetimeObject(value), 'dd MMMM yyyy');
-    }
-    return value;
-})
-/*
-protocol : 'http://',
-domain : 'localhost:8081',
-controllerPath : '/hison-api-link',
-timeout : 10000,
-webSocketProtocol : 'ws://',
-webSocketEndPoint : '/hison-caching-websocket-endpoint',
-cachingLimit : 10,
-beforeGetRequst(resourcePath: string, options: Record<string, any>): boolean | void {return true;},
-beforePostRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
-beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
-beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
-beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
-interceptApiResult(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
-interceptApiError(error: any): boolean | void {return true;},
-
-setProtocol(str: string): void;
-setDomain(str: string): void;
-setControllerPath(str: string): void;
-setTimeout(num: number): void;
-setWebSocketProtocol(str: string): void;
-setWebSocketEndPoint(str: string): void;
-setCachingLimit(num: number): void;
-setBeforeGetRequst(func: BeforeGetRequst): void;
-setBeforePostRequst(func: BeforePostRequst): void;
-setBeforePutRequst(func: BeforePutRequst): void;
-setBeforePatchRequst(func: BeforePatchRequst): void;
-setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
-setInterceptApiResult(func: InterceptApiResult): void;
-setInterceptApiError(func: InterceptApiError): void;
-
-https://jsonplaceholder.typicode.com/users
-*/
-hison.setProtocol('https://');
-hison.setDomain('jsonplaceholder.typicode.com/');
-hison.setControllerPath('');
-
-const dm = new hison.data.DataModel(data);
-const cm = new hison.link.CachingModule(5);
-//const al = new hison.link.ApiLink('users', cm);
-const url = 'https://' + 'jsonplaceholder.typicode.com/' + 'users';
-
 
 export default createHison();
