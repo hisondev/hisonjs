@@ -1,25 +1,71 @@
 /**
- * The hison object is a container for configuration values and methods required for using the hisondev solution.
- * It includes the following sub-objects:
- * 
- * - hison.const: Contains constants required for overall configuration.
- * - hison.data: Provides functionalities for DataWrapper and DataModel.
- * - hison.link: Offers features necessary for ApiLink.
- * - hison.caching: Includes functionalities for the caching module.
- * - hison.utils: A collection of various common utility methods.
- * 
- * The hison object is finally defined in the shield.js file through the finalDefinehison() method.
- * After its definition, it is frozen and hidden to prevent external access and modification.
- * All utils' methods have no dependency on each other.
- * When an error occurs, null is usually returned and the cause of the error is displayed on the console. This is to ensure that logic progresses continuously without errors occurring in the client for user UI/UX experience.
- * 
- * @namespace Hison
+ * The `Hison` interface serves as a central container for configuration values and methods 
+ * required to use the `hisondev` solution. It provides various functionalities aimed at 
+ * enhancing the development experience.
+ *
+ * The `hisondev` solution offers the following core modules:
+ *
+ * - **hison.utils**: A collection of utility methods for various development needs.
+ * - **hison.sheild**: Security-related methods to enhance data protection.
+ * - **hison.data**: Instances designed for structuring and transmitting communication 
+ *   data in a table format.
+ * - **hison.link**: Promise-based communication support instances to simplify 
+ *   asynchronous operations.
+ *
+ * ## Object Creation and Encapsulation
+ * - The `Hison` object is **created through the `createHison()` function**, which encapsulates 
+ *   its implementation using a closure.
+ * - This ensures that the internal state remains private while exposing only the necessary 
+ *   methods to interact with `Hison`.
+ * - The function returns an object containing various methods to access `Hison` functionalities.
+ *
+ * ## Default Option Configuration
+ * - `Hison` provides setter methods to modify **defaultOption** properties that influence 
+ *   internal method behavior.
+ * - Examples include:
+ *   - `setDateFormat(format: string)`: Updates the default date format.
+ *   - `setTimeFormat(format: string)`: Updates the default time format.
+ * - These methods allow developers to customize behavior according to project requirements.
  */
 interface Hison {
     //====================================================================================
     //option utils set
     //====================================================================================
+    /**
+     * Sets the default format for displaying dates.
+     *
+     * This method updates the `dateFormat` property in `defaultOption.utils`, 
+     * which is used throughout the `hisondev` solution for parsing and formatting date values.
+     *
+     * - The new format will be applied globally to all date-related operations.
+     * - Default value: `'yyyy-MM-dd'`
+     * - Example output after setting format: `'02/04/2025'` (for `'MM/dd/yyyy'`)
+     *
+     * ## Related Property
+     * - **`dateFormat`**: Defines the default date format.
+     *   - Default: `'yyyy-MM-dd'`
+     *   - Example output: `'2025-02-04'`
+     *
+     * @param str The new date format string.
+     */
     setDateFormat(str: string): void;
+    /**
+     * Sets the default format for displaying time.
+     *
+     * This method updates the `timeFormat` property in `defaultOption.utils`, 
+     * which is used throughout the `hisondev` solution for parsing and formatting time values.
+     *
+     * - The new format will be applied globally to all time-related operations.
+     * - Default value: `'hh:mm:ss'`
+     * - Example output after setting format: `'14:30'` (for `'HH:mm'`)
+     *
+     * ## Related Property
+     * - **`timeFormat`**: Defines the default time format.
+     *   - Default: `'hh:mm:ss'`
+     *   - Example output: `'14:30:15'`
+     *
+     * @param str The new time format string.
+     */
     setTimeFormat(str: string): void;
     setDatetimeFormat(str: string): void;
     setYearFormat(str: string): void;
@@ -663,48 +709,401 @@ interface InterceptApiError {(error: any/**promise에서 던지는 error는 어�
 function createHison(): Hison {
     class DefaultOption {
         utils = {
+            /**
+             * The default format for displaying dates.
+             *
+             * This format is used throughout the `hisondev` solution for parsing 
+             * and formatting date values.
+             *
+             * - Default value: `'yyyy-MM-dd'`
+             * - Example output: `'2025-02-04'` (for February 4, 2025)
+             * - Can be modified using `setDateFormat(format: string)`.
+             */
             dateFormat : 'yyyy-MM-dd',
+            /**
+             * The default format for displaying time.
+             *
+             * This format is used throughout the `hisondev` solution for parsing 
+             * and formatting time values.
+             *
+             * - Default value: `'hh:mm:ss'`
+             * - Example output: `'14:30:15'` (for 2:30:15 PM)
+             * - Can be modified using `setTimeFormat(format: string)`.
+             */
             timeFormat : 'hh:mm:ss',
+            /**
+             * The default format for displaying date and time.
+             *
+             * This format is used throughout the `hisondev` solution for parsing 
+             * and formatting datetime values.
+             *
+             * - Default value: `'yyyy-MM-dd hh:mm:ss'`
+             * - Example output: `'2025-02-04 14:30:15'` (for February 4, 2025, 2:30:15 PM)
+             * - Can be modified using `setDatetimeFormat(format: string)`.
+             */
             datetimeFormat : 'yyyy-MM-dd hh:mm:ss',
+            /**
+             * The default format for displaying the year.
+             *
+             * This format is used to represent year values in date-related operations.
+             *
+             * - Default value: `'yyyy'`
+             * - Example output: `'2025'` (for the year 2025)
+             * - Can be modified using `setYearFormat(format: string)`.
+             */
             yearFormat : 'yyyy',
+            /**
+             * The default format for displaying the month.
+             *
+             * This format is used to represent month values in date-related operations.
+             *
+             * - Default value: `'M'`
+             * - Example output: `'2'` (for February)
+             * - Can be modified using `setMonthFormat(format: string)`.
+             */
             monthFormat : 'M',
+            /**
+             * The default format for displaying the full month name.
+             *
+             * This format is used to represent the full name of a month in date-related operations.
+             *
+             * - Default value: `'MMMM'`
+             * - Example output: `'February'` (for the month of February)
+             * - Can be modified using `setMonthNameFormat(format: string)`.
+             */
             monthNameFormat : 'MMMM',
+            /**
+             * The default format for displaying year and month.
+             *
+             * This format is used to represent a combination of year and month in date-related operations.
+             *
+             * - Default value: `'yyyy-MM'`
+             * - Example output: `'2025-02'` (for February 2025)
+             * - Can be modified using `setYearMonthFormat(format: string)`.
+             */
             yearMonthFormat : 'yyyy-MM',
+            /**
+             * The default format for displaying the day of the month.
+             *
+             * This format is used to represent the day component in date-related operations.
+             *
+             * - Default value: `'d'`
+             * - Example output: `'4'` (for the 4th day of the month)
+             * - Can be modified using `setDayFormat(format: string)`.
+             */
             dayFormat : 'd',
+            /**
+             * The default format for displaying the day of the week.
+             *
+             * This format is used to represent the day of the week in date-related operations.
+             *
+             * - Default value: `'d'`
+             * - Example output: `'3'` (where 3 could represent Wednesday depending on locale settings)
+             * - Can be modified using `setDayOfWeekFormat(format: string)`.
+             */
             dayOfWeekFormat : 'd',
+            /**
+             * The default format for displaying the hour.
+             *
+             * This format is used to represent the hour component in time-related operations.
+             *
+             * - Default value: `'h'`
+             * - Example output: `'2'
+             * - Can be modified using `setHourFormat(format: string)`.
+             */
             hourFormat : 'h',
+            /**
+             * The default format for displaying the hour and minute.
+             *
+             * This format is used to represent the time in hours and minutes.
+             *
+             * - Default value: `'hh:mm'`
+             * - Example output: `'14:30'` (for 2:30 PM in 24-hour format)
+             * - Can be modified using `setHourMinuteFormat(format: string)`.
+             */
             hourMinuteFormat : 'hh:mm',
+            /**
+             * The default format for displaying the minute.
+             *
+             * This format is used to represent the minute component in time-related operations.
+             *
+             * - Default value: `'m'`
+             * - Example output: `'5'` (for the 5th minute of the hour)
+             * - Can be modified using `setMinuteFormat(format: string)`.
+             */
             minuteFormat : 'm',
+            /**
+             * The default format for displaying the second.
+             *
+             * This format is used to represent the second component in time-related operations.
+             *
+             * - Default value: `'s'`
+             * - Example output: `'45'` (for the 45th second of the minute)
+             * - Can be modified using `setSecondFormat(format: string)`.
+             */
             secondFormat : 's',
+            /**
+             * The default format for displaying numbers.
+             *
+             * This format is used to represent numeric values with grouping separators and decimal precision.
+             *
+             * - Default value: `"#,##0.##"`
+             * - Example output: `"1,234.56"` (for the number `1234.56`)
+             * - Can be modified using `setNumberFormat(format: string)`.
+             */
             numberFormat : '#,##0.##',
-            LESSOREQ_0X7FF_BYTE : 2,    //charCode <= 0x7FF
-            LESSOREQ_0XFFFF_BYTE : 3,   //charCode <= 0xFFFF
-            GREATER_0XFFFF_BYTE : 4,    //charCode > 0xFFFF
+            /**
+             * The byte size used for characters with a char code less than or equal to `0x7FF`.
+             *
+             * This value defines the number of bytes required to encode characters in this range.
+             *
+             * - Default value: `2`
+             * - Represents characters with `charCode <= 0x7FF`
+             */
+            LESSOREQ_0X7FF_BYTE : 2,
+            /**
+             * The byte size used for characters with a char code less than or equal to `0xFFFF`.
+             *
+             * This value defines the number of bytes required to encode characters in this range.
+             *
+             * - Default value: `3`
+             * - Represents characters with `charCode <= 0xFFFF`
+             */
+            LESSOREQ_0XFFFF_BYTE : 3,
+            /**
+             * The byte size used for characters with a char code greater than `0xFFFF`.
+             *
+             * This value defines the number of bytes required to encode characters in this range.
+             *
+             * - Default value: `4`
+             * - Represents characters with `charCode > 0xFFFF`
+             */
+            GREATER_0XFFFF_BYTE : 4,
         };
         shield = {
+            /**
+             * The URL used to enforce access restrictions.
+             *
+             * If this value is set, the system verifies whether the current location matches 
+             * the specified URL. If not, access may be blocked.
+             *
+             * - Default value: `""` (empty string, meaning no restriction)
+             * - Used in `shield.excute(hison: Hison)` to validate the URL.
+             */
             shieldURL : '',
+            /**
+             * A list of IP addresses that are allowed to bypass security restrictions.
+             *
+             * When the shield mechanism is activated, only these IPs are granted access.
+             *
+             * - Default value: `["0:0:0:0:0:0:0:1"]` (allows localhost)
+             * - Used in `shield.excute(hison: Hison)` to verify access permissions.
+             */
             exposeIpList : ['0:0:0:0:0:0:0:1'],
+            /**
+             * Determines whether the `Hison` instance should be frozen to prevent modifications.
+             *
+             * If `true`, the `Hison` object and its properties are deeply frozen using `Object.freeze()`, 
+             * ensuring that no further changes can be made.
+             *
+             * - Default value: `true`
+             * - Used in `shield.excute(hison: Hison)`, where `deepFreeze(hison)` is applied.
+             */
             isFreeze : true,
+            /**
+             * Determines whether the browser's back navigation is allowed.
+             *
+             * If `false`, a mechanism is implemented to prevent the user from navigating back.
+             *
+             * - Default value: `false`
+             * - Used in `shield.excute(hison: Hison)`, where `history.pushState()` is applied 
+             *   to disable the back button.
+             */
             isPossibleGoBack : false,
+            /**
+             * Determines whether developer tools can be opened.
+             *
+             * If `false`, an event listener is added to detect developer mode access (F12 key, 
+             * browser dev tools, resizing, etc.), and alerts the user if an attempt is detected.
+             *
+             * - Default value: `false`
+             * - Used in `shield.excute(hison: Hison)`, where `shieldFuncCreateBlockDevMode()` is triggered.
+             */
             isPossibleOpenDevTool : false,
         };
         data = {
+            /**
+             * A function that allows customization of how specific objects are inserted into a `DataModel`.
+             *
+             * In `hisondev`, all values inserted into a `DataModel` are **copied** to maintain data integrity.
+             * However, certain JavaScript objects, such as `Date`, require a more flexible way of handling 
+             * their copying process. Instead of manually defining conversion logic for every object type, 
+             * `convertValue` provides a way for developers to customize how specific objects are transformed
+             * before being inserted into a `DataModel`.
+             *
+             * - By default, this function **returns the input value as is**.
+             * - Developers can override this function to implement custom conversion logic.
+             * - Used in `DataModel._deepCopy(object)`, where it is applied to non-plain objects.
+             *
+             * ## Usage in `DataModel`
+             * When copying an object, if it is not a plain `Object` or `Array`, `convertValue` is called:
+             * ```typescript
+             * if (object.constructor !== Object && object.constructor !== Array) {
+             *     const convertValue = defaultOption.data.convertValue(object);
+             *     return convertValue !== undefined ? convertValue : object;
+             * }
+             * ```
+             *
+             * ## Example: Customizing `convertValue` to Handle `Date` Objects
+             * ```typescript
+             * hison.setConvertValue((value: any) => {
+             *     return value instanceof Date ? value.getTime() : value;
+             * });
+             * ```
+             *
+             * - The above example ensures that when a `Date` object is inserted into `DataModel`, 
+             *   it is converted into a timestamp (`number`) instead of being copied as a reference.
+             *
+             * @param value The value to be processed before being inserted into `DataModel`.
+             * @returns The customized or original value.
+             */
             convertValue(value: any): any {return value;},
         };
         link = {
+            /**
+             * The default protocol used for API communication.
+             *
+             * - Default value: `'http://'`
+             * - Used in `ApiLink` to construct request URLs.
+             */
             protocol : 'http://',
+            /**
+             * The default domain for API requests.
+             *
+             * - Default value: `'localhost:8081'`
+             * - Used in `ApiLink` when constructing full request URLs.
+             */
             domain : 'localhost:8081',
+            /**
+             * The default controller path for API requests.
+             *
+             * This value is appended to the `protocol` and `domain` when making API calls.
+             *
+             * - Default value: `'/hison-api-link'`
+             * - Used in `ApiLink` when constructing API request URLs.
+             */
             controllerPath : '/hison-api-link',
+            /**
+             * The timeout duration (in milliseconds) for API requests.
+             *
+             * If the request does not complete within this time, it will be aborted.
+             *
+             * - Default value: `10000` (10 seconds)
+             * - Used in `ApiLink._getFetch()` to set request timeouts.
+             */
             timeout : 10000,
+            /**
+             * The default protocol used for WebSocket connections.
+             *
+             * - Default value: `'ws://'`
+             * - Used in `ApiLink` when initializing WebSocket communication.
+             */
             webSocketProtocol : 'ws://',
+            /**
+             * The default WebSocket endpoint for caching-related communication.
+             *
+             * - Default value: `'/hison-caching-websocket-endpoint'`
+             * - Used in `ApiLink` when establishing WebSocket connections.
+             */
             webSocketEndPoint : '/hison-caching-websocket-endpoint',
+            /**
+             * The caching limit for stored API responses.
+             *
+             * Determines the maximum number of cached API responses before old ones are removed.
+             *
+             * - Default value: `10`
+             * - Used in `ApiLink._getCachingResult()` for cache management.
+             */
             cachingLimit : 10,
+            /**
+             * Hook function executed before making a `GET` request.
+             *
+             * This function can be used to modify request parameters or cancel the request.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param resourcePath The API resource path being requested.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
             beforeGetRequst(resourcePath: string, options: Record<string, any>): boolean | void {return true;},
+            /**
+             * Hook function executed before making a `POST` request.
+             *
+             * This function allows modifying the request before it is sent.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
             beforePostRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            /**
+             * Hook function executed before making a `PUT` request.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
             beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            /**
+             * Hook function executed before making a `PATCH` request.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
             beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            /**
+             * Hook function executed before making a `DELETE` request.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
             beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            /**
+             * Intercepts and processes API responses before returning them to the caller.
+             *
+             * - If it returns `false`, the response is ignored.
+             * - Default implementation returns `true`.
+             *
+             * @param result The `DataWrapper` object containing the API response.
+             * @param response The raw `Response` object from the fetch request.
+             * @returns `boolean | void` (Returning `false` cancels further processing)
+             */
             interceptApiResult(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
+            /**
+             * Intercepts and processes API errors before returning them to the caller.
+             *
+             * - If it returns `false`, the error is ignored.
+             * - Default implementation returns `true`.
+             *
+             * @param error The encountered error.
+             * @returns `boolean | void` (Returning `false` cancels further error handling)
+             */
             interceptApiError(error: any): boolean | void {return true;},
         };
     }
@@ -879,30 +1278,35 @@ function createHison(): Hison {
             return result;
         };
         get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(defaultOption.link.beforeGetRequst(resourcePath, options) === false) return null;
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
             if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + resourcePath, options, null, null), resourcePath);
         };
         post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(defaultOption.link.beforePostRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(defaultOption.link.beforePutRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(defaultOption.link.beforePatchRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(defaultOption.link.beforeDeleteRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
