@@ -20,7 +20,7 @@
  * - The function returns an object containing various methods to access `Hison` functionalities.
  *
  * ## Default Option Configuration
- * - `Hison` provides setter methods to modify **defaultOption** properties that influence 
+ * - `Hison` provides setter methods to modify **customOption** properties that influence 
  *   internal method behavior.
  * - Examples include:
  *   - `setDateFormat(format: string)`: Updates the default date format.
@@ -34,7 +34,7 @@ interface Hison {
     /**
      * Sets the default format for displaying dates.
      *
-     * This method updates the `dateFormat` property in `defaultOption.utils`, 
+     * This method updates the `dateFormat` property in `customOption`, 
      * which is used throughout the `hisondev` solution for parsing and formatting date values.
      *
      * - The new format will be applied globally to all date-related operations.
@@ -52,7 +52,7 @@ interface Hison {
     /**
      * Sets the default format for displaying time.
      *
-     * This method updates the `timeFormat` property in `defaultOption.utils`, 
+     * This method updates the `timeFormat` property in `customOption`, 
      * which is used throughout the `hisondev` solution for parsing and formatting time values.
      *
      * - The new format will be applied globally to all time-related operations.
@@ -67,6 +67,23 @@ interface Hison {
      * @param str The new time format string.
      */
     setTimeFormat(str: string): void;
+    /**
+     * Sets the default format for displaying date and time.
+     *
+     * This method updates the `datetimeFormat` property in `customOption`, 
+     * which is used throughout the `hisondev` solution for parsing and formatting datetime values.
+     *
+     * - The new format will be applied globally to all datetime-related operations.
+     * - Default value: `'yyyy-MM-dd hh:mm:ss'`
+     * - Example output after setting format: `'02/04/2025 14:30'` (for `'MM/dd/yyyy HH:mm'`)
+     *
+     * ## Related Property
+     * - **`datetimeFormat`**: Defines the default date-time format.
+     *   - Default: `'yyyy-MM-dd hh:mm:ss'`
+     *   - Example output: `'2025-02-04 14:30:15'`
+     *
+     * @param str The new datetime format string.
+     */
     setDatetimeFormat(str: string): void;
     setYearFormat(str: string): void;
     setMonthFormat(str: string): void;
@@ -259,7 +276,6 @@ interface Hison {
         getRpad(str: string, padStr: string, length: number): string;
         getTrim(str: string): string;
         getReplaceAll(str: string, targetStr: string, replaceStr?: string): string;
-        nvl(val: any, defaultValue: any): any;
         getNumberFormat(value: number, format?: string): string;
         getRemoveExceptNumbers(str: string): string;
         getRemoveNumbers(str: string): string;
@@ -271,6 +287,7 @@ interface Hison {
         getToInteger(value: any, impossibleValue?: number): number;
         getToString(str: any, impossibleValue?: string): string;
         //etc
+        nvl(val: any, defaultValue: any): any;
         getFileExtension(str: string): string;
         getFileName(str: string): string;
         getDecodeBase64(str: string): string;
@@ -341,35 +358,72 @@ interface Hison {
     //data
     //====================================================================================
     /**
-     * DataWrapper와 DataModel 생성자를 가진 객체입니다.
+     * The `hison.data` object provides two core constructors: `DataWrapper` and `DataModel`, 
+     * which facilitate structured data storage and management.
+     *
+     * ## Key Components
+     * - **`DataWrapper`**: A key-value based storage wrapper that allows for structured data organization.
+     * - **`DataModel`**: A table-like data structure designed for managing rows and columns efficiently.
+     *
+     * These components allow developers to store, manipulate, and retrieve structured data effectively.
+     *
+     * ## Example Usage
+     * ```typescript
+     * // Using DataWrapper
+     * const dataWrapper = new hison.data.DataWrapper({ key1: "value1", key2: "value2" });
+     * console.log(dataWrapper.getString("key1")); // Output: "value1"
      * 
-     * @returns {Object} { DataWrapper class, DataModel class }
-     * 
-     * @example
-     * new hison.data.DataWrapper(); DataWrapper 인스턴스를 생성합니다.
-     * new hison.data.DataModel(); DataModel 인스턴스를 생성합니다.
-     * 
-     * @description
-     * DataModel을 감싸는 wrapper객체인 DataWrapper 생성자와
-     * JavaScript object for managing and manipulating a table-like data structure인 DataModel 생성자를 갖고있는 객체입니다.
+     * // Using DataModel
+     * const dataModel = new hison.data.DataModel([
+     *     { id: 1, name: "Alice" },
+     *     { id: 2, name: "Bob" }
+     * ]);
+     * console.log(dataModel.getValue(0, "name")); // Output: "Alice"
+     * ```
      */
     data: {
         /**
-         * DataWrapper constructor.
+         * The `DataWrapper` constructor creates an instance that stores key-value pairs.
+         * It supports storing primitive types, strings, and `DataModel` objects.
+         *
+         * ## Parameters
+         * - `keyOrObject` **(Object | string, optional)**: Either an object containing key-value pairs 
+         *   or a single key when paired with a `value`.
+         * - `value` **(*, optional)**: The value associated with the provided key. Only required when 
+         *   `keyOrObject` is a string.
+         *
+         * ## Example Usage
+         * ```typescript
+         * const wrapper = new hison.data.DataWrapper({ name: "John", age: 30 });
+         * console.log(wrapper.getString("name")); // Output: "John"
+         * ```
+         *
          * @constructor
-         * @param {Object|string} keyOrObject - Either an object with key-value pairs, or a single key if paired with a value.
-         * @param {*} [value] - Value associated with the provided key. Only needed if a single key is provided.
          */
         DataWrapper: new (keyOrObject?: Record<string, any> | string, value?: any) => DataWrapper;
         /**
-         * DataModel is a JavaScript object for managing and manipulating a table-like data structure.
-         * It provides methods to add, remove, sort, and filter rows and columns, and to perform various operations on the data.
+         * The `DataModel` constructor provides a structured table-like data management system, 
+         * allowing row and column-based operations such as insertion, deletion, filtering, 
+         * and sorting.
+         *
+         * ## Parameters
+         * - `data` **(Array | Object, optional)**: The initial dataset, which can be:
+         *   - An **array of objects**, where each object represents a row, and keys represent columns.
+         *   - An **array of strings**, which initializes column names.
+         *   - A **single object**, representing a single-row initialization.
+         *
+         * ## Example Usage
+         * ```typescript
+         * // Creating a DataModel from an array of objects
+         * const model = new hison.data.DataModel([
+         *     { id: 1, name: "Alice" },
+         *     { id: 2, name: "Bob" }
+         * ]);
+         *
+         * console.log(model.getValue(0, "name")); // Output: "Alice"
+         * ```
          *
          * @constructor
-         * @param {Array|Object} ArrayOrObject - An array or object to initialize the DataModel. 
-         *                                       If an array of objects is provided, each object represents a row, and the keys represent the columns.
-         *                                       If an array of strings is provided, it initializes the column names.
-         *                                       If an object is provided, it initializes a single row with the object's key-value pairs.
          */
         DataModel: new (data?: Record<string, any>[] | Record<string, any>) => DataModel;
     };
@@ -378,17 +432,55 @@ interface Hison {
     //link
     //====================================================================================
     /**
-     * ApiLink와 CachingModule 생성자를 가진 객체입니다.
+     * The `hison.link` object provides core communication modules for interacting with the hisondev platform.
+     * It serves as a central hub for API requests, caching, and WebSocket communication.
+     *
+     * ## Key Components
+     * - **`CachingModule`**: Manages API response caching using an LRU (Least Recently Used) strategy.
+     * - **`ApiGet`, `ApiPost`, `ApiPut`, `ApiPatch`, `ApiDelete`**: Handle REST API calls by encapsulating request logic.
+     * - **`ApiGetUrl`, `ApiPostUrl`, `ApiPutUrl`, `ApiPatchUrl`, `ApiDeleteUrl`**: Similar to the above, but allow direct URL-based requests.
+     *
+     * These components simplify API integration and provide caching and event-driven request handling.
+     *
+     * ## How It Works
+     * - **API requests are wrapped in `DataWrapper` instances**, which store key-value data.
+     * - **The `cmd` property in `DataWrapper` determines the service path**, directing the request to the appropriate business logic on the server.
+     * - **`CachingModule` enables response caching**, reducing redundant network calls for frequently accessed resources.
+     * - **`EventEmitter` allows developers to listen for request events**, such as completion, errors, or specific triggers.
+     *
+     * ## Example Usage
+     * ```typescript
+     * // Creating an API request
+     * const requestData = new hison.data.DataWrapper();
+     * requestData.putString("cmd", "UserService.createUser");
+     * requestData.putString("username", "Alice");
      * 
-     * @returns {Object} { ApiLink와 class, CachingModule class }
-     * 
-     * @example
-     * new hison.link.ApiLink(); ApiLink 인스턴스를 생성합니다.
-     * new hison.link.CachingModule(); CachingModule 인스턴스를 생성합니다.
-     * 
-     * @description
-     * hisondev 플랫폼의 api-link와 통신을 지원하는 javasctript 통신 인스턴스인 ApiLink와.
-     * hisondev 플랫폼의 api-link와 웹소캣 통신 및 캐싱을 지원하는 javasctript 인스턴스인 CachingModule을 갖고있는 객체입니다.
+     * // Sending a POST request
+     * const apiPost = new hison.link.ApiPost("UserService.createUser");
+     * apiPost.call(requestData).then(response => {
+     *     console.log(response.data); // Response from the server
+     * });
+     *
+     * // Handling request events
+     * apiPost.onEventEmit("requestCompleted_Data", (data, response) => {
+     *     console.log("Request completed!", data);
+     * });
+     *
+     * // Using caching for a GET request
+     * const cachingModule = new hison.link.CachingModule(20); // Set cache limit to 20
+     * const apiGet = new hison.link.ApiGet("/users", cachingModule);
+     * apiGet.call().then(response => {
+     *     console.log(response.data);
+     * });
+     * ```
+     *
+     * ## Internal Structure
+     * - **Uses `ApiLink` for handling network requests**.
+     * - **Utilizes `EventEmitter` for event-driven communication**.
+     * - **Supports WebSocket integration via `CachingModule`**.
+     * - **Compatible with `CustomOption` for flexible configuration**.
+     *
+     * @returns {Object} An object containing API communication classes and caching support.
      */
     link: {
         CachingModule: new (cachingLimit?: number) => CachingModule;
@@ -707,7 +799,7 @@ interface InterceptApiError {(error: any/**promise에서 던지는 error는 어�
  * @namespace Hison
  */
 function createHison(): Hison {
-    class DefaultOption {
+    class CustomOption {
         utils = {
             /**
              * The default format for displaying dates.
@@ -949,7 +1041,7 @@ function createHison(): Hison {
              * When copying an object, if it is not a plain `Object` or `Array`, `convertValue` is called:
              * ```typescript
              * if (object.constructor !== Object && object.constructor !== Array) {
-             *     const convertValue = defaultOption.data.convertValue(object);
+             *     const convertValue = customOption.data.convertValue(object);
              *     return convertValue !== undefined ? convertValue : object;
              * }
              * ```
@@ -1212,7 +1304,7 @@ function createHison(): Hison {
         private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; }> => {
             if(this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(resourcePath)) {
                 const result = await this._cachingModule.get(resourcePath);
-                if(result && defaultOption.link.interceptApiResult(result.data, result.response) !== false) {
+                if(result && customOption.link.interceptApiResult(result.data, result.response) !== false) {
                     return result;
                 };
                 return null;
@@ -1266,54 +1358,54 @@ function createHison(): Hison {
                 const data = this._getRsultDataWrapper(resultData);
                 this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
                 if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(cachingKey, Promise.resolve({ data: data, response: rtn.response }));
-                if(defaultOption.link.interceptApiResult(data, rtn.response) === false) return null;
+                if(customOption.link.interceptApiResult(data, rtn.response) === false) return null;
                 return { data: data, response: rtn.response };
             })
             .catch(error => {
                 this._eventEmitter.emit('requestError', error);
-                if(defaultOption.link.interceptApiError(error) === false) return null;
+                if(customOption.link.interceptApiError(error) === false) return null;
                 return error;
             });
         
             return result;
         };
         get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(defaultOption.link.beforeGetRequst(resourcePath, options) === false) return null;
+            if(customOption.link.beforeGetRequst(resourcePath, options) === false) return null;
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
             if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
-            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + resourcePath, options, null, null), resourcePath);
+            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + resourcePath, options, null, null), resourcePath);
         };
         post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(defaultOption.link.beforePostRequst(requestData, options) === false) return null;
+            if(customOption.link.beforePostRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(defaultOption.link.beforePutRequst(requestData, options) === false) return null;
+            if(customOption.link.beforePutRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(defaultOption.link.beforePatchRequst(requestData, options) === false) return null;
+            if(customOption.link.beforePatchRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(defaultOption.link.beforeDeleteRequst(requestData, options) === false) return null;
+            if(customOption.link.beforeDeleteRequst(requestData, options) === false) return null;
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, defaultOption.link.protocol + defaultOption.link.domain + defaultOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         head = async (resourcePath: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
-            const url = defaultOption.link.protocol + defaultOption.link.domain + resourcePath;
+            const url = customOption.link.protocol + customOption.link.domain + resourcePath;
             return fetch(url, { method: 'HEAD', ...options })
                 .then(response => {
                     if (!response.ok) {
@@ -1330,7 +1422,7 @@ function createHison(): Hison {
                 });
         };
         options = async (resourcePath: string, options: Record<string, any> = {}): Promise<string[]> => {
-            const url = defaultOption.link.protocol + defaultOption.link.domain + resourcePath;
+            const url = customOption.link.protocol + customOption.link.domain + resourcePath;
             return fetch(url, { method: 'OPTIONS', ...options })
                 .then(response => {
                     if (!response.ok) {
@@ -1440,58 +1532,293 @@ function createHison(): Hison {
     };
     class Hison implements Hison{
         utils = {
-            //for boolean
+            /**
+             * Checks if the given string contains only alphabetic characters (A-Z, a-z).
+             *
+             * - Returns `true` if the string consists solely of alphabetic characters.
+             * - Returns `false` if the string contains numbers, symbols, or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only alphabetic characters, otherwise `false`.
+             *
+             * @example
+             * isAlpha("Hello"); // true
+             * isAlpha("Hello123"); // false
+             * isAlpha("!@#"); // false
+             */
             isAlpha(str: string): boolean {
                 return /^[A-Za-z]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains only alphabetic characters (A-Z, a-z) and numbers (0-9).
+             *
+             * - Returns `true` if the string consists solely of alphabetic characters and/or numbers.
+             * - Returns `false` if the string contains symbols or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only alphabetic characters and numbers, otherwise `false`.
+             *
+             * @example
+             * isAlphaNumber("Hello123"); // true
+             * isAlphaNumber("Hello!"); // false
+             * isAlphaNumber("123"); // true
+             */
             isAlphaNumber(str: string): boolean {
                 return /^[A-Za-z0-9]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains only numeric characters (0-9).
+             *
+             * - Returns `true` if the string consists solely of numbers.
+             * - Returns `false` if the string contains letters, symbols, or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only numeric characters, otherwise `false`.
+             *
+             * @example
+             * isNumber("123456"); // true
+             * isNumber("123a"); // false
+             * isNumber("!@#"); // false
+             */
             isNumber(str: string): boolean {
                 return /^[0-9]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains only numeric characters (0-9) and symbols.
+             *
+             * - Returns `true` if the string consists solely of numbers and/or symbols.
+             * - Returns `false` if the string contains alphabetic characters or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only numeric characters and symbols, otherwise `false`.
+             *
+             * @example
+             * isNumberSymbols("123!@#"); // true
+             * isNumberSymbols("123ABC"); // false
+             * isNumberSymbols("!@#$%^"); // true
+             */
             isNumberSymbols(str: string): boolean {
                 return /^[0-9!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?~]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains any symbols.
+             *
+             * - Returns `true` if the string contains at least one symbol.
+             * - Returns `false` if the string has only alphanumeric characters or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains symbols, otherwise `false`.
+             *
+             * @example
+             * isIncludeSymbols("Hello!"); // true
+             * isIncludeSymbols("123"); // false
+             * isIncludeSymbols("password@123"); // true
+             */
             isIncludeSymbols(str: string): boolean {
                 return /[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?~]/.test(str);
             },
+            /**
+             * Checks if the given string contains only lowercase alphabetic characters (a-z).
+             *
+             * - Returns `true` if the string consists solely of lowercase letters.
+             * - Returns `false` if the string contains uppercase letters, numbers, symbols, or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only lowercase alphabetic characters, otherwise `false`.
+             *
+             * @example
+             * isLowerAlpha("hello"); // true
+             * isLowerAlpha("Hello"); // false
+             * isLowerAlpha("hello123"); // false
+             */
             isLowerAlpha(str: string): boolean {
                 return /^[a-z]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains only lowercase alphabetic characters (a-z) and numbers (0-9).
+             *
+             * - Returns `true` if the string consists solely of lowercase letters and/or numbers.
+             * - Returns `false` if the string contains uppercase letters, symbols, or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only lowercase letters and numbers, otherwise `false`.
+             *
+             * @example
+             * isLowerAlphaAndNumber("hello123"); // true
+             * isLowerAlphaAndNumber("Hello123"); // false
+             * isLowerAlphaAndNumber("hello!"); // false
+             */
             isLowerAlphaAndNumber(str: string): boolean {
                 return /^[a-z0-9]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains only uppercase alphabetic characters (A-Z).
+             *
+             * - Returns `true` if the string consists solely of uppercase letters.
+             * - Returns `false` if the string contains lowercase letters, numbers, symbols, or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only uppercase alphabetic characters, otherwise `false`.
+             *
+             * @example
+             * isUpperAlpha("HELLO"); // true
+             * isUpperAlpha("Hello"); // false
+             * isUpperAlpha("HELLO123"); // false
+             */
             isUpperAlpha(str: string): boolean {
                 return /^[A-Z]+$/.test(str);
             },
+            /**
+             * Checks if the given string contains only uppercase alphabetic characters (A-Z) and numbers (0-9).
+             *
+             * - Returns `true` if the string consists solely of uppercase letters and/or numbers.
+             * - Returns `false` if the string contains lowercase letters, symbols, or is empty.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string contains only uppercase letters and numbers, otherwise `false`.
+             *
+             * @example
+             * isUpperAlphaNumber("HELLO123"); // true
+             * isUpperAlphaNumber("Hello123"); // false
+             * isUpperAlphaNumber("HELLO!"); // false
+             */
             isUpperAlphaNumber(str: string): boolean {
                 return /^[A-Z0-9]+$/.test(str);
             },
+            /**
+             * Checks if the given value is a numeric value.
+             *
+             * - Returns `true` if the value is a finite number.
+             * - Returns `false` if the value is `NaN`, `Infinity`, or not a number.
+             *
+             * @param num The value to be checked.
+             * @returns `true` if the value is numeric, otherwise `false`.
+             *
+             * @example
+             * isNumeric(123); // true
+             * isNumeric("123"); // true
+             * isNumeric("abc"); // false
+             * isNumeric(Infinity); // false
+             * isNumeric(NaN); // false
+             */
             isNumeric(num: any): boolean {
                 return !isNaN(num) && isFinite(num);
             },
+            /**
+             * Checks if the given value is an integer.
+             *
+             * - Returns `true` if the value is a finite integer.
+             * - Returns `false` if the value is a decimal, `NaN`, `Infinity`, or not a number.
+             *
+             * @param num The value to be checked.
+             * @returns `true` if the value is an integer, otherwise `false`.
+             *
+             * @example
+             * isInteger(10); // true
+             * isInteger("10"); // true
+             * isInteger(10.5); // false
+             * isInteger("abc"); // false
+             * isInteger(Infinity); // false
+             */
             isInteger(num: any): boolean {
                 if (!hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num);
             },
+            /**
+             * Checks if the given value is a positive integer.
+             *
+             * - Returns `true` if the value is a finite integer greater than zero.
+             * - Returns `false` if the value is zero, a negative number, a decimal, `NaN`, `Infinity`, or not a number.
+             *
+             * @param num The value to be checked.
+             * @returns `true` if the value is a positive integer, otherwise `false`.
+             *
+             * @example
+             * isPositiveInteger(10); // true
+             * isPositiveInteger("10"); // true
+             * isPositiveInteger(0); // false
+             * isPositiveInteger(-5); // false
+             * isPositiveInteger(10.5); // false
+             */
             isPositiveInteger(num: any): boolean {
                 if (!hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num) && num > 0;
             },
+            /**
+             * Checks if the given value is a negative integer.
+             *
+             * - Returns `true` if the value is a finite integer less than zero.
+             * - Returns `false` if the value is zero, a positive number, a decimal, `NaN`, `Infinity`, or not a number.
+             *
+             * @param num The value to be checked.
+             * @returns `true` if the value is a negative integer, otherwise `false`.
+             *
+             * @example
+             * isNegativeInteger(-10); // true
+             * isNegativeInteger("-10"); // true
+             * isNegativeInteger(0); // false
+             * isNegativeInteger(5); // false
+             * isNegativeInteger(-10.5); // false
+             */
             isNegativeInteger(num: any): boolean {
                 if (!hison.utils.isNumeric(num)) return false;
                 num = Number(num);
                 return Number.isInteger(num) && num < 0;
             },
+            /**
+             * Checks if the given value is an array.
+             *
+             * - Returns `true` if the value is an array.
+             * - Returns `false` if the value is `null`, `undefined`, an object, or any other data type.
+             *
+             * @param arr The value to be checked.
+             * @returns `true` if the value is an array, otherwise `false`.
+             *
+             * @example
+             * isArray([1, 2, 3]); // true
+             * isArray("Hello"); // false
+             * isArray({ key: "value" }); // false
+             * isArray(null); // false
+             */
             isArray(arr: any): boolean {
                 return Array.isArray(arr) && arr.constructor === Array;
             },
+            /**
+             * Checks if the given value is a plain object.
+             *
+             * - Returns `true` if the value is a non-null object and not an array.
+             * - Returns `false` if the value is `null`, an array, or any other data type.
+             *
+             * @param obj The value to be checked.
+             * @returns `true` if the value is a plain object, otherwise `false`.
+             *
+             * @example
+             * isObject({ key: "value" }); // true
+             * isObject([1, 2, 3]); // false
+             * isObject(null); // false
+             * isObject("Hello"); // false
+             */
             isObject(obj: any): boolean {
                 return obj !== null && typeof obj === 'object' && !Array.isArray(obj) && obj.constructor === Object;
             },
+            /**
+             * Checks if the given value is a valid date.
+             *
+             * - Accepts a `DateObject` or a string representation of a date.
+             * - Returns `true` if the date is valid based on its year, month, and day.
+             * - Returns `false` if the date is improperly formatted or does not exist.
+             *
+             * @param date The value to be checked (as a `DateObject` or string).
+             * @returns `true` if the value is a valid date, otherwise `false`.
+             *
+             * @example
+             * isDate("2024-02-29"); // true (valid leap year date)
+             * isDate("2023-02-29"); // false (February 29 does not exist in 2023)
+             * isDate({ y: 2023, M: 12, d: 31 }); // true
+             * isDate("invalid-date"); // false
+             */
             isDate(date: DateObject | string): boolean {
                 const dateObj: DateObject = hison.utils.isObject(date) ? date as DateObject : hison.utils.getDateObject(date as string);
         
@@ -1536,6 +1863,23 @@ function createHison(): Hison {
                 }    
                 return result;
             },
+            /**
+             * Checks if the given value is a valid time.
+             *
+             * - Accepts a `TimeObject` or a string representation of a time.
+             * - Returns `true` if the time consists of valid hours, minutes, and seconds.
+             * - Returns `false` if any part of the time is invalid or improperly formatted.
+             *
+             * @param time The value to be checked (as a `TimeObject` or string).
+             * @returns `true` if the value is a valid time, otherwise `false`.
+             *
+             * @example
+             * isTime("14:30:59"); // true
+             * isTime({ h: 23, m: 59, s: 59 }); // true
+             * isTime("25:00:00"); // false (invalid hour)
+             * isTime("12:60:00"); // false (invalid minute)
+             * isTime("12:30:61"); // false (invalid second)
+             */
             isTime(time: TimeObject | string): boolean {
                 const timeObj: TimeObject = hison.utils.isObject(time) ? time as TimeObject : hison.utils.getTimeObject(time as string);
         
@@ -1558,20 +1902,87 @@ function createHison(): Hison {
             
                 return isValidTimePart(hh, 23) && isValidTimePart(mm, 59) && isValidTimePart(ss, 59);
             },
+            /**
+             * Checks if the given value is a valid datetime.
+             *
+             * - Accepts a `DateTimeObject` or a string representation of a datetime.
+             * - Returns `true` if both the date and time components are valid.
+             * - Returns `false` if either the date or time is invalid or improperly formatted.
+             *
+             * @param datetime The value to be checked (as a `DateTimeObject` or string).
+             * @returns `true` if the value is a valid datetime, otherwise `false`.
+             *
+             * @example
+             * isDatetime("2024-02-29 14:30:59"); // true
+             * isDatetime({ y: 2023, M: 12, d: 31, h: 23, m: 59, s: 59 }); // true
+             * isDatetime("2023-02-29 12:00:00"); // false (invalid date)
+             * isDatetime("2024-02-28 25:00:00"); // false (invalid time)
+             */
             isDatetime(datetime: DateTimeObject | string): boolean {
                 const datetimeObj: DateTimeObject = hison.utils.isObject(datetime) ? datetime as DateTimeObject : hison.utils.getDatetimeObject(datetime as string);
                 if (!hison.utils.isDate(datetimeObj)) return false;
                 if (!hison.utils.isTime(datetimeObj)) return false;
                 return true;
             },
+            /**
+             * Checks if the given string is a valid email address.
+             *
+             * - Returns `true` if the string follows the standard email format.
+             * - Returns `false` if the string does not match the email pattern.
+             *
+             * @param str The string to be checked.
+             * @returns `true` if the string is a valid email address, otherwise `false`.
+             *
+             * @example
+             * isEmail("user@example.com"); // true
+             * isEmail("user.name@domain.co"); // true
+             * isEmail("user@domain"); // false (missing top-level domain)
+             * isEmail("invalid-email"); // false
+             */
             isEmail(str: string): boolean {
                 const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,}$/;
                 return emailPattern.test(str);
             },
+            /**
+             * Checks if the given string is a valid URL.
+             *
+             * - Returns `true` if the string follows the standard URL format.
+             * - Returns `false` if the string does not match the URL pattern.
+             *
+             * @param urlStr The string to be checked.
+             * @returns `true` if the string is a valid URL, otherwise `false`.
+             *
+             * @example
+             * isURL("https://example.com"); // true
+             * isURL("ftp://files.server.com"); // true
+             * isURL("www.example.com"); // false (missing protocol)
+             * isURL("invalid-url"); // false
+             */
             isURL(urlStr: string): boolean {
                 const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
                 return urlPattern.test(urlStr);
             },
+            /**
+             * Checks if the given string matches the specified mask pattern.
+             *
+             * - A mask defines expected character types at each position:
+             *   - `'A'` expects an uppercase letter (A-Z).
+             *   - `'a'` expects a lowercase letter (a-z).
+             *   - `'9'` expects a numeric digit (0-9).
+             *   - Any other character in the mask must match exactly.
+             * - Returns `true` if the string fully matches the mask pattern.
+             * - Returns `false` if the string does not match the mask or has a different length.
+             *
+             * @param str The string to be validated.
+             * @param mask The mask pattern defining expected character types.
+             * @returns `true` if the string matches the mask pattern, otherwise `false`.
+             *
+             * @example
+             * isValidMask("ABC123", "AAA999"); // true
+             * isValidMask("abc123", "AAA999"); // false (lowercase letters don't match uppercase mask)
+             * isValidMask("abc-123", "aaa-999"); // true
+             * isValidMask("abcd123", "aaa-999"); // false (length mismatch)
+             */
             isValidMask(str: string, mask: string): boolean {
                 if (str.length !== mask.length) {
                     return false;
@@ -1597,8 +2008,25 @@ function createHison(): Hison {
                 }
                 return true;
             },
-
-            //for Date
+            /**
+             * Extracts and returns the year, month, and day from a given date.
+             *
+             * - If the input is a `Date` object, it extracts the year, month, and day.
+             * - If the input is a string, it attempts to parse it in formats:
+             *   - `"YYYY-MM-DD"`
+             *   - `"YYYY/MM/DD"`
+             *   - `"YYYYMMDD"`
+             * - If parsing fails, it returns an object with `null` values.
+             *
+             * @param date A `Date` object or a date string in a supported format.
+             * @returns An object containing the year (`y`), month (`M`), and day (`d`).
+             *
+             * @example
+             * getDateObject("2024-02-05"); // { y: 2024, M: 2, d: 5 }
+             * getDateObject("20240205"); // { y: 2024, M: 2, d: 5 }
+             * getDateObject(new Date(2024, 1, 5)); // { y: 2024, M: 2, d: 5 }
+             * getDateObject("invalid"); // { y: null, M: null, d: null }
+             */
             getDateObject(date: Date | string): DateObject {
                 const result = {y: null, M: null, d: null};
                 if (typeof date === 'string') {
@@ -1626,6 +2054,26 @@ function createHison(): Hison {
                 }
                 return result
             },
+            /**
+             * Extracts and returns the hours, minutes, and seconds from a given time.
+             *
+             * - If the input is a `Date` object, it extracts the hour, minute, and second.
+             * - If the input is a string, it attempts to parse it in formats:
+             *   - `"HH:MM:SS"`
+             *   - `"HHMMSS"`
+             * - If the input is a datetime string (`"YYYY-MM-DD HH:MM:SS"`), it extracts only the time part.
+             * - If parsing fails, it returns an object with `null` values.
+             *
+             * @param time A `Date` object or a time string in a supported format.
+             * @returns An object containing the hours (`h`), minutes (`m`), and seconds (`s`).
+             *
+             * @example
+             * getTimeObject("14:30:45"); // { h: 14, m: 30, s: 45 }
+             * getTimeObject("143045"); // { h: 14, m: 30, s: 45 }
+             * getTimeObject("2024-02-05 14:30:45"); // { h: 14, m: 30, s: 45 }
+             * getTimeObject(new Date(2024, 1, 5, 14, 30, 45)); // { h: 14, m: 30, s: 45 }
+             * getTimeObject("invalid"); // { h: null, m: null, s: null }
+             */
             getTimeObject(time: Date | string): TimeObject {
                 const result = {h: null, m: null, s: null};
                 if (typeof time === 'string') {
@@ -1653,6 +2101,27 @@ function createHison(): Hison {
                 }
                 return result;
             },
+            /**
+             * Extracts and returns the year, month, day, hours, minutes, and seconds from a given datetime.
+             *
+             * - If the input is a `Date` object, it extracts all date and time components.
+             * - If the input is a string, it attempts to parse it in formats:
+             *   - `"YYYY-MM-DD HH:MM:SS"`
+             *   - `"YYYY/MM/DD HH:MM:SS"`
+             *   - `"YYYYMMDDHHMMSS"`
+             * - If the input is a date-only string (`"YYYY-MM-DD"`), the time defaults to `00:00:00`.
+             * - If parsing fails, it returns `null`.
+             *
+             * @param datetime A `Date` object or a datetime string in a supported format.
+             * @returns An object containing the year (`y`), month (`M`), day (`d`), hours (`h`), minutes (`m`), and seconds (`s`), or `null` if parsing fails.
+             *
+             * @example
+             * getDatetimeObject("2024-02-05 14:30:45"); // { y: 2024, M: 2, d: 5, h: 14, m: 30, s: 45 }
+             * getDatetimeObject("20240205143045"); // { y: 2024, M: 2, d: 5, h: 14, m: 30, s: 45 }
+             * getDatetimeObject("2024-02-05"); // { y: 2024, M: 2, d: 5, h: 0, m: 0, s: 0 }
+             * getDatetimeObject(new Date(2024, 1, 5, 14, 30, 45)); // { y: 2024, M: 2, d: 5, h: 14, m: 30, s: 45 }
+             * getDatetimeObject("invalid"); // null
+             */
             getDatetimeObject(datetime: Date | string): DateTimeObject {
                 if (typeof datetime === 'string') {
                     datetime = hison.utils.getToString(datetime);
@@ -1673,14 +2142,35 @@ function createHison(): Hison {
                 }
                 return null;
             },
+
+            /**
+             * Adds a specified amount of time to a given date or datetime.
+             *
+             * - Accepts a `DateTimeObject`, `DateObject`, or a date string.
+             * - Supports adding years (`'y'`), months (`'M'`), days (`'d'`), hours (`'h'`), minutes (`'m'`), and seconds (`'s'`).
+             * - If `addType` is omitted or invalid, it defaults to adding days.
+             * - If `format` is provided, returns a formatted string; otherwise, returns a `DateTimeObject`.
+             *
+             * @param datetime The original datetime as an object or string.
+             * @param addValue The amount to add (positive or negative).
+             * @param addType The unit of time to add (`'y'`, `'M'`, `'d'`, `'h'`, `'m'`, `'s'`).
+             * @param format Optional format string for the output. default : 'yyyy-MM-dd' or 'yyyy-MM-dd hh:mm:ss'
+             * @returns The updated datetime as an object or formatted string.
+             *
+             * @example
+             * addDate("2024-02-05", 1, "d"); // { y: 2024, M: 2, d: 6 }
+             * addDate("2024-02-05", -1, "M"); // { y: 2024, M: 1, d: 5 }
+             * addDate("2024-02-05 14:30:00", 2, "h"); // { y: 2024, M: 2, d: 5, h: 16, m: 30, s: 0 }
+             * addDate("2024-02-05", 1, "d", "yyyy-MM-dd"); // "2024-02-06"
+             */
             addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = '', format: string = ''): DateTimeObject | string {
                 const datetimeObj: DateTimeObject = hison.utils.isObject(datetime) ? hison.utils.deepCopyObject(datetime) : hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
-                        format = defaultOption.utils.dateFormat
+                        format = customOption.utils.dateFormat
                     }
                     else {
-                        format = defaultOption.utils.datetimeFormat;
+                        format = customOption.utils.datetimeFormat;
                     }
                 }
                 
@@ -1732,6 +2222,32 @@ function createHison(): Hison {
         
                 return hison.utils.isObject(datetime) ? rtnObj : hison.utils.getDateWithFormat(rtnObj, format);
             },
+            /**
+             * Calculates the difference between two dates or datetimes.
+             *
+             * - Accepts `DateTimeObject`, `DateObject`, or a string representation of a date or datetime.
+             * - If `diffType` is specified, it returns the difference in the given unit:
+             *   - `'y'`: Years
+             *   - `'M'`: Months
+             *   - `'d'`: Days
+             *   - `'h'`: Hours
+             *   - `'m'`: Minutes
+             *   - `'s'`: Seconds
+             * - If `diffType` is omitted or invalid, it defaults to calculating the difference in days.
+             *
+             * @param datetime1 The first date or datetime.
+             * @param datetime2 The second date or datetime.
+             * @param diffType The unit of difference (`'y'`, `'M'`, `'d'`, `'h'`, `'m'`, `'s'`).
+             * @returns The difference between the two dates in the specified unit.
+             *
+             * @example
+             * getDateDiff("2024-02-01", "2024-03-01", "M"); // 1
+             * getDateDiff("2024-02-01", "2025-02-01", "y"); // 1
+             * getDateDiff("2024-02-01", "2024-02-10", "d"); // 9
+             * getDateDiff("2024-02-01 14:00:00", "2024-02-01 16:30:00", "h"); // 2
+             * getDateDiff("2024-02-01 14:00:00", "2024-02-01 14:45:00", "m"); // 45
+             * getDateDiff("2024-02-01 14:00:00", "2024-02-01 14:00:30", "s"); // 30
+             */
             getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType: string = ''): number {
                 const datetimeObj1: DateTimeObject = hison.utils.isObject(datetime1) ? hison.utils.deepCopyObject(datetime1) : hison.utils.getDatetimeObject(datetime1 as string);
                 const datetimeObj2: DateTimeObject = hison.utils.isObject(datetime2) ? hison.utils.deepCopyObject(datetime2) : hison.utils.getDatetimeObject(datetime2 as string);
@@ -1767,6 +2283,26 @@ function createHison(): Hison {
                         return Math.floor((d2.getTime() - d1.getTime()) / (24 * 60 * 60 * 1000));
                 }
             },
+            /**
+             * Returns the full or abbreviated name of a given month.
+             *
+             * - Accepts a month number (`1-12`) or a string representation of a number.
+             * - If `isFullName` is `true`, it returns the full month name (e.g., `"January"`).
+             * - If `isFullName` is `false`, it returns the abbreviated month name (e.g., `"Jan"`).
+             * - Throws an error if the input month is outside the valid range (`1-12`).
+             *
+             * @param month The month as a number (`1-12`) or a string representing a number.
+             * @param isFullName Determines whether to return the full name (`true`) or the abbreviated name (`false`) (default: `true`).
+             * @returns The full or abbreviated month name.
+             *
+             * @throws Error if the month is not between `1` and `12`.
+             *
+             * @example
+             * getMonthName(2); // "February"
+             * getMonthName("3", false); // "Mar"
+             * getMonthName(12, true); // "December"
+             * getMonthName(0); // Throws error: "Month must be between 1 and 12"
+             */
             getMonthName(month: number | string, isFullName: boolean = true): string {
                 if (typeof month === 'string') month = parseInt(month, 10);
         
@@ -1780,14 +2316,37 @@ function createHison(): Hison {
                     return MonthShortName[month];
                 }
             },
+            /**
+             * Formats a given date or datetime according to the specified format.
+             *
+             * - Accepts a `DateTimeObject`, `DateObject`, or a string representation of a date/datetime.
+             * - If no format is provided, it defaults to `CustomOption.dateFormat` for dates 
+             *   and `CustomOption.datetimeFormat` for datetimes.
+             * - Supports various formats such as:
+             *   - `'yyyy-MM-dd'` → `"2025-02-05"`
+             *   - `'yyyy/MM/dd hh:mm:ss'` → `"2025/02/05 14:30:45"`
+             *   - `'MMMM dd, yyyy'` → `"February 5, 2025"`
+             * - Throws an error if the input date is invalid.
+             *
+             * @param datetime The date or datetime to format.
+             * @param format The desired output format (optional). Default: `'yyyy-MM-dd'` or `'yyyy-MM-dd hh:mm:ss'`
+             * @returns The formatted date/time as a string.
+             *
+             * @throws Error if the provided date is invalid.
+             *
+             * @example
+             * getDateWithFormat("2025-02-05", "yyyy/MM/dd"); // "2025/02/05"
+             * getDateWithFormat("2025-02-05 14:30:45", "MMMM dd, yyyy"); // "February 5, 2025"
+             * getDateWithFormat({ y: 2025, M: 2, d: 5 }, "MM-dd-yyyy"); // "02-05-2025"
+             */
             getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = ''): string {
                 const datetimeObj = hison.utils.isObject(datetime) ? hison.utils.deepCopyObject(datetime) : hison.utils.getDatetimeObject(datetime as string);
                 if (!format) {
                     if (datetimeObj.h === undefined || datetimeObj.h === null) {
-                        format = defaultOption.utils.dateFormat
+                        format = customOption.utils.dateFormat
                     }
                     else {
-                        format = defaultOption.utils.datetimeFormat;
+                        format = customOption.utils.datetimeFormat;
                     }
                 }
 
@@ -2076,7 +2635,33 @@ function createHison(): Hison {
                         throw new Error(`ER0010 Invalid format.\n=>${JSON.stringify(format)}`);
                 }
             },
-            getDayOfWeek(date: DateObject | string, dayType: string = defaultOption.utils.dayOfWeekFormat): string {
+            /**
+             * Returns the day of the week for a given date.
+             *
+             * - Accepts a `DateObject` or a string representation of a date.
+             * - Uses `CustomOption.dayOfWeekFormat` as the default format.
+             * - Supports different formats for output:
+             *   - `'d'` → Numeric day of the week (`0-6`, where `0 = Sunday`).
+             *   - `'dy'` → Abbreviated English name (`"Sun", "Mon", ..., "Sat"`).
+             *   - `'day'` → Full English name (`"Sunday", "Monday", ..., "Saturday"`).
+             *   - `'kdy'` → Abbreviated Korean name (`"일", "월", ..., "토"`).
+             *   - `'kday'` → Full Korean name (`"일요일", "월요일", ..., "토요일"`).
+             * - Throws an error if the input date is invalid.
+             *
+             * @param date The date to evaluate.
+             * @param dayType The format of the output (optional). Default: `'d'`
+             * @returns The day of the week in the specified format.
+             *
+             * @throws Error if the provided date is invalid.
+             *
+             * @example
+             * getDayOfWeek("2025-02-05", "d"); // "3" (Wednesday)
+             * getDayOfWeek("2025-02-05", "dy"); // "Wed"
+             * getDayOfWeek("2025-02-05", "day"); // "Wednesday"
+             * getDayOfWeek("2025-02-05", "kdy"); // "수"
+             * getDayOfWeek("2025-02-05", "kday"); // "수요일"
+             */
+            getDayOfWeek(date: DateObject | string, dayType: string = customOption.utils.dayOfWeekFormat): string {
                 const dateObj: DateObject = hison.utils.isObject(date) ? date as DateObject : hison.utils.getDateObject(date as string);
                 if (!hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
                 
@@ -2097,6 +2682,26 @@ function createHison(): Hison {
                         return dayOfWeek.toString();
                 }
             },
+            /**
+             * Returns the last day of the month for a given date.
+             *
+             * - Accepts a `DateObject` or a string representation of a date.
+             * - If the input is a `DateObject`, it uses the month and year from the object.
+             * - If the input is a string, it assumes the first day of the given month unless a full date is provided.
+             * - Determines the last day of the specified month by computing the last day of the next month minus one.
+             * - Throws an error if the input date is invalid.
+             *
+             * @param date The date or month to evaluate.
+             * @returns The last day of the month as a number.
+             *
+             * @throws Error if the provided date is invalid.
+             *
+             * @example
+             * getLastDay("2025-02"); // 28 (for February 2025)
+             * getLastDay("2024-02"); // 29 (leap year February)
+             * getLastDay({ y: 2025, M: 5, d: 15 }); // 31 (May has 31 days)
+             * getLastDay("2025-07-10"); // 31 (July has 31 days)
+             */
             getLastDay(date: DateObject | string): number {
                 let dateObj: DateObject;
                 if (hison.utils.isObject(date)) {
@@ -2121,7 +2726,24 @@ function createHison(): Hison {
                 nextMonthFirstDay.setDate(0);
                 return nextMonthFirstDay.getDate();
             },
-            getSysYear(format: string = defaultOption.utils.yearFormat): string {
+            /**
+             * Returns the current system year in the specified format.
+             *
+             * - Uses `CustomOption.yearFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'yyyy'` → Full year (`"2025"`)
+             *   - `'yy'` → Last two digits of the year (`"25"`)
+             * - If an unsupported format is provided, it defaults to `'yyyy'`.
+             *
+             * @param format The desired output format (optional). Default: `'yyyy'`
+             * @returns The current year as a string in the specified format.
+             *
+             * @example
+             * getSysYear(); // "2025" (default format)
+             * getSysYear("yyyy"); // "2025"
+             * getSysYear("yy"); // "25"
+             */
+            getSysYear(format: string = customOption.utils.yearFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'yy':
@@ -2130,7 +2752,27 @@ function createHison(): Hison {
                         return currentDate.getFullYear().toString();
                 }
             },
-            getSysMonth(format: string = defaultOption.utils.monthFormat): string {
+            /**
+             * Returns the current system month in the specified format.
+             *
+             * - Uses `CustomOption.monthFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'M'` → Numeric month without leading zero (`"2"` for February).
+             *   - `'MM'` → Numeric month with leading zero (`"02"` for February).
+             *   - `'MMMM'` → Full month name (`"February"`).
+             *   - `'MMM'` → Abbreviated month name (`"Feb"`).
+             * - If an unsupported format is provided, it defaults to `'M'`.
+             *
+             * @param format The desired output format (optional). Default: `'M'`
+             * @returns The current month as a string in the specified format.
+             *
+             * @example
+             * getSysMonth(); // "2" (default format for February)
+             * getSysMonth("MM"); // "02"
+             * getSysMonth("MMMM"); // "February"
+             * getSysMonth("MMM"); // "Feb"
+             */
+            getSysMonth(format: string = customOption.utils.monthFormat): string {
                 const currentDate = new Date();
                 const sysMonth = currentDate.getMonth() + 1;
                 switch (format.toLowerCase()) {
@@ -2144,11 +2786,47 @@ function createHison(): Hison {
                         return sysMonth.toString();
                 }
             },
-            getSysYearMonth(format: string = defaultOption.utils.yearMonthFormat): string {
+            /**
+             * Returns the current system year and month in the specified format.
+             *
+             * - Uses `CustomOption.yearMonthFormat` as the default format.
+             * - Delegates formatting to `getDateWithFormat()` using the first day of the current month.
+             * - Common formats include:
+             *   - `'yyyy-MM'` → `"2025-02"`
+             *   - `'yyyy/MM'` → `"2025/02"`
+             *   - `'MMMM yyyy'` → `"February 2025"`
+             *   - `'MMM yyyy'` → `"Feb 2025"`
+             *
+             * @param format The desired output format (optional). Default: `'yyyy-MM'`
+             * @returns The current year and month as a formatted string.
+             *
+             * @example
+             * getSysYearMonth(); // "2025-02" (default format for February 2025)
+             * getSysYearMonth("yyyy/MM"); // "2025/02"
+             * getSysYearMonth("MMMM yyyy"); // "February 2025"
+             * getSysYearMonth("MMM yyyy"); // "Feb 2025"
+             */
+            getSysYearMonth(format: string = customOption.utils.yearMonthFormat): string {
                 const currentDate = new Date();
                 return hison.utils.getDateWithFormat( {y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : 1 }, format);
             },
-            getSysDay(format: string = defaultOption.utils.dayFormat): string {
+            /**
+             * Returns the current system day of the month in the specified format.
+             *
+             * - Uses `CustomOption.dayFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'d'` → Day without leading zero (`"5"` for the 5th day of the month).
+             *   - `'dd'` → Day with leading zero (`"05"` for the 5th day of the month).
+             * - If an unsupported format is provided, it defaults to `'d'`.
+             *
+             * @param format The desired output format (optional). Default: `'d'`
+             * @returns The current day of the month as a string in the specified format.
+             *
+             * @example
+             * getSysDay(); // "5" (default format for the 5th day)
+             * getSysDay("dd"); // "05"
+             */
+            getSysDay(format: string = customOption.utils.dayFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'dd':
@@ -2157,11 +2835,48 @@ function createHison(): Hison {
                         return currentDate.getDate().toString();
                 }
             },
-            getSysDayOfWeek(dayType: string = defaultOption.utils.dayOfWeekFormat): string {
+            /**
+             * Returns the current system day of the week in the specified format.
+             *
+             * - Uses `CustomOption.dayOfWeekFormat` as the default format.
+             * - Delegates formatting to `getDayOfWeek()`, which supports:
+             *   - `'d'` → Numeric day of the week (`0-6`, where `0 = Sunday`).
+             *   - `'dy'` → Abbreviated English name (`"Sun", "Mon", ..., "Sat"`).
+             *   - `'day'` → Full English name (`"Sunday", "Monday", ..., "Saturday"`).
+             *   - `'kdy'` → Abbreviated Korean name (`"일", "월", ..., "토"`).
+             *   - `'kday'` → Full Korean name (`"일요일", "월요일", ..., "토요일"`).
+             *
+             * @param format The desired output format (optional). Default: `'d'`
+             * @returns The current day of the week in the specified format.
+             *
+             * @example
+             * getSysDayOfWeek(); // "3" (default format, Wednesday)
+             * getSysDayOfWeek("dy"); // "Wed"
+             * getSysDayOfWeek("day"); // "Wednesday"
+             * getSysDayOfWeek("kdy"); // "수"
+             * getSysDayOfWeek("kday"); // "수요일"
+             */
+            getSysDayOfWeek(format: string = customOption.utils.dayOfWeekFormat): string {
                 const currentDate = new Date();
-                return hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, dayType);
+                return hison.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, format);
             },
-            getSysHour(format: string = defaultOption.utils.hourFormat): string {
+            /**
+             * Returns the current system hour in the specified format.
+             *
+             * - Uses `CustomOption.hourFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'h'` → Hour without leading zero (`"5"` for 5 AM/PM).
+             *   - `'hh'` → Hour with leading zero (`"05"` for 5 AM/PM).
+             * - If an unsupported format is provided, it defaults to `'h'`.
+             *
+             * @param format The desired output format (optional). Default: `'h'`
+             * @returns The current hour as a string in the specified format.
+             *
+             * @example
+             * getSysHour(); // "5" (default format)
+             * getSysHour("hh"); // "05"
+             */
+            getSysHour(format: string = customOption.utils.hourFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hh':
@@ -2170,7 +2885,23 @@ function createHison(): Hison {
                         return currentDate.getHours().toString();
                 }
             },
-            getSysHourMinute(format: string = defaultOption.utils.hourMinuteFormat): string {
+            /**
+             * Returns the current system hour and minute in the specified format.
+             *
+             * - Uses `CustomOption.hourMinuteFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'hhmm'` → Compact format without separators (`"1430"` for 2:30 PM).
+             *   - `'hh:mm'` → Standard format with a colon separator (`"14:30"` for 2:30 PM).
+             * - If an unsupported format is provided, it defaults to `'hh:mm'`.
+             *
+             * @param format The desired output format (optional). Default: `'hh:mm'`
+             * @returns The current hour and minute as a string in the specified format.
+             *
+             * @example
+             * getSysHourMinute(); // "14:30" (default format)
+             * getSysHourMinute("hhmm"); // "1430"
+             */
+            getSysHourMinute(format: string = customOption.utils.hourMinuteFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmm':
@@ -2179,7 +2910,23 @@ function createHison(): Hison {
                         return currentDate.getHours().toString().padStart(2, '0') + ':' + currentDate.getMinutes().toString().padStart(2, '0');
                 }
             },
-            getSysMinute(format: string = defaultOption.utils.minuteFormat): string {
+            /**
+             * Returns the current system minute in the specified format.
+             *
+             * - Uses `CustomOption.minuteFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'m'` → Minute without leading zero (`"5"` for the 5th minute).
+             *   - `'mm'` → Minute with leading zero (`"05"` for the 5th minute).
+             * - If an unsupported format is provided, it defaults to `'m'`.
+             *
+             * @param format The desired output format (optional). Default: `'m'`
+             * @returns The current minute as a string in the specified format.
+             *
+             * @example
+             * getSysMinute(); // "5" (default format)
+             * getSysMinute("mm"); // "05"
+             */
+            getSysMinute(format: string = customOption.utils.minuteFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'mm':
@@ -2188,7 +2935,23 @@ function createHison(): Hison {
                         return currentDate.getMinutes().toString();
                 }
             },
-            getSysSecond(format: string = defaultOption.utils.secondFormat): string {
+            /**
+             * Returns the current system second in the specified format.
+             *
+             * - Uses `CustomOption.secondFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'s'` → Second without leading zero (`"5"` for the 5th second).
+             *   - `'ss'` → Second with leading zero (`"05"` for the 5th second).
+             * - If an unsupported format is provided, it defaults to `'s'`.
+             *
+             * @param format The desired output format (optional). Default: `'s'`
+             * @returns The current second as a string in the specified format.
+             *
+             * @example
+             * getSysSecond(); // "5" (default format)
+             * getSysSecond("ss"); // "05"
+             */
+            getSysSecond(format: string = customOption.utils.secondFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'ss':
@@ -2197,7 +2960,23 @@ function createHison(): Hison {
                         return currentDate.getSeconds().toString();
                 }
             },
-            getSysTime(format: string = defaultOption.utils.timeFormat): string {
+            /**
+             * Returns the current system time in the specified format.
+             *
+             * - Uses `CustomOption.timeFormat` as the default format.
+             * - Supports the following formats:
+             *   - `'hhmmss'` → Compact format without separators (`"143015"` for 2:30:15 PM).
+             *   - `'hh:mm:ss'` → Standard format with colons (`"14:30:15"` for 2:30:15 PM).
+             * - If an unsupported format is provided, it defaults to `'hh:mm:ss'`.
+             *
+             * @param format The desired output format (optional). Default: `'hh:mm:ss'`
+             * @returns The current time as a string in the specified format.
+             *
+             * @example
+             * getSysTime(); // "14:30:15" (default format)
+             * getSysTime("hhmmss"); // "143015"
+             */
+            getSysTime(format: string = customOption.utils.timeFormat): string {
                 const currentDate = new Date();
                 switch (format.toLowerCase()) {
                     case 'hhmmss':
@@ -2206,7 +2985,25 @@ function createHison(): Hison {
                         return currentDate.getHours().toString().padStart(2, '0') + ':' + currentDate.getMinutes().toString().padStart(2, '0') + ':' + currentDate.getSeconds().toString().padStart(2, '0');
                 }
             },
-            getSysDate(format: string = defaultOption.utils.datetimeFormat): string {
+            /**
+             * Returns the current system date and time in the specified format.
+             *
+             * - Uses `CustomOption.datetimeFormat` as the default format.
+             * - Delegates formatting to `getDateWithFormat()`, which supports various formats, including:
+             *   - `'yyyy-MM-dd hh:mm:ss'` → `"2025-02-05 14:30:15"`
+             *   - `'yyyy/MM/dd'` → `"2025/02/05"`
+             *   - `'MMMM dd, yyyy'` → `"February 5, 2025"`
+             * - If no format is specified, it defaults to the full datetime format.
+             *
+             * @param format The desired output format (optional). Default: `'yyyy-MM-dd hh:mm:ss'`
+             * @returns The current date and time as a formatted string.
+             *
+             * @example
+             * getSysDate(); // "2025-02-05 14:30:15" (default format)
+             * getSysDate("yyyy/MM/dd"); // "2025/02/05"
+             * getSysDate("MMMM dd, yyyy"); // "February 5, 2025"
+             */
+            getSysDate(format: string = customOption.utils.datetimeFormat): string {
                 const currentDate = new Date();
                 return hison.utils.getDateWithFormat(
                     {
@@ -2219,32 +3016,116 @@ function createHison(): Hison {
                     }
                     , format);
             },
-            //for number
+            /**
+             * Rounds a number up to the nearest integer or specified decimal place.
+             *
+             * - If `precision` is `0`, it rounds up to the nearest whole number.
+             * - If `precision` is greater than `0`, it rounds up to the specified number of decimal places.
+             * - If `precision` is less than `0`, it rounds up to the nearest multiple of `10^precision`.
+             *
+             * @param num The number to be rounded up.
+             * @param precision The number of decimal places to retain (default: `0`).
+             * @returns The rounded-up number.
+             *
+             * @example
+             * getCeil(12.34); // 13
+             * getCeil(12.34, 1); // 12.4
+             * getCeil(12.34, 2); // 12.34
+             * getCeil(1250, -2); // 1300
+             */
             getCeil(num: number, precision: number = 0): number {
                 num = hison.utils.getToNumber(num);
                 precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.ceil(num * factor) / factor;
             },
+            /**
+             * Rounds a number down to the nearest integer or specified decimal place.
+             *
+             * - If `precision` is `0`, it rounds down to the nearest whole number.
+             * - If `precision` is greater than `0`, it rounds down to the specified number of decimal places.
+             * - If `precision` is less than `0`, it rounds down to the nearest multiple of `10^precision`.
+             *
+             * @param num The number to be rounded down.
+             * @param precision The number of decimal places to retain (default: `0`).
+             * @returns The rounded-down number.
+             *
+             * @example
+             * getFloor(12.89); // 12
+             * getFloor(12.89, 1); // 12.8
+             * getFloor(12.89, 2); // 12.89
+             * getFloor(1299, -2); // 1200
+             */
             getFloor(num: number, precision: number = 0): number {
                 num = hison.utils.getToNumber(num);
                 precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.floor(num * factor) / factor;
             },
+            /**
+             * Rounds a number to the nearest integer or specified decimal place.
+             *
+             * - If `precision` is `0`, it rounds to the nearest whole number.
+             * - If `precision` is greater than `0`, it rounds to the specified number of decimal places.
+             * - If `precision` is less than `0`, it rounds to the nearest multiple of `10^precision`.
+             *
+             * @param num The number to be rounded.
+             * @param precision The number of decimal places to retain (default: `0`).
+             * @returns The rounded number.
+             *
+             * @example
+             * getRound(12.49); // 12
+             * getRound(12.5); // 13
+             * getRound(12.345, 2); // 12.35
+             * getRound(1250, -2); // 1300
+             */
             getRound(num: number, precision: number = 0): number {
                 num = hison.utils.getToNumber(num);
                 precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.round(num * factor) / factor;
             },
+            /**
+             * Truncates a number to the specified decimal place without rounding.
+             *
+             * - If `precision` is `0`, it removes the decimal part, keeping only the integer.
+             * - If `precision` is greater than `0`, it truncates the number at the specified decimal places.
+             * - If `precision` is less than `0`, it truncates to the nearest multiple of `10^precision`.
+             *
+             * @param num The number to be truncated.
+             * @param precision The number of decimal places to retain (default: `0`).
+             * @returns The truncated number.
+             *
+             * @example
+             * getTrunc(12.89); // 12
+             * getTrunc(12.89, 1); // 12.8
+             * getTrunc(12.89, 2); // 12.89
+             * getTrunc(1299, -2); // 1200
+             */
             getTrunc(num: number, precision: number = 0): number {
                 num = hison.utils.getToNumber(num);
                 precision = Math.trunc(hison.utils.getToNumber(precision));
                 const factor = Math.pow(10, precision);
                 return Math.trunc(num * factor) / factor;
             },
-            //for string
+            /**
+             * Calculates the byte length of a given string based on character encoding.
+             *
+             * - Uses UTF-8 encoding rules to determine the byte size of each character.
+             * - Character byte sizes are determined as follows:
+             *   - `charCode <= 0x7F` → 1 byte (ASCII characters).
+             *   - `charCode <= 0x7FF` → `CustomOption.LESSOREQ_0X7FF_BYTE` bytes. Default: 2
+             *   - `charCode <= 0xFFFF` → `CustomOption.LESSOREQ_0XFFFF_BYTE` bytes. Default: 3
+             *   - `charCode > 0xFFFF` → `CustomOption.GREATER_0XFFFF_BYTE` bytes. Default: 4
+             *
+             * @param str The input string.
+             * @returns The total byte length of the string.
+             *
+             * @example
+             * getByteLength("Hello"); // 5 (each ASCII character is 1 byte)
+             * getByteLength("안녕하세요"); // 15 (each Korean character is 3 bytes)
+             * getByteLength("𐍈"); // 4 (UTF-16 surrogate pair)
+             */
             getByteLength(str: string): number {
                 str = hison.utils.getToString(str);
                 let byteLength = 0;
@@ -2253,15 +3134,35 @@ function createHison(): Hison {
                     if (charCode <= 0x7F) {
                         byteLength += 1;
                     } else if (charCode <= 0x7FF) {
-                        byteLength += defaultOption.utils.LESSOREQ_0X7FF_BYTE;
+                        byteLength += customOption.utils.LESSOREQ_0X7FF_BYTE;
                     } else if (charCode <= 0xFFFF) {
-                        byteLength += defaultOption.utils.LESSOREQ_0XFFFF_BYTE;
+                        byteLength += customOption.utils.LESSOREQ_0XFFFF_BYTE;
                     } else {
-                        byteLength += defaultOption.utils.GREATER_0XFFFF_BYTE;
+                        byteLength += customOption.utils.GREATER_0XFFFF_BYTE;
                     }
                 }
                 return byteLength;
             },
+            /**
+             * Truncates a string to fit within a specified byte length.
+             *
+             * - Uses UTF-8 encoding rules to calculate byte size.
+             * - Truncates the string at the point where the total byte length exceeds `cutByte`.
+             * - Character byte sizes are determined as follows:
+             *   - `charCode <= 0x7F` → 1 byte (ASCII characters).
+             *   - `charCode <= 0x7FF` → `CustomOption.LESSOREQ_0X7FF_BYTE` bytes.
+             *   - `charCode <= 0xFFFF` → `CustomOption.LESSOREQ_0XFFFF_BYTE` bytes.
+             *   - `charCode > 0xFFFF` → `CustomOption.GREATER_0XFFFF_BYTE` bytes.
+             *
+             * @param str The input string to be truncated.
+             * @param cutByte The maximum allowed byte length.
+             * @returns The truncated string that fits within the given byte length.
+             *
+             * @example
+             * getCutByteLength("Hello, World!", 5); // "Hello"
+             * getCutByteLength("안녕하세요", 6); // "안녕" (each Korean character is 3 bytes)
+             * getCutByteLength("𐍈𐍈𐍈", 4); // "𐍈" (each surrogate pair character is 4 bytes)
+             */
             getCutByteLength(str: string, cutByte: number): string {
                 str = hison.utils.getToString(str);
                 cutByte = hison.utils.getToNumber(cutByte);
@@ -2272,11 +3173,11 @@ function createHison(): Hison {
                     if (charCode <= 0x7F) {
                         byteLength += 1;
                     } else if (charCode <= 0x7FF) {
-                        byteLength += defaultOption.utils.LESSOREQ_0X7FF_BYTE;
+                        byteLength += customOption.utils.LESSOREQ_0X7FF_BYTE;
                     } else if (charCode <= 0xFFFF) {
-                        byteLength += defaultOption.utils.LESSOREQ_0XFFFF_BYTE;
+                        byteLength += customOption.utils.LESSOREQ_0XFFFF_BYTE;
                     } else {
-                        byteLength += defaultOption.utils.GREATER_0XFFFF_BYTE;
+                        byteLength += customOption.utils.GREATER_0XFFFF_BYTE;
                     }
                     if (byteLength > cutByte) {
                         cutIndex = i;
@@ -2285,6 +3186,22 @@ function createHison(): Hison {
                 }
                 return str.substring(0, cutIndex);
             },
+            /**
+             * Adjusts a string to fit a specified length by evenly distributing spaces between characters.
+             *
+             * - If the string's length is already greater than or equal to `length`, it is returned as is.
+             * - Spaces are distributed as evenly as possible between characters to reach the desired length.
+             * - If the spacing is not evenly divisible, extra spaces are added starting from the left.
+             *
+             * @param str The input string.
+             * @param length The target total length of the formatted string.
+             * @returns A string with evenly distributed spaces to match the specified length.
+             *
+             * @example
+             * getStringLenForm("Hi", 5); // "H  i"
+             * getStringLenForm("Hello", 10); // "H  e  l  l  o"
+             * getStringLenForm("A", 3); // "A  "
+             */
             getStringLenForm(str: string, length: number): string {
                 str = hison.utils.getToString(str);
                 length = hison.utils.getToNumber(length);
@@ -2304,6 +3221,23 @@ function createHison(): Hison {
                 result += str[strLength - 1];
                 return result;
             },
+            /**
+             * Left-pads a string with a specified padding string until it reaches the desired length.
+             *
+             * - If the original string's length is already greater than or equal to `length`, it is returned as is.
+             * - The `padStr` is repeated as needed to fill the remaining space.
+             * - If `padStr` does not evenly divide into the required padding length, it may be truncated.
+             *
+             * @param str The original string.
+             * @param padStr The string used for padding.
+             * @param length The desired total length of the padded string.
+             * @returns The left-padded string.
+             *
+             * @example
+             * getLpad("123", "0", 5); // "00123"
+             * getLpad("abc", "-", 6); // "---abc"
+             * getLpad("test", "XY", 10); // "XYXYXYtest"
+             */
             getLpad(str: string, padStr: string, length: number): string {
                 str = hison.utils.getToString(str);
                 padStr = hison.utils.getToString(padStr);
@@ -2312,6 +3246,23 @@ function createHison(): Hison {
                 const pad = padStr.repeat((length - str.length) / padStr.length);
                 return pad + str;
             },
+            /**
+             * Right-pads a string with a specified padding string until it reaches the desired length.
+             *
+             * - If the original string's length is already greater than or equal to `length`, it is truncated to fit.
+             * - The `padStr` is repeated as needed to fill the remaining space.
+             * - If `padStr` does not evenly divide into the required padding length, it may be truncated.
+             *
+             * @param str The original string.
+             * @param padStr The string used for padding.
+             * @param length The desired total length of the padded string.
+             * @returns The right-padded string.
+             *
+             * @example
+             * getRpad("123", "0", 5); // "12300"
+             * getRpad("abc", "-", 6); // "abc---"
+             * getRpad("test", "XY", 10); // "testXYXYXY"
+             */
             getRpad(str: string, padStr: string, length: number): string {
                 str = hison.utils.getToString(str);
                 padStr = hison.utils.getToString(padStr);
@@ -2320,19 +3271,71 @@ function createHison(): Hison {
                 const pad = padStr.repeat((length - str.length) / padStr.length);
                 return str + pad;
             },
+            /**
+             * Removes leading and trailing whitespace from a string.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Uses JavaScript's built-in `trim()` method to remove whitespace.
+             *
+             * @param str The input string.
+             * @returns The trimmed string without leading or trailing spaces.
+             *
+             * @example
+             * getTrim("  Hello World  "); // "Hello World"
+             * getTrim("\tTest String\n"); // "Test String"
+             * getTrim("   "); // "" (empty string)
+             */
             getTrim(str: string): string {
                 str = hison.utils.getToString(str);
                 return str.trim();
             },
+            /**
+             * Replaces all occurrences of a target substring within a string with a specified replacement.
+             *
+             * - Converts all inputs to strings before processing.
+             * - Uses `split()` and `join()` to replace all instances of `targetStr` with `replaceStr`.
+             * - If `replaceStr` is not provided, occurrences of `targetStr` are removed.
+             *
+             * @param str The original string.
+             * @param targetStr The substring to be replaced.
+             * @param replaceStr The string to replace occurrences of `targetStr` (default: `''`).
+             * @returns A new string with all occurrences of `targetStr` replaced.
+             *
+             * @example
+             * getReplaceAll("hello world", "o", "O"); // "hellO wOrld"
+             * getReplaceAll("banana", "a", ""); // "bnn"
+             * getReplaceAll("2025-02-05", "-", "/"); // "2025/02/05"
+             */
             getReplaceAll(str: string, targetStr: string, replaceStr: string = ''): string {
                 str = hison.utils.getToString(str);
                 targetStr = hison.utils.getToString(targetStr);
                 replaceStr = hison.utils.getToString(replaceStr);
                 return str.split(targetStr).join(replaceStr);
             },
-            nvl(val: any, defaultValue: any): any {
-                return (val === null || val === undefined) ? defaultValue : val;
-            },
+            /**
+             * Formats a number according to a specified format pattern.
+             *
+             * - Uses `CustomOption.numberFormat` as the default format if none is provided.
+             * - Supports various number formatting patterns, including:
+             *   - `"#,###"` → `"1,234"` (comma-separated thousands).
+             *   - `"#,##0"` → `"1,234"` (ensures at least one digit).
+             *   - `".##"` → `"0.1"` (no grouping).
+             *   - `".00"` → `"0.10"` (ensures at least one digit).
+             * - Supports decimal formatting and percentage notation (`"%"`).
+             * - Throws an error if the input is not a valid number or if the format is invalid.
+             *
+             * @param value The number to format.
+             * @param format The desired format pattern (optional). Default: `'#,##0.##'`
+             * @returns The formatted number as a string.
+             *
+             * @throws Error if the input value is not numeric or the format is invalid.
+             *
+             * @example
+             * getNumberFormat(1234); // "1,234" (default format)
+             * getNumberFormat(1234.5678, "#,###.00"); // "1,234.56"
+             * getNumberFormat(0.25, "#,##0%"); // "25%" (percentage conversion)
+             * getNumberFormat(-1234, "#,###"); // "-1,234"
+             */
             getNumberFormat(value: number, format?: string): string {
                 value = hison.utils.getToNumber(value);
                 format = hison.utils.getToString(format);
@@ -2341,7 +3344,7 @@ function createHison(): Hison {
                 if (!hison.utils.isNumeric(value)) {
                     throw new Error(`ER0021 Invalid number\n=>${JSON.stringify(oriValue)}`);
                 }
-                format = format ? format : defaultOption.utils.numberFormat;
+                format = format ? format : customOption.utils.numberFormat;
                 const regex = /^(.*?)([#0,.]+)(.*?)$/;
                 const matches = format.match(regex);
         
@@ -2404,19 +3407,79 @@ function createHison(): Hison {
                 result = isNegative ? '-' + result : result;
                 return prefix + result + suffix;
             },
+            /**
+             * Removes all non-numeric characters from a string, leaving only digits.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Uses a regular expression to remove any character that is not a digit (`0-9`).
+             *
+             * @param str The input string.
+             * @returns A new string containing only numeric characters.
+             *
+             * @example
+             * getRemoveExceptNumbers("abc123def456"); // "123456"
+             * getRemoveExceptNumbers("Phone: (555) 123-4567"); // "5551234567"
+             * getRemoveExceptNumbers("No numbers here!"); // ""
+             */
             getRemoveExceptNumbers(str: string): string {
                 str = hison.utils.getToString(str);
                 return str.replace(/[^0-9]/g, '');
             },
+            /**
+             * Removes all numeric characters from a string, leaving only non-numeric characters.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Uses a regular expression to remove any digit (`0-9`).
+             *
+             * @param str The input string.
+             * @returns A new string containing only non-numeric characters.
+             *
+             * @example
+             * getRemoveNumbers("abc123def456"); // "abcdef"
+             * getRemoveNumbers("Phone: (555) 123-4567"); // "Phone: () -"
+             * getRemoveNumbers("123456"); // "" (all numbers removed)
+             */
             getRemoveNumbers(str: string): string {
                 str = hison.utils.getToString(str);
                 return str.replace(/[0-9]/g, '');
             },
+            /**
+             * Reverses the characters in a given string.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Splits the string into an array of characters, reverses the order, and joins them back.
+             *
+             * @param str The input string.
+             * @returns The reversed string.
+             *
+             * @example
+             * getReverse("hello"); // "olleh"
+             * getReverse("12345"); // "54321"
+             * getReverse("A B C"); // "C B A"
+             */
             getReverse(str: string): string {
                 str = hison.utils.getToString(str);
                 return str.split('').reverse().join('');
             },
-            //for convertor
+            /**
+             * Converts the given value to a boolean.
+             *
+             * - Numeric values: `0` is `false`, any other number is `true`.
+             * - Boolean values: Returned as is.
+             * - String values: Returns `true` if the string matches predefined truthy values (`"true"`, `"yes"`, `"checked"`, etc.).
+             * - Other types: Returns `false`.
+             *
+             * @param value The value to be converted.
+             * @returns `true` if the value represents a truthy value, otherwise `false`.
+             *
+             * @example
+             * getToBoolean(1); // true
+             * getToBoolean(0); // false
+             * getToBoolean("yes"); // true
+             * getToBoolean("false"); // false
+             * getToBoolean(true); // true
+             * getToBoolean(null); // false
+             */
             getToBoolean(value: any): boolean {
                 if (hison.utils.isNumeric(value)) {
                     return Number(value) != 0;
@@ -2431,21 +3494,87 @@ function createHison(): Hison {
                     return false;
                 }
             },
-            getToNumber(value: any, impossibleValue: number = 0) {
+            /**
+             * Converts the given value to a number.
+             *
+             * - If the value is numeric, it is returned as a number.
+             * - If the value is not a valid number, `impossibleValue` is returned instead.
+             *
+             * @param value The value to be converted.
+             * @param impossibleValue The fallback value if conversion fails (default: `0`).
+             * @returns The numeric representation of the value, or `impossibleValue` if conversion fails.
+             *
+             * @example
+             * getToNumber("123"); // 123
+             * getToNumber("12.34"); // 12.34
+             * getToNumber("abc", -1); // -1 (fallback value)
+             * getToNumber(null, 100); // 100 (fallback value)
+             */
+            getToNumber(value: any, impossibleValue: number = 0): number {
                 return hison.utils.getToFloat(value, impossibleValue);
             },
-            getToFloat(value: any, impossibleValue: number = 0) {
+            /**
+             * Converts the given value to a floating-point number.
+             *
+             * - If the value is numeric, it is converted to a float and returned.
+             * - If the value is not a valid number, `impossibleValue` is returned instead.
+             *
+             * @param value The value to be converted.
+             * @param impossibleValue The fallback value if conversion fails (default: `0`).
+             * @returns The floating-point representation of the value, or `impossibleValue` if conversion fails.
+             *
+             * @example
+             * getToFloat("123.45"); // 123.45
+             * getToFloat(42); // 42
+             * getToFloat("abc", -1); // -1 (fallback value)
+             * getToFloat(null, 100.5); // 100.5 (fallback value)
+             */
+            getToFloat(value: any, impossibleValue: number = 0): number {
                 if (!hison.utils.isNumeric(value)) {
                     return impossibleValue;
                 }
                 return parseFloat(value);
             },
+            /**
+             * Converts the given value to an integer.
+             *
+             * - If the value is numeric, it is converted to an integer using `Math.trunc()`.
+             * - If the value is not a valid number, `impossibleValue` is returned instead.
+             *
+             * @param value The value to be converted.
+             * @param impossibleValue The fallback value if conversion fails (default: `0`).
+             * @returns The integer representation of the value, or `impossibleValue` if conversion fails.
+             *
+             * @example
+             * getToInteger("123.45"); // 123
+             * getToInteger(42.9); // 42
+             * getToInteger("abc", -1); // -1 (fallback value)
+             * getToInteger(null, 100); // 100 (fallback value)
+             */
             getToInteger(value: any, impossibleValue: number = 0): number {
                 if (!hison.utils.isNumeric(value)) {
                     return Math.trunc(impossibleValue);
                 }
                 return Math.trunc(parseInt(value, 10));
             },
+            /**
+             * Converts the given value to a string.
+             *
+             * - If the value is already a string, it is returned as is.
+             * - If the value is a number, boolean, or bigint, it is converted to a string.
+             * - If the value is a symbol, its description is returned.
+             * - If the value is `null`, `undefined`, or an unsupported type, `impossibleValue` is returned.
+             *
+             * @param str The value to be converted.
+             * @param impossibleValue The fallback value if conversion fails (default: `""`).
+             * @returns The string representation of the value, or `impossibleValue` if conversion fails.
+             *
+             * @example
+             * getToString(123); // "123"
+             * getToString(true); // "true"
+             * getToString(Symbol("test")); // "test"
+             * getToString(null, "N/A"); // "N/A" (fallback value)
+             */
             getToString(str: any, impossibleValue: string = ''): string {
                 if (typeof str === 'string') {
                 } else if (typeof str === 'number' || typeof str === 'boolean' || typeof str === 'bigint') {
@@ -2458,6 +3587,40 @@ function createHison(): Hison {
                 return str;
             },
             //etc
+            /**
+             * Returns a default value if the given value is `null` or `undefined`.
+             *
+             * - If `val` is `null` or `undefined`, `defaultValue` is returned.
+             * - Otherwise, `val` is returned as is.
+             *
+             * @param val The value to check.
+             * @param defaultValue The default value to return if `val` is `null` or `undefined`.
+             * @returns The original value if not `null` or `undefined`, otherwise the `defaultValue`.
+             *
+             * @example
+             * nvl(null, "default"); // "default"
+             * nvl(undefined, 100); // 100
+             * nvl("Hello", "default"); // "Hello"
+             * nvl(0, "fallback"); // 0 (not null or undefined, so returned as is)
+             */
+            nvl(val: any, defaultValue: any): any {
+                return (val === null || val === undefined) ? defaultValue : val;
+            },
+            /**
+             * Extracts the file extension from a given filename or file path.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Splits the string by `.` and returns the last segment as the file extension.
+             * - If no extension is found, an empty string is returned.
+             *
+             * @param str The filename or file path.
+             * @returns The file extension as a string, or an empty string if no extension exists.
+             *
+             * @example
+             * getFileExtension("document.txt"); // "txt"
+             * getFileExtension("archive.tar.gz"); // "gz"
+             * getFileExtension("/path/to/file"); // "" (no extension)
+             */
             getFileExtension(str: string): string {
                 str = hison.utils.getToString(str);
             
@@ -2467,6 +3630,21 @@ function createHison(): Hison {
                 }
                 return extension;
             },
+            /**
+             * Extracts the filename (without extension) from a given file path or filename.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Extracts the last part of the path after the last `/` (or full filename if no path exists).
+             * - Removes the file extension by cutting the string at the last `.` if present.
+             *
+             * @param str The full file path or filename.
+             * @returns The filename without the extension.
+             *
+             * @example
+             * getFileName("/path/to/document.txt"); // "document"
+             * getFileName("archive.tar.gz"); // "archive.tar"
+             * getFileName("file_without_extension"); // "file_without_extension"
+             */
             getFileName(str: string): string {
                 str = hison.utils.getToString(str);
             
@@ -2476,18 +3654,69 @@ function createHison(): Hison {
                 if (lastDotIndex === -1) return fileName;
                 return fileName.substring(0, lastDotIndex);
             },
+            /**
+             * Decodes a Base64-encoded string into a human-readable format.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Uses `atob()` to decode the Base64 string.
+             * - Decodes percent-encoded UTF-8 characters to properly restore special characters.
+             *
+             * @param str The Base64-encoded string.
+             * @returns The decoded string.
+             *
+             * @example
+             * getDecodeBase64("SGVsbG8gd29ybGQh"); // "Hello world!"
+             * getDecodeBase64("44GT44KT44Gr44Gh44Gv"); // "こんにちは" (Japanese "Hello")
+             */
             getDecodeBase64(str: string): string {
                 str = hison.utils.getToString(str);
                 return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
             },
+            /**
+             * Encodes a string into Base64 format.
+             *
+             * - Converts the input to a string if it is not already.
+             * - Uses `encodeURIComponent()` to properly handle special characters.
+             * - Encodes the string to Base64 using `btoa()`.
+             *
+             * @param str The input string to be encoded.
+             * @returns The Base64-encoded string.
+             *
+             * @example
+             * getEncodeBase64("Hello world!"); // "SGVsbG8gd29ybGQh"
+             * getEncodeBase64("こんにちは"); // "44GT44KT44Gr44Gh44Gv" (Japanese "Hello")
+             */
             getEncodeBase64(str: string): string {
                 str = hison.utils.getToString(str);
                 return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(_, p1:string) {
                     return String.fromCharCode(parseInt(p1, 16));
                 }));
             },
+            /**
+             * Creates a deep copy of an object or array, preserving nested structures.
+             *
+             * - Handles `Object` and `Array` types recursively.
+             * - Supports cloning custom objects implementing `getIsDataWrapper()` or `getIsDataModel()`.
+             * - Prevents infinite loops by tracking previously copied references.
+             * - If the object is `null` or not an object, it is returned as is.
+             *
+             * @param object The object or array to be deep copied.
+             * @param visited An optional array to track visited references and prevent circular references.
+             * @returns A deep copy of the input object or array.
+             *
+             * @example
+             * const obj = { a: 1, b: { c: 2 } };
+             * const copy = deepCopyObject(obj);
+             * copy.b.c = 3;
+             * console.log(obj.b.c); // 2 (original object remains unchanged)
+             *
+             * const arr = [1, [2, 3]];
+             * const arrCopy = deepCopyObject(arr);
+             * arrCopy[1][0] = 99;
+             * console.log(arr[1][0]); // 2 (original array remains unchanged)
+             */
             deepCopyObject(object: any, visited?: { source: any, copy: any }[]): any {
                 if (object === null || typeof object !== 'object') {
                     return object;
@@ -2532,7 +3761,75 @@ function createHison(): Hison {
             },
         };
         shield = {
+            /**
+             * Executes security mechanisms for the given `Hison` object to enforce access restrictions and prevent unauthorized modifications.
+             *
+             * This function applies multiple layers of security, including:
+             * - **Object Freezing**: Prevents modification of the `Hison` object.
+             * - **Access Control by URL and IP**: Restricts access based on predefined security settings.
+             * - **Developer Tool Restrictions**: Prevents unauthorized debugging or tampering.
+             * - **Back Navigation Prevention**: Blocks browser back navigation if enabled.
+             *
+             * @param hison The main `Hison` object to be processed and optionally frozen for immutability.
+             *
+             * @throws Error If `hison` is not provided or is not a valid `Hison` instance.
+             *
+             * @remarks
+             * This function is designed to enhance security by enforcing strict runtime protections.
+             * It utilizes configuration settings from `customOption.shield` to determine the applied security policies.
+             *
+             * ---
+             * ## Security Features & Execution Flow
+             *
+             * ### 1. **Validation of `hison` Parameter**
+             * - If `hison` is not provided, an error is thrown:  
+             *   `"Invalid arguments. Provide an object or a key-value pair."`
+             * - Ensures that the input is a valid `Hison` instance before executing security functions.
+             *
+             * ### 2. **Object Freezing (`isFreeze`)**
+             * - If `customOption.shield.isFreeze` is `true`, the `Hison` object is **deeply frozen**.
+             * - Uses the `deepFreeze()` function to recursively apply `Object.freeze()`, preventing any modifications.
+             *
+             * ### 3. **Access Control by URL (`shieldURL`)**
+             * - If `customOption.shield.shieldURL` is set:
+             *   - Ensures the current URL matches `shieldURL`. 
+             *   - If the URL does not match, execution stops immediately.
+             *
+             * ### 4. **IP-Based Access Control (`exposeIpList`)**
+             * - If the request is **not from `localhost`**, it performs IP verification:
+             *   - Fetches the user's IP from `/ajax/getIp`.
+             *   - Compares the retrieved IP against `customOption.shield.exposeIpList`.
+             *   - If the IP is **not** in the list, additional restrictions are applied:
+             *     - **Back Navigation is Blocked** if `isPossibleGoBack` is `false`.
+             *     - **Developer Tools are Restricted** if `isPossibleOpenDevTool` is `false`.
+             *
+             * ### 5. **Back Navigation Prevention (`isPossibleGoBack`)**
+             * - If `customOption.shield.isPossibleGoBack` is `false`:
+             *   - Overrides the browser's back button functionality using `history.pushState()`.
+             *   - Registers an event listener to **prevent back navigation**.
+             *
+             * ### 6. **Developer Tool Restrictions (`isPossibleOpenDevTool`)**
+             * - If `customOption.shield.isPossibleOpenDevTool` is `false`:
+             *   - Blocks `F12` keypress to prevent opening developer tools.
+             *   - Uses `debugger` trick and event listeners (`resize`, `mousemove`, `focus`, `blur`) to detect dev tools.
+             *   - Displays a warning message and prevents further execution if dev tools are detected.
+             *
+             * ---
+             * ## Related Methods
+             * - `hison.setShieldURL(url: string)`
+             * - `hison.setExposeIpList(ipList: string[])`
+             * - `hison.setIsFreeze(state: boolean)`
+             * - `hison.setIsPossibleGoBack(state: boolean)`
+             * - `hison.setIsPossibleOpenDevTool(state: boolean)`
+             *
+             * @example
+             * // Execute security features for the Hison instance
+             * shield.excute(hison);
+             */
             excute(hison: Hison) {
+                if (!hison) throw new Error("Invalid argument: 'hison' is required.");
+                if (hison.constructor !== Hison) throw new Error("Invalid argument: 'hison' must be an instance of Hison.");
+
                 const deepFreeze = function(object: any) {
                     const propNames = Object.getOwnPropertyNames(object);
                 
@@ -2590,29 +3887,29 @@ function createHison(): Hison {
                     window.addEventListener('blur', detectDevTool);
                 }
 
-                if (defaultOption.shield.isFreeze) {
+                if (customOption.shield.isFreeze) {
                     deepFreeze(hison);
                 }
                 
                 if (location.href.indexOf('localhost') < 0){
-                    if (defaultOption.shield.shieldURL && location.href.indexOf(defaultOption.shield.shieldURL) < 0 ){
+                    if (customOption.shield.shieldURL && location.href.indexOf(customOption.shield.shieldURL) < 0 ){
                         return;
                     }
     
                     shieldFuncGetIp(function(response: any) {
                         const ip = response && response.ip ? response.ip : '';
-                        if (ip && defaultOption.shield.exposeIpList.indexOf(ip) >= 0) {
+                        if (ip && customOption.shield.exposeIpList.indexOf(ip) >= 0) {
                             return;
                         }
     
-                        if (!defaultOption.shield.isPossibleGoBack) {
-                            history.pushState(null, document.title, location.href);//현재 URL push
-                            window.addEventListener('popstate', function() {  //뒤로가기 이벤트 등록
-                                history.pushState(null, document.title, location.href); //다시 push함으로 뒤로가기 방지
+                        if (!customOption.shield.isPossibleGoBack) {
+                            history.pushState(null, document.title, location.href);
+                            window.addEventListener('popstate', function() {
+                                history.pushState(null, document.title, location.href);
                             });
                         }
                         
-                        if (!defaultOption.shield.isPossibleOpenDevTool) {
+                        if (!customOption.shield.isPossibleOpenDevTool) {
                             shieldFuncCreateBlockDevMode();
                             return;
                         }
@@ -2622,6 +3919,35 @@ function createHison(): Hison {
         };
         data = {
             DataWrapper : class implements DataWrapper {
+                /**
+                 * Creates an instance of `DataWrapper`, which serves as a key-value storage container.
+                 * It allows storing various data types, including primitive values and `DataModel` instances.
+                 *
+                 * ## Parameters
+                 * - `keyOrObject` **(Object | string, optional)**: This parameter can be:
+                 *   - An **object** containing multiple key-value pairs, where each key is mapped to a value.
+                 *   - A **single string key** when paired with a `value` parameter.
+                 * - `value` **(*, optional)**: The value associated with the provided key. This parameter is 
+                 *   required only when `keyOrObject` is a string.
+                 *
+                 * ## Behavior
+                 * - If an **object** is provided, all key-value pairs from the object are stored in the `DataWrapper`.
+                 * - If a **string and value** are provided, a single key-value pair is stored.
+                 * - If neither of these conditions are met, an error is thrown.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * // Creating a DataWrapper with an object
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * console.log(dataWrapper.getString("name")); // Output: "Alice"
+                 *
+                 * // Creating a DataWrapper with a single key-value pair
+                 * const dataWrapper = new hison.data.DataWrapper("status", "active");
+                 * console.log(dataWrapper.getString("status")); // Output: "active"
+                 * ```
+                 *
+                 * @constructor
+                 */
                 constructor(keyOrObject?: Record<string, any> | string, value?: any) {
                     this._data = {};
                     if (keyOrObject === undefined) return;
@@ -2659,9 +3985,56 @@ function createHison(): Hison {
                         throw new Error('Please insert only values convertible to string or of data-model type.');
                     }
                 };
+                /**
+                 * Checks whether the current instance is a `DataWrapper`.
+                 * This method is primarily used for type verification.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: Returns `true` if the instance is a `DataWrapper`, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ key: "value" });
+                 * console.log(dataWrapper.getIsDataWrapper()); // Output: true
+                 * ```
+                 *
+                 * @returns {boolean} `true` if the instance is a `DataWrapper`, otherwise `false`.
+                 */
                 getIsDataWrapper = (): boolean => {
                     return this._isDataWrapper;
                 };
+                /**
+                 * Creates and returns a deep copy of the current `DataWrapper` instance.
+                 * This method ensures that all stored key-value pairs are fully cloned, 
+                 * preventing unintended modifications between the original and copied instances.
+                 *
+                 * ## Implementation Details
+                 * - Uses `hison.utils.deepCopyObject()` to recursively copy nested objects and arrays.
+                 * - Supports cloning `DataModel` instances stored within the `DataWrapper`.
+                 * - Prevents circular references by tracking previously copied objects.
+                 * - Ensures that modifications in the cloned instance do not affect the original instance.
+                 *
+                 * ## Returns
+                 * - **`DataWrapper`**: A new `DataWrapper` instance containing a deep copy of the original data.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * const clonedWrapper = dataWrapper.clone();
+                 * 
+                 * console.log(clonedWrapper.getString("name")); // Output: "Alice"
+                 * console.log(clonedWrapper !== dataWrapper);   // Output: true (Cloned instance is independent)
+                 *
+                 * // Deep copy verification
+                 * const originalNested = new hison.data.DataModel([{ id: 1, value: "Test" }]);
+                 * const dataWrapperWithModel = new hison.data.DataWrapper({ nested: originalNested });
+                 * const clonedWrapperWithModel = dataWrapperWithModel.clone();
+                 * 
+                 * console.log(clonedWrapperWithModel.getDataModel("nested") !== originalNested); // Output: true
+                 * ```
+                 *
+                 * @returns {DataWrapper} A new `DataWrapper` instance with a deep copy of the stored data.
+                 */
                 clone = (): DataWrapper => {
                     const newData = {};
                     for (let key in this._data) {
@@ -2669,44 +4042,248 @@ function createHison(): Hison {
                     }
                     return new hison.data.DataWrapper(newData);
                 };
+                /**
+                 * Removes all stored key-value pairs in the `DataWrapper`, resetting it to an empty state.
+                 * 
+                 * ## Behavior
+                 * - Clears the internal storage by setting `_data` to an empty object.
+                 * - Returns the same `DataWrapper` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataWrapper`**: The current instance after clearing all stored data.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ key1: "value1", key2: "value2" });
+                 * console.log(dataWrapper.size()); // Output: 2
+                 * 
+                 * dataWrapper.clear();
+                 * console.log(dataWrapper.size()); // Output: 0
+                 * ```
+                 *
+                 * @returns {DataWrapper} The current `DataWrapper` instance after clearing all data.
+                 */
                 clear = (): DataWrapper => {
                     this._data = {};
                     return this;
                 };
+                /**
+                 * Serializes the `DataWrapper` into a JSON string representation.
+                 * Converts stored `DataModel` instances into their row data format for proper serialization.
+                 *
+                 * ## Behavior
+                 * - Iterates through all key-value pairs in the `DataWrapper`.
+                 * - If a value is a `DataModel`, it is converted to an array of rows using `getRows()`.
+                 * - Other values are stored as-is.
+                 * - The final object is serialized into a JSON string.
+                 *
+                 * ## Returns
+                 * - **`string`**: A JSON string representation of the `DataWrapper` contents.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
+                 * 
+                 * console.log(dataWrapper.getSerialized());
+                 * // Output: '{"users":[{"id":1,"name":"Alice"}],"status":"active"}'
+                 * ```
+                 *
+                 * @returns {string} JSON string representation of the stored data.
+                 */
                 getSerialized = (): string => {
                     const data = {};
                     
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
-                            // DataModel 객체인 경우
                             if (this._data[key] && (this._data[key] as DataModel).getIsDataModel && (this._data[key] as DataModel).getIsDataModel()) {
                                 data[key] = (this._data[key] as DataModel).getRows();
                             } else {
-                                // 그 외의 경우는 정상적으로 값을 할당
                                 data[key] = this._data[key];
                             }
                         }
                     }
                     return JSON.stringify(data);
                 };
+                /**
+                 * Retrieves the value associated with the specified key from the `DataWrapper`.
+                 * If the value exists, a deep copy is returned to prevent unintended modifications.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key associated with the value to retrieve.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - If the key exists, returns a deep copy of the stored value.
+                 * - If the key does not exist, returns `null`.
+                 *
+                 * ## Returns
+                 * - **`DataModel | string | null`**: A deep copy of the stored value, or `null` if the key is not found.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ message: "Hello", users: new hison.data.DataModel([{ id: 1 }]) });
+                 * 
+                 * console.log(dataWrapper.get("message")); // Output: "Hello"
+                 * console.log(dataWrapper.get("users"));   // Output: Deep copy of the DataModel instance
+                 * console.log(dataWrapper.get("nonExistentKey")); // Output: null
+                 * ```
+                 *
+                 * @param {string} key The key to retrieve the associated value.
+                 * @returns {DataModel | string | null} A deep copy of the stored value, or `null` if the key is not found.
+                 */
                 get = (key: string): DataModel | string | null => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     return this._data[key] ? hison.utils.deepCopyObject(this._data[key]) : null;
                 };
+                /**
+                 * Retrieves the string value associated with the specified key from the `DataWrapper`.
+                 * Ensures that the retrieved value is explicitly a string before returning it.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key associated with the string value to retrieve.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - Throws an error if the value associated with `key` is not a string.
+                 * - Returns the string value if it exists; otherwise, returns `null`.
+                 *
+                 * ## Returns
+                 * - **`string | null`**: The associated string value, or `null` if the key is not found.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ status: "active", count: 5 });
+                 * 
+                 * console.log(dataWrapper.getString("status")); // Output: "active"
+                 * console.log(dataWrapper.getString("nonExistentKey")); // Output: null
+                 *
+                 * // Throws an error: "The data does not contain the specified string value."
+                 * console.log(dataWrapper.getString("count"));
+                 * ```
+                 *
+                 * @param {string} key The key associated with the string value.
+                 * @returns {string | null} The associated string value, or `null` if not found.
+                 * @throws {Error} If the key is not a string or if the stored value is not a string.
+                 */
                 getString = (key: string): string | null => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (typeof this._data[key] !== 'string') throw new Error('The data does not contain the specified string value.');
                     return this._data[key] ? this._data[key] as string : null;
                 };
+                /**
+                 * Retrieves the `DataModel` instance associated with the specified key from the `DataWrapper`.
+                 * Ensures that the retrieved value is a valid `DataModel` before returning a cloned copy.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key associated with the `DataModel` instance to retrieve.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - Throws an error if the value associated with `key` is not a valid `DataModel` instance.
+                 * - Returns a deep-cloned copy of the `DataModel` to maintain data integrity.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A cloned `DataModel` instance retrieved from the `DataWrapper`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * const dataWrapper = new hison.data.DataWrapper({ users: dataModel });
+                 * 
+                 * const clonedDataModel = dataWrapper.getDataModel("users");
+                 * console.log(clonedDataModel.getRowCount()); // Output: 1
+                 *
+                 * // Throws an error: "The data does not contain the specified data-model value."
+                 * console.log(dataWrapper.getDataModel("nonExistentKey"));
+                 * ```
+                 *
+                 * @param {string} key The key associated with the `DataModel` instance.
+                 * @returns {DataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
+                 * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel`.
+                 */
                 getDataModel = (key: string): DataModel => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (!this._data[key] || !(this._data[key] as DataModel).getIsDataModel || !(this._data[key] as DataModel).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
                     return (this._data[key] as DataModel).clone();
                 };
+                /**
+                 * Inserts or updates a key-value pair in the `DataWrapper`.
+                 * Allows storing primitive values, strings, and `DataModel` instances.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key under which the value will be stored.
+                 * - `value` **(any)**: The value to be stored. Can be a string, number, boolean, `DataModel`, or other valid types.
+                 *
+                 * ## Behavior
+                 * - Calls the internal `_put()` method to validate and store the value.
+                 * - If the key already exists, its value is updated.
+                 * - Returns the current `DataWrapper` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataWrapper`**: The current instance after inserting/updating the value.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper();
+                 * 
+                 * // Storing a string value
+                 * dataWrapper.put("status", "active");
+                 * console.log(dataWrapper.getString("status")); // Output: "active"
+                 * 
+                 * // Storing a DataModel instance
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * dataWrapper.put("users", dataModel);
+                 * console.log(dataWrapper.getDataModel("users").getRowCount()); // Output: 1
+                 * ```
+                 *
+                 * @param {string} key The key under which the value is stored.
+                 * @param {any} value The value to store.
+                 * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+                 */
                 put = (key: string, value: any): DataWrapper => {
                     this._put(key, value);
                     return this;
                 };
+                /**
+                 * Inserts or updates a key-value pair in the `DataWrapper`, ensuring that the value is a string-convertible type.
+                 * Only accepts primitive types (`string`, `number`, `boolean`, `bigint`, `symbol`) or `null`.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key under which the value will be stored.
+                 * - `value` **(string | number | boolean | bigint | symbol | null)**: The value to be stored, 
+                 *   restricted to types that can be converted to a string.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - Throws an error if `value` is not of a valid type.
+                 * - Calls the internal `_put()` method to store the value.
+                 * - Returns the current `DataWrapper` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataWrapper`**: The current instance after inserting/updating the value.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper();
+                 * 
+                 * // Storing a string value
+                 * dataWrapper.putString("status", "active");
+                 * console.log(dataWrapper.getString("status")); // Output: "active"
+                 *
+                 * // Storing a number (converted to string internally)
+                 * dataWrapper.putString("count", 10);
+                 * console.log(dataWrapper.getString("count")); // Output: "10"
+                 *
+                 * // Throws an error: "Please insert only values convertible to string type."
+                 * dataWrapper.putString("invalid", { key: "value" });
+                 * ```
+                 *
+                 * @param {string} key The key under which the value is stored.
+                 * @param {string | number | boolean | bigint | symbol | null} value The value to store.
+                 * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+                 * @throws {Error} If `key` is not a string or `value` is not a valid type.
+                 */
                 putString = (key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (typeof value !== 'string'
@@ -2720,6 +4297,42 @@ function createHison(): Hison {
                     this._put(key, value);
                     return this;
                 };
+                /**
+                 * Inserts or updates a `DataModel` instance in the `DataWrapper`.
+                 * Ensures that the stored value is a valid `DataModel`.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key under which the `DataModel` will be stored.
+                 * - `value` **(`DataModel`)**: The `DataModel` instance to be stored.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - Throws an error if `value` is not a valid `DataModel` instance.
+                 * - Calls the internal `_put()` method to store the `DataModel`.
+                 * - Returns the current `DataWrapper` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataWrapper`**: The current instance after inserting/updating the `DataModel`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper();
+                 * 
+                 * // Creating and storing a DataModel
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * dataWrapper.putDataModel("users", dataModel);
+                 * 
+                 * console.log(dataWrapper.getDataModel("users").getRowCount()); // Output: 1
+                 *
+                 * // Throws an error: "Please insert only values of data-model type."
+                 * dataWrapper.putDataModel("invalid", "not a DataModel");
+                 * ```
+                 *
+                 * @param {string} key The key under which the `DataModel` is stored.
+                 * @param {DataModel} value The `DataModel` instance to store.
+                 * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+                 * @throws {Error} If `key` is not a string or `value` is not a valid `DataModel`.
+                 */
                 putDataModel = (key: string, value: DataModel): DataWrapper => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (value === null || !value.getIsDataModel || !value.getIsDataModel()) {
@@ -2728,6 +4341,30 @@ function createHison(): Hison {
                     this._put(key, value);
                     return this;
                 };
+                /**
+                 * Converts the `DataWrapper` instance into a standard JavaScript object.
+                 * If the stored values include `DataModel` instances, they are converted into object representations.
+                 *
+                 * ## Behavior
+                 * - Iterates through all key-value pairs in the `DataWrapper`.
+                 * - If a value is a `DataModel`, it is converted using `getObject()`.
+                 * - Other values are returned as-is.
+                 * - Returns a plain JavaScript object representation of the `DataWrapper`.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>`**: A plain object containing all stored key-value pairs.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
+                 * 
+                 * console.log(dataWrapper.getObject());
+                 * // Output: { users: { cols: ["id", "name"], rows: [{ id: 1, name: "Alice" }] }, status: "active" }
+                 * ```
+                 *
+                 * @returns {Record<string, any>} A plain object representation of the `DataWrapper` instance.
+                 */
                 getObject = (): Record<string, any> => {
                     const result = {};
                     for(let key in this._data) {
@@ -2739,13 +4376,93 @@ function createHison(): Hison {
                     }
                     return result;
                 };
+                /**
+                 * Checks whether the `DataWrapper` contains a specified key.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key to check for existence in the `DataWrapper`.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - Uses `hasOwnProperty()` to determine if the key exists in the stored data.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if the key exists, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * 
+                 * console.log(dataWrapper.containsKey("name")); // Output: true
+                 * console.log(dataWrapper.containsKey("nonExistentKey")); // Output: false
+                 * ```
+                 *
+                 * @param {string} key The key to check for existence.
+                 * @returns {boolean} `true` if the key exists, otherwise `false`.
+                 * @throws {Error} If `key` is not a string.
+                 */
                 containsKey = (key: string): boolean => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     return this._data.hasOwnProperty(key);
                 };
+                /**
+                 * Checks whether the `DataWrapper` is empty (i.e., contains no key-value pairs).
+                 *
+                 * ## Behavior
+                 * - Determines emptiness by checking if the number of stored keys is `0`.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if the `DataWrapper` contains no data, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper();
+                 * console.log(dataWrapper.isEmpty()); // Output: true
+                 * 
+                 * dataWrapper.put("status", "active");
+                 * console.log(dataWrapper.isEmpty()); // Output: false
+                 * ```
+                 *
+                 * @returns {boolean} `true` if the `DataWrapper` contains no data, otherwise `false`.
+                 */
                 isEmpty = (): boolean => {
                     return Object.keys(this._data).length === 0;
                 };
+                /**
+                 * Removes a key-value pair from the `DataWrapper` if the key exists.
+                 *
+                 * ## Parameters
+                 * - `key` **(string)**: The key to be removed from the `DataWrapper`.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `key` is not a string.
+                 * - Checks if the key exists using `hasOwnProperty()`.
+                 * - If the key exists, it is deleted from the internal data storage.
+                 * - Returns an object containing the updated `DataWrapper` and a boolean indicating success.
+                 *
+                 * ## Returns
+                 * - **`{ data: DataWrapper, result: boolean }`**:
+                 *   - `data`: The current `DataWrapper` instance after attempting removal.
+                 *   - `result`: `true` if the key was successfully removed, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * 
+                 * console.log(dataWrapper.containsKey("name")); // Output: true
+                 * 
+                 * const { data: updatedWrapper, result } = dataWrapper.remove("name");
+                 * console.log(result); // Output: true
+                 * console.log(updatedWrapper.containsKey("name")); // Output: false
+                 *
+                 * const { result: nonExistentResult } = dataWrapper.remove("nonExistentKey");
+                 * console.log(nonExistentResult); // Output: false
+                 * ```
+                 *
+                 * @param {string} key The key to remove from the `DataWrapper`.
+                 * @returns {{ data: DataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
+                 * @throws {Error} If `key` is not a string.
+                 */
                 remove = (key: string): { data: DataWrapper, result: boolean } => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     let result = false;
@@ -2755,12 +4472,77 @@ function createHison(): Hison {
                     }
                     return { data: this, result };
                 };
+                /**
+                 * Returns the number of key-value pairs stored in the `DataWrapper`.
+                 *
+                 * ## Behavior
+                 * - Counts the number of keys present in the internal data storage.
+                 *
+                 * ## Returns
+                 * - **`number`**: The total number of stored key-value pairs.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * console.log(dataWrapper.size()); // Output: 2
+                 * 
+                 * dataWrapper.put("status", "active");
+                 * console.log(dataWrapper.size()); // Output: 3
+                 * ```
+                 *
+                 * @returns {number} The number of stored key-value pairs in the `DataWrapper`.
+                 */
                 size = (): number => {
                     return Object.keys(this._data).length;
                 };
+                /**
+                 * Retrieves an array of all keys stored in the `DataWrapper`.
+                 *
+                 * ## Behavior
+                 * - Returns a list of all keys currently stored in the `DataWrapper`.
+                 * - If the `DataWrapper` is empty, returns an empty array.
+                 *
+                 * ## Returns
+                 * - **`string[]`**: An array containing all stored keys.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * console.log(dataWrapper.keys()); // Output: ["name", "age"]
+                 * 
+                 * dataWrapper.clear();
+                 * console.log(dataWrapper.keys()); // Output: []
+                 * ```
+                 *
+                 * @returns {string[]} An array of keys stored in the `DataWrapper`.
+                 */
                 keys = (): string[] => {
                     return Object.keys(this._data);
                 };
+                /**
+                 * Retrieves an array of all values stored in the `DataWrapper`.
+                 * Ensures that stored values are returned as deep copies to prevent unintended modifications.
+                 *
+                 * ## Behavior
+                 * - Iterates through all key-value pairs in the `DataWrapper`.
+                 * - Uses `hison.utils.deepCopyObject()` to return deep copies of stored values.
+                 * - If the `DataWrapper` is empty, returns an empty array.
+                 *
+                 * ## Returns
+                 * - **`any[]`**: An array containing deep copies of all stored values.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * console.log(dataWrapper.values()); // Output: ["Alice", 25]
+                 * 
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * dataWrapper.put("users", dataModel);
+                 * console.log(dataWrapper.values()); // Output: ["Alice", 25, <cloned DataModel>]
+                 * ```
+                 *
+                 * @returns {any[]} An array of deep-copied values stored in the `DataWrapper`.
+                 */
                 values = (): any[] => {
                     const values = [];
                     for (let key in this._data) {
@@ -2772,6 +4554,47 @@ function createHison(): Hison {
                 };
             },
             DataModel : class implements DataModel {
+                /**
+                 * Creates a `DataModel` instance, which manages a structured table-like data format.
+                 * The instance allows for efficient row and column management.
+                 *
+                 * ## Parameters
+                 * - `data` **(Array | Object, optional)**: The initial dataset, which can be:
+                 *   - An **array of objects**, where each object represents a row and its keys represent columns.
+                 *   - An **array of strings**, which initializes column names.
+                 *   - A **single object**, representing a single-row initialization.
+                 *
+                 * ## Behavior
+                 * - If no data is provided, an empty `DataModel` is created.
+                 * - Calls `_put(data)`, which processes the input and initializes `_cols` and `_rows` accordingly.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A new instance containing structured tabular data.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * // Creating a DataModel with an array of objects (rows)
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 *
+                 * console.log(dataModel.getRowCount()); // Output: 2
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 *
+                 * // Creating a DataModel with column names only
+                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 *
+                 * // Creating a DataModel with a single object (one row)
+                 * const dataModel = new hison.data.DataModel({ id: 1, name: "Alice" });
+                 * console.log(dataModel.getRowCount()); // Output: 1
+                 * ```
+                 *
+                 * @constructor
+                 * @param {Array | Object} [data] The initial dataset, which can be an array of objects, an array of column names, or a single object.
+                 * @returns {DataModel} A new instance of `DataModel`.
+                 */
                 constructor(data?: Record<string, any>[] | Record<string, any>) {
                     if (!data) return;
                     this._put(data);
@@ -2784,7 +4607,7 @@ function createHison(): Hison {
                         return object;
                     }
                     if (object.constructor !== Object && object.constructor !== Array) {
-                        const convertValue = defaultOption.data.convertValue(object);
+                        const convertValue = customOption.data.convertValue(object);
                         return convertValue !== undefined ? convertValue : object;
                     }
                     if (!visited) visited = [];
@@ -3028,26 +4851,188 @@ function createHison(): Hison {
                     }
                     return -1;
                 };
+                /**
+                 * Checks whether the current instance is a `DataModel`.
+                 * This method is primarily used for type verification.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: Returns `true` if the instance is a `DataModel`, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * console.log(dataModel.getIsDataModel()); // Output: true
+                 * ```
+                 *
+                 * @returns {boolean} `true` if the instance is a `DataModel`, otherwise `false`.
+                 */
                 getIsDataModel = (): boolean => {
                     return this._isDataModel;
                 };
+                /**
+                 * Creates and returns a deep copy of the current `DataModel` instance.
+                 * The cloned instance contains independent copies of all stored rows, 
+                 * ensuring that modifications in the cloned instance do not affect the original instance.
+                 *
+                 * ## Behavior
+                 * - Uses the internal `_rows` data to initialize a new `DataModel` instance.
+                 * - Ensures that all row data is duplicated to maintain data integrity.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A new `DataModel` instance containing a copy of the original rows.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * const clonedModel = dataModel.clone();
+                 * 
+                 * console.log(clonedModel.getRowCount()); // Output: 1
+                 * console.log(clonedModel !== dataModel); // Output: true (Cloned instance is independent)
+                 * ```
+                 *
+                 * @returns {DataModel} A new `DataModel` instance with a copy of the stored rows.
+                 */
                 clone = (): DataModel => {
                     return new hison.data.DataModel(this._rows);
                 };
+                /**
+                 * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
+                 * 
+                 * ## Behavior
+                 * - Clears the `_cols` array, removing all column definitions.
+                 * - Clears the `_rows` array, removing all stored data.
+                 * - Returns the same `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after clearing all stored data.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * console.log(dataModel.getRowCount()); // Output: 1
+                 * 
+                 * dataModel.clear();
+                 * console.log(dataModel.getRowCount()); // Output: 0
+                 * console.log(dataModel.getColumns());  // Output: []
+                 * ```
+                 *
+                 * @returns {DataModel} The current `DataModel` instance after clearing all data.
+                 */
                 clear = (): DataModel => {
                     this._cols = [];
                     this._rows = [];
                     return this;
                 };
+                /**
+                 * Serializes the `DataModel` instance into a JSON string representation.
+                 * Converts the stored row data into a JSON format for easy storage or transmission.
+                 *
+                 * ## Behavior
+                 * - Uses `JSON.stringify()` to serialize the `_rows` array.
+                 * - Column definitions (`_cols`) are not included in the serialized output.
+                 *
+                 * ## Returns
+                 * - **`string`**: A JSON string representation of the stored row data.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getSerialized());
+                 * // Output: '[{"id":1,"name":"Alice"},{"id":2,"name":"Bob"}]'
+                 * ```
+                 *
+                 * @returns {string} JSON string representation of the stored row data.
+                 */
                 getSerialized = (): string => {
                     return JSON.stringify(this._rows);
                 };
+                /**
+                 * Checks whether the `DataModel` has defined columns.
+                 * This method determines if the `DataModel` has been initialized with at least one column.
+                 *
+                 * ## Behavior
+                 * - Returns `true` if `_cols` contains at least one column.
+                 * - Returns `false` if no columns have been defined.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if columns are defined, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * console.log(dataModel.isDeclare()); // Output: true
+                 * 
+                 * const emptyModel = new hison.data.DataModel();
+                 * console.log(emptyModel.isDeclare()); // Output: false
+                 * ```
+                 *
+                 * @returns {boolean} `true` if columns are defined, otherwise `false`.
+                 */
                 isDeclare = (): boolean => {
                     return this._cols.length > 0;
                 };
+                /**
+                 * Retrieves an array of all column names defined in the `DataModel`.
+                 * Returns a deep copy of the `_cols` array to prevent unintended modifications.
+                 *
+                 * ## Behavior
+                 * - Uses `_deepCopy()` to return a copy of `_cols`, ensuring data integrity.
+                 * - If no columns are defined, returns an empty array.
+                 *
+                 * ## Returns
+                 * - **`string[]`**: An array of column names.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 * 
+                 * const emptyModel = new hison.data.DataModel();
+                 * console.log(emptyModel.getColumns()); // Output: []
+                 * ```
+                 *
+                 * @returns {string[]} An array containing the column names.
+                 */
                 getColumns = (): string[] => {
                     return this._deepCopy(this._cols);
                 };
+                /**
+                 * Retrieves an array of all values in the specified column.
+                 * Ensures that returned values are deep copies to prevent unintended modifications.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The column name from which to retrieve values.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `column` is not a valid string.
+                 * - Throws an error if the specified column does not exist.
+                 * - Iterates through all rows and extracts the values of the specified column.
+                 * - Uses `_deepCopy()` to return deep copies of the values.
+                 *
+                 * ## Returns
+                 * - **`any[]`**: An array containing all values from the specified column.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getColumnValues("name")); // Output: ["Alice", "Bob"]
+                 *
+                 * // Throws an error: "The column does not exist."
+                 * console.log(dataModel.getColumnValues("age"));
+                 * ```
+                 *
+                 * @param {string} column The column name from which to retrieve values.
+                 * @returns {any[]} An array of values from the specified column.
+                 * @throws {Error} If the column is invalid or does not exist.
+                 */
                 getColumnValues = (column: string): any[] => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
@@ -3057,6 +5042,36 @@ function createHison(): Hison {
                     }
                     return result;
                 };
+                /**
+                 * Adds a new column to the `DataModel`.
+                 * Ensures that all existing rows include the new column with a default value of `null`.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to be added.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `column` is not a valid string.
+                 * - Calls `_addCol(column)` to validate and add the column.
+                 * - Iterates through `_rows` and ensures each row includes the new column, assigning `null` if missing.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after adding the new column.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 * 
+                 * dataModel.addColumn("age");
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
+                 * console.log(dataModel.getRow(0)); // Output: { id: 1, name: "Alice", age: null }
+                 * ```
+                 *
+                 * @param {string} column The name of the column to add.
+                 * @returns {DataModel} The current `DataModel` instance after adding the column.
+                 * @throws {Error} If the column is invalid or already exists.
+                 */
                 addColumn = (column: string): DataModel => {
                     this._addCol(column);
                     for(const row of this._rows) {
@@ -3066,6 +5081,36 @@ function createHison(): Hison {
                     }
                     return this;
                 };
+                /**
+                 * Adds multiple new columns to the `DataModel`.
+                 * Ensures that all existing rows include the newly added columns with a default value of `null`.
+                 *
+                 * ## Parameters
+                 * - `columns` **(string[])**: An array of column names to be added.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `columns` is not an array.
+                 * - Iterates through the provided column names and calls `_addCol(column)` to validate and add each column.
+                 * - Ensures that all existing rows include the new columns, assigning `null` if missing.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after adding the new columns.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 * 
+                 * dataModel.addColumns(["age", "email"]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age", "email"]
+                 * console.log(dataModel.getRow(0)); // Output: { id: 1, name: "Alice", age: null, email: null }
+                 * ```
+                 *
+                 * @param {string[]} columns An array of column names to add.
+                 * @returns {DataModel} The current `DataModel` instance after adding the columns.
+                 * @throws {Error} If `columns` is not an array or contains invalid column names.
+                 */
                 addColumns = (columns: string[]): DataModel => {
                     if (!Array.isArray(columns)) {
                         throw new Error('Only array contains strings can be inserted into columns.');
@@ -3080,6 +5125,41 @@ function createHison(): Hison {
                     }
                     return this;
                 };
+                /**
+                 * Sets the same value for all rows in the specified column.
+                 * If the column does not exist, it is created before assigning values.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to update.
+                 * - `value` **(any)**: The value to be assigned to all rows in the specified column.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `value` is `undefined`.
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - If the column does not exist, `_addCol(column)` is called to add it.
+                 * - Iterates through all rows and assigns the specified value using `_getValidRowValue()`.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after setting the column values.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }]);
+                 * 
+                 * // Set the same value for all rows in the "status" column
+                 * dataModel.setColumnSameValue("status", "active");
+                 * console.log(dataModel.getColumnValues("status")); // Output: ["active", "active"]
+                 * 
+                 * // If the column does not exist, it is created automatically
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "status"]
+                 * ```
+                 *
+                 * @param {string} column The name of the column to set the value for.
+                 * @param {any} value The value to assign to all rows in the column.
+                 * @returns {DataModel} The current `DataModel` instance after updating the column.
+                 * @throws {Error} If `value` is `undefined` or if the column name is invalid.
+                 */
                 setColumnSameValue = (column: string, value: any): DataModel => {
                     if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     column = this._getValidColValue(column);
@@ -3091,6 +5171,45 @@ function createHison(): Hison {
                     }
                     return this;
                 };
+                /**
+                 * Applies a formatting function to all values in the specified column.
+                 * The formatter function transforms each row's value in the column.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to format.
+                 * - `formatter` **(`DataModelFormatter`)**: A function that takes a value and returns a formatted version of it.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `formatter` is not a valid function.
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - Throws an error if the specified column does not exist.
+                 * - Iterates through all rows and applies the `formatter` function to each value in the column.
+                 * - Ensures that the formatted value is valid using `_getValidRowValue()`.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after formatting the column values.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, price: 1000 },
+                 *     { id: 2, price: 2000 }
+                 * ]);
+                 * 
+                 * // Format the "price" column by adding a currency symbol
+                 * dataModel.setColumnSameFormat("price", value => `$${value}`);
+                 * console.log(dataModel.getColumnValues("price")); // Output: ["$1000", "$2000"]
+                 * 
+                 * // Throws an error if the column does not exist
+                 * // dataModel.setColumnSameFormat("discount", value => `${value}%`);
+                 * ```
+                 *
+                 * @param {string} column The name of the column to format.
+                 * @param {DataModelFormatter} formatter A function that transforms each value in the column.
+                 * @returns {DataModel} The current `DataModel` instance after formatting the column.
+                 * @throws {Error} If `formatter` is not a function or if the column does not exist.
+                 */
                 setColumnSameFormat = (column: string, formatter: DataModelFormatter): DataModel => {
                     this._checkValidFunction(formatter);
                     column = this._getValidColValue(column);
@@ -3102,12 +5221,120 @@ function createHison(): Hison {
                     }
                     return this;
                 };
+                /**
+                 * Retrieves a deep copy of the row at the specified index.
+                 * Ensures that modifications to the returned row do not affect the original data.
+                 *
+                 * ## Parameters
+                 * - `rowIndex` **(number)**: The index of the row to retrieve.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
+                 * - Uses `_deepCopy()` to return a copy of the row, preventing unintended modifications.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>`**: A deep copy of the row data as an object.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getRow(0)); // Output: { id: 1, name: "Alice" }
+                 *
+                 * // Throws an error if the index is out of bounds
+                 * // console.log(dataModel.getRow(10));
+                 * ```
+                 *
+                 * @param {number} rowIndex The index of the row to retrieve.
+                 * @returns {Record<string, any>} A deep copy of the row data.
+                 * @throws {Error} If `rowIndex` is out of bounds.
+                 */
                 getRow = (rowIndex: number): Record<string, any> => {
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
+                /**
+                 * Retrieves the row at the specified index as a new `DataModel` instance.
+                 * Converts the row object into a `DataModel` for further structured operations.
+                 *
+                 * ## Parameters
+                 * - `rowIndex` **(number)**: The index of the row to retrieve.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
+                 * - Initializes a new `DataModel` using the retrieved row data.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A new `DataModel` instance containing the specified row.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * const rowDataModel = dataModel.getRowAsDataModel(0);
+                 * console.log(rowDataModel.getRowCount()); // Output: 1
+                 * console.log(rowDataModel.getColumns()); // Output: ["id", "name"]
+                 *
+                 * // Throws an error if the index is out of bounds
+                 * // console.log(dataModel.getRowAsDataModel(10));
+                 * ```
+                 *
+                 * @param {number} rowIndex The index of the row to retrieve.
+                 * @returns {DataModel} A new `DataModel` instance containing the row data.
+                 * @throws {Error} If `rowIndex` is out of bounds.
+                 */
                 getRowAsDataModel = (rowIndex: number): DataModel => {
                     return new hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
+                /**
+                 * Adds a new row to the `DataModel` at the specified index or appends it to the end.
+                 * If no parameters are provided, an empty row is added.
+                 *
+                 * ## Parameters
+                 * - `rowIndexOrRow` **(number | Object, optional)**: The index at which to insert the row, or the row data to insert.
+                 * - `row` **(Object, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
+                 *
+                 * ## Behavior
+                 * - If **no parameters** are provided, an empty row is appended.
+                 * - If **only a number is provided**, an empty row is inserted at that index.
+                 * - If **only an object is provided**, it is inserted as a new row at the end.
+                 * - If **both a number and an object are provided**, the row is inserted at the specified index.
+                 * - Throws an error if attempting to add a row without first defining columns.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after adding the new row.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * 
+                 * // Add an empty row
+                 * dataModel.addRow();
+                 * console.log(dataModel.getRowCount()); // Output: 1
+                 * console.log(dataModel.getRow(0)); // Output: { id: null, name: null }
+                 * 
+                 * // Add a row with data
+                 * dataModel.addRow({ id: 1, name: "Alice" });
+                 * console.log(dataModel.getRow(1)); // Output: { id: 1, name: "Alice" }
+                 * 
+                 * // Insert a row at index 1
+                 * dataModel.addRow(1, { id: 2, name: "Bob" });
+                 * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
+                 * 
+                 * // Throws an error: "Please define the column first."
+                 * // new hison.data.DataModel().addRow();
+                 * ```
+                 *
+                 * @param {number | Object} [rowIndexOrRow] The index at which to insert the row, or the row data.
+                 * @param {Object} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
+                 * @returns {DataModel} The current `DataModel` instance after adding the row.
+                 * @throws {Error} If columns are not defined or parameters are invalid.
+                 */
                 addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel => {
                     if (rowIndexOrRow === undefined && row === undefined) {
                         if (this._cols.length <= 0) {
@@ -3140,6 +5367,45 @@ function createHison(): Hison {
                     }
                     return this;
                 };
+                /**
+                 * Retrieves a deep copy of a range of rows from the `DataModel`.
+                 * Ensures that modifications to the returned rows do not affect the original data.
+                 *
+                 * ## Parameters
+                 * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
+                 * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
+                 * - If `endRow` is `null`, retrieves rows from `startRow` to the last row.
+                 * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>[]`**: An array of deep-copied row objects.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" },
+                 *     { id: 3, name: "Charlie" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getRows()); 
+                 * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
+                 * 
+                 * console.log(dataModel.getRows(1, 2)); 
+                 * // Output: [{ id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
+                 * 
+                 * // Throws an error if startRow or endRow is out of bounds
+                 * // console.log(dataModel.getRows(5));
+                 * ```
+                 *
+                 * @param {number} [startRow=0] The starting index of the row range.
+                 * @param {number} [endRow=null] The ending index of the row range (inclusive).
+                 * @returns {Record<string, any>[]} An array of deep-copied rows.
+                 * @throws {Error} If `startRow` or `endRow` is out of bounds.
+                 */
                 getRows = (startRow: number = 0, endRow: number = null): Record<string, any>[] => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this._deepCopy(this._rows);
@@ -3150,7 +5416,46 @@ function createHison(): Hison {
                         result.push(this._deepCopy(this._rows[i]));
                     }
                     return result;
-                }
+                };
+                /**
+                 * Retrieves a range of rows as a new `DataModel` instance.
+                 * Ensures that the returned `DataModel` contains independent copies of the selected rows.
+                 *
+                 * ## Parameters
+                 * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
+                 * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
+                 * - If `startRow` is `0` and `endRow` is `null`, returns a clone of the entire `DataModel`.
+                 * - Uses `_deepCopy()` to ensure the returned rows are independent.
+                 * - Returns a new `DataModel` containing the selected rows.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A new `DataModel` instance containing the selected row range.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" },
+                 *     { id: 3, name: "Charlie" }
+                 * ]);
+                 * 
+                 * const newModel = dataModel.getRowsAsDataModel(1, 2);
+                 * console.log(newModel.getRowCount()); // Output: 2
+                 * console.log(newModel.getRow(0)); // Output: { id: 2, name: "Bob" }
+                 *
+                 * // Retrieves all rows as a new DataModel
+                 * const clonedModel = dataModel.getRowsAsDataModel();
+                 * console.log(clonedModel.getRowCount()); // Output: 3
+                 * ```
+                 *
+                 * @param {number} [startRow=0] The starting index of the row range.
+                 * @param {number} [endRow=null] The ending index of the row range (inclusive).
+                 * @returns {DataModel} A new `DataModel` instance containing the selected rows.
+                 * @throws {Error} If `startRow` or `endRow` is out of bounds.
+                 */
                 getRowsAsDataModel = (startRow: number = 0, endRow: number = null): DataModel => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this.clone();
@@ -3161,11 +5466,80 @@ function createHison(): Hison {
                         result.push(this._deepCopy(this._rows[i]));
                     }
                     return new hison.data.DataModel(result);
-                }
+                };
+                /**
+                 * Adds multiple rows to the `DataModel`.
+                 * Each row is validated and inserted into the existing dataset.
+                 *
+                 * ## Parameters
+                 * - `rows` **(`Record<string, any>[]`)**: An array of row objects to be added.
+                 *
+                 * ## Behavior
+                 * - Calls `_put(rows)` to process and insert the provided rows.
+                 * - Ensures that column structures are maintained.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after adding the new rows.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * 
+                 * // Add multiple rows
+                 * dataModel.addRows([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getRowCount()); // Output: 2
+                 * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
+                 * ```
+                 *
+                 * @param {Record<string, any>[]} rows An array of row objects to add.
+                 * @returns {DataModel} The current `DataModel` instance after adding the rows.
+                 * @throws {Error} If `rows` contain invalid data.
+                 */
                 addRows = (rows: Record<string, any>[]): DataModel => {
                     this._put(rows);
                     return this;
-                }
+                };
+                /**
+                 * Converts the `DataModel` instance into a standard JavaScript object.
+                 * The returned object includes column definitions, row data, and metadata.
+                 *
+                 * ## Behavior
+                 * - Uses `_deepCopy()` to ensure that returned data is independent of the original `DataModel`.
+                 * - Includes the following properties in the returned object:
+                 *   - `cols`: An array of column names.
+                 *   - `rows`: An array of row objects.
+                 *   - `colCount`: The total number of columns.
+                 *   - `rowCount`: The total number of rows.
+                 *   - `isDeclare`: A boolean indicating whether columns are defined.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>`**: A plain object representing the `DataModel` structure.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getObject());
+                 * // Output:
+                 * // {
+                 * //   cols: ["id", "name"],
+                 * //   rows: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }],
+                 * //   colCount: 2,
+                 * //   rowCount: 2,
+                 * //   isDeclare: true
+                 * // }
+                 * ```
+                 *
+                 * @returns {Record<string, any>} A plain object representing the `DataModel` structure.
+                 */
                 getObject = (): Record<string, any> => {
                     const result = {};
                     const copyCol = this._deepCopy(this._cols);
@@ -3178,11 +5552,90 @@ function createHison(): Hison {
                     result['isDeclare'] = this.isDeclare();
                     return result;
                 };
+                /**
+                 * Retrieves the value at the specified row index and column name.
+                 * Ensures that the returned value is a deep copy to prevent unintended modifications.
+                 *
+                 * ## Parameters
+                 * - `rowIndex` **(number)**: The index of the row from which to retrieve the value.
+                 * - `column` **(string)**: The name of the column containing the desired value.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - Throws an error if the specified column does not exist.
+                 * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
+                 * - Uses `_deepCopy()` to return an independent copy of the value.
+                 *
+                 * ## Returns
+                 * - **`any`**: A deep copy of the value stored at the specified row and column.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getValue(0, "name")); // Output: "Alice"
+                 * 
+                 * // Throws an error if the column does not exist
+                 * // console.log(dataModel.getValue(0, "age"));
+                 * ```
+                 *
+                 * @param {number} rowIndex The index of the row to retrieve the value from.
+                 * @param {string} column The column name containing the value.
+                 * @returns {any} A deep copy of the value stored at the specified row and column.
+                 * @throws {Error} If `rowIndex` or `column` is invalid.
+                 */
                 getValue = (rowIndex: number, column: string): any => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)][column]);
                 };
+                /**
+                 * Sets a value at the specified row index and column name.
+                 * Ensures that the value is valid and maintains data integrity.
+                 *
+                 * ## Parameters
+                 * - `rowIndex` **(number)**: The index of the row where the value should be set.
+                 * - `column` **(string)**: The name of the column where the value should be stored.
+                 * - `value` **(any)**: The value to be assigned to the specified row and column.
+                 *
+                 * ## Behavior
+                 * - Throws an error if `value` is `undefined`.
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - Throws an error if the specified column does not exist.
+                 * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
+                 * - Calls `_getValidRowValue(rowIndex, column, value)` to ensure the value is properly formatted.
+                 * - Updates the value at the specified row and column.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after updating the value.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * dataModel.setValue(0, "name", "Charlie");
+                 * console.log(dataModel.getValue(0, "name")); // Output: "Charlie"
+                 *
+                 * // Throws an error if trying to set `undefined`
+                 * // dataModel.setValue(1, "name", undefined);
+                 *
+                 * // Throws an error if the column does not exist
+                 * // dataModel.setValue(0, "age", 25);
+                 * ```
+                 *
+                 * @param {number} rowIndex The index of the row where the value should be set.
+                 * @param {string} column The column name where the value should be stored.
+                 * @param {any} value The value to assign.
+                 * @returns {DataModel} The current `DataModel` instance after updating the value.
+                 * @throws {Error} If `value` is `undefined` or if `rowIndex` or `column` is invalid.
+                 */
                 setValue = (rowIndex: number, column: string, value: any): DataModel => {
                     if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     column = this._getValidColValue(column);
@@ -3190,6 +5643,43 @@ function createHison(): Hison {
                     this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(rowIndex, column, value);
                     return this;
                 };
+                /**
+                 * Removes a column from the `DataModel`, deleting its values from all rows.
+                 * Ensures that the column exists before attempting removal.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to remove.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - Throws an error if the specified column does not exist.
+                 * - Iterates through all rows and removes the specified column.
+                 * - Updates `_cols` to exclude the removed column.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after removing the column.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
+                 * 
+                 * dataModel.removeColumn("age");
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 *
+                 * // Throws an error if the column does not exist
+                 * // dataModel.removeColumn("salary");
+                 * ```
+                 *
+                 * @param {string} column The name of the column to remove.
+                 * @returns {DataModel} The current `DataModel` instance after removing the column.
+                 * @throws {Error} If `column` is invalid or does not exist.
+                 */
                 removeColumn = (column: string): DataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
@@ -3199,32 +5689,265 @@ function createHison(): Hison {
                     this._cols = this._cols.filter(oriColumn => oriColumn !== column);
                     return this;
                 };
+                /**
+                 * Removes multiple columns from the `DataModel`, deleting their values from all rows.
+                 * Ensures that each specified column exists before attempting removal.
+                 *
+                 * ## Parameters
+                 * - `columns` **(string[])**: An array of column names to remove.
+                 *
+                 * ## Behavior
+                 * - Iterates through the `columns` array and calls `removeColumn(column)` for each entry.
+                 * - If any column does not exist, `removeColumn` will throw an error.
+                 * - Returns the current `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The current instance after removing the specified columns.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25, city: "New York" },
+                 *     { id: 2, name: "Bob", age: 30, city: "Los Angeles" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age", "city"]
+                 * 
+                 * dataModel.removeColumns(["age", "city"]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 *
+                 * // Throws an error if a column does not exist
+                 * // dataModel.removeColumns(["salary", "bonus"]);
+                 * ```
+                 *
+                 * @param {string[]} columns An array of column names to remove.
+                 * @returns {DataModel} The current `DataModel` instance after removing the columns.
+                 * @throws {Error} If any column does not exist.
+                 */
                 removeColumns = (columns: string[]): DataModel => {
                     for(const column of columns) {
                         this.removeColumn(column);
                     }
                     return this;
                 };
+                /**
+                 * Removes a row from the `DataModel` at the specified index and returns the removed row.
+                 * Ensures that the row index is valid before removal.
+                 *
+                 * ## Parameters
+                 * - `rowIndex` **(number, optional, default = `0`)**: The index of the row to remove.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
+                 * - Uses `splice()` to remove the row from `_rows` and returns the removed row.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>`**: The removed row object.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" },
+                 *     { id: 3, name: "Charlie" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getRowCount()); // Output: 3
+                 * 
+                 * const removedRow = dataModel.removeRow(1);
+                 * console.log(removedRow); // Output: { id: 2, name: "Bob" }
+                 * console.log(dataModel.getRowCount()); // Output: 2
+                 *
+                 * // Throws an error if rowIndex is out of bounds
+                 * // dataModel.removeRow(10);
+                 * ```
+                 *
+                 * @param {number} [rowIndex=0] The index of the row to remove.
+                 * @returns {Record<string, any>} The removed row object.
+                 * @throws {Error} If `rowIndex` is out of bounds.
+                 */
                 removeRow = (rowIndex: number = 0): Record<string, any> => {
                     return this._rows.splice(this._getValidRowIndex(rowIndex), 1)[0];
                 };
+                /**
+                 * Retrieves the total number of columns in the `DataModel`.
+                 *
+                 * ## Behavior
+                 * - Returns the length of the `_cols` array, which represents the column definitions.
+                 *
+                 * ## Returns
+                 * - **`number`**: The total number of columns in the `DataModel`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
+                 * console.log(dataModel.getColumnCount()); // Output: 3
+                 * 
+                 * dataModel.removeColumn("age");
+                 * console.log(dataModel.getColumnCount()); // Output: 2
+                 * ```
+                 *
+                 * @returns {number} The number of columns in the `DataModel`.
+                 */
                 getColumnCount = (): number => {
                     return this._cols.length;
                 };
+                /**
+                 * Retrieves the total number of rows in the `DataModel`.
+                 *
+                 * ## Behavior
+                 * - Returns the length of the `_rows` array, which represents the stored data rows.
+                 *
+                 * ## Returns
+                 * - **`number`**: The total number of rows in the `DataModel`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getRowCount()); // Output: 2
+                 * 
+                 * dataModel.addRow({ id: 3, name: "Charlie" });
+                 * console.log(dataModel.getRowCount()); // Output: 3
+                 * ```
+                 *
+                 * @returns {number} The number of rows in the `DataModel`.
+                 */
                 getRowCount = (): number => {
                     return this._rows.length;
                 };
+                /**
+                 * Checks whether the `DataModel` contains a specified column.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to check.
+                 *
+                 * ## Behavior
+                 * - Calls `_hasColumn(column)` to determine if the column exists.
+                 * - Returns `true` if the column is found in `_cols`, otherwise `false`.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if the column exists, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * 
+                 * console.log(dataModel.hasColumn("name")); // Output: true
+                 * console.log(dataModel.hasColumn("age")); // Output: false
+                 * ```
+                 *
+                 * @param {string} column The column name to check.
+                 * @returns {boolean} `true` if the column exists, otherwise `false`.
+                 */
                 hasColumn = (column: string): boolean => {
                     return this._hasColumn(column);
                 };
+                /**
+                 * Restricts the `DataModel` to only the specified columns by removing all other columns.
+                 * Ensures that only the columns listed in `columns` remain in the dataset.
+                 *
+                 * ## Parameters
+                 * - `columns` **(string[])**: An array of column names to keep in the `DataModel`.
+                 *
+                 * ## Behavior
+                 * - Filters `_cols` to identify columns that are **not** in the provided `columns` list.
+                 * - Calls `removeColumns()` to remove those columns from the dataset.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with only the specified columns retained.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
+                 * 
+                 * // Keep only "id" and "name" columns
+                 * dataModel.setValidColumns(["id", "name"]);
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 * ```
+                 *
+                 * @param {string[]} columns An array of column names to retain.
+                 * @returns {DataModel} The modified `DataModel` instance with only the specified columns retained.
+                 */
                 setValidColumns = (columns: string[]): DataModel => {
                     columns = this._cols.filter(oriColumn => !columns.includes(oriColumn));
                     this.removeColumns(columns);
                     return this;
                 };
+                /**
+                 * Checks whether a specified column contains only non-null values.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to check.
+                 *
+                 * ## Behavior
+                 * - Calls `_getNullColumnFirstRowIndex(column)` to find the first occurrence of a `null` value in the column.
+                 * - If no `null` values are found, returns `true`; otherwise, returns `false`.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if the column has no `null` values, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: null },
+                 *     { id: 3, name: "Charlie" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.isNotNullColumn("id")); // Output: true
+                 * console.log(dataModel.isNotNullColumn("name")); // Output: false
+                 * ```
+                 *
+                 * @param {string} column The column name to check.
+                 * @returns {boolean} `true` if the column has no `null` values, otherwise `false`.
+                 * @throws {Error} If `column` does not exist.
+                 */
                 isNotNullColumn = (column: string): boolean => {
                     return this._getNullColumnFirstRowIndex(column) === -1;
                 };
+                /**
+                 * Finds and returns the first row where the specified column contains a `null` value.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to check.
+                 *
+                 * ## Behavior
+                 * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value in the column.
+                 * - If no `null` values are found, returns `null`.
+                 * - If a `null` value is found, retrieves and returns the corresponding row using `getRow()`.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any> | null`**: The first row where the column has a `null` value, or `null` if no such row exists.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: null },
+                 *     { id: 3, name: "Charlie" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.findFirstRowNullColumn("name"));
+                 * // Output: { id: 2, name: null }
+                 * 
+                 * console.log(dataModel.findFirstRowNullColumn("id"));
+                 * // Output: null (no null values in the "id" column)
+                 * ```
+                 *
+                 * @param {string} column The column name to check for `null` values.
+                 * @returns {Record<string, any> | null} The first row where the column has a `null` value, or `null` if none exist.
+                 * @throws {Error} If `column` does not exist.
+                 */
                 findFirstRowNullColumn = (column: string): Record<string, any> => {
                     const nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column);
                     if (nullColumnFirstRowIndex === -1) {
@@ -3233,9 +5956,71 @@ function createHison(): Hison {
                         return this.getRow(nullColumnFirstRowIndex);
                     }
                 };
+                /**
+                 * Checks whether a specified column contains only unique values (i.e., no duplicate values).
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to check.
+                 *
+                 * ## Behavior
+                 * - Calls `_getDuplColumnFirstRowIndex(column)` to find the first occurrence of a duplicate value in the column.
+                 * - If no duplicates are found, returns `true`; otherwise, returns `false`.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if the column has no duplicate values, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" },
+                 *     { id: 3, name: "Alice" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.isNotDuplColumn("id")); // Output: true
+                 * console.log(dataModel.isNotDuplColumn("name")); // Output: false
+                 * ```
+                 *
+                 * @param {string} column The column name to check for duplicate values.
+                 * @returns {boolean} `true` if the column has no duplicate values, otherwise `false`.
+                 * @throws {Error} If `column` does not exist.
+                 */
                 isNotDuplColumn = (column: string): boolean => {
                     return this._getDuplColumnFirstRowIndex(column) === -1;
                 };
+                /**
+                 * Finds and returns the first row where the specified column contains a duplicate value.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to check for duplicate values.
+                 *
+                 * ## Behavior
+                 * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value in the column.
+                 * - If no duplicate values are found, returns `null`.
+                 * - If a duplicate value is found, retrieves and returns the corresponding row using `getRow()`.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any> | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" },
+                 *     { id: 3, name: "Alice" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.findFirstRowDuplColumn("name"));
+                 * // Output: { id: 3, name: "Alice" } (the second occurrence of "Alice")
+                 * 
+                 * console.log(dataModel.findFirstRowDuplColumn("id"));
+                 * // Output: null (no duplicate values in the "id" column)
+                 * ```
+                 *
+                 * @param {string} column The column name to check for duplicate values.
+                 * @returns {Record<string, any> | null} The first row where the column has a duplicate value, or `null` if none exist.
+                 * @throws {Error} If `column` does not exist.
+                 */
                 findFirstRowDuplColumn = (column: string): Record<string, any> => {
                     const duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column);
                     if (duplColumnFirstRowIndex === -1) {
@@ -3244,9 +6029,80 @@ function createHison(): Hison {
                         return this.getRow(duplColumnFirstRowIndex);
                     }
                 };
+                /**
+                 * Checks whether all values in the specified column satisfy a given validation function.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to validate.
+                 * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
+                 *
+                 * ## Behavior
+                 * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to check for invalid values.
+                 * - If no invalid values are found, returns `true`; otherwise, returns `false`.
+                 *
+                 * ## Returns
+                 * - **`boolean`**: `true` if all values in the column are valid, otherwise `false`.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, age: 25 },
+                 *     { id: 2, age: 30 },
+                 *     { id: 3, age: "invalid" }
+                 * ]);
+                 * 
+                 * // Check if all values in "age" column are valid numbers
+                 * console.log(dataModel.isValidValue("age", value => typeof value === "number"));
+                 * // Output: false
+                 * 
+                 * console.log(dataModel.isValidValue("id", value => typeof value === "number"));
+                 * // Output: true
+                 * ```
+                 *
+                 * @param {string} column The column name to validate.
+                 * @param {DataModelValidator} validator A function that checks if a value is valid.
+                 * @returns {boolean} `true` if all values in the column are valid, otherwise `false`.
+                 * @throws {Error} If `column` does not exist or `validator` is not a function.
+                 */
                 isValidValue = (column: string, vaildator: DataModelValidator): boolean => {
                     return this._getInValidColumnFirstRowIndex(column, vaildator) === -1;
                 };
+                /**
+                 * Finds and returns the first row where the specified column contains an invalid value based on a given validation function.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The name of the column to validate.
+                 * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
+                 *
+                 * ## Behavior
+                 * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to locate the first occurrence of an invalid value in the column.
+                 * - If no invalid values are found, returns `null`.
+                 * - If an invalid value is found, retrieves and returns the corresponding row using `getRow()`.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any> | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, age: 25 },
+                 *     { id: 2, age: "invalid" },
+                 *     { id: 3, age: 30 }
+                 * ]);
+                 * 
+                 * // Find the first row where "age" contains a non-numeric value
+                 * console.log(dataModel.findFirstRowInvalidValue("age", value => typeof value === "number"));
+                 * // Output: { id: 2, age: "invalid" }
+                 * 
+                 * console.log(dataModel.findFirstRowInvalidValue("id", value => typeof value === "number"));
+                 * // Output: null (all values in "id" are valid)
+                 * ```
+                 *
+                 * @param {string} column The column name to validate.
+                 * @param {DataModelValidator} validator A function that checks if a value is valid.
+                 * @returns {Record<string, any> | null} The first row with an invalid value, or `null` if all values are valid.
+                 * @throws {Error} If `column` does not exist or `validator` is not a function.
+                 */
                 findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): Record<string, any> => {
                     const inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column, vaildator);
                     if (inValidColumnFirstRowIndex === -1) {
@@ -3255,6 +6111,47 @@ function createHison(): Hison {
                         return this.getRow(inValidColumnFirstRowIndex);
                     }
                 };
+                /**
+                 * Searches for rows that match a given condition and returns their indexes.
+                 * Allows for both positive and negative filtering based on the `isNegative` flag.
+                 *
+                 * ## Parameters
+                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
+                 * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+                 * - Iterates through `_rows`, checking if each row meets the condition.
+                 * - Uses `JSON.stringify()` for deep comparison of values.
+                 * - If `isNegative` is `false`, adds matching row indexes to the result.
+                 * - If `isNegative` is `true`, adds **non-matching** row indexes to the result.
+                 *
+                 * ## Returns
+                 * - **`number[]`**: An array of indexes of rows that match (or do not match) the condition.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 25 }
+                 * ]);
+                 * 
+                 * // Search for row indexes where age is 25
+                 * console.log(dataModel.searchRowIndexes({ age: 25 }));
+                 * // Output: [0, 2]
+                 * 
+                 * // Search for row indexes where age is NOT 25
+                 * console.log(dataModel.searchRowIndexes({ age: 25 }, true));
+                 * // Output: [1]
+                 * ```
+                 *
+                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {boolean} [isNegative=false] If `true`, returns indexes of rows that do **not** match the condition.
+                 * @returns {number[]} An array of indexes of rows that match or do not match the condition.
+                 * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
+                 */
                 searchRowIndexes = (condition: Record<string, any>, isNegative: boolean = false): number[] => {
                     const _this = this;
                     _this._checkOriginObject(condition);
@@ -3277,6 +6174,48 @@ function createHison(): Hison {
                     });
                     return matched;
                 };
+                /**
+                 * Searches for rows that match a given condition and returns them as an array.
+                 * Allows for both positive and negative filtering based on the `isNegative` flag.
+                 *
+                 * ## Parameters
+                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
+                 * - Calls `_checkBoolean(isNegative)` to validate the flag.
+                 * - Iterates through `_rows`, checking if each row meets the condition.
+                 * - Uses `JSON.stringify()` for deep comparison of values.
+                 * - If `isNegative` is `false`, adds matching rows to the result.
+                 * - If `isNegative` is `true`, adds **non-matching** rows to the result.
+                 * - Returns a deep copy of the matched rows.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>[]`**: An array of deep-copied rows that match (or do not match) the condition.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 25 }
+                 * ]);
+                 * 
+                 * // Search for rows where age is 25
+                 * console.log(dataModel.searchRows({ age: 25 }));
+                 * // Output: [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 25 }]
+                 * 
+                 * // Search for rows where age is NOT 25
+                 * console.log(dataModel.searchRows({ age: 25 }, true));
+                 * // Output: [{ id: 2, name: "Bob", age: 30 }]
+                 * ```
+                 *
+                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
+                 * @returns {Record<string, any>[]} An array of deep-copied rows that match or do not match the condition.
+                 * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
+                 */
                 searchRows = (condition: Record<string, any>, isNegative: boolean = false): Record<string, any>[] => {
                     const _this = this;
                     _this._checkOriginObject(condition);
@@ -3299,6 +6238,51 @@ function createHison(): Hison {
                     });
                     return matched;
                 };
+                /**
+                 * Searches for rows that match a given condition and returns them as a new `DataModel` instance.
+                 * Allows for both positive and negative filtering based on the `isNegative` flag.
+                 *
+                 * ## Parameters
+                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
+                 * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+                 * - Iterates through `_rows`, checking if each row meets the condition.
+                 * - Uses `JSON.stringify()` for deep comparison of values.
+                 * - If `isNegative` is `false`, adds matching rows to the result.
+                 * - If `isNegative` is `true`, adds **non-matching** rows to the result.
+                 * - Returns a new `DataModel` containing the filtered rows.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A new `DataModel` instance containing the matched rows.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 25 }
+                 * ]);
+                 * 
+                 * // Search for rows where age is 25 and return them as a new DataModel
+                 * const filteredModel = dataModel.searchRowsAsDataModel({ age: 25 });
+                 * console.log(filteredModel.getRowCount()); // Output: 2
+                 * console.log(filteredModel.getRows());
+                 * // Output: [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 25 }]
+                 * 
+                 * // Search for rows where age is NOT 25
+                 * const excludedModel = dataModel.searchRowsAsDataModel({ age: 25 }, true);
+                 * console.log(excludedModel.getRows());
+                 * // Output: [{ id: 2, name: "Bob", age: 30 }]
+                 * ```
+                 *
+                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
+                 * @returns {DataModel} A new `DataModel` instance containing the matched rows.
+                 * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
+                 */
                 searchRowsAsDataModel = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
                     const _this = this;
                     _this._checkOriginObject(condition);
@@ -3321,6 +6305,50 @@ function createHison(): Hison {
                     });
                     return new hison.data.DataModel(matched);
                 };
+                /**
+                 * Searches for rows that match a given condition and **modifies** the original `DataModel` by removing matched or unmatched rows.
+                 * This method directly updates the existing dataset instead of returning a new instance.
+                 *
+                 * ## Parameters
+                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
+                 * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+                 * - Iterates through `_rows`, checking if each row meets the condition.
+                 * - Uses `JSON.stringify()` for deep comparison of values.
+                 * - If `isNegative` is `false`, removes rows that **do not** match the condition.
+                 * - If `isNegative` is `true`, removes rows that **do** match the condition.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance after removing specified rows.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 25 }
+                 * ]);
+                 * 
+                 * // Keep only rows where age is 25
+                 * dataModel.searchAndModify({ age: 25 });
+                 * console.log(dataModel.getRows());
+                 * // Output: [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 25 }]
+                 * 
+                 * // Remove rows where age is 25
+                 * dataModel.searchAndModify({ age: 25 }, true);
+                 * console.log(dataModel.getRows());
+                 * // Output: []
+                 * ```
+                 *
+                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {boolean} [isNegative=false] If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
+                 * @returns {DataModel} The modified `DataModel` instance after removing specified rows.
+                 * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
+                 */
                 searchAndModify = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
                     const _this = this;
                     _this._checkOriginObject(condition);
@@ -3348,6 +6376,38 @@ function createHison(): Hison {
                     }
                     return _this;
                 };
+                /**
+                 * Filters rows in the `DataModel` based on a custom filtering function and returns their indexes.
+                 * Allows for efficiently identifying row positions that match a given condition.
+                 *
+                 * ## Parameters
+                 * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
+                 * - Iterates through `_rows`, applying the filter function to each row.
+                 * - Collects the indexes of rows that satisfy the filter condition.
+                 *
+                 * ## Returns
+                 * - **`number[]`**: An array of indexes of rows that match the filter condition.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 22 }
+                 * ]);
+                 * 
+                 * // Get indexes of rows where age is greater than 25
+                 * const rowIndexes = dataModel.filterRowIndexes(row => row.age > 25);
+                 * console.log(rowIndexes); // Output: [1]
+                 * ```
+                 *
+                 * @param {DataModelFillter} filter A function that determines whether a row should be included.
+                 * @returns {number[]} An array of indexes of rows that match the filter condition.
+                 * @throws {Error} If `filter` is not a valid function.
+                 */
                 filterRowIndexes = (filter: DataModelFillter): number[] => {
                     const _this = this;
                     _this._checkValidFunction(filter);
@@ -3359,6 +6419,40 @@ function createHison(): Hison {
                     });
                     return matched;
                 };
+                /**
+                 * Filters rows in the `DataModel` based on a custom filtering function.
+                 * Returns an array of rows that satisfy the provided filter condition.
+                 *
+                 * ## Parameters
+                 * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
+                 * - Iterates through `_rows`, applying the filter function to each row.
+                 * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
+                 * - Returns an array of matching rows.
+                 *
+                 * ## Returns
+                 * - **`Record<string, any>[]`**: An array of deep-copied rows that match the filter condition.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 22 }
+                 * ]);
+                 * 
+                 * // Filter rows where age is greater than 25
+                 * const filteredRows = dataModel.filterRows(row => row.age > 25);
+                 * console.log(filteredRows);
+                 * // Output: [{ id: 2, name: "Bob", age: 30 }]
+                 * ```
+                 *
+                 * @param {DataModelFillter} filter A function that determines whether a row should be included.
+                 * @returns {Record<string, any>[]} An array of deep-copied rows that match the filter condition.
+                 * @throws {Error} If `filter` is not a valid function.
+                 */
                 filterRows = (filter: DataModelFillter): Record<string, any>[] => {
                     const _this = this;
                     _this._checkValidFunction(filter);
@@ -3370,6 +6464,40 @@ function createHison(): Hison {
                     });
                     return matched;
                 };
+                /**
+                 * Filters rows in the `DataModel` based on a custom filtering function and returns a new `DataModel` containing the matched rows.
+                 * Allows for extracting a subset of the dataset while preserving the structured format.
+                 *
+                 * ## Parameters
+                 * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
+                 * - Iterates through `_rows`, applying the filter function to each row.
+                 * - Collects rows that satisfy the filter condition.
+                 * - Returns a new `DataModel` instance containing the filtered rows.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: A new `DataModel` instance containing the filtered rows.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 22 }
+                 * ]);
+                 * 
+                 * // Create a new DataModel containing only rows where age is greater than 25
+                 * const filteredDataModel = dataModel.filterRowsAsDataModel(row => row.age > 25);
+                 * console.log(filteredDataModel.getRowCount()); // Output: 1
+                 * console.log(filteredDataModel.getRow(0)); // Output: { id: 2, name: "Bob", age: 30 }
+                 * ```
+                 *
+                 * @param {DataModelFillter} filter A function that determines whether a row should be included.
+                 * @returns {DataModel} A new `DataModel` instance containing the filtered rows.
+                 * @throws {Error} If `filter` is not a valid function.
+                 */
                 filterRowsAsDataModel = (filter: DataModelFillter): DataModel => {
                     const _this = this;
                     _this._checkValidFunction(filter);
@@ -3381,6 +6509,41 @@ function createHison(): Hison {
                     });
                     return new hison.data.DataModel(matched);
                 };
+                /**
+                 * Filters rows in the `DataModel` based on a custom filtering function and **modifies** the original `DataModel` by removing unmatched rows.
+                 * This method directly updates the existing dataset instead of returning a new instance.
+                 *
+                 * ## Parameters
+                 * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be retained.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
+                 * - Iterates through `_rows`, applying the filter function to each row.
+                 * - Removes rows that do **not** satisfy the filter condition.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with only the filtered rows.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice", age: 25 },
+                 *     { id: 2, name: "Bob", age: 30 },
+                 *     { id: 3, name: "Charlie", age: 22 }
+                 * ]);
+                 * 
+                 * // Remove all rows where age is 25 or below
+                 * dataModel.filterAndModify(row => row.age > 25);
+                 * 
+                 * console.log(dataModel.getRowCount()); // Output: 1
+                 * console.log(dataModel.getRow(0)); // Output: { id: 2, name: "Bob", age: 30 }
+                 * ```
+                 *
+                 * @param {DataModelFillter} filter A function that determines whether a row should be retained.
+                 * @returns {DataModel} The modified `DataModel` instance after removing unmatched rows.
+                 * @throws {Error} If `filter` is not a valid function.
+                 */
                 filterAndModify = (filter: DataModelFillter): DataModel => {
                     const _this = this;
                     _this._checkValidFunction(filter);
@@ -3392,6 +6555,38 @@ function createHison(): Hison {
                     }
                     return _this;
                 };
+                /**
+                 * Reorders the columns in the `DataModel` based on the specified order.
+                 * Ensures that all existing columns are included, maintaining the defined structure.
+                 *
+                 * ## Parameters
+                 * - `columns` **(string[])**: An array of column names in the desired order.
+                 *
+                 * ## Behavior
+                 * - Calls `_checkArray(columns)` to validate the input as an array.
+                 * - Iterates through `columns`, ensuring each column is valid and exists in the `DataModel`.
+                 * - Creates a new column order, appending any remaining columns that were not specified.
+                 * - Updates `_cols` with the new column order.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with reordered columns.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
+                 * 
+                 * // Change column order
+                 * dataModel.setColumnSorting(["age", "name"]);
+                 * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
+                 * ```
+                 *
+                 * @param {string[]} columns An array of column names in the desired order.
+                 * @returns {DataModel} The modified `DataModel` instance with reordered columns.
+                 * @throws {Error} If `columns` is not an array or contains invalid column names.
+                 */
                 setColumnSorting = (columns: string[]): DataModel => {
                     this._checkArray(columns);
                     const newColumns = [];
@@ -3408,10 +6603,56 @@ function createHison(): Hison {
                     this._cols = newColumns;
                     return this;
                 };
+                /**
+                 * Sorts the columns of the `DataModel` in ascending (A-Z) order.
+                 * The sorting is applied alphabetically based on column names.
+                 *
+                 * ## Behavior
+                 * - Calls the native `Array.sort()` method on `_cols` to rearrange columns in ascending order.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with columns sorted in ascending order.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
+                 * 
+                 * dataModel.sortColumnAscending();
+                 * console.log(dataModel.getColumns()); // Output: ["age", "id", "name"]
+                 * ```
+                 *
+                 * @returns {DataModel} The modified `DataModel` instance with columns sorted in ascending order.
+                 */
                 sortColumnAscending = (): DataModel => {
                     this._cols.sort();
                     return this;
                 };
+                /**
+                 * Sorts the columns of the `DataModel` in descending (Z-A) order.
+                 * The sorting is applied alphabetically based on column names.
+                 *
+                 * ## Behavior
+                 * - Calls the native `Array.sort()` method on `_cols` with a custom comparator to sort columns in descending order.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with columns sorted in descending order.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
+                 * 
+                 * dataModel.sortColumnDescending();
+                 * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
+                 * ```
+                 *
+                 * @returns {DataModel} The modified `DataModel` instance with columns sorted in descending order.
+                 */
                 sortColumnDescending = (): DataModel => {
                     this._cols.sort(function(a, b) {
                         if (a > b) {
@@ -3424,10 +6665,76 @@ function createHison(): Hison {
                     });
                     return this;
                 };
+                /**
+                 * Reverses the order of columns in the `DataModel`.
+                 * The column order is flipped without sorting alphabetically.
+                 *
+                 * ## Behavior
+                 * - Calls the native `Array.reverse()` method on `_cols` to reverse the column order.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with reversed column order.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
+                 * 
+                 * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
+                 * 
+                 * dataModel.sortColumnReverse();
+                 * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
+                 * ```
+                 *
+                 * @returns {DataModel} The modified `DataModel` instance with reversed column order.
+                 */
                 sortColumnReverse = (): DataModel => {
                     this._cols.reverse();
                     return this;
                 };
+                /**
+                 * Sorts the rows of the `DataModel` in ascending order based on the specified column.
+                 * Optionally supports integer-based sorting for numerical values.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The column name to sort by.
+                 * - `isIntegerOrder` **(boolean, optional, default = `false`)**: If `true`, treats values as integers for sorting.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - Throws an error if the specified column does not exist.
+                 * - Calls `_checkBoolean(isIntegerOrder)` to validate the boolean flag.
+                 * - Uses the native `Array.sort()` method to arrange rows in ascending order.
+                 * - Handles `null` values by placing them at the end of the sorted list.
+                 * - Converts object values to JSON strings for sorting.
+                 * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
+                 * - Throws an error if a non-numeric value is encountered during integer sorting.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with rows sorted in ascending order.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 3, name: "Charlie" },
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * // Sort rows by "id" in ascending order
+                 * dataModel.sortRowAscending("id");
+                 * console.log(dataModel.getRows());
+                 * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
+                 * 
+                 * // Sort rows numerically by "id"
+                 * dataModel.sortRowAscending("id", true);
+                 * ```
+                 *
+                 * @param {string} column The column name to sort by.
+                 * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
+                 * @returns {DataModel} The modified `DataModel` instance with rows sorted in ascending order.
+                 * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
+                 */
                 sortRowAscending = (column: string, isIntegerOrder: boolean = false): DataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
@@ -3459,6 +6766,49 @@ function createHison(): Hison {
                     });
                     return this;
                 };
+                /**
+                 * Sorts the rows of the `DataModel` in descending order based on the specified column.
+                 * Optionally supports integer-based sorting for numerical values.
+                 *
+                 * ## Parameters
+                 * - `column` **(string)**: The column name to sort by.
+                 * - `isIntegerOrder` **(boolean, optional, default = `false`)**: If `true`, treats values as integers for sorting.
+                 *
+                 * ## Behavior
+                 * - Calls `_getValidColValue(column)` to validate the column name.
+                 * - Throws an error if the specified column does not exist.
+                 * - Calls `_checkBoolean(isIntegerOrder)` to validate the boolean flag.
+                 * - Uses the native `Array.sort()` method to arrange rows in descending order.
+                 * - Handles `null` values by placing them at the beginning of the sorted list.
+                 * - Converts object values to JSON strings for sorting.
+                 * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
+                 * - Throws an error if a non-numeric value is encountered during integer sorting.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with rows sorted in descending order.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 3, name: "Charlie" },
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * 
+                 * // Sort rows by "id" in descending order
+                 * dataModel.sortRowDescending("id");
+                 * console.log(dataModel.getRows());
+                 * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
+                 * 
+                 * // Sort rows numerically by "id"
+                 * dataModel.sortRowDescending("id", true);
+                 * ```
+                 *
+                 * @param {string} column The column name to sort by.
+                 * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
+                 * @returns {DataModel} The modified `DataModel` instance with rows sorted in descending order.
+                 * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
+                 */
                 sortRowDescending = (column: string, isIntegerOrder: boolean = false): DataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
@@ -3490,6 +6840,35 @@ function createHison(): Hison {
                     });
                     return this;
                 };
+                /**
+                 * Reverses the order of rows in the `DataModel`.
+                 * This method flips the row order without sorting by a specific column.
+                 *
+                 * ## Behavior
+                 * - Calls the native `Array.reverse()` method on `_rows` to reverse the row order.
+                 * - Returns the modified `DataModel` instance for method chaining.
+                 *
+                 * ## Returns
+                 * - **`DataModel`**: The modified `DataModel` instance with reversed row order.
+                 *
+                 * ## Example Usage
+                 * ```typescript
+                 * const dataModel = new hison.data.DataModel([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" },
+                 *     { id: 3, name: "Charlie" }
+                 * ]);
+                 * 
+                 * console.log(dataModel.getRows());
+                 * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
+                 * 
+                 * dataModel.sortRowReverse();
+                 * console.log(dataModel.getRows());
+                 * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
+                 * ```
+                 *
+                 * @returns {DataModel} The modified `DataModel` instance with reversed row order.
+                 */
                 sortRowReverse = (): DataModel => {
                     this._rows.reverse();
                     return this;
@@ -3497,9 +6876,98 @@ function createHison(): Hison {
             },
         };
         link = {
+            /**
+             * **`CachingModule` - A module for API response caching and real-time WebSocket updates.**
+             *
+             * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy** 
+             * while integrating **WebSocket communication** for real-time data updates.
+             *
+             * ## **Key Features**
+             * - **LRU Cache for API Responses**: Stores API responses with a configurable limit, reducing redundant network requests.
+             * - **WebSocket Support**: Maintains a persistent WebSocket connection for real-time data updates.
+             * - **Cache Management Methods**: Supports cache operations (`get`, `put`, `remove`, `clear`, etc.).
+             * - **Event-Driven Communication**: Allows event listeners (`onopen`, `onmessage`, `onclose`, `onerror`) for WebSocket handling.
+             * - **Flexible Configuration**: Uses `CustomOption` settings for cache limits and WebSocket parameters.
+             * - **Validation Methods**: Ensures proper data types for cache keys and event listeners.
+             *
+             * ## **How It Works**
+             * - **API responses are stored in an LRUCache instance**, avoiding redundant network calls.
+             * - **When a WebSocket connection is established**, data updates can be received in real-time.
+             * - **Cache data can be accessed and managed using `get`, `put`, `remove`, and `clear` methods.**
+             * - **WebSocket event handlers can be set up for real-time notifications.**
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Create a CachingModule instance with a cache limit of 20
+             * const cachingModule = new hison.link.CachingModule(20);
+             * 
+             * // Store API response in the cache
+             * cachingModule.put("users", fetch("/api/users").then(response => response.json()));
+             * 
+             * // Retrieve cached data
+             * cachingModule.get("users").then(data => console.log(data));
+             * 
+             * // Register WebSocket event handlers
+             * cachingModule.onopen = () => console.log("WebSocket Connected");
+             * cachingModule.onmessage = event => console.log("New Message:", event.data);
+             * ```
+             *
+             * ## **Internal Structure**
+             * - **Uses `LRUCache`** to manage cached responses with a defined limit.
+             * - **Maintains a WebSocket connection** to receive real-time data updates.
+             * - **Supports configurable options via `CustomOption`**, such as WebSocket endpoint and cache size.
+             * - **Provides utility methods** for cache validation, data retrieval, and event handling.
+             *
+             * ## **Related Components**
+             * - **`LRUCache`**: Handles the caching logic for API responses.
+             * - **`WebSocket`**: Establishes a real-time connection for live data updates.
+             * - **`CustomOption`**: Provides configurable options for WebSocket and cache settings.
+             * - **`ApiLink`**: Uses this module to fetch and store API responses efficiently.
+             *
+             * ## **Return Value**
+             * - This module **returns an instance of `CachingModule`**, which allows cache operations and WebSocket event management.
+             *
+             * ## **Typical Use Cases**
+             * - **Reducing unnecessary API calls** by storing frequently accessed responses.
+             * - **Receiving real-time updates** from the server without polling.
+             * - **Efficiently managing API response data** in web applications.
+             * - **Supporting offline or low-latency scenarios** by using cached responses.
+             */
             CachingModule: class implements CachingModule {
-                constructor(cachingLimit: number = defaultOption.link.cachingLimit) {
-                    this._webSocket = new WebSocket(defaultOption.link.webSocketProtocol + defaultOption.link.domain + defaultOption.link.webSocketEndPoint);
+                /**
+                 * **Creates an instance of `CachingModule`, initializing an LRU cache and a WebSocket connection.**
+                 *
+                 * The constructor sets up the **WebSocket connection** for real-time updates and 
+                 * **instantiates an `LRUCache`** to manage API response caching.
+                 *
+                 * ## **Parameters**
+                 * - `cachingLimit` *(optional, number)* - The maximum number of items the cache can store.  
+                 *   - **Default:** `customOption.link.cachingLimit`
+                 *
+                 * ## **Initialization Process**
+                 * 1. **Establishes a WebSocket connection** using the protocol, domain, and endpoint specified in `CustomOption`.
+                 * 2. **Configures WebSocket event handlers** (`onopen`, `onmessage`, `onclose`, `onerror`).
+                 * 3. **Creates an LRUCache instance** with the specified caching limit.
+                 * 4. **Marks this instance as a valid caching module** using `_isCachingModule = true`.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * // Creating a caching module with a default caching limit
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Creating a caching module with a custom limit of 50 entries
+                 * const customCachingModule = new hison.link.CachingModule(50);
+                 * ```
+                 *
+                 * ## **Related Properties**
+                 * - **`_webSocket`** *(WebSocket)* - The WebSocket connection instance.
+                 * - **`_LRUCache`** *(LRUCache)* - The LRU-based cache for storing API responses.
+                 * - **`_isCachingModule`** *(boolean)* - A flag indicating whether this instance is a caching module.
+                 *
+                 * @param {number} [cachingLimit=customOption.link.cachingLimit] - The maximum number of cached responses.
+                 */
+                constructor(cachingLimit: number = customOption.link.cachingLimit) {
+                    this._webSocket = new WebSocket(customOption.link.webSocketProtocol + customOption.link.domain + customOption.link.webSocketEndPoint);
                     this._webSocket.onopen = function() {};
                     this._webSocket.onmessage = function() {};
                     this._webSocket.onclose = function() {};
@@ -3529,54 +6997,503 @@ function createHison(): Hison {
                         return -1;
                     }
                 };
+                /**
+                 * **Checks whether this instance is a valid caching module.**
+                 *
+                 * This method returns a boolean flag indicating whether the current instance 
+                 * is recognized as a `CachingModule`. This is useful for validating whether 
+                 * an instance supports caching functionalities.
+                 *
+                 * ## **Return Value**
+                 * - `true` if this instance is a caching module.
+                 * - `false` if caching is not enabled.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * console.log(cachingModule.getIsCachingModule()); // true
+                 * ```
+                 *
+                 * ## **Related Properties**
+                 * - **`_isCachingModule`** *(boolean)* - Stores the module's caching capability status.
+                 *
+                 * @returns {boolean} `true` if this instance is a caching module.
+                 */
                 getIsCachingModule = (): boolean => {
                     return this._isCachingModule;
                 };
+                /**
+                 * **Checks if the cache contains a specific key.**
+                 *
+                 * This method verifies if the specified `key` exists in the LRU cache. It ensures 
+                 * that the key is a valid string and then delegates the check to the underlying 
+                 * `LRUCache` instance.
+                 *
+                 * ## **Parameters**
+                 * - `key` *(string)* - The key to check in the cache.
+                 *
+                 * ## **Return Value**
+                 * - `true` if the cache contains the specified key.
+                 * - `false` if the key is not found in the cache.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * console.log(cachingModule.hasKey("user123")); // true
+                 * console.log(cachingModule.hasKey("user456")); // false
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`_checkTypeString(key)`** - Ensures the key is a valid string before performing the cache check.
+                 * - **`_LRUCache.hasKey(key)`** - The internal method that checks the existence of the key in the cache.
+                 *
+                 * @param {string} key - The key to check in the cache.
+                 * @returns {boolean} `true` if the cache contains the key, otherwise `false`.
+                 */
                 hasKey = (key: string): boolean => {
                     this._checkTypeString(key);
                     return this._LRUCache.hasKey(key);
                 };
+                /**
+                 * **Retrieves cached data for a given key.**
+                 *
+                 * This method fetches the cached API response associated with the specified `key`.
+                 * Before accessing the cache, it validates that the key is a string.
+                 *
+                 * ## **Parameters**
+                 * - `key` *(string)* - The key of the cached data.
+                 *
+                 * ## **Return Value**
+                 * - A `Promise` resolving to an object containing:
+                 *   - `data` *(any)* - The cached API response data.
+                 *   - `response` *(Response)* - The original HTTP response object.
+                 * - If the key does not exist in the cache, `null` is returned.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Store API response in the cache
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * 
+                 * // Retrieve cached data
+                 * cachingModule.get("user123").then(data => console.log(data));
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`put(key, value)`** - Stores API responses in the cache.
+                 * - **`hasKey(key)`** - Checks if a key exists in the cache.
+                 * - **`remove(key)`** - Removes a key from the cache.
+                 *
+                 * @param {string} key - The key to retrieve from the cache.
+                 * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the cached response data.
+                 */
                 get = (key: string): Promise<{ data: any; response: Response; }> => {
                     this._checkTypeString(key);
                     return this._LRUCache.get(key);
                 };
+                /**
+                 * **Stores API response data in the cache.**
+                 *
+                 * This method saves the provided `value` (API response) in the cache with the specified `key`.
+                 * Before storing the data, it validates that the `key` is a string.
+                 *
+                 * ## **Parameters**
+                 * - `key` *(string)* - The cache key under which the response will be stored.
+                 * - `value` *(Promise<{ data: any; response: Response }>)*
+                 *   - A promise resolving to an object containing:
+                 *     - `data` *(any)* - The API response data.
+                 *     - `response` *(Response)* - The original HTTP response object.
+                 *
+                 * ## **Behavior**
+                 * - If the `key` already exists, the old value is **replaced** with the new one.
+                 * - If the cache reaches its limit, the **least recently used (LRU) entry is removed**.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Store an API response in the cache
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`get(key)`** - Retrieves cached data for a given key.
+                 * - **`hasKey(key)`** - Checks if a key exists in the cache.
+                 * - **`remove(key)`** - Removes a specific key from the cache.
+                 *
+                 * @param {string} key - The cache key under which the response will be stored.
+                 * @param {Promise<{ data: any; response: Response }>} value - The API response to be cached.
+                 */
                 put = (key: string, value: Promise<{ data: any; response: Response; }>) => {
                     this._checkTypeString(key);
                     this._LRUCache.put(key, value);
                 };
+                /**
+                 * **Removes a specific key from the cache.**
+                 *
+                 * This method deletes the cached API response associated with the given `key`.
+                 * Before performing the removal, it ensures that the `key` is a valid string.
+                 *
+                 * ## **Parameters**
+                 * - `key` *(string)* - The cache key to be removed.
+                 *
+                 * ## **Behavior**
+                 * - If the specified `key` exists in the cache, it is deleted.
+                 * - If the `key` does not exist, no action is taken.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Store an API response in the cache
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * 
+                 * // Remove the cached response
+                 * cachingModule.remove("user123");
+                 * 
+                 * // Check if the key still exists
+                 * console.log(cachingModule.hasKey("user123")); // false
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`put(key, value)`** - Stores API responses in the cache.
+                 * - **`get(key)`** - Retrieves cached data for a given key.
+                 * - **`clear()`** - Removes all cached entries.
+                 *
+                 * @param {string} key - The cache key to be removed.
+                 */
                 remove = (key: string) => {
                     this._checkTypeString(key);
                     this._LRUCache.remove(key);
                 };
+                /**
+                 * **Retrieves all cached data as a key-value object.**
+                 *
+                 * This method returns the entire cache as a record where each key corresponds to a cached API response.
+                 *
+                 * ## **Return Value**
+                 * - A `Record<string, Promise<{ data: any; response: Response }>>` representing all cached entries.
+                 * - Each entry consists of:
+                 *   - `key` *(string)* - The cache key.
+                 *   - `value` *(Promise<{ data: any; response: Response }>>)* - A promise resolving to:
+                 *     - `data` *(any)* - The API response data.
+                 *     - `response` *(Response)* - The original HTTP response object.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Store multiple API responses in the cache
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * cachingModule.put("posts", fetch("/api/posts").then(response => response.json()));
+                 * 
+                 * // Retrieve all cached data
+                 * console.log(cachingModule.getAll());
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`put(key, value)`** - Stores API responses in the cache.
+                 * - **`get(key)`** - Retrieves cached data for a given key.
+                 * - **`getKeys()`** - Retrieves all cache keys.
+                 * - **`clear()`** - Removes all cached entries.
+                 *
+                 * @returns {Record<string, Promise<{ data: any; response: Response }>>} An object containing all cached responses.
+                 */
                 getAll = (): Record<string, Promise<{ data: any; response: Response; }>>  => {
                     return this._LRUCache.getAll();
                 };
+                /**
+                 * **Retrieves all cache keys.**
+                 *
+                 * This method returns an array of all keys currently stored in the cache.
+                 *
+                 * ## **Return Value**
+                 * - An array of strings representing the cache keys.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Store multiple API responses in the cache
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * cachingModule.put("posts", fetch("/api/posts").then(response => response.json()));
+                 * 
+                 * // Retrieve all cache keys
+                 * console.log(cachingModule.getKeys()); // ["user123", "posts"]
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`put(key, value)`** - Stores API responses in the cache.
+                 * - **`get(key)`** - Retrieves cached data for a given key.
+                 * - **`getAll()`** - Retrieves all cached data as a key-value object.
+                 * - **`clear()`** - Removes all cached entries.
+                 *
+                 * @returns {string[]} An array of cache keys.
+                 */
                 getKeys = (): string[] => {
                     return this._LRUCache.getKeys();
-                }
+                };
+                /**
+                 * **Clears all cached data.**
+                 *
+                 * This method removes all entries from the cache, resetting it to an empty state.
+                 *
+                 * ## **Behavior**
+                 * - All cached responses are permanently deleted.
+                 * - The cache size is reset to zero.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Store multiple API responses in the cache
+                 * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
+                 * cachingModule.put("posts", fetch("/api/posts").then(response => response.json()));
+                 * 
+                 * // Clear all cached data
+                 * cachingModule.clear();
+                 * 
+                 * // Verify that the cache is empty
+                 * console.log(cachingModule.getKeys()); // []
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`put(key, value)`** - Stores API responses in the cache.
+                 * - **`get(key)`** - Retrieves cached data for a given key.
+                 * - **`getAll()`** - Retrieves all cached data as a key-value object.
+                 * - **`getKeys()`** - Retrieves all cache keys.
+                 *
+                 * @returns {void}
+                 */
                 clear = () => {
                     this._LRUCache.clear();
                 };
+                /**
+                 * **Registers an event handler for the WebSocket `open` event.**
+                 *
+                 * This method assigns a custom event handler to be executed when the WebSocket connection is successfully opened.
+                 *
+                 * ## **Parameters**
+                 * - `func` *(function | null)* - A callback function to handle the WebSocket `open` event.
+                 *   - If `null` is provided, the event handler is cleared.
+                 *
+                 * ## **Behavior**
+                 * - Ensures that the provided function is valid before assigning it as the event handler.
+                 * - When the WebSocket connection is established, the specified function is invoked.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Register a WebSocket open event handler
+                 * cachingModule.onopen = (event) => {
+                 *     console.log("WebSocket connected:", event);
+                 * };
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
+                 * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
+                 * - **`onerror(func)`** - Registers a handler for WebSocket error events.
+                 *
+                 * @param {(this: WebSocket, ev: Event) => any | null} func - The event handler function for the WebSocket `open` event.
+                 */
                 onopen = (func: ((this: WebSocket, ev: Event) => any) | null) => {
                     this._checkTypeFunction(func);
                     this._webSocket.onopen = func;
                 };
+                /**
+                 * **Registers an event handler for the WebSocket `message` event.**
+                 *
+                 * This method assigns a custom event handler to be executed whenever a message is received 
+                 * through the WebSocket connection.
+                 *
+                 * ## **Parameters**
+                 * - `func` *(function | null)* - A callback function to handle incoming WebSocket messages.
+                 *   - If `null` is provided, the event handler is cleared.
+                 *
+                 * ## **Behavior**
+                 * - Ensures that the provided function is valid before assigning it as the event handler.
+                 * - When a message is received, the specified function is invoked with the event data.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Register a WebSocket message event handler
+                 * cachingModule.onmessage = (event) => {
+                 *     console.log("Received WebSocket message:", event.data);
+                 * };
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
+                 * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
+                 * - **`onerror(func)`** - Registers a handler for WebSocket error events.
+                 *
+                 * @param {(this: WebSocket, ev: MessageEvent) => any | null} func - The event handler function for WebSocket messages.
+                 */
                 onmessage = (func: ((this: WebSocket, ev: MessageEvent) => any) | null) => {
                     this._checkTypeFunction(func);
                     this._webSocket.onmessage = func;
                 };
+                /**
+                 * **Registers an event handler for the WebSocket `close` event.**
+                 *
+                 * This method assigns a custom event handler to be executed when the WebSocket connection is closed.
+                 *
+                 * ## **Parameters**
+                 * - `func` *(function | null)* - A callback function to handle the WebSocket `close` event.
+                 *   - If `null` is provided, the event handler is cleared.
+                 *
+                 * ## **Behavior**
+                 * - Ensures that the provided function is valid before assigning it as the event handler.
+                 * - When the WebSocket connection is closed, the specified function is invoked with the event data.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Register a WebSocket close event handler
+                 * cachingModule.onclose = (event) => {
+                 *     console.log("WebSocket closed:", event);
+                 * };
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
+                 * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
+                 * - **`onerror(func)`** - Registers a handler for WebSocket error events.
+                 *
+                 * @param {(this: WebSocket, ev: CloseEvent) => any | null} func - The event handler function for WebSocket disconnection.
+                 */
                 onclose = (func: ((this: WebSocket, ev: CloseEvent) => any) | null) => {
                     this._checkTypeFunction(func);
                     this._webSocket.onclose = func;
                 };
+                /**
+                 * **Registers an event handler for the WebSocket `error` event.**
+                 *
+                 * This method assigns a custom event handler to be executed when a WebSocket error occurs.
+                 *
+                 * ## **Parameters**
+                 * - `func` *(function | null)* - A callback function to handle WebSocket errors.
+                 *   - If `null` is provided, the event handler is cleared.
+                 *
+                 * ## **Behavior**
+                 * - Ensures that the provided function is valid before assigning it as the event handler.
+                 * - When an error occurs in the WebSocket connection, the specified function is invoked with the event data.
+                 * - **Note:** The implementation currently assigns the function to `onclose` instead of `onerror`,
+                 *   which may require correction.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Register a WebSocket error event handler
+                 * cachingModule.onerror = (event) => {
+                 *     console.error("WebSocket error:", event);
+                 * };
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
+                 * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
+                 * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
+                 *
+                 * @param {(this: WebSocket, ev: Event) => any | null} func - The event handler function for WebSocket errors.
+                 */
                 onerror = (func: ((this: WebSocket, ev: Event) => any) | null) => {
                     this._checkTypeFunction(func);
                     this._webSocket.onclose = func;
                 };
+                /**
+                 * **Checks the current state of the WebSocket connection.**
+                 *
+                 * This method returns an integer representing the current status of the WebSocket connection.
+                 *
+                 * ## **Return Value**
+                 * - `1` → The WebSocket connection is open.
+                 * - `0` → The WebSocket connection is in the process of connecting.
+                 * - `-1` → The WebSocket connection is closed or unavailable.
+                 *
+                 * ## **Behavior**
+                 * - Internally calls `_checkWebSocketConnection()` to determine the WebSocket state.
+                 * - Useful for monitoring connection status and handling reconnection logic if needed.
+                 *
+                 * ## **Example Usage**
+                 * ```typescript
+                 * const cachingModule = new hison.link.CachingModule();
+                 * 
+                 * // Check WebSocket connection status
+                 * const status = cachingModule.isWebSocketConnection();
+                 * console.log(status); // Output: 1 (open), 0 (connecting), or -1 (closed)
+                 * ```
+                 *
+                 * ## **Related Methods**
+                 * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
+                 * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
+                 * - **`onerror(func)`** - Registers a handler for WebSocket error events.
+                 *
+                 * @returns {number} The WebSocket connection status (`1`: open, `0`: connecting, `-1`: closed).
+                 */
                 isWebSocketConnection = (): number => {
                     return this._checkWebSocketConnection();
-                }
+                };
             },
+            /**
+             * **`ApiGet` - A class for handling HTTP GET requests within the `hison.link` module.**
+             *
+             * The `ApiGet` class is responsible for sending HTTP GET requests to a specified API resource. 
+             * It integrates with `ApiLink` to handle request execution, event emissions, and optional response caching.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP GET requests** using `ApiLink`.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows setting event listeners** for request completion, errors, and other key events.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiGet` stores the API resource path and an optional `CachingModule` instance.
+             * - The `call()` method triggers a GET request to the specified resource path.
+             * - If caching is enabled, previously stored responses may be returned instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiGet without caching
+             * const apiGet = new hison.link.ApiGet("/users");
+             * 
+             * // Sending a GET request
+             * apiGet.call().then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiGet = new hison.link.ApiGet("/users", cachingModule);
+             * 
+             * // Handling request events
+             * cachedApiGet.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("GET request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-based request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiGet`, which provides methods for executing GET requests and managing request events.
+             *
+             * ## **Typical Use Cases**
+             * - **Fetching data from a REST API** with minimal setup.
+             * - **Using cached responses** to reduce redundant API calls.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiGet: class implements ApiGet {
                 constructor(resourcePath: string = '', cachingModule: CachingModule = null) {
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
@@ -3601,6 +7518,63 @@ function createHison(): Hison {
                     this._apiLink.onEventEmit('GET', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiPost` - A class for handling HTTP POST requests within the `hison.link` module.**
+             *
+             * The `ApiPost` class is responsible for sending HTTP POST requests to a specified service command.
+             * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP POST requests** using `ApiLink`.
+             * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiPost` requires a `serviceCmd` that specifies the business logic endpoint.
+             * - The `call()` method sends a POST request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiPost
+             * const apiPost = new hison.link.ApiPost("UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a POST request
+             * apiPost.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiPost = new hison.link.ApiPost("UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiPost.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("POST request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiPost`, providing methods for executing POST requests and managing request events.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to a REST API** with structured payloads.
+             * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiPost: class implements ApiPost {
                 constructor(serviceCmd: string, cachingModule: CachingModule = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
@@ -3617,15 +7591,72 @@ function createHison(): Hison {
                     return this._apiLink.post(requestData, this._serviceCmd, options);
                 }
                 head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
-                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                    return this._apiLink.head(customOption.link.controllerPath, options);
                 };
                 options = (options: Record<string, any> = {}): Promise<string[]> => {
-                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                    return this._apiLink.options(customOption.link.controllerPath, options);
                 };
                 onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
                     this._apiLink.onEventEmit('POST', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiPut` - A class for handling HTTP PUT requests within the `hison.link` module.**
+             *
+             * The `ApiPut` class is responsible for sending HTTP PUT requests to a specified service command.
+             * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP PUT requests** using `ApiLink`.
+             * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiPut` requires a `serviceCmd` that specifies the business logic endpoint.
+             * - The `call()` method sends a PUT request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiPut
+             * const apiPut = new hison.link.ApiPut("UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a PUT request
+             * apiPut.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiPut = new hison.link.ApiPut("UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiPut.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("PUT request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiPut`, providing methods for executing PUT requests and managing request events.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to a REST API** with structured payloads.
+             * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiPut: class implements ApiPut {
                 constructor(serviceCmd: string, cachingModule: CachingModule = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
@@ -3642,15 +7673,72 @@ function createHison(): Hison {
                     return this._apiLink.put(requestData, this._serviceCmd, options);
                 }
                 head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
-                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                    return this._apiLink.head(customOption.link.controllerPath, options);
                 };
                 options = (options: Record<string, any> = {}): Promise<string[]> => {
-                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                    return this._apiLink.options(customOption.link.controllerPath, options);
                 };
                 onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
                     this._apiLink.onEventEmit('PUT', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
+             *
+             * The `ApiPatch` class is responsible for sending HTTP PATCH requests to a specified service command.
+             * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP PATCH requests** using `ApiLink`.
+             * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiPatch` requires a `serviceCmd` that specifies the business logic endpoint.
+             * - The `call()` method sends a PATCH request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiPatch
+             * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a PATCH request
+             * apiPatch.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiPatch = new hison.link.ApiPatch("UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiPatch.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("PATCH request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiPatch`, providing methods for executing PATCH requests and managing request events.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to a REST API** with structured payloads.
+             * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiPatch: class implements ApiPatch {
                 constructor(serviceCmd: string, cachingModule: CachingModule = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
@@ -3667,15 +7755,72 @@ function createHison(): Hison {
                     return this._apiLink.patch(requestData, this._serviceCmd, options);
                 }
                 head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
-                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                    return this._apiLink.head(customOption.link.controllerPath, options);
                 };
                 options = (options: Record<string, any> = {}): Promise<string[]> => {
-                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                    return this._apiLink.options(customOption.link.controllerPath, options);
                 };
                 onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
                     this._apiLink.onEventEmit('PATCH', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiDelete` - A class for handling HTTP DELETE requests within the `hison.link` module.**
+             *
+             * The `ApiDelete` class is responsible for sending HTTP DELETE requests to a specified service command.
+             * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP DELETE requests** using `ApiLink`.
+             * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiDelete` requires a `serviceCmd` that specifies the business logic endpoint.
+             * - The `call()` method sends a DELETE request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiDelete
+             * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a DELETE request
+             * apiDelete.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiDelete = new hison.link.ApiDelete("UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiDelete.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("DELETE request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiDelete`, providing methods for executing DELETE requests and managing request events.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to a REST API** with structured payloads.
+             * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiDelete: class implements ApiDelete {
                 constructor(serviceCmd: string, cachingModule: CachingModule = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
@@ -3692,15 +7837,67 @@ function createHison(): Hison {
                     return this._apiLink.delete(requestData, this._serviceCmd, options);
                 }
                 head = (options: Record<string, any> = {}): Promise<Record<string, string>> => {
-                    return this._apiLink.head(defaultOption.link.controllerPath, options);
+                    return this._apiLink.head(customOption.link.controllerPath, options);
                 };
                 options = (options: Record<string, any> = {}): Promise<string[]> => {
-                    return this._apiLink.options(defaultOption.link.controllerPath, options);
+                    return this._apiLink.options(customOption.link.controllerPath, options);
                 };
                 onEventEmit = (eventName: string, eventFunc: (...args: any[]) => void) => {
                     this._apiLink.onEventEmit('DELETE', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
+             *
+             * The `ApiGetUrl` class is responsible for sending HTTP GET requests to a provided URL.
+             * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP GET requests** using `ApiLink`.
+             * - **Accepts a direct URL** instead of using a predefined API resource path.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiGetUrl` requires a valid URL.
+             * - The `call()` method triggers a GET request to the specified URL.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiGetUrl without caching
+             * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
+             * 
+             * // Sending a GET request
+             * apiGetUrl.call().then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users", cachingModule);
+             * 
+             * // Handling request events
+             * cachedApiGetUrl.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("GET request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiGetUrl`, which provides methods for executing GET requests to a specific URL.
+             *
+             * ## **Typical Use Cases**
+             * - **Fetching data from an external API** by specifying a full URL.
+             * - **Using cached responses** to reduce redundant API calls.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiGetUrl: class implements ApiGetUrl {
                 constructor(url: string, cachingModule: CachingModule = null) {
                     if (!url) throw new Error('Please enter the request URL.');
@@ -3726,6 +7923,65 @@ function createHison(): Hison {
                     this._apiLink.onEventEmit('GET', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiPostUrl` - A class for handling HTTP POST requests to a specified URL.**
+             *
+             * The `ApiPostUrl` class is responsible for sending HTTP POST requests to a provided URL.
+             * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP POST requests** using `ApiLink`.
+             * - **Accepts a direct URL** instead of using a predefined service command.
+             * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiPostUrl` requires a valid URL and an optional `serviceCmd`.
+             * - The `call()` method sends a POST request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiPostUrl
+             * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a POST request
+             * apiPostUrl.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiPostUrl.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("POST request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiPostUrl`, which provides methods for executing POST requests to a specific URL.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to an external API** using a full URL.
+             * - **Passing a `serviceCmd` for structured request routing**.
+             * - **Using cached responses** to reduce redundant API calls.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiPostUrl: class implements ApiPostUrl {
                 constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
                     if (!url) throw new Error('Please enter the request URL.');
@@ -3753,6 +8009,65 @@ function createHison(): Hison {
                     this._apiLink.onEventEmit('POST', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiPutUrl` - A class for handling HTTP PUT requests to a specified URL.**
+             *
+             * The `ApiPutUrl` class is responsible for sending HTTP PUT requests to a provided URL.
+             * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP PUT requests** using `ApiLink`.
+             * - **Accepts a direct URL** instead of using a predefined service command.
+             * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiPutUrl` requires a valid URL and an optional `serviceCmd`.
+             * - The `call()` method sends a PUT request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiPutUrl
+             * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a PUT request
+             * apiPutUrl.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiPutUrl.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("PUT request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiPutUrl`, which provides methods for executing PUT requests to a specific URL.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to an external API** using a full URL.
+             * - **Passing a `serviceCmd` for structured request routing**.
+             * - **Using cached responses** to reduce redundant API calls.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiPutUrl: class implements ApiPutUrl {
                 constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
                     if (!url) throw new Error('Please enter the request URL.');
@@ -3780,6 +8095,65 @@ function createHison(): Hison {
                     this._apiLink.onEventEmit('PUT', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiPatchUrl` - A class for handling HTTP PATCH requests to a specified URL.**
+             *
+             * The `ApiPatchUrl` class is responsible for sending HTTP PATCH requests to a provided URL.
+             * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP PATCH requests** using `ApiLink`.
+             * - **Accepts a direct URL** instead of using a predefined service command.
+             * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiPatchUrl` requires a valid URL and an optional `serviceCmd`.
+             * - The `call()` method sends a PATCH request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiPatchUrl
+             * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a PATCH request
+             * apiPatchUrl.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiPatchUrl.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("PATCH request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiPatchUrl`, which provides methods for executing PATCH requests to a specific URL.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to an external API** using a full URL.
+             * - **Passing a `serviceCmd` for structured request routing**.
+             * - **Using cached responses** to reduce redundant API calls.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiPatchUrl: class implements ApiPatchUrl {
                 constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
                     if (!url) throw new Error('Please enter the request URL.');
@@ -3807,6 +8181,65 @@ function createHison(): Hison {
                     this._apiLink.onEventEmit('PATCH', eventName, eventFunc);
                 };
             },
+            /**
+             * **`ApiDeleteUrl` - A class for handling HTTP DELETE requests to a specified URL.**
+             *
+             * The `ApiDeleteUrl` class is responsible for sending HTTP DELETE requests to a provided URL.
+             * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+             *
+             * ## **Key Features**
+             * - **Executes HTTP DELETE requests** using `ApiLink`.
+             * - **Accepts a direct URL** instead of using a predefined service command.
+             * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
+             * - **Supports response caching** via an optional `CachingModule`.
+             * - **Emits request lifecycle events** using `EventEmitter`.
+             * - **Allows event listeners** for monitoring request execution.
+             *
+             * ## **How It Works**
+             * - When instantiated, `ApiDeleteUrl` requires a valid URL and an optional `serviceCmd`.
+             * - The `call()` method sends a DELETE request with the provided request data.
+             * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
+             * - Event listeners can be attached to monitor the request lifecycle.
+             *
+             * ## **Example Usage**
+             * ```typescript
+             * // Creating an instance of ApiDeleteUrl
+             * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
+             *
+             * // Creating request data
+             * const requestData = new hison.data.DataWrapper();
+             * requestData.putString("cmd", "UserService.createUser");
+             * requestData.putString("username", "Alice");
+             * 
+             * // Sending a DELETE request
+             * apiDeleteUrl.call(requestData).then(response => {
+             *     console.log(response.data); // Response data
+             * });
+             *
+             * // Creating an instance with caching
+             * const cachingModule = new hison.link.CachingModule(20);
+             * const cachedApiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+             *
+             * // Handling request events
+             * cachedApiDeleteUrl.onEventEmit("requestCompleted_Data", (data, response) => {
+             *     console.log("DELETE request completed!", data);
+             * });
+             * ```
+             *
+             * ## **Internal Components**
+             * - **`ApiLink`**: Handles request execution and response processing.
+             * - **`EventEmitter`**: Manages event-driven request handling.
+             * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
+             *
+             * ## **Return Value**
+             * - This class returns an instance of `ApiDeleteUrl`, which provides methods for executing DELETE requests to a specific URL.
+             *
+             * ## **Typical Use Cases**
+             * - **Sending data to an external API** using a full URL.
+             * - **Passing a `serviceCmd` for structured request routing**.
+             * - **Using cached responses** to reduce redundant API calls.
+             * - **Handling event-driven request monitoring** via `onEventEmit`.
+             */
             ApiDeleteUrl: class implements ApiDeleteUrl {
                 constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
                     if (!url) throw new Error('Please enter the request URL.');
@@ -3837,149 +8270,1059 @@ function createHison(): Hison {
         };
     };
     
-    const defaultOption = new DefaultOption();
+    const customOption = new CustomOption();
     const hison = new Hison();
 
     return {
-        setDateFormat(str: string) {defaultOption.utils.dateFormat = str;},
-        setTimeFormat(str: string) {defaultOption.utils.timeFormat = str;},
-        setDatetimeFormat(str: string) {defaultOption.utils.datetimeFormat = str;},
-        setYearFormat(str: string) {defaultOption.utils.yearFormat = str;},
-        setMonthFormat(str: string) {defaultOption.utils.monthFormat = str;},
-        setMonthNameFormat(str: string) {defaultOption.utils.monthNameFormat = str;},
-        setYearMonthFormat(str: string) {defaultOption.utils.yearMonthFormat = str;},
-        setDayFormat(str: string) {defaultOption.utils.dayFormat = str;},
-        setDayOfWeekFormat(str: string) {defaultOption.utils.dayOfWeekFormat = str;},
-        setHourFormat(str: string) {defaultOption.utils.hourFormat = str;},
-        setHourMinuteFormat(str: string) {defaultOption.utils.hourMinuteFormat = str;},
-        setMinuteFormat(str: string) {defaultOption.utils.minuteFormat = str;},
-        setSecondFormat(str: string) {defaultOption.utils.secondFormat = str;},
-        setNumberFormat(str: string) {defaultOption.utils.numberFormat = str;},
-        setLESSOREQ_0X7FF_BYTE(num: number) {defaultOption.utils.LESSOREQ_0X7FF_BYTE = num;},
-        setLESSOREQ_0XFFFF_BYTE(num: number) {defaultOption.utils.LESSOREQ_0XFFFF_BYTE = num;},
-        setGREATER_0XFFFF_BYTE(num: number) {defaultOption.utils.GREATER_0XFFFF_BYTE = num;},
-        getDateFormat() {return defaultOption.utils.dateFormat;},
-        getTimeFormat() {return defaultOption.utils.timeFormat;},
-        getDatetimeFormat() {return defaultOption.utils.datetimeFormat;},
-        getYearFormat() {return defaultOption.utils.yearFormat;},
-        getMonthFormat() {return defaultOption.utils.monthFormat;},
-        getMonthNameFormat() {return defaultOption.utils.monthNameFormat;},
-        getYearMonthFormat() {return defaultOption.utils.yearMonthFormat;},
-        getDayFormat() {return defaultOption.utils.dayFormat;},
-        getDayOfWeekFormat() {return defaultOption.utils.dayOfWeekFormat;},
-        getHourFormat() {return defaultOption.utils.hourFormat;},
-        getHourMinuteFormat() {return defaultOption.utils.hourMinuteFormat;},
-        getMinuteFormat() {return defaultOption.utils.minuteFormat;},
-        getSecondFormat() {return defaultOption.utils.secondFormat;},
-        getNumberFormat() {return defaultOption.utils.numberFormat;},
-        getLESSOREQ_0X7FF_BYTE() {return defaultOption.utils.LESSOREQ_0X7FF_BYTE;},
-        getLESSOREQ_0XFFFF_BYTE() {return defaultOption.utils.LESSOREQ_0XFFFF_BYTE;},
-        getGREATER_0XFFFF_BYTE() {return defaultOption.utils.GREATER_0XFFFF_BYTE;},
-        setShieldURL(str: string) {defaultOption.shield.shieldURL = str;},
-        setExposeIpList(arr: string[]) {defaultOption.shield.exposeIpList = arr;},
-        setIsFreeze(bool: boolean) {defaultOption.shield.isFreeze = bool;},
-        setIsPossibleGoBack(bool: boolean) {defaultOption.shield.isPossibleGoBack = bool;},
-        setIsPossibleOpenDevTool(bool: boolean) {defaultOption.shield.isPossibleOpenDevTool = bool;},
-        getShieldURL() {return defaultOption.shield.shieldURL;},
-        getExposeIpList() {return defaultOption.shield.exposeIpList;},
-        getIsFreeze() {return defaultOption.shield.isFreeze;},
-        getIsPossibleGoBack() {return defaultOption.shield.isPossibleGoBack;},
-        getIsPossibleOpenDevTool() {return defaultOption.shield.isPossibleOpenDevTool;},
-        setConvertValue(func: ConvertValue) {defaultOption.data.convertValue = func;},
-        setProtocol(str: string) {defaultOption.link.protocol = str;},
-        setDomain(str: string) {defaultOption.link.domain = str;},
-        setControllerPath(str: string) {defaultOption.link.controllerPath = str;},
-        setTimeout(num: number) {defaultOption.link.timeout = num;},
-        setWebSocketProtocol(str: string) {defaultOption.link.webSocketProtocol = str;},
-        setWebSocketEndPoint(str: string) {defaultOption.link.webSocketEndPoint = str;},
-        setCachingLimit(num: number) {defaultOption.link.cachingLimit = num;},
-        getProtocol() {return defaultOption.link.protocol;},
-        getDomain() {return defaultOption.link.domain;},
-        getControllerPath() {return defaultOption.link.controllerPath;},
-        getTimeout() {return defaultOption.link.timeout;},
-        getWebSocketProtocol() {return defaultOption.link.webSocketProtocol;},
-        getWebSocketEndPoint() {return defaultOption.link.webSocketEndPoint;},
-        getCachingLimit() {return defaultOption.link.cachingLimit;},
-        setBeforeGetRequst(func: BeforeGetRequst) {defaultOption.link.beforeGetRequst = func;},
-        setBeforePostRequst(func: BeforePostRequst) {defaultOption.link.beforePostRequst = func},
-        setBeforePutRequst(func: BeforePutRequst) {defaultOption.link.beforePutRequst = func},
-        setBeforePatchRequst(func: BeforePatchRequst) {defaultOption.link.beforePatchRequst = func},
-        setBeforeDeleteRequst(func: BeforeDeleteRequst) {defaultOption.link.beforeDeleteRequst = func},
-        setInterceptApiResult(func: InterceptApiResult) {defaultOption.link.interceptApiResult = func},
-        setInterceptApiError(func: InterceptApiError) {defaultOption.link.interceptApiError = func},
+        /**
+         * Sets the default format for displaying dates.
+         *
+         * This method updates the `dateFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting date values.
+         *
+         * - The new format will be applied globally to all date-related operations.
+         * - Default value: `'yyyy-MM-dd'`
+         * - Example output after setting format: `'02/04/2025'` (for `'MM/dd/yyyy'`)
+         *
+         * ## Related Property
+         * - **`dateFormat`**: Defines the default date format.
+         *   - Default: `'yyyy-MM-dd'`
+         *   - Example output: `'2025-02-04'`
+         *
+         * @param str The new date format string.
+         */
+        setDateFormat(str: string) {customOption.utils.dateFormat = str;},
+        /**
+         * Sets the default format for displaying time.
+         *
+         * This method updates the `timeFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting time values.
+         *
+         * - The new format will be applied globally to all time-related operations.
+         * - Default value: `'hh:mm:ss'`
+         * - Example output after setting format: `'14:30'` (for `'HH:mm'`)
+         *
+         * ## Related Property
+         * - **`timeFormat`**: Defines the default time format.
+         *   - Default: `'hh:mm:ss'`
+         *   - Example output: `'14:30:15'`
+         *
+         * @param str The new time format string.
+         */
+        setTimeFormat(str: string) {customOption.utils.timeFormat = str;},
+        /**
+         * Sets the default format for displaying date and time.
+         *
+         * This method updates the `datetimeFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting datetime values.
+         *
+         * - The new format will be applied globally to all datetime-related operations.
+         * - Default value: `'yyyy-MM-dd hh:mm:ss'`
+         * - Example output after setting format: `'02/04/2025 14:30'` (for `'MM/dd/yyyy HH:mm'`)
+         *
+         * ## Related Property
+         * - **`datetimeFormat`**: Defines the default date-time format.
+         *   - Default: `'yyyy-MM-dd hh:mm:ss'`
+         *   - Example output: `'2025-02-04 14:30:15'`
+         *
+         * @param str The new datetime format string.
+         */
+        setDatetimeFormat(str: string) {customOption.utils.datetimeFormat = str;},
+        /**
+         * Sets the default format for displaying the year.
+         *
+         * This method updates the `yearFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting year values.
+         *
+         * - The new format will be applied globally to all year-related operations.
+         * - Default value: `'yyyy'`
+         * - Example output after setting format: `'25'` (for `'yy'`)
+         *
+         * ## Related Property
+         * - **`yearFormat`**: Defines the default year format.
+         *   - Default: `'yyyy'`
+         *   - Example output: `'2025'`
+         *
+         * @param str The new year format string.
+         */
+        setYearFormat(str: string) {customOption.utils.yearFormat = str;},
+        /**
+         * Sets the default format for displaying the month.
+         *
+         * This method updates the `monthFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting month values.
+         *
+         * - The new format will be applied globally to all month-related operations.
+         * - Default value: `'M'`
+         * - Example output after setting format: `'02'` (for `'MM'`)
+         *
+         * ## Related Property
+         * - **`monthFormat`**: Defines the default month format.
+         *   - Default: `'M'`
+         *   - Example output: `'2'` (for February)
+         *
+         * @param str The new month format string.
+         */
+        setMonthFormat(str: string) {customOption.utils.monthFormat = str;},
+        /**
+         * Sets the default format for displaying the full month name.
+         *
+         * This method updates the `monthNameFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting month names.
+         *
+         * - The new format will be applied globally to all month-related operations.
+         * - Default value: `'MMMM'`
+         * - Example output after setting format: `'Feb'` (for `'MMM'`)
+         *
+         * ## Related Property
+         * - **`monthNameFormat`**: Defines the default full month name format.
+         *   - Default: `'MMMM'`
+         *   - Example output: `'February'`
+         *
+         * @param str The new full month name format string.
+         */
+        setMonthNameFormat(str: string) {customOption.utils.monthNameFormat = str;},
+        /**
+         * Sets the default format for displaying year and month.
+         *
+         * This method updates the `yearMonthFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting year-month values.
+         *
+         * - The new format will be applied globally to all year-month-related operations.
+         * - Default value: `'yyyy-MM'`
+         * - Example output after setting format: `'02/2025'` (for `'MM/yyyy'`)
+         *
+         * ## Related Property
+         * - **`yearMonthFormat`**: Defines the default year and month format.
+         *   - Default: `'yyyy-MM'`
+         *   - Example output: `'2025-02'`
+         *
+         * @param str The new year-month format string.
+         */
+        setYearMonthFormat(str: string) {customOption.utils.yearMonthFormat = str;},
+        /**
+         * Sets the default format for displaying the day of the month.
+         *
+         * This method updates the `dayFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting day values.
+         *
+         * - The new format will be applied globally to all day-related operations.
+         * - Default value: `'d'`
+         * - Example output after setting format: `'04'` (for `'dd'`)
+         *
+         * ## Related Property
+         * - **`dayFormat`**: Defines the default day format.
+         *   - Default: `'d'`
+         *   - Example output: `'4'` (for the 4th day of the month)
+         *
+         * @param str The new day format string.
+         */
+        setDayFormat(str: string) {customOption.utils.dayFormat = str;},
+        /**
+         * Sets the default format for displaying the day of the week.
+         *
+         * This method updates the `dayOfWeekFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting day-of-week values.
+         *
+         * - The new format will be applied globally to all day-of-week-related operations.
+         * - Default value: `'d'`
+         * - Example output after setting format: `'Wed'` (for `'EEE'`)
+         *
+         * ## Related Property
+         * - **`dayOfWeekFormat`**: Defines the default day-of-week format.
+         *   - Default: `'d'`
+         *   - Example output: `'3'` (where 3 represents Wednesday depending on locale settings)
+         *
+         * @param str The new day-of-week format string.
+         */
+        setDayOfWeekFormat(str: string) {customOption.utils.dayOfWeekFormat = str;},
+        /**
+         * Sets the default format for displaying the hour.
+         *
+         * This method updates the `hourFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting hour values.
+         *
+         * - The new format will be applied globally to all hour-related operations.
+         * - Default value: `'h'`
+         * - Example output after setting format: `'14'` (for `'HH'`)
+         *
+         * ## Related Property
+         * - **`hourFormat`**: Defines the default hour format.
+         *   - Default: `'h'`
+         *   - Example output: `'2'` (for 2 AM or 2 PM, depending on the time format setting)
+         *
+         * @param str The new hour format string.
+         */
+        setHourFormat(str: string) {customOption.utils.hourFormat = str;},
+        /**
+         * Sets the default format for displaying the hour and minute.
+         *
+         * This method updates the `hourMinuteFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting time values.
+         *
+         * - The new format will be applied globally to all hour-minute-related operations.
+         * - Default value: `'hh:mm'`
+         * - Example output after setting format: `'14:30'` (for `'HH:mm'`)
+         *
+         * ## Related Property
+         * - **`hourMinuteFormat`**: Defines the default hour-minute format.
+         *   - Default: `'hh:mm'`
+         *   - Example output: `'02:30'` (for 2:30 AM or PM, depending on the time format setting)
+         *
+         * @param str The new hour-minute format string.
+         */
+        setHourMinuteFormat(str: string) {customOption.utils.hourMinuteFormat = str;},
+        /**
+         * Sets the default format for displaying the minute.
+         *
+         * This method updates the `minuteFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting minute values.
+         *
+         * - The new format will be applied globally to all minute-related operations.
+         * - Default value: `'m'`
+         * - Example output after setting format: `'05'` (for `'mm'`)
+         *
+         * ## Related Property
+         * - **`minuteFormat`**: Defines the default minute format.
+         *   - Default: `'m'`
+         *   - Example output: `'5'` (for the 5th minute of the hour)
+         *
+         * @param str The new minute format string.
+         */
+        setMinuteFormat(str: string) {customOption.utils.minuteFormat = str;},
+        /**
+         * Sets the default format for displaying the second.
+         *
+         * This method updates the `secondFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for parsing and formatting second values.
+         *
+         * - The new format will be applied globally to all second-related operations.
+         * - Default value: `'s'`
+         * - Example output after setting format: `'09'` (for `'ss'`)
+         *
+         * ## Related Property
+         * - **`secondFormat`**: Defines the default second format.
+         *   - Default: `'s'`
+         *   - Example output: `'45'` (for the 45th second of the minute)
+         *
+         * @param str The new second format string.
+         */
+        setSecondFormat(str: string) {customOption.utils.secondFormat = str;},
+        /**
+         * Sets the default format for displaying numbers.
+         *
+         * This method updates the `numberFormat` property in `customOption`, 
+         * which is used throughout the `hisondev` solution for formatting numeric values.
+         *
+         * - The new format will be applied globally to all number-related operations.
+         * - Default value: `"#,##0.##"`
+         * - Example output after setting format: `"1.234,56"` (for `"#.###,##"` in European style)
+         *
+         * ## Related Property
+         * - **`numberFormat`**: Defines the default number format.
+         *   - Default: `"#,##0.##"`
+         *   - Example output: `"1,234.56"` (for the number `1234.56`)
+         *
+         * @param str The new number format string.
+         */
+        setNumberFormat(str: string) {customOption.utils.numberFormat = str;},
+        /**
+         * Sets the byte size for characters with a char code less than or equal to `0x7FF`.
+         *
+         * This method updates the `LESSOREQ_0X7FF_BYTE` property in `customOption`, 
+         * which determines the number of bytes required to encode characters in this range.
+         *
+         * - The new value will be applied globally to all character encoding operations.
+         * - Default value: `2`
+         * - Example usage: `setLESSOREQ_0X7FF_BYTE(3);` (Changes encoding size to 3 bytes)
+         *
+         * ## Related Property
+         * - **`LESSOREQ_0X7FF_BYTE`**: Defines the byte size for `charCode <= 0x7FF`.
+         *   - Default: `2`
+         *   - Represents characters with `charCode <= 0x7FF`
+         *
+         * @param num The new byte size for characters in this range.
+         */
+        setLESSOREQ_0X7FF_BYTE(num: number) {customOption.utils.LESSOREQ_0X7FF_BYTE = num;},
+        /**
+         * Sets the byte size for characters with a char code less than or equal to `0xFFFF`.
+         *
+         * This method updates the `LESSOREQ_0XFFFF_BYTE` property in `customOption`, 
+         * which determines the number of bytes required to encode characters in this range.
+         *
+         * - The new value will be applied globally to all character encoding operations.
+         * - Default value: `3`
+         * - Example usage: `setLESSOREQ_0XFFFF_BYTE(4);` (Changes encoding size to 4 bytes)
+         *
+         * ## Related Property
+         * - **`LESSOREQ_0XFFFF_BYTE`**: Defines the byte size for `charCode <= 0xFFFF`.
+         *   - Default: `3`
+         *   - Represents characters with `charCode <= 0xFFFF`
+         *
+         * @param num The new byte size for characters in this range.
+         */
+        setLESSOREQ_0XFFFF_BYTE(num: number) {customOption.utils.LESSOREQ_0XFFFF_BYTE = num;},
+        /**
+         * Sets the byte size for characters with a char code greater than `0xFFFF`.
+         *
+         * This method updates the `GREATER_0XFFFF_BYTE` property in `customOption`, 
+         * which determines the number of bytes required to encode characters in this range.
+         *
+         * - The new value will be applied globally to all character encoding operations.
+         * - Default value: `4`
+         * - Example usage: `setGREATER_0XFFFF_BYTE(5);` (Changes encoding size to 5 bytes)
+         *
+         * ## Related Property
+         * - **`GREATER_0XFFFF_BYTE`**: Defines the byte size for `charCode > 0xFFFF`.
+         *   - Default: `4`
+         *   - Represents characters with `charCode > 0xFFFF`
+         *
+         * @param num The new byte size for characters in this range.
+         */
+        setGREATER_0XFFFF_BYTE(num: number) {customOption.utils.GREATER_0XFFFF_BYTE = num;},
+        /**
+         * Returns the currently set default date format.
+         *
+         * This method retrieves the value of `dateFormat` from `customOption`.
+         *
+         * @returns The current date format string.
+         */
+        getDateFormat(): string {return customOption.utils.dateFormat;},
+        /**
+         * Returns the currently set default time format.
+         *
+         * This method retrieves the value of `timeFormat` from `customOption`.
+         *
+         * @returns The current time format string.
+         */
+        getTimeFormat(): string {return customOption.utils.timeFormat;},
+        /**
+         * Returns the currently set default datetime format.
+         *
+         * This method retrieves the value of `datetimeFormat` from `customOption`.
+         *
+         * @returns The current datetime format string.
+         */
+        getDatetimeFormat(): string {return customOption.utils.datetimeFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `yearFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getYearFormat(): string {return customOption.utils.yearFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `monthFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getMonthFormat(): string {return customOption.utils.monthFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `monthNameFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getMonthNameFormat(): string {return customOption.utils.monthNameFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `yearMonthFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getYearMonthFormat(): string {return customOption.utils.yearMonthFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `dayFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getDayFormat(): string {return customOption.utils.dayFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `dayOfWeekFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getDayOfWeekFormat(): string {return customOption.utils.dayOfWeekFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `hourFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getHourFormat(): string {return customOption.utils.hourFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `hourMinuteFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getHourMinuteFormat(): string {return customOption.utils.hourMinuteFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `minuteFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getMinuteFormat(): string {return customOption.utils.minuteFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `secondFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getSecondFormat(): string {return customOption.utils.secondFormat;},
+        /**
+         * Returns the currently set default year format.
+         *
+         * This method retrieves the value of `numberFormat` from `customOption`.
+         *
+         * @returns The current year format string.
+         */
+        getNumberFormat(): string {return customOption.utils.numberFormat;},
+        /**
+        * Returns the currently set byte size for characters with a char code less than or equal to `0x7FF`.
+        *
+        * This method retrieves the value of `LESSOREQ_0X7FF_BYTE` from `customOption`.
+        *
+        * @returns The byte size for `charCode <= 0x7FF`.
+        */
+        getLESSOREQ_0X7FF_BYTE(): number {return customOption.utils.LESSOREQ_0X7FF_BYTE;},
+        /**
+        * Returns the currently set byte size for characters with a char code less than or equal to `0xFFFF`.
+        *
+        * This method retrieves the value of `LESSOREQ_0XFFFF_BYTE` from `customOption`.
+        *
+        * @returns The byte size for `charCode <= 0xFFFF`.
+        */
+        getLESSOREQ_0XFFFF_BYTE(): number {return customOption.utils.LESSOREQ_0XFFFF_BYTE;},
+        /**
+         * Returns the currently set byte size for characters with a char code greater than `0xFFFF`.
+         *
+         * This method retrieves the value of `GREATER_0XFFFF_BYTE` from `customOption`.
+         *
+         * @returns The byte size for `charCode > 0xFFFF`.
+         */
+        getGREATER_0XFFFF_BYTE(): number {return customOption.utils.GREATER_0XFFFF_BYTE;},
+        /**
+         * Sets the security service URL used to enforce access restrictions.
+         *
+         * This method updates the `shieldURL` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to validate access to the system.
+         *
+         * - If set, the system verifies whether the current location matches the specified URL.
+         * - If the URL does not match, access may be restricted.
+         * - Default value: `""` (empty string, meaning no restriction)
+         * - Example usage: `setShieldURL("https://secure.example.com");`
+         *
+         * ## Related Property
+         * - **`shieldURL`**: Defines the security enforcement URL.
+         *   - Default: `""`
+         *   - Used in `shield.excute(hison: Hison)` to validate URL access.
+         *
+         * @param str The new security service URL.
+         */
+        setShieldURL(str: string) {customOption.shield.shieldURL = str;},
+        /**
+         * Sets the list of IP addresses that are allowed to bypass security restrictions.
+         *
+         * This method updates the `exposeIpList` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to define a whitelist of trusted IPs.
+         *
+         * - Only IPs in this list will be granted access when security restrictions are enabled.
+         * - Default value: `["0:0:0:0:0:0:0:1"]` (allows localhost)
+         * - Example usage: `setExposeIpList(["192.168.1.1", "203.0.113.45"]);`
+         *
+         * ## Related Property
+         * - **`exposeIpList`**: Defines the list of allowed IP addresses.
+         *   - Default: `["0:0:0:0:0:0:0:1"]`
+         *   - Used in `shield.excute(hison: Hison)` to verify access permissions.
+         *
+         * @param arr An array of IP addresses to be added to the whitelist.
+         */
+        setExposeIpList(arr: string[]) {customOption.shield.exposeIpList = arr;},
+        /**
+         * Sets whether the `Hison` instance should be frozen to prevent modifications.
+         *
+         * This method updates the `isFreeze` property in `customOption`, 
+         * which determines whether the `Hison` object and its properties should be deeply frozen.
+         *
+         * - If `true`, `Object.freeze()` is applied to prevent modifications.
+         * - Default value: `true`
+         * - Example usage: `setIsFreeze(false);` (Allows modifications to the `Hison` instance)
+         *
+         * ## Related Property
+         * - **`isFreeze`**: Determines if the `Hison` object should be frozen.
+         *   - Default: `true`
+         *   - Used in `shield.excute(hison: Hison)`, where `deepFreeze(hison)` is applied.
+         *
+         * @param bool A boolean indicating whether the `Hison` instance should be frozen.
+         */
+        setIsFreeze(bool: boolean) {customOption.shield.isFreeze = bool;},
+        /**
+         * Sets whether the browser's back navigation is allowed.
+         *
+         * This method updates the `isPossibleGoBack` property in `customOption`, 
+         * which determines if users can navigate back in their browser history.
+         *
+         * - If `false`, a mechanism is implemented to prevent the user from navigating back.
+         * - Default value: `false`
+         * - Example usage: `setIsPossibleGoBack(true);` (Allows back navigation)
+         *
+         * ## Related Property
+         * - **`isPossibleGoBack`**: Determines if browser back navigation is allowed.
+         *   - Default: `false`
+         *     to disable the back button.
+         *
+         * @param bool A boolean indicating whether back navigation is allowed.
+         */
+        setIsPossibleGoBack(bool: boolean) {customOption.shield.isPossibleGoBack = bool;},
+        /**
+         * Sets whether developer tools can be opened.
+         *
+         * This method updates the `isPossibleOpenDevTool` property in `customOption`, 
+         * which determines if browser developer tools should be restricted.
+         *
+         * - If `false`, an event listener is added to detect developer mode access 
+         *   (e.g., F12 key, browser dev tools, resizing).
+         * - Default value: `false`
+         * - Example usage: `setIsPossibleOpenDevTool(true);` (Allows developer tools to be opened)
+         *
+         * ## Related Property
+         * - **`isPossibleOpenDevTool`**: Determines if developer tools can be opened.
+         *   - Default: `false`
+         *
+         * @param bool A boolean indicating whether developer tools can be opened.
+         */
+        setIsPossibleOpenDevTool(bool: boolean) {customOption.shield.isPossibleOpenDevTool = bool;},
+        /**
+         * Returns the currently set security service URL.
+         *
+         * This method retrieves the value of `shieldURL` from `customOption`.
+         *
+         * @returns The current security service URL.
+         */
+        getShieldURL(): string {return customOption.shield.shieldURL;},
+        /**
+         * Returns the list of IP addresses allowed to bypass security restrictions.
+         *
+         * This method retrieves the value of `exposeIpList` from `customOption`.
+         *
+         * @returns An array of allowed IP addresses.
+         */
+        getExposeIpList(): string[] {return customOption.shield.exposeIpList;},
+        /**
+         * Returns whether the `Hison` instance is frozen to prevent modifications.
+         *
+         * This method retrieves the value of `isFreeze` from `customOption`.
+         *
+         * @returns `true` if the `Hison` instance is frozen, otherwise `false`.
+         */
+        getIsFreeze(): boolean {return customOption.shield.isFreeze;},
+        /**
+         * Returns whether browser back navigation is allowed.
+         *
+         * This method retrieves the value of `isPossibleGoBack` from `customOption`.
+         *
+         * @returns `true` if back navigation is allowed, otherwise `false`.
+         */
+        getIsPossibleGoBack(): boolean {return customOption.shield.isPossibleGoBack;},
+        /**
+         * Returns whether developer tools can be opened.
+         *
+         * This method retrieves the value of `isPossibleOpenDevTool` from `customOption`.
+         *
+         * @returns `true` if developer tools can be opened, otherwise `false`.
+         */
+        getIsPossibleOpenDevTool(): boolean {return customOption.shield.isPossibleOpenDevTool;},
+        /**
+         * Sets the function used to convert special values before they are inserted into the `DataModel`.
+         *
+         * This method updates the `convertValue` property in `customOption`, 
+         * allowing developers to define a custom transformation for specific objects like `Date` 
+         * before they are stored in a `DataModel`. By default, values are inserted as-is.
+         *
+         * - The new function will be applied globally to all `DataModel` insertions.
+         * - Default behavior: Returns the input value unchanged.
+         * - Example use case: Formatting `Date` objects before storage.
+         *
+         * ## Related Property
+         * - **`convertValue`**: Defines a function for transforming special values.
+         *   - Default: Returns the value unchanged.
+         *   - Used in `DataModel._deepCopy()` to handle non-plain objects.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setConvertValue(function(value) {
+         *     if (value instanceof Date) {
+         *         let year = value.getFullYear();
+         *         let month = ('0' + (value.getMonth() + 1)).slice(-2);
+         *         let day = ('0' + value.getDate()).slice(-2);
+         *         let hour = ('0' + value.getHours()).slice(-2);
+         *         let minute = ('0' + value.getMinutes()).slice(-2);
+         *         let second = ('0' + value.getSeconds()).slice(-2);
+         *         return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+         *     }
+         *     return value;
+         * });
+         * ```
+         *
+         * ## Notes:
+         * 1. Special values not processed by `convertValue` are stored in the `DataModel` as references.
+         *    Changes to the original object will also reflect in the `DataModel`.
+         * 2. Ensure the function returns the original value for all cases not explicitly handled.
+         *    This prevents unexpected `undefined` values in the `DataModel`.
+         *
+         * @param func The function used to transform values before they are stored in `DataModel`.
+         */
+        setConvertValue(func: ConvertValue) {customOption.data.convertValue = func;},
+        /**
+         * Sets the default protocol for API communication.
+         *
+         * This method updates the `protocol` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to construct request URLs.
+         *
+         * - The new protocol will be applied globally to all API requests.
+         * - Default value: `'http://'`
+         * - Example usage: `setProtocol("https://");` (Switches API communication to HTTPS)
+         *
+         * ## Related Property
+         * - **`protocol`**: Defines the default protocol for API requests.
+         *   - Default: `'http://'`
+         *   - Used in `ApiLink` to construct full request URLs.
+         *
+         * @param str The new protocol string (e.g., `'http://'` or `'https://'`).
+         */
+        setProtocol(str: string) {customOption.link.protocol = str;},
+        /**
+         * Sets the default domain for API requests.
+         *
+         * This method updates the `domain` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to construct request URLs.
+         *
+         * - The new domain will be applied globally to all API requests.
+         * - Default value: `'localhost:8081'`
+         * - Example usage: `setDomain("api.example.com");` (Changes the API domain to `api.example.com`)
+         *
+         * ## Related Property
+         * - **`domain`**: Defines the default domain for API requests.
+         *   - Default: `'localhost:8081'`
+         *   - Used in `ApiLink` to construct full request URLs.
+         *
+         * @param str The new domain string (e.g., `'api.example.com'` or `'192.168.1.100:3000'`).
+         */
+        setDomain(str: string) {customOption.link.domain = str;},
+        /**
+         * Sets the default controller path for API requests.
+         *
+         * This method updates the `controllerPath` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to construct request URLs.
+         *
+         * - The new controller path will be applied globally to all API requests.
+         * - Default value: `'/hison-api-link'`
+         * - Example usage: `setControllerPath("/api/v1");` (Changes the API path to `/api/v1`)
+         *
+         * ## Related Property
+         * - **`controllerPath`**: Defines the default API controller path.
+         *   - Default: `'/hison-api-link'`
+         *   - Used in `ApiLink` to construct full request URLs.
+         *
+         * @param str The new controller path string (e.g., `'/api'`).
+         */
+        setControllerPath(str: string) {customOption.link.controllerPath = str;},
+        /**
+         * Sets the default timeout duration for API requests.
+         *
+         * This method updates the `timeout` property in `customOption`, 
+         * which determines the maximum time (in milliseconds) an API request can take before being aborted.
+         *
+         * - The new timeout will be applied globally to all API requests.
+         * - Default value: `10000` (10 seconds)
+         * - Example usage: `setTimeout(5000);` (Sets the timeout to 5 seconds)
+         *
+         * ## Related Property
+         * - **`timeout`**: Defines the request timeout duration in milliseconds.
+         *   - Default: `10000`
+         *
+         * @param num The new timeout duration in milliseconds.
+         */
+        setTimeout(num: number) {customOption.link.timeout = num;},
+        /**
+         * Sets the default protocol for WebSocket communication.
+         *
+         * This method updates the `webSocketProtocol` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to establish WebSocket connections.
+         *
+         * - The new protocol will be applied globally to all WebSocket connections.
+         * - Default value: `'ws://'`
+         * - Example usage: `setWebSocketProtocol("wss://");` (Switches WebSocket communication to a secure protocol)
+         *
+         * ## Related Property
+         * - **`webSocketProtocol`**: Defines the default protocol for WebSocket connections.
+         *   - Default: `'ws://'`
+         *   - Used in `ApiLink` when initializing WebSocket communication.
+         *
+         * @param str The new WebSocket protocol string (e.g., `'ws://'` or `'wss://'`).
+         */
+        setWebSocketProtocol(str: string) {customOption.link.webSocketProtocol = str;},
+        /**
+         * Sets the default WebSocket endpoint for real-time communication.
+         *
+         * This method updates the `webSocketEndPoint` property in `customOption`, 
+         * which is used throughout the `hisondev` solution to establish WebSocket connections.
+         *
+         * - The new endpoint will be applied globally to all WebSocket connections.
+         * - Default value: `'/hison-caching-websocket-endpoint'`
+         * - Example usage: `setWebSocketEndPoint("/ws/data-stream");` (Changes the WebSocket endpoint)
+         *
+         * ## Related Property
+         * - **`webSocketEndPoint`**: Defines the default WebSocket endpoint for API communication.
+         *   - Default: `'/hison-caching-websocket-endpoint'`
+         *   - Used in `ApiLink` when establishing WebSocket connections.
+         *
+         * @param str The new WebSocket endpoint string (e.g., `'/ws/data-stream'` or `'/ws/notifications'`).
+         */
+        setWebSocketEndPoint(str: string) {customOption.link.webSocketEndPoint = str;},
+        /**
+         * Sets the caching limit for stored API responses.
+         *
+         * This method updates the `cachingLimit` property in `customOption`, 
+         * which determines the maximum number of cached API responses before older ones are removed.
+         *
+         * - The new caching limit will be applied globally to all API request caching.
+         * - Default value: `10`
+         * - Example usage: `setCachingLimit(20);` (Increases the caching limit to 20 responses)
+         *
+         * ## Related Property
+         * - **`cachingLimit`**: Defines the maximum number of cached API responses.
+         *   - Default: `10`
+         *
+         * @param num The new caching limit.
+         */
+        setCachingLimit(num: number) {customOption.link.cachingLimit = num;},
+        /**
+         * Returns the currently set default protocol for API communication.
+         *
+         * This method retrieves the value of `protocol` from `customOption`.
+         *
+         * @returns The current protocol string (e.g., `'http://'` or `'https://'`).
+         */
+        getProtocol(): string {return customOption.link.protocol;},
+        /**
+         * Returns the currently set default domain for API requests.
+         *
+         * This method retrieves the value of `domain` from `customOption`.
+         *
+         * @returns The current domain string.
+         */
+        getDomain(): string {return customOption.link.domain;},
+        /**
+         * Returns the currently set default controller path for API requests.
+         *
+         * This method retrieves the value of `controllerPath` from `customOption`.
+         *
+         * @returns The current controller path string.
+         */
+        getControllerPath(): string {return customOption.link.controllerPath;},
+        /**
+         * Returns the currently set timeout duration for API requests.
+         *
+         * This method retrieves the value of `timeout` from `customOption`.
+         *
+         * @returns The current timeout duration in milliseconds.
+         */
+        getTimeout(): number {return customOption.link.timeout;},
+        /**
+         * Returns the currently set default protocol for WebSocket communication.
+         *
+         * This method retrieves the value of `webSocketProtocol` from `customOption`.
+         *
+         * @returns The current WebSocket protocol string (e.g., `'ws://'` or `'wss://'`).
+         */
+        getWebSocketProtocol(): string {return customOption.link.webSocketProtocol;},
+        /**
+         * Returns the currently set default WebSocket endpoint.
+         *
+         * This method retrieves the value of `webSocketEndPoint` from `customOption`.
+         *
+         * @returns The current WebSocket endpoint string.
+         */
+        getWebSocketEndPoint(): string {return customOption.link.webSocketEndPoint;},
+        /**
+         * Returns the currently set caching limit for stored API responses.
+         *
+         * This method retrieves the value of `cachingLimit` from `customOption`.
+         *
+         * @returns The maximum number of cached API responses.
+         */
+        getCachingLimit(): number {return customOption.link.cachingLimit;},
+        /**
+         * Sets the hook function that executes before making a `GET` request.
+         *
+         * This method updates the `beforeGetRequst` property in `customOption`, 
+         * allowing developers to intercept or modify `GET` requests before they are sent.
+         *
+         * - If the function returns `false`, the request will be canceled.
+         * - The new function will be applied globally to all `GET` requests.
+         * - Default behavior: Returns `true`, allowing the request to proceed.
+         *
+         * ## Related Property
+         * - **`beforeGetRequst`**: A hook function executed before a `GET` request.
+         *   - Default: Returns `true`
+         *   - Used in `ApiGet.call()` to determine if a request should proceed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setBeforeGetRequst((resourcePath, options) => {
+         *     console.log("GET request intercepted:", resourcePath);
+         *     return resourcePath.startsWith("/secure/") ? false : true;
+         * });
+         * ```
+         *
+         * @param func A function to execute before a `GET` request. Returning `false` cancels the request.
+         */
+        setBeforeGetRequst(func: BeforeGetRequst) {customOption.link.beforeGetRequst = func;},
+        /**
+         * Sets the hook function that executes before making a `POST` request.
+         *
+         * This method updates the `beforePostRequst` property in `customOption`, 
+         * allowing developers to intercept or modify `POST` requests before they are sent.
+         *
+         * - If the function returns `false`, the request will be canceled.
+         * - The new function will be applied globally to all `POST` requests.
+         * - Default behavior: Returns `true`, allowing the request to proceed.
+         *
+         * ## Related Property
+         * - **`beforePostRequst`**: A hook function executed before a `POST` request.
+         *   - Default: Returns `true`
+         *   - Used in `ApiPost.call()` to determine if a request should proceed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setBeforePostRequst((requestDw, options) => {
+         *     console.log("POST request intercepted:", requestDw);
+         *     return requestDw.hasOwnProperty("secureData") ? false : true;
+         * });
+         * ```
+         *
+         * @param func A function to execute before a `POST` request. Returning `false` cancels the request.
+         */
+        setBeforePostRequst(func: BeforePostRequst) {customOption.link.beforePostRequst = func},
+        /**
+         * Sets the hook function that executes before making a `PUT` request.
+         *
+         * This method updates the `beforePutRequst` property in `customOption`, 
+         * allowing developers to intercept or modify `PUT` requests before they are sent.
+         *
+         * - If the function returns `false`, the request will be canceled.
+         * - The new function will be applied globally to all `PUT` requests.
+         * - Default behavior: Returns `true`, allowing the request to proceed.
+         *
+         * ## Related Property
+         * - **`beforePutRequst`**: A hook function executed before a `PUT` request.
+         *   - Default: Returns `true`
+         *   - Used in `ApiPut.call()` to determine if a request should proceed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setBeforePutRequst((requestDw, options) => {
+         *     console.log("PUT request intercepted:", requestDw);
+         *     return requestDw.hasOwnProperty("readOnly") ? false : true;
+         * });
+         * ```
+         *
+         * @param func A function to execute before a `PUT` request. Returning `false` cancels the request.
+         */
+        setBeforePutRequst(func: BeforePutRequst) {customOption.link.beforePutRequst = func},
+        /**
+         * Sets the hook function that executes before making a `PATCH` request.
+         *
+         * This method updates the `beforePatchRequst` property in `customOption`, 
+         * allowing developers to intercept or modify `PATCH` requests before they are sent.
+         *
+         * - If the function returns `false`, the request will be canceled.
+         * - The new function will be applied globally to all `PATCH` requests.
+         * - Default behavior: Returns `true`, allowing the request to proceed.
+         *
+         * ## Related Property
+         * - **`beforePatchRequst`**: A hook function executed before a `PATCH` request.
+         *   - Default: Returns `true`
+         *   - Used in `ApiPatch.call()` to determine if a request should proceed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setBeforePatchRequst((requestDw, options) => {
+         *     console.log("PATCH request intercepted:", requestDw);
+         *     return requestDw.hasOwnProperty("lockedField") ? false : true;
+         * });
+         * ```
+         *
+         * @param func A function to execute before a `PATCH` request. Returning `false` cancels the request.
+         */
+        setBeforePatchRequst(func: BeforePatchRequst) {customOption.link.beforePatchRequst = func},
+        /**
+         * Sets the hook function that executes before making a `DELETE` request.
+         *
+         * This method updates the `beforeDeleteRequst` property in `customOption`, 
+         * allowing developers to intercept or modify `DELETE` requests before they are sent.
+         *
+         * - If the function returns `false`, the request will be canceled.
+         * - The new function will be applied globally to all `DELETE` requests.
+         * - Default behavior: Returns `true`, allowing the request to proceed.
+         *
+         * ## Related Property
+         * - **`beforeDeleteRequst`**: A hook function executed before a `DELETE` request.
+         *   - Default: Returns `true`
+         *   - Used in `ApiDelete.call()` to determine if a request should proceed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setBeforeDeleteRequst((requestDw, options) => {
+         *     console.log("DELETE request intercepted:", requestDw);
+         *     return requestDw.hasOwnProperty("protected") ? false : true;
+         * });
+         * ```
+         *
+         * @param func A function to execute before a `DELETE` request. Returning `false` cancels the request.
+         */
+        setBeforeDeleteRequst(func: BeforeDeleteRequst) {customOption.link.beforeDeleteRequst = func},
+        /**
+         * Sets the function that intercepts and processes API responses before returning them to the caller.
+         *
+         * This method updates the `interceptApiResult` property in `customOption`, 
+         * allowing developers to handle API responses globally before they are processed.
+         *
+         * - If the function returns `false`, the response will be ignored.
+         * - The new function will be applied globally to all API responses.
+         * - Default behavior: Returns `true`, allowing the response to be processed normally.
+         *
+         * ## Related Property
+         * - **`interceptApiResult`**: A hook function executed after receiving an API response.
+         *   - Default: Returns `true`
+         *   - Used in `ApiLink._request()` to determine if the response should be processed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setInterceptApiResult((result, response) => {
+         *     console.log("API response intercepted:", result);
+         *     return response.status === 200 ? true : false;
+         * });
+         * ```
+         *
+         * @param func A function to execute after receiving an API response. Returning `false` cancels further processing.
+         */
+        setInterceptApiResult(func: InterceptApiResult) {customOption.link.interceptApiResult = func},
+        /**
+         * Sets the function that intercepts and processes API errors before returning them to the caller.
+         *
+         * This method updates the `interceptApiError` property in `customOption`, 
+         * allowing developers to handle API errors globally before they are processed.
+         *
+         * - If the function returns `false`, the error will be ignored.
+         * - The new function will be applied globally to all API error responses.
+         * - Default behavior: Returns `true`, allowing the error to be processed normally.
+         *
+         * ## Related Property
+         * - **`interceptApiError`**: A hook function executed when an API request encounters an error.
+         *   - Default: Returns `true`
+         *   - Used in `ApiLink._request()` to determine if the error should be processed.
+         *
+         * ## Example Usage:
+         * ```typescript
+         * setInterceptApiError((error) => {
+         *     console.error("API error intercepted:", error);
+         *     return error.message.includes("timeout") ? false : true;
+         * });
+         * ```
+         *
+         * @param func A function to execute when an API error occurs. Returning `false` cancels further error handling.
+         */
+        setInterceptApiError(func: InterceptApiError) {customOption.link.interceptApiError = func},
 
         utils : {
-            isAlpha: hison.utils.isAlpha,
-            isAlphaNumber: hison.utils.isAlphaNumber,
-            isNumber: hison.utils.isNumber,
-            isNumberSymbols: hison.utils.isNumberSymbols,
-            isIncludeSymbols: hison.utils.isIncludeSymbols,
-            isLowerAlpha: hison.utils.isLowerAlpha,
-            isLowerAlphaAndNumber: hison.utils.isLowerAlphaAndNumber,
-            isUpperAlpha: hison.utils.isUpperAlpha,
-            isUpperAlphaNumber: hison.utils.isUpperAlphaNumber,
-            isNumeric: hison.utils.isNumeric,
-            isInteger: hison.utils.isInteger,
-            isPositiveInteger: hison.utils.isPositiveInteger,
-            isNegativeInteger: hison.utils.isNegativeInteger,
-            isArray: hison.utils.isArray,
-            isObject: hison.utils.isObject,
-            isDate: hison.utils.isDate,
-            isTime: hison.utils.isTime,
-            isDatetime: hison.utils.isDatetime,
-            isEmail: hison.utils.isEmail,
-            isURL: hison.utils.isURL,
-            isValidMask: hison.utils.isValidMask,
-            getDateObject: hison.utils.getDateObject,
-            getTimeObject: hison.utils.getTimeObject,
-            getDatetimeObject: hison.utils.getDatetimeObject,
-            addDate: hison.utils.addDate,
-            getDateDiff: hison.utils.getDateDiff,
-            getMonthName: hison.utils.getMonthName,
-            getDateWithFormat: hison.utils.getDateWithFormat,
-            getDayOfWeek: hison.utils.getDayOfWeek,
-            getLastDay: hison.utils.getLastDay,
-            getSysYear: hison.utils.getSysYear,
-            getSysMonth: hison.utils.getSysMonth,
-            getSysYearMonth: hison.utils.getSysYearMonth,
-            getSysDay: hison.utils.getSysDay,
-            getSysDayOfWeek: hison.utils.getSysDayOfWeek,
-            getSysHour: hison.utils.getSysHour,
-            getSysHourMinute: hison.utils.getSysHourMinute,
-            getSysMinute: hison.utils.getSysMinute,
-            getSysSecond: hison.utils.getSysSecond,
-            getSysTime: hison.utils.getSysTime,
-            getSysDate: hison.utils.getSysDate,
-            getCeil: hison.utils.getCeil,
-            getFloor: hison.utils.getFloor,
-            getRound: hison.utils.getRound,
-            getTrunc: hison.utils.getTrunc,
-            getByteLength: hison.utils.getByteLength,
-            getCutByteLength: hison.utils.getCutByteLength,
-            getStringLenForm: hison.utils.getStringLenForm,
-            getLpad: hison.utils.getLpad,
-            getRpad: hison.utils.getRpad,
-            getTrim: hison.utils.getTrim,
-            getReplaceAll: hison.utils.getReplaceAll,
-            nvl: hison.utils.nvl,
-            getNumberFormat: hison.utils.getNumberFormat,
-            getRemoveExceptNumbers: hison.utils.getRemoveExceptNumbers,
-            getRemoveNumbers: hison.utils.getRemoveNumbers,
-            getReverse: hison.utils.getReverse,
-            getToBoolean: hison.utils.getToBoolean,
-            getToNumber: hison.utils.getToNumber,
-            getToFloat: hison.utils.getToFloat,
-            getToInteger: hison.utils.getToInteger,
-            getToString: hison.utils.getToString,
-            getFileExtension: hison.utils.getFileExtension,
-            getFileName: hison.utils.getFileName,
-            getDecodeBase64: hison.utils.getDecodeBase64,
-            getEncodeBase64: hison.utils.getEncodeBase64,
-            deepCopyObject: hison.utils.deepCopyObject,
+            isAlpha(str: string): boolean { return hison.utils.isAlpha(str) },
+            isAlphaNumber(str: string): boolean { return hison.utils.isAlphaNumber(str) },
+            isNumber(str: string): boolean { return hison.utils.isNumber(str) },
+            isNumberSymbols(str: string): boolean { return hison.utils.isNumberSymbols(str) },
+            isIncludeSymbols(str: string): boolean { return hison.utils.isIncludeSymbols(str) },
+            isLowerAlpha(str: string): boolean { return hison.utils.isLowerAlpha(str) },
+            isLowerAlphaAndNumber(str: string): boolean { return hison.utils.isLowerAlphaAndNumber(str) },
+            isUpperAlpha(str: string): boolean { return hison.utils.isUpperAlpha(str) },
+            isUpperAlphaNumber(str: string): boolean { return hison.utils.isUpperAlphaNumber(str) },
+            isNumeric(num: any): boolean { return hison.utils.isNumeric(num) },
+            isInteger(num: any): boolean { return hison.utils.isInteger(num) },
+            isPositiveInteger(num: any): boolean { return hison.utils.isPositiveInteger(num) },
+            isNegativeInteger(num: any): boolean { return hison.utils.isNegativeInteger(num) },
+            isArray(arr: any): boolean { return hison.utils.isArray(arr) },
+            isObject(obj: any): boolean { return hison.utils.isObject(obj) },
+            isDate(date: DateObject | string): boolean { return hison.utils.isDate(date) },
+            isTime(time: TimeObject | string): boolean { return hison.utils.isTime(time) },
+            isDatetime(datetime: DateTimeObject | string): boolean { return hison.utils.isDatetime(datetime) },
+            isEmail(str: string): boolean { return hison.utils.isEmail(str) },
+            isURL(str: string): boolean { return hison.utils.isURL(str) },
+            isValidMask(str: string, mask: string): boolean { return hison.utils.isValidMask(str, mask) },
+            getDateObject(date: Date | string): DateObject { return hison.utils.getDateObject(date) },
+            getTimeObject(time: Date | string): TimeObject { return hison.utils.getTimeObject(time) },
+            getDatetimeObject(datetime: Date | string): DateTimeObject { return hison.utils.getDatetimeObject(datetime) },
+            addDate(datetime: DateTimeObject | DateObject | string, addValue?: string | number, addType?: string, format?: string): DateTimeObject | string { return hison.utils.addDate(datetime, addValue, addType, format) },
+            getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType?: string): number { return hison.utils.getDateDiff(datetime1, datetime2, diffType) },
+            getMonthName(month: number | string, isFullName?: boolean): string { return hison.utils.getMonthName(month, isFullName) },
+            getDateWithFormat(datetime: DateTimeObject | DateObject | string, format?: string): string { return hison.utils.getDateWithFormat(datetime, format) },
+            getDayOfWeek(date: DateObject | string, dayType?: string): string { return hison.utils.getDayOfWeek(date, dayType) },
+            getLastDay(date: DateObject | string): number { return hison.utils.getLastDay(date) },
+            getSysYear(format?: string): string { return hison.utils.getSysYear(format) },
+            getSysMonth(format?: string): string { return hison.utils.getSysMonth(format) },
+            getSysYearMonth(format?: string): string { return hison.utils.getSysYearMonth(format) },
+            getSysDay(format?: string): string { return hison.utils.getSysDay(format) },
+            getSysDayOfWeek(format?: string): string { return hison.utils.getSysDayOfWeek(format) },
+            getSysHour(format?: string): string { return hison.utils.getSysHour(format) },
+            getSysHourMinute(format?: string): string { return hison.utils.getSysHourMinute(format) },
+            getSysMinute(format?: string): string { return hison.utils.getSysMinute(format) },
+            getSysSecond(format?: string): string { return hison.utils.getSysSecond(format) },
+            getSysTime(format?: string): string { return hison.utils.getSysTime(format) },
+            getSysDate(format?: string): string { return hison.utils.getSysDate(format) },
+            getCeil(num: number, precision?: number): number { return hison.utils.getCeil(num, precision) },
+            getFloor(num: number, precision?: number): number { return hison.utils.getFloor(num, precision) },
+            getRound(num: number, precision?: number): number { return hison.utils.getRound(num, precision) },
+            getTrunc(num: number, precision?: number): number { return hison.utils.getTrunc(num, precision) },
+            getByteLength(str: string): number { return hison.utils.getByteLength(str) },
+            getCutByteLength(str: string, cutByte: number): string { return hison.utils.getCutByteLength(str, cutByte) },
+            getStringLenForm(str: string, length: number): string { return hison.utils.getStringLenForm(str, length) },
+            getLpad(str: string, padStr: string, length: number): string { return hison.utils.getLpad(str, padStr, length) },
+            getRpad(str: string, padStr: string, length: number): string { return hison.utils.getRpad(str, padStr, length) },
+            getTrim(str: string): string { return hison.utils.getTrim(str, ) },
+            getReplaceAll(str: string, targetStr: string, replaceStr?: string): string { return hison.utils.getReplaceAll(str, targetStr, replaceStr) },
+            getNumberFormat(value: number, format?: string): string { return hison.utils.getNumberFormat(value, format) },
+            getRemoveExceptNumbers(str: string): string { return hison.utils.getRemoveExceptNumbers(str) },
+            getRemoveNumbers(str: string): string { return hison.utils.getRemoveNumbers(str) },
+            getReverse(str: string): string { return hison.utils.getReverse(str) },
+            getToBoolean(value: any): boolean { return hison.utils.getToBoolean(value) },
+            getToNumber(value: any, impossibleValue?: number): number { return hison.utils.getToNumber(value, impossibleValue) },
+            getToFloat(value: any, impossibleValue?: number): number { return hison.utils.getToFloat(value, impossibleValue) },
+            getToInteger(value: any, impossibleValue?: number): number { return hison.utils.getToInteger(value, impossibleValue) },
+            getToString(str: any, impossibleValue?: string): string { return hison.utils.getToString(str, impossibleValue) },
+            nvl(val: any, defaultValue: any): any { return hison.utils.nvl(val, defaultValue) },
+            getFileExtension(str: string): string { return hison.utils.getFileExtension(str) },
+            getFileName(str: string): string { return hison.utils.getFileName(str) },
+            getDecodeBase64(str: string): string { return hison.utils.getDecodeBase64(str) },
+            getEncodeBase64(str: string): string { return hison.utils.getEncodeBase64(str) },
+            deepCopyObject(object: any, visited?: { source: any, copy: any }[]): any { return hison.utils.deepCopyObject(object, visited) },
         },
 
         shield : {
-            excute: hison.shield.excute,
+            excute(hison: Hison) { hison.shield.excute(hison) },
         },
         
         data: hison.data,
