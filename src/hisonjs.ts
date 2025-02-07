@@ -6325,7 +6325,7 @@ interface InterfaceApiGet {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the specified resource path.**
      *
@@ -6572,7 +6572,7 @@ interface InterfaceApiPost {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -6823,7 +6823,7 @@ interface InterfaceApiPut {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7074,7 +7074,7 @@ interface InterfaceApiPatch {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7325,7 +7325,7 @@ interface InterfaceApiDelete {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the API controller path.**
     *
@@ -7556,7 +7556,7 @@ interface InterfaceApiGetUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -7807,7 +7807,7 @@ interface InterfaceApiPostUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8058,7 +8058,7 @@ interface InterfaceApiPutUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8309,7 +8309,7 @@ interface InterfaceApiPatchUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8560,7 +8560,7 @@ interface InterfaceApiDeleteUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: InterfaceDataWrapper; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -9436,7 +9436,8 @@ function createHison(): Hison {
         private _cachingModule: InterfaceCachingModule | null = null;
         private _getRsultDataWrapper = (resultData: any): any => {
             let data = null;
-            if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'true') {
+            if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'true'
+            ) {
                 data = new hison.data.DataWrapper();
                 for(const key of Object.keys(resultData)) {
                     if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
@@ -15878,7 +15879,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+                call = (options: Record<string, any> = {}): Promise<{ data: InterfaceDataWrapper; response: Response; } | null> => {
                     return this._apiLink.get(this._resourcePath, options);
                 };
                 /**
@@ -16189,7 +16190,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: InterfaceDataWrapper; response: Response; } | null> => {
                     return this._apiLink.post(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -16504,7 +16505,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: InterfaceDataWrapper; response: Response; } | null> => {
                     return this._apiLink.put(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -16819,7 +16820,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: InterfaceDataWrapper; response: Response; } | null> => {
                     return this._apiLink.patch(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -17134,7 +17135,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: InterfaceDataWrapper; response: Response; } | null> => {
                     return this._apiLink.delete(requestData, this._serviceCmd, options);
                 };
                 /**
