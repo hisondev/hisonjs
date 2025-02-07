@@ -1602,7 +1602,7 @@ interface Hison {
          * getDatetimeObject(new Date(2024, 1, 5, 14, 30, 45)); // { y: 2024, M: 2, d: 5, h: 14, m: 30, s: 45 }
          * getDatetimeObject("invalid"); // null
          */
-        getDatetimeObject(datetime: Date | string): DateTimeObject;
+        getDatetimeObject(datetime: Date | string): DateTimeObject | null;
         /**
          * Adds a specified amount of time to a given date or datetime.
          *
@@ -2635,7 +2635,7 @@ interface Hison {
          * console.log(dataWrapper.getSerialized());
          * ```
          */
-        DataWrapper: new (keyOrObject?: Record<string, any> | string, value?: any) => DataWrapper;
+        DataWrapper: new (keyOrObject?: Record<string, any> | string, value?: any) => InterfaceDataWrapper;
         /**
          * The `DataModel` class provides a structured way to manage tabular data within the `hisondev` solution.
          * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency
@@ -2689,7 +2689,7 @@ interface Hison {
          * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
          *
          */
-        DataModel: new (data?: Record<string, any>[] | Record<string, any>) => DataModel;
+        DataModel: new (data?: Record<string, any>[] | Record<string, any>) => InterfaceDataModel;
     };
 
     //====================================================================================
@@ -2801,7 +2801,7 @@ interface Hison {
          * - **Efficiently managing API response data** in web applications.
          * - **Supporting offline or low-latency scenarios** by using cached responses.
          */
-        CachingModule: new (cachingLimit?: number) => CachingModule;
+        CachingModule: new (cachingLimit?: number) => InterfaceCachingModule;
         /**
          * **`ApiGet` - A class for handling HTTP GET requests within the `hison.link` module.**
          *
@@ -2853,7 +2853,7 @@ interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiGet: new (resourcePath?: string, cachingModule?: CachingModule) => ApiGet;
+        ApiGet: new (resourcePath?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGet;
         /**
          * **`ApiPost` - A class for handling HTTP POST requests within the `hison.link` module.**
          *
@@ -2910,7 +2910,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPost: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPost;
+        ApiPost: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
         /**
          * **`ApiPut` - A class for handling HTTP PUT requests within the `hison.link` module.**
          *
@@ -2967,7 +2967,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPut: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPut;
+        ApiPut: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
         /**
          * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
          *
@@ -3024,7 +3024,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPatch: new (serviceCmd: string, cachingModule?: CachingModule) => ApiPatch;
+        ApiPatch: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
         /**
          * **`ApiDelete` - A class for handling HTTP DELETE requests within the `hison.link` module.**
          *
@@ -3081,7 +3081,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiDelete: new (serviceCmd: string, cachingModule?: CachingModule) => ApiDelete;
+        ApiDelete: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
         /**
          * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
          *
@@ -3134,7 +3134,7 @@ interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiGetUrl: new (url: string, cachingModule?: CachingModule) => ApiGetUrl;
+        ApiGetUrl: new (url: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGetUrl;
         /**
          * **`ApiPostUrl` - A class for handling HTTP POST requests to a specified URL.**
          *
@@ -3193,7 +3193,7 @@ interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPostUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPostUrl;
+        ApiPostUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPostUrl;
         /**
          * **`ApiPutUrl` - A class for handling HTTP PUT requests to a specified URL.**
          *
@@ -3252,7 +3252,7 @@ interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPutUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPutUrl;
+        ApiPutUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPutUrl;
         /**
          * **`ApiPatchUrl` - A class for handling HTTP PATCH requests to a specified URL.**
          *
@@ -3311,7 +3311,7 @@ interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPatchUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiPatchUrl;
+        ApiPatchUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatchUrl;
         /**
          * **`ApiDeleteUrl` - A class for handling HTTP DELETE requests to a specified URL.**
          *
@@ -3370,7 +3370,7 @@ interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiDeleteUrl: new (url: string, serviceCmd?: string, cachingModule?: CachingModule) => ApiDeleteUrl;
+        ApiDeleteUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDeleteUrl;
     }
 }
 //====================================================================================
@@ -3544,7 +3544,7 @@ interface ConvertValue {
  * console.log(dataWrapper.getSerialized());
  * ```
  */
-interface DataWrapper {
+interface InterfaceDataWrapper {
     /**
      * Checks whether the current instance is a `DataWrapper`.
      * This method is primarily used for type verification.
@@ -3591,9 +3591,9 @@ interface DataWrapper {
      * console.log(clonedWrapperWithModel.getDataModel("nested") !== originalNested); // Output: true
      * ```
      *
-     * @returns {DataWrapper} A new `DataWrapper` instance with a deep copy of the stored data.
+     * @returns {InterfaceDataWrapper} A new `DataWrapper` instance with a deep copy of the stored data.
      */
-    clone(): DataWrapper;
+    clone(): InterfaceDataWrapper | null;
     /**
      * Removes all stored key-value pairs in the `DataWrapper`, resetting it to an empty state.
      * 
@@ -3613,9 +3613,9 @@ interface DataWrapper {
      * console.log(dataWrapper.size()); // Output: 0
      * ```
      *
-     * @returns {DataWrapper} The current `DataWrapper` instance after clearing all data.
+     * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after clearing all data.
      */
-    clear(): DataWrapper;
+    clear(): InterfaceDataWrapper;
     /**
      * Serializes the `DataWrapper` into a JSON string representation.
      * Converts stored `DataModel` instances into their row data format for proper serialization.
@@ -3666,9 +3666,9 @@ interface DataWrapper {
      * ```
      *
      * @param {string} key The key to retrieve the associated value.
-     * @returns {DataModel | string | null} A deep copy of the stored value, or `null` if the key is not found.
+     * @returns {InterfaceDataModel | string | null} A deep copy of the stored value, or `null` if the key is not found.
      */
-    get(key: string): DataModel | string | null;
+    get(key: string): InterfaceDataModel | string | null;
     /**
      * Retrieves the string value associated with the specified key from the `DataWrapper`.
      * Ensures that the retrieved value is explicitly a string before returning it.
@@ -3699,7 +3699,7 @@ interface DataWrapper {
      * @returns {string | null} The associated string value, or `null` if not found.
      * @throws {Error} If the key is not a string or if the stored value is not a string.
      */
-    getString(key: string): string;
+    getString(key: string): string | null;
     /**
      * Retrieves the `DataModel` instance associated with the specified key from the `DataWrapper`.
      * Ensures that the retrieved value is a valid `DataModel` before returning a cloned copy.
@@ -3728,10 +3728,10 @@ interface DataWrapper {
      * ```
      *
      * @param {string} key The key associated with the `DataModel` instance.
-     * @returns {DataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
+     * @returns {InterfaceDataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
      * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel`.
      */
-    getDataModel(key: string): DataModel;
+    getDataModel(key: string): InterfaceDataModel;
     /**
      * Inserts or updates a key-value pair in the `DataWrapper`.
      * Allows storing primitive values, strings, and `DataModel` instances.
@@ -3764,9 +3764,9 @@ interface DataWrapper {
      *
      * @param {string} key The key under which the value is stored.
      * @param {any} value The value to store.
-     * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+     * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
      */
-    put(key: string, value: any): DataWrapper;
+    put(key: string, value: any): InterfaceDataWrapper;
     /**
      * Inserts or updates a key-value pair in the `DataWrapper`, ensuring that the value is a string-convertible type.
      * Only accepts primitive types (`string`, `number`, `boolean`, `bigint`, `symbol`) or `null`.
@@ -3803,10 +3803,10 @@ interface DataWrapper {
      *
      * @param {string} key The key under which the value is stored.
      * @param {string | number | boolean | bigint | symbol | null} value The value to store.
-     * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+     * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
      * @throws {Error} If `key` is not a string or `value` is not a valid type.
      */
-    putString(key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper;
+    putString(key: string, value: string | number | boolean | bigint | symbol | null): InterfaceDataWrapper;
     /**
      * Inserts or updates a `DataModel` instance in the `DataWrapper`.
      * Ensures that the stored value is a valid `DataModel`.
@@ -3839,11 +3839,11 @@ interface DataWrapper {
      * ```
      *
      * @param {string} key The key under which the `DataModel` is stored.
-     * @param {DataModel} value The `DataModel` instance to store.
-     * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+     * @param {InterfaceDataModel} value The `DataModel` instance to store.
+     * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
      * @throws {Error} If `key` is not a string or `value` is not a valid `DataModel`.
      */
-    putDataModel(key: string, value: DataModel): DataWrapper;
+    putDataModel(key: string, value: InterfaceDataModel): InterfaceDataWrapper;
     /**
      * Converts the `DataWrapper` instance into a standard JavaScript object.
      * If the stored values include `DataModel` instances, they are converted into object representations.
@@ -3948,10 +3948,10 @@ interface DataWrapper {
      * ```
      *
      * @param {string} key The key to remove from the `DataWrapper`.
-     * @returns {{ data: DataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
+     * @returns {{ data: InterfaceDataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
      * @throws {Error} If `key` is not a string.
      */
-    remove(key: string): { data: DataWrapper, result: boolean };
+    remove(key: string): { data: InterfaceDataWrapper, result: boolean };
     /**
      * Returns the number of key-value pairs stored in the `DataWrapper`.
      *
@@ -4075,7 +4075,7 @@ interface DataWrapper {
  * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
  *
  */
-interface DataModel {
+interface InterfaceDataModel {
     /**
      * Checks whether the current instance is a `DataModel`.
      * This method is primarily used for type verification.
@@ -4113,9 +4113,9 @@ interface DataModel {
      * console.log(clonedModel !== dataModel); // Output: true (Cloned instance is independent)
      * ```
      *
-     * @returns {DataModel} A new `DataModel` instance with a copy of the stored rows.
+     * @returns {InterfaceDataModel} A new `DataModel` instance with a copy of the stored rows.
      */
-    clone(): DataModel;
+    clone(): InterfaceDataModel;
     /**
      * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
      * 
@@ -4137,9 +4137,9 @@ interface DataModel {
      * console.log(dataModel.getColumns());  // Output: []
      * ```
      *
-     * @returns {DataModel} The current `DataModel` instance after clearing all data.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after clearing all data.
      */
-    clear(): DataModel;
+    clear(): InterfaceDataModel;
     /**
      * Serializes the `DataModel` instance into a JSON string representation.
      * Converts the stored row data into a JSON format for easy storage or transmission.
@@ -4272,10 +4272,10 @@ interface DataModel {
      * ```
      *
      * @param {string} column The name of the column to add.
-     * @returns {DataModel} The current `DataModel` instance after adding the column.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the column.
      * @throws {Error} If the column is invalid or already exists.
      */
-    addColumn(column: string): DataModel;
+    addColumn(column: string): InterfaceDataModel;
     /**
      * Adds multiple new columns to the `DataModel`.
      * Ensures that all existing rows include the newly added columns with a default value of `null`.
@@ -4303,10 +4303,10 @@ interface DataModel {
      * ```
      *
      * @param {string[]} columns An array of column names to add.
-     * @returns {DataModel} The current `DataModel` instance after adding the columns.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the columns.
      * @throws {Error} If `columns` is not an array or contains invalid column names.
      */
-    addColumns(columns: string[]): DataModel;
+    addColumns(columns: string[]): InterfaceDataModel;
     /**
      * Sets the same value for all rows in the specified column.
      * If the column does not exist, it is created before assigning values.
@@ -4339,10 +4339,10 @@ interface DataModel {
      *
      * @param {string} column The name of the column to set the value for.
      * @param {any} value The value to assign to all rows in the column.
-     * @returns {DataModel} The current `DataModel` instance after updating the column.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after updating the column.
      * @throws {Error} If `value` is `undefined` or if the column name is invalid.
      */
-    setColumnSameValue(column: string, value: any): DataModel;
+    setColumnSameValue(column: string, value: any): InterfaceDataModel;
     /**
      * Applies a formatting function to all values in the specified column.
      * The formatter function transforms each row's value in the column.
@@ -4379,10 +4379,10 @@ interface DataModel {
      *
      * @param {string} column The name of the column to format.
      * @param {DataModelFormatter} formatter A function that transforms each value in the column.
-     * @returns {DataModel} The current `DataModel` instance after formatting the column.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after formatting the column.
      * @throws {Error} If `formatter` is not a function or if the column does not exist.
      */
-    setColumnSameFormat(column: string, formatter: DataModelFormatter): DataModel;
+    setColumnSameFormat(column: string, formatter: DataModelFormatter): InterfaceDataModel;
     /**
      * Retrieves a deep copy of the row at the specified index.
      * Ensures that modifications to the returned row do not affect the original data.
@@ -4445,10 +4445,10 @@ interface DataModel {
      * ```
      *
      * @param {number} rowIndex The index of the row to retrieve.
-     * @returns {DataModel} A new `DataModel` instance containing the row data.
+     * @returns {InterfaceDataModel} A new `DataModel` instance containing the row data.
      * @throws {Error} If `rowIndex` is out of bounds.
      */
-    getRowAsDataModel(rowIndex: number): DataModel;
+    getRowAsDataModel(rowIndex: number): InterfaceDataModel;
     /**
      * Adds a new row to the `DataModel` at the specified index or appends it to the end.
      * If no parameters are provided, an empty row is added.
@@ -4490,10 +4490,10 @@ interface DataModel {
      *
      * @param {number | Object} [rowIndexOrRow] The index at which to insert the row, or the row data.
      * @param {Object} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
-     * @returns {DataModel} The current `DataModel` instance after adding the row.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the row.
      * @throws {Error} If columns are not defined or parameters are invalid.
      */
-    addRow(rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel;
+    addRow(rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): InterfaceDataModel;
     /**
      * Retrieves a deep copy of a range of rows from the `DataModel`.
      * Ensures that modifications to the returned rows do not affect the original data.
@@ -4570,10 +4570,10 @@ interface DataModel {
      *
      * @param {number} [startRow=0] The starting index of the row range.
      * @param {number} [endRow=null] The ending index of the row range (inclusive).
-     * @returns {DataModel} A new `DataModel` instance containing the selected rows.
+     * @returns {InterfaceDataModel} A new `DataModel` instance containing the selected rows.
      * @throws {Error} If `startRow` or `endRow` is out of bounds.
      */
-    getRowsAsDataModel(startRow?: number, endRow?: number): DataModel;
+    getRowsAsDataModel(startRow?: number, endRow?: number): InterfaceDataModel;
     /**
      * Adds multiple rows to the `DataModel`.
      * Each row is validated and inserted into the existing dataset.
@@ -4604,10 +4604,10 @@ interface DataModel {
      * ```
      *
      * @param {Record<string, any>[]} rows An array of row objects to add.
-     * @returns {DataModel} The current `DataModel` instance after adding the rows.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the rows.
      * @throws {Error} If `rows` contain invalid data.
      */
-    addRows(rows: Record<string, any>[]): DataModel;
+    addRows(rows: Record<string, any>[]): InterfaceDataModel;
     /**
      * Converts the `DataModel` instance into a standard JavaScript object.
      * The returned object includes column definitions, row data, and metadata.
@@ -4722,10 +4722,10 @@ interface DataModel {
      * @param {number} rowIndex The index of the row where the value should be set.
      * @param {string} column The column name where the value should be stored.
      * @param {any} value The value to assign.
-     * @returns {DataModel} The current `DataModel` instance after updating the value.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after updating the value.
      * @throws {Error} If `value` is `undefined` or if `rowIndex` or `column` is invalid.
      */
-    setValue(rowIndex: number, column: string, value: any): DataModel;
+    setValue(rowIndex: number, column: string, value: any): InterfaceDataModel;
     /**
      * Removes a column from the `DataModel`, deleting its values from all rows.
      * Ensures that the column exists before attempting removal.
@@ -4760,10 +4760,10 @@ interface DataModel {
      * ```
      *
      * @param {string} column The name of the column to remove.
-     * @returns {DataModel} The current `DataModel` instance after removing the column.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after removing the column.
      * @throws {Error} If `column` is invalid or does not exist.
      */
-    removeColumn(column: string): DataModel;
+    removeColumn(column: string): InterfaceDataModel;
     /**
      * Removes multiple columns from the `DataModel`, deleting their values from all rows.
      * Ensures that each specified column exists before attempting removal.
@@ -4796,10 +4796,10 @@ interface DataModel {
      * ```
      *
      * @param {string[]} columns An array of column names to remove.
-     * @returns {DataModel} The current `DataModel` instance after removing the columns.
+     * @returns {InterfaceDataModel} The current `DataModel` instance after removing the columns.
      * @throws {Error} If any column does not exist.
      */
-    removeColumns(columns: string[]): DataModel;
+    removeColumns(columns: string[]): InterfaceDataModel;
     /**
      * Removes a row from the `DataModel` at the specified index and returns the removed row.
      * Ensures that the row index is valid before removal.
@@ -4938,9 +4938,9 @@ interface DataModel {
      * ```
      *
      * @param {string[]} columns An array of column names to retain.
-     * @returns {DataModel} The modified `DataModel` instance with only the specified columns retained.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with only the specified columns retained.
      */
-    setValidColumns(columns: string[]): DataModel;
+    setValidColumns(columns: string[]): InterfaceDataModel;
     /**
      * Checks whether a specified column contains only non-null values.
      *
@@ -5004,7 +5004,7 @@ interface DataModel {
      * @returns {Record<string, any> | null} The first row where the column has a `null` value, or `null` if none exist.
      * @throws {Error} If `column` does not exist.
      */
-    findFirstRowNullColumn(column: string): Record<string, any>;
+    findFirstRowNullColumn(column: string): Record<string, any> | null;
     /**
      * Checks whether a specified column contains only unique values (i.e., no duplicate values).
      *
@@ -5068,7 +5068,7 @@ interface DataModel {
      * @returns {Record<string, any> | null} The first row where the column has a duplicate value, or `null` if none exist.
      * @throws {Error} If `column` does not exist.
      */
-    findFirstRowDuplColumn(column: string): Record<string, any>;
+    findFirstRowDuplColumn(column: string): Record<string, any> | null;
     /**
      * Checks whether all values in the specified column satisfy a given validation function.
      *
@@ -5141,7 +5141,7 @@ interface DataModel {
      * @returns {Record<string, any> | null} The first row with an invalid value, or `null` if all values are valid.
      * @throws {Error} If `column` does not exist or `validator` is not a function.
      */
-    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): Record<string, any>;
+    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): Record<string, any> | null;
     /**
      * Searches for rows that match a given condition and returns their indexes.
      * Allows for both positive and negative filtering based on the `isNegative` flag.
@@ -5269,10 +5269,10 @@ interface DataModel {
      *
      * @param {Record<string, any>} condition The key-value condition to match.
      * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
-     * @returns {DataModel} A new `DataModel` instance containing the matched rows.
+     * @returns {InterfaceDataModel} A new `DataModel` instance containing the matched rows.
      * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
      */
-    searchRowsAsDataModel(condition: Record<string, any>, isNegative?: boolean): DataModel;
+    searchRowsAsDataModel(condition: Record<string, any>, isNegative?: boolean): InterfaceDataModel;
     /**
      * Searches for rows that match a given condition and **modifies** the original `DataModel` by removing matched or unmatched rows.
      * This method directly updates the existing dataset instead of returning a new instance.
@@ -5314,10 +5314,10 @@ interface DataModel {
      *
      * @param {Record<string, any>} condition The key-value condition to match.
      * @param {boolean} [isNegative=false] If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
-     * @returns {DataModel} The modified `DataModel` instance after removing specified rows.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance after removing specified rows.
      * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
      */
-    searchAndModify(condition: Record<string, any>, isNegative?: boolean): DataModel;
+    searchAndModify(condition: Record<string, any>, isNegative?: boolean): InterfaceDataModel;
     /**
      * Filters rows in the `DataModel` based on a custom filtering function and returns their indexes.
      * Allows for efficiently identifying row positions that match a given condition.
@@ -5417,10 +5417,10 @@ interface DataModel {
      * ```
      *
      * @param {DataModelFillter} filter A function that determines whether a row should be included.
-     * @returns {DataModel} A new `DataModel` instance containing the filtered rows.
+     * @returns {InterfaceDataModel} A new `DataModel` instance containing the filtered rows.
      * @throws {Error} If `filter` is not a valid function.
      */
-    filterRowsAsDataModel(filter: DataModelFillter): DataModel;
+    filterRowsAsDataModel(filter: DataModelFillter): InterfaceDataModel;
     /**
      * Filters rows in the `DataModel` based on a custom filtering function and **modifies** the original `DataModel` by removing unmatched rows.
      * This method directly updates the existing dataset instead of returning a new instance.
@@ -5453,10 +5453,10 @@ interface DataModel {
      * ```
      *
      * @param {DataModelFillter} filter A function that determines whether a row should be retained.
-     * @returns {DataModel} The modified `DataModel` instance after removing unmatched rows.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance after removing unmatched rows.
      * @throws {Error} If `filter` is not a valid function.
      */
-    filterAndModify(filter: DataModelFillter): DataModel;
+    filterAndModify(filter: DataModelFillter): InterfaceDataModel;
     /**
      * Reorders the columns in the `DataModel` based on the specified order.
      * Ensures that all existing columns are included, maintaining the defined structure.
@@ -5486,10 +5486,10 @@ interface DataModel {
      * ```
      *
      * @param {string[]} columns An array of column names in the desired order.
-     * @returns {DataModel} The modified `DataModel` instance with reordered columns.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with reordered columns.
      * @throws {Error} If `columns` is not an array or contains invalid column names.
      */
-    setColumnSorting(columns: string[]): DataModel;
+    setColumnSorting(columns: string[]): InterfaceDataModel;
     /**
      * Sorts the columns of the `DataModel` in ascending (A-Z) order.
      * The sorting is applied alphabetically based on column names.
@@ -5511,9 +5511,9 @@ interface DataModel {
      * console.log(dataModel.getColumns()); // Output: ["age", "id", "name"]
      * ```
      *
-     * @returns {DataModel} The modified `DataModel` instance with columns sorted in ascending order.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in ascending order.
      */
-    sortColumnAscending(): DataModel;
+    sortColumnAscending(): InterfaceDataModel;
     /**
      * Sorts the columns of the `DataModel` in descending (Z-A) order.
      * The sorting is applied alphabetically based on column names.
@@ -5535,9 +5535,9 @@ interface DataModel {
      * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
      * ```
      *
-     * @returns {DataModel} The modified `DataModel` instance with columns sorted in descending order.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in descending order.
      */
-    sortColumnDescending(): DataModel;
+    sortColumnDescending(): InterfaceDataModel;
     /**
      * Reverses the order of columns in the `DataModel`.
      * The column order is flipped without sorting alphabetically.
@@ -5559,9 +5559,9 @@ interface DataModel {
      * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
      * ```
      *
-     * @returns {DataModel} The modified `DataModel` instance with reversed column order.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed column order.
      */
-    sortColumnReverse(): DataModel;
+    sortColumnReverse(): InterfaceDataModel;
     /**
      * Sorts the rows of the `DataModel` in ascending order based on the specified column.
      * Optionally supports integer-based sorting for numerical values.
@@ -5602,10 +5602,10 @@ interface DataModel {
      *
      * @param {string} column The column name to sort by.
      * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-     * @returns {DataModel} The modified `DataModel` instance with rows sorted in ascending order.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in ascending order.
      * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
      */
-    sortRowAscending(column: string, isIntegerOrder?: boolean): DataModel;
+    sortRowAscending(column: string, isIntegerOrder?: boolean): InterfaceDataModel;
     /**
      * Sorts the rows of the `DataModel` in descending order based on the specified column.
      * Optionally supports integer-based sorting for numerical values.
@@ -5646,10 +5646,10 @@ interface DataModel {
      *
      * @param {string} column The column name to sort by.
      * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-     * @returns {DataModel} The modified `DataModel` instance with rows sorted in descending order.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in descending order.
      * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
      */
-    sortRowDescending(column: string, isIntegerOrder?: boolean): DataModel;
+    sortRowDescending(column: string, isIntegerOrder?: boolean): InterfaceDataModel;
     /**
      * Reverses the order of rows in the `DataModel`.
      * This method flips the row order without sorting by a specific column.
@@ -5677,9 +5677,9 @@ interface DataModel {
      * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
      * ```
      *
-     * @returns {DataModel} The modified `DataModel` instance with reversed row order.
+     * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed row order.
      */
-    sortRowReverse(): DataModel;
+    sortRowReverse(): InterfaceDataModel;
 };
 /**
  * Defines a function signature for formatting values in a `DataModel` column.
@@ -5794,7 +5794,7 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
  * - **Efficiently managing API response data** in web applications.
  * - **Supporting offline or low-latency scenarios** by using cached responses.
  */
-interface CachingModule {
+interface InterfaceCachingModule {
     /**
      * **Checks whether this instance is a valid caching module.**
      *
@@ -5882,7 +5882,7 @@ interface CachingModule {
      * @param {string} key - The key to retrieve from the cache.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the cached response data.
      */
-    get(key: string): Promise<{ data: any; response: Response; }>;
+    get(key: string): Promise<{ data: any; response: Response; }> | null;
     /**
      * **Stores API response data in the cache.**
      *
@@ -6258,7 +6258,7 @@ interface CachingModule {
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiGet {
+interface InterfaceApiGet {
     /**
      * **Executes an HTTP GET request to the specified resource path.**
      *
@@ -6325,7 +6325,7 @@ interface ApiGet {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the specified resource path.**
      *
@@ -6501,7 +6501,7 @@ interface ApiGet {
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiPost {
+interface InterfaceApiPost {
     /**
      * **Executes an HTTP POST request to the specified service command.**
      *
@@ -6572,7 +6572,7 @@ interface ApiPost {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -6752,7 +6752,7 @@ interface ApiPost {
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiPut {
+interface InterfaceApiPut {
     /**
      * **Executes an HTTP PUT request to the specified service command.**
      *
@@ -6823,7 +6823,7 @@ interface ApiPut {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7003,7 +7003,7 @@ interface ApiPut {
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiPatch {
+interface InterfaceApiPatch {
     /**
      * **Executes an HTTP PATCH request to the specified service command.**
      *
@@ -7074,7 +7074,7 @@ interface ApiPatch {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7254,7 +7254,7 @@ interface ApiPatch {
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiDelete {
+interface InterfaceApiDelete {
     /**
     * **Executes an HTTP DELETE request to the specified service command.**
     *
@@ -7325,7 +7325,7 @@ interface ApiDelete {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the API controller path.**
     *
@@ -7501,7 +7501,7 @@ interface ApiDelete {
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiGetUrl {
+interface InterfaceApiGetUrl {
     /**
     * **Executes an HTTP GET request to the specified URL.**
     *
@@ -7556,7 +7556,7 @@ interface ApiGetUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -7743,7 +7743,7 @@ interface ApiGetUrl {
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiPostUrl {
+interface InterfaceApiPostUrl {
     /**
     * **Executes an HTTP POST request to the specified URL with an optional service command.**
     *
@@ -7807,7 +7807,7 @@ interface ApiPostUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -7994,7 +7994,7 @@ interface ApiPostUrl {
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiPutUrl {
+interface InterfaceApiPutUrl {
     /**
     * **Executes an HTTP PUT request to the specified URL with an optional service command.**
     *
@@ -8058,7 +8058,7 @@ interface ApiPutUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8245,7 +8245,7 @@ interface ApiPutUrl {
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiPatchUrl {
+interface InterfaceApiPatchUrl {
     /**
     * **Executes an HTTP PATCH request to the specified URL with an optional service command.**
     *
@@ -8309,7 +8309,7 @@ interface ApiPatchUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8496,7 +8496,7 @@ interface ApiPatchUrl {
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
  */
-interface ApiDeleteUrl {
+interface InterfaceApiDeleteUrl {
     /**
     * **Executes an HTTP DELETE request to the specified URL with an optional service command.**
     *
@@ -8560,7 +8560,7 @@ interface ApiDeleteUrl {
     * @param {Record<string, any>} [options={}] - Additional request options.
     * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
     */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; }>;
+    call(requestData: any, options?: Record<string, any>): Promise<{ data: any; response: Response; } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8731,7 +8731,7 @@ interface BeforeGetRequst {(resourcePath?: string, options?: Record<string, any>
  * });
  * ```
  */
-interface BeforePostRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforePostRequst {(requestDw?: InterfaceDataWrapper, options?: Record<string, any>): boolean | void;};
 /**
  * Defines a function type for handling API PUT requests before they are sent.
  * Similar to `BeforePostRequst`, this allows modifying request payload or settings.
@@ -8751,7 +8751,7 @@ interface BeforePostRequst {(requestDw?: DataWrapper, options?: Record<string, a
  * });
  * ```
  */
-interface BeforePutRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforePutRequst {(requestDw?: InterfaceDataWrapper, options?: Record<string, any>): boolean | void;};
 /**
  * Defines a function type for handling API PATCH requests before they are sent.
  * This allows modifying partial update data before execution.
@@ -8771,7 +8771,7 @@ interface BeforePutRequst {(requestDw?: DataWrapper, options?: Record<string, an
  * });
  * ```
  */
-interface BeforePatchRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforePatchRequst {(requestDw?: InterfaceDataWrapper, options?: Record<string, any>): boolean | void;};
 /**
  * Defines a function type for handling API DELETE requests before they are sent.
  * This allows validating or modifying delete operations before execution.
@@ -8791,7 +8791,7 @@ interface BeforePatchRequst {(requestDw?: DataWrapper, options?: Record<string, 
  * });
  * ```
  */
-interface BeforeDeleteRequst {(requestDw?: DataWrapper, options?: Record<string, any>): boolean | void;};
+interface BeforeDeleteRequst {(requestDw?: InterfaceDataWrapper, options?: Record<string, any>): boolean | void;};
 /**
  * Defines a function type for intercepting API response results.
  * This allows modifying API responses before they are returned to the caller.
@@ -8812,7 +8812,7 @@ interface BeforeDeleteRequst {(requestDw?: DataWrapper, options?: Record<string,
  * });
  * ```
  */
-interface InterceptApiResult {(result: DataWrapper | undefined, response: Response): boolean | void;};
+interface InterceptApiResult {(result: InterfaceDataWrapper | undefined, response: Response): boolean | void;};
 /**
  * Defines a function type for handling API errors before they are propagated.
  * This allows logging or modifying error responses before they are thrown.
@@ -9291,7 +9291,7 @@ function createHison(): Hison {
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforePostRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePostRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `PUT` request.
              *
@@ -9302,7 +9302,7 @@ function createHison(): Hison {
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforePutRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePutRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `PATCH` request.
              *
@@ -9313,7 +9313,7 @@ function createHison(): Hison {
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforePatchRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePatchRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `DELETE` request.
              *
@@ -9324,7 +9324,7 @@ function createHison(): Hison {
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforeDeleteRequst(requestDw: DataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforeDeleteRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Intercepts and processes API responses before returning them to the caller.
              *
@@ -9335,7 +9335,7 @@ function createHison(): Hison {
              * @param response The raw `Response` object from the fetch request.
              * @returns `boolean | void` (Returning `false` cancels further processing)
              */
-            interceptApiResult(result: DataWrapper | undefined, response: Response): boolean | void {return true;},
+            interceptApiResult(result: InterfaceDataWrapper | undefined, response: Response): boolean | void {return true;},
             /**
              * Intercepts and processes API errors before returning them to the caller.
              *
@@ -9366,7 +9366,7 @@ function createHison(): Hison {
         hasKey = (key: string): boolean => {
             return this._cache.hasOwnProperty(key);
         }
-        get = (key: string): Promise<{ data: any; response: Response; }> => {
+        get = (key: string): Promise<{ data: any; response: Response; }> | null => {
             if(!this.hasKey(key)) return null;
             const value = hison.utils.deepCopyObject(this._cache[key]);
             this._removeKey(key);
@@ -9378,12 +9378,12 @@ function createHison(): Hison {
                 this.remove(key);
             } else if (this._keys.length == this._limit) {
                 const oldestKey = this._keys.shift();
-                delete this._cache[oldestKey];
+                if(oldestKey !== undefined) delete this._cache[oldestKey];
             }
             this._cache[key] = hison.utils.deepCopyObject(value);
             this._keys.push(key);
         };
-        remove = (key: string): Promise<{ data: any; response: Response; }> => {
+        remove = (key: string): Promise<{ data: any; response: Response; }> | null => {
             if(!this.hasKey(key)) return null;
             this._removeKey(key);
             const result = hison.utils.deepCopyObject(this._cache[key])
@@ -9391,14 +9391,14 @@ function createHison(): Hison {
             return result;
         };
         getAll = (): Record<string, Promise<{ data: any; response: Response; }>> => {
-            const result = {}
+            const result: Record<string, Promise<{ data: any; response: Response; }>> = {}
             Object.keys(this._cache).forEach((key) => {
                 result[key] = hison.utils.deepCopyObject(this._cache[key]);
             });
             return result;
         };
         getKeys = (): string[] => {
-            const result =[];
+            const result: string[] = [];
             this._keys.forEach((key) => {
                 result.push(key);
             })
@@ -9426,14 +9426,14 @@ function createHison(): Hison {
         };
     };
     class ApiLink {
-        constructor(eventEmitter: EventEmitter, cachingModule?: CachingModule) {
+        constructor(eventEmitter: EventEmitter, cachingModule?: InterfaceCachingModule | null) {
             this._eventEmitter = eventEmitter;
             if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) {
                 this._cachingModule = cachingModule;
             }
         };
         private _eventEmitter: EventEmitter;
-        private _cachingModule: CachingModule;
+        private _cachingModule: InterfaceCachingModule | null = null;
         private _getRsultDataWrapper = (resultData: any): any => {
             let data = null;
             if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'true') {
@@ -9450,16 +9450,17 @@ function createHison(): Hison {
             }
             return data;
         };
-        private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; }> => {
-            if(this._cachingModule.isWebSocketConnection() === 1 && this._cachingModule.get(resourcePath)) {
+        private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; } | null> => {
+            if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
                 const result = await this._cachingModule.get(resourcePath);
                 if(result && customOption.link.interceptApiResult(result.data, result.response) !== false) {
                     return result;
                 };
                 return null;
             }
+            return null;
         };
-        private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string, requestData: any): Promise<any>[] => {
+        private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string | null, requestData: any): Promise<any>[] => {
             if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) {
                 if (serviceCmd) requestData.putString('cmd', serviceCmd);
                 requestData = requestData.getSerialized();
@@ -9467,7 +9468,7 @@ function createHison(): Hison {
                 if (serviceCmd && requestData.constructor === Object) requestData.cmd = serviceCmd;
                 requestData = JSON.parse(requestData);
             }
-            const fetchOptions = {
+            const fetchOptions: Record<string, any> = {
                 method: methodName,
                 headers: {'Content-Type': 'application/json'},
                 body: requestData
@@ -9485,7 +9486,7 @@ function createHison(): Hison {
                 }
                 timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), options.timeout));
             }
-            const fecthArr = [fetch(requestPath, fetchOptions)];
+            const fecthArr: Promise<any>[] = [fetch(requestPath, fetchOptions)];
             if(timeoutPromise) fecthArr.push(timeoutPromise);
             return fecthArr;
         };
@@ -9518,36 +9519,36 @@ function createHison(): Hison {
         
             return result;
         };
-        get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(customOption.link.beforeGetRequst(resourcePath, options) === false) return null;
+        get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforeGetRequst(resourcePath, options) === false) return Promise.resolve(null);
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
             if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
             return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + resourcePath, options, null, null), resourcePath);
         };
-        post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(customOption.link.beforePostRequst(requestData, options) === false) return null;
+        post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforePostRequst(requestData, options) === false) return Promise.resolve(null);
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(customOption.link.beforePutRequst(requestData, options) === false) return null;
+        put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforePutRequst(requestData, options) === false) return Promise.resolve(null);
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(customOption.link.beforePatchRequst(requestData, options) === false) return null;
+        patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforePatchRequst(requestData, options) === false) return Promise.resolve(null);
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
-            if(customOption.link.beforeDeleteRequst(requestData, options) === false) return null;
+        delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforeDeleteRequst(requestData, options) === false) return Promise.resolve(null);
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
@@ -9560,7 +9561,7 @@ function createHison(): Hison {
                     if (!response.ok) {
                         throw new Error(`HEAD request failed with status: ${response.status}`);
                     }
-                    const headers = {};
+                    const headers: Record<string, any> = {};
                     response.headers.forEach((value, key) => {
                         headers[key] = value;
                     });
@@ -9587,31 +9588,31 @@ function createHison(): Hison {
                     return Promise.reject(error);
                 });
         };
-        getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+        getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, url, options);
             if(this._cachingModule && this._cachingModule.hasKey(url)) return this._getCachingResult(url);
             return this._request(this._getFetch(METHOD_NAME, url, options, null, null), url);
         };
-        postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+        postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
-        putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+        putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
-        patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+        patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
             return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
-        deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
+        deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
@@ -9623,7 +9624,7 @@ function createHison(): Hison {
                     if (!response.ok) {
                         throw new Error(`HEAD request failed with status: ${response.status}`);
                     }
-                    const headers = {};
+                    const headers: Record<string, any> = {};
                     response.headers.forEach((value, key) => {
                         headers[key] = value;
                     });
@@ -9968,7 +9969,8 @@ function createHison(): Hison {
              * isDate({ y: 2023, M: 12, d: 31 }); // true
              * isDate("invalid-date"); // false
              */
-            isDate(date: DateObject | string): boolean {
+            isDate(date: DateObject | string | null): boolean {
+                if(!date) return false;
                 const dateObj: DateObject = hison.utils.isObject(date) ? date as DateObject : hison.utils.getDateObject(date as string);
         
                 let yyyy: string = hison.utils.getToString(dateObj.y);
@@ -10029,12 +10031,13 @@ function createHison(): Hison {
              * isTime("12:60:00"); // false (invalid minute)
              * isTime("12:30:61"); // false (invalid second)
              */
-            isTime(time: TimeObject | string): boolean {
+            isTime(time: TimeObject | string | null): boolean {
+                if(!time) return false;
                 const timeObj: TimeObject = hison.utils.isObject(time) ? time as TimeObject : hison.utils.getTimeObject(time as string);
         
-                let hh: number = timeObj.h;
-                let mm: number = timeObj.m;
-                let ss: number = timeObj.s;
+                let hh: number | null = timeObj.h;
+                let mm: number | null = timeObj.m;
+                let ss: number | null = timeObj.s;
         
                 if (!hison.utils.isInteger(hh) || !hison.utils.isInteger(mm) || !hison.utils.isInteger(ss)) {
                     return false;
@@ -10045,7 +10048,8 @@ function createHison(): Hison {
                 ss = parseInt(ss, 10);
                 */
         
-                function isValidTimePart(time: number, max: number): boolean {
+                function isValidTimePart(time: number | null, max: number): boolean {
+                    if(!time) return false;
                     return !isNaN(time) && time >= 0 && time <= max;
                 }
             
@@ -10068,7 +10072,7 @@ function createHison(): Hison {
              * isDatetime("2024-02-28 25:00:00"); // false (invalid time)
              */
             isDatetime(datetime: DateTimeObject | string): boolean {
-                const datetimeObj: DateTimeObject = hison.utils.isObject(datetime) ? datetime as DateTimeObject : hison.utils.getDatetimeObject(datetime as string);
+                const datetimeObj: DateTimeObject | null = hison.utils.isObject(datetime) ? datetime as DateTimeObject : hison.utils.getDatetimeObject(datetime as string);
                 if (!hison.utils.isDate(datetimeObj)) return false;
                 if (!hison.utils.isTime(datetimeObj)) return false;
                 return true;
@@ -10177,9 +10181,13 @@ function createHison(): Hison {
              * getDateObject("invalid"); // { y: null, M: null, d: null }
              */
             getDateObject(date: Date | string): DateObject {
-                const result = {y: null, M: null, d: null};
+                const result: {
+                   y: number | null;
+                   M: number | null;
+                   d: number | null; 
+                } = {y: null, M: null, d: null};
                 if (typeof date === 'string') {
-                    let year: number = null, month: number = null, day: number = null;
+                    let year: number | null = null, month: number | null = null, day: number | null = null;
                     date = hison.utils.getToString(date);
                     date = date.split(' ')[0];
                     if (date.includes('-')) {
@@ -10224,9 +10232,13 @@ function createHison(): Hison {
              * getTimeObject("invalid"); // { h: null, m: null, s: null }
              */
             getTimeObject(time: Date | string): TimeObject {
-                const result = {h: null, m: null, s: null};
+                const result: {
+                    h: number | null;
+                    m: number | null;
+                    s: number | null;
+                } = {h: null, m: null, s: null};
                 if (typeof time === 'string') {
-                    let hours: number = null, minutes: number = null, seconds: number = null;
+                    let hours: number | null = null, minutes: number | null = null, seconds: number | null = null;
                     time = hison.utils.getToString(time);
                     const dateArr = time.split(' ');
                     time = dateArr.length > 1 ? dateArr[1] : time;
@@ -10271,7 +10283,7 @@ function createHison(): Hison {
              * getDatetimeObject(new Date(2024, 1, 5, 14, 30, 45)); // { y: 2024, M: 2, d: 5, h: 14, m: 30, s: 45 }
              * getDatetimeObject("invalid"); // null
              */
-            getDatetimeObject(datetime: Date | string): DateTimeObject {
+            getDatetimeObject(datetime: Date | string): DateTimeObject | null {
                 if (typeof datetime === 'string') {
                     datetime = hison.utils.getToString(datetime);
                     const datetimeArr = datetime.split(' ');
@@ -10334,7 +10346,10 @@ function createHison(): Hison {
         
                 if (!hison.utils.isDate(datetimeObj)) throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
                 if (!hison.utils.isTime(datetimeObj)) throw new Error(`ER0003 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-            
+                if (datetimeObj.y === null || datetimeObj.M === null || datetimeObj.d === null) {
+                    throw new Error(`ER0002 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+                }
+
                 const d = new Date(datetimeObj.y, datetimeObj.M - 1, datetimeObj.d, datetimeObj.h, datetimeObj.m, datetimeObj.s);
             
                 switch (addType) {
@@ -10409,8 +10424,14 @@ function createHison(): Hison {
         
                 if (!hison.utils.isDate(datetimeObj1)) throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
                 if (!hison.utils.isTime(datetimeObj1)) throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if (!hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
-                if (!hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                if (!hison.utils.isDate(datetimeObj2)) throw new Error(`ER0006 Please enter a valid date.\n=>${JSON.stringify(datetimeObj2)}`);
+                if (!hison.utils.isTime(datetimeObj2)) throw new Error(`ER0007 Please enter a valid date.\n=>${JSON.stringify(datetimeObj2)}`);
+                if (datetimeObj1.y === null) {
+                    throw new Error(`ER0004 Please enter a valid date.\n=>${JSON.stringify(datetimeObj1)}`);
+                }
+                if (datetimeObj2.y === null) {
+                    throw new Error(`ER0005 Please enter a valid date.\n=>${JSON.stringify(datetimeObj2)}`);
+                }
             
                 const d1 = new Date(datetimeObj1.y, datetimeObj1.M - 1, datetimeObj1.d, datetimeObj1.h, datetimeObj1.m, datetimeObj1.s);
                 const d2 = new Date(datetimeObj2.y, datetimeObj2.M - 1, datetimeObj2.d, datetimeObj2.h, datetimeObj2.m, datetimeObj2.s);
@@ -10813,7 +10834,9 @@ function createHison(): Hison {
             getDayOfWeek(date: DateObject | string, dayType: string = customOption.utils.dayOfWeekFormat): string {
                 const dateObj: DateObject = hison.utils.isObject(date) ? date as DateObject : hison.utils.getDateObject(date as string);
                 if (!hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
-                
+                if (dateObj.y === null || dateObj.M === null || dateObj.d === null) {
+                    throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
+                }
                 const d = new Date(dateObj.y, dateObj.M - 1, dateObj.d);
                 const dayOfWeek = d.getDay();
                 switch (dayType.toLowerCase()) {
@@ -10869,8 +10892,10 @@ function createHison(): Hison {
                     }
                     dateObj = hison.utils.getDateObject(date);
                 }
-                if (!hison.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
-        
+                if (!hison.utils.isDate(dateObj)) throw new Error(`ER0012 Invalid format.\n=>${JSON.stringify(date)}`);
+                if (dateObj.y === null || dateObj.M === null) {
+                    throw new Error(`ER0012 Invalid format.\n=>${JSON.stringify(date)}`);
+                }
                 const nextMonthFirstDay = new Date(dateObj.y, dateObj.M, 1);
                 nextMonthFirstDay.setDate(0);
                 return nextMonthFirstDay.getDate();
@@ -11777,7 +11802,7 @@ function createHison(): Hison {
                 if (extension === str) {
                     return '';
                 }
-                return extension;
+                return extension ? extension : '';
             },
             /**
              * Extracts the filename (without extension) from a given file path or filename.
@@ -11798,6 +11823,7 @@ function createHison(): Hison {
                 str = hison.utils.getToString(str);
             
                 const fileName = str.split('/').pop();
+                if(!fileName) return '';
                 const lastDotIndex = fileName.lastIndexOf('.');
             
                 if (lastDotIndex === -1) return fileName;
@@ -12105,7 +12131,7 @@ function createHison(): Hison {
              * console.log(dataWrapper.getSerialized());
              * ```
              */
-            DataWrapper : class implements DataWrapper {
+            DataWrapper : class implements InterfaceDataWrapper {
                 /**
                  * Creates an instance of `DataWrapper`, which serves as a key-value storage container.
                  * It allows storing various data types, including primitive values and `DataModel` instances.
@@ -12148,7 +12174,7 @@ function createHison(): Hison {
                         throw new Error('Invalid arguments. Provide an object or a key-value pair.');
                     }
                 }
-                private _data: Record<string, DataModel | string | null>;
+                private _data: Record<string, InterfaceDataModel | string | null>;
                 private _isDataWrapper = true;
                 private _put = (key: string, value: any) => {
                     if (typeof key !== 'string') {
@@ -12158,7 +12184,7 @@ function createHison(): Hison {
                     } else if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
                         this._data[key] = String(value);
                     } else if (typeof value === 'symbol') {
-                        this._data[key] = value.description;
+                        this._data[key] = value.description ? value.description : null;
                     } else if (value === null) {
                         this._data[key] = null;
                     } else if (value === undefined) {
@@ -12220,10 +12246,10 @@ function createHison(): Hison {
                  * console.log(clonedWrapperWithModel.getDataModel("nested") !== originalNested); // Output: true
                  * ```
                  *
-                 * @returns {DataWrapper} A new `DataWrapper` instance with a deep copy of the stored data.
+                 * @returns {InterfaceDataWrapper} A new `DataWrapper` instance with a deep copy of the stored data.
                  */
-                clone = (): DataWrapper => {
-                    const newData = {};
+                clone = (): InterfaceDataWrapper | null => {
+                    const newData: Record<string, any> = {};
                     for (let key in this._data) {
                         newData[key] = hison.utils.deepCopyObject(this._data[key]);
                     }
@@ -12248,9 +12274,9 @@ function createHison(): Hison {
                  * console.log(dataWrapper.size()); // Output: 0
                  * ```
                  *
-                 * @returns {DataWrapper} The current `DataWrapper` instance after clearing all data.
+                 * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after clearing all data.
                  */
-                clear = (): DataWrapper => {
+                clear = (): InterfaceDataWrapper => {
                     this._data = {};
                     return this;
                 };
@@ -12279,12 +12305,12 @@ function createHison(): Hison {
                  * @returns {string} JSON string representation of the stored data.
                  */
                 getSerialized = (): string => {
-                    const data = {};
+                    const data: Record<string, any> = {};
                     
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
-                            if (this._data[key] && (this._data[key] as DataModel).getIsDataModel && (this._data[key] as DataModel).getIsDataModel()) {
-                                data[key] = (this._data[key] as DataModel).getRows();
+                            if (this._data[key] && (this._data[key] as InterfaceDataModel).getIsDataModel && (this._data[key] as InterfaceDataModel).getIsDataModel()) {
+                                data[key] = (this._data[key] as InterfaceDataModel).getRows();
                             } else {
                                 data[key] = this._data[key];
                             }
@@ -12319,7 +12345,7 @@ function createHison(): Hison {
                  * @param {string} key The key to retrieve the associated value.
                  * @returns {DataModel | string | null} A deep copy of the stored value, or `null` if the key is not found.
                  */
-                get = (key: string): DataModel | string | null => {
+                get = (key: string): InterfaceDataModel | string | null => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     return this._data[key] ? hison.utils.deepCopyObject(this._data[key]) : null;
                 };
@@ -12386,13 +12412,13 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} key The key associated with the `DataModel` instance.
-                 * @returns {DataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
+                 * @returns {InterfaceDataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
                  * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel`.
                  */
-                getDataModel = (key: string): DataModel => {
+                getDataModel = (key: string): InterfaceDataModel => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
-                    if (!this._data[key] || !(this._data[key] as DataModel).getIsDataModel || !(this._data[key] as DataModel).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
-                    return (this._data[key] as DataModel).clone();
+                    if (!this._data[key] || !(this._data[key] as InterfaceDataModel).getIsDataModel || !(this._data[key] as InterfaceDataModel).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
+                    return (this._data[key] as InterfaceDataModel).clone();
                 };
                 /**
                  * Inserts or updates a key-value pair in the `DataWrapper`.
@@ -12426,9 +12452,9 @@ function createHison(): Hison {
                  *
                  * @param {string} key The key under which the value is stored.
                  * @param {any} value The value to store.
-                 * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+                 * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
                  */
-                put = (key: string, value: any): DataWrapper => {
+                put = (key: string, value: any): InterfaceDataWrapper => {
                     this._put(key, value);
                     return this;
                 };
@@ -12468,10 +12494,10 @@ function createHison(): Hison {
                  *
                  * @param {string} key The key under which the value is stored.
                  * @param {string | number | boolean | bigint | symbol | null} value The value to store.
-                 * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+                 * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
                  * @throws {Error} If `key` is not a string or `value` is not a valid type.
                  */
-                putString = (key: string, value: string | number | boolean | bigint | symbol | null): DataWrapper => {
+                putString = (key: string, value: string | number | boolean | bigint | symbol | null): InterfaceDataWrapper => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (typeof value !== 'string'
                         && typeof value !== 'number'
@@ -12516,11 +12542,11 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} key The key under which the `DataModel` is stored.
-                 * @param {DataModel} value The `DataModel` instance to store.
-                 * @returns {DataWrapper} The current `DataWrapper` instance after insertion.
+                 * @param {InterfaceDataModel} value The `DataModel` instance to store.
+                 * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
                  * @throws {Error} If `key` is not a string or `value` is not a valid `DataModel`.
                  */
-                putDataModel = (key: string, value: DataModel): DataWrapper => {
+                putDataModel = (key: string, value: InterfaceDataModel): InterfaceDataWrapper => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (value === null || !value.getIsDataModel || !value.getIsDataModel()) {
                         throw new Error('Please insert only values of data-model type.');
@@ -12553,10 +12579,10 @@ function createHison(): Hison {
                  * @returns {Record<string, any>} A plain object representation of the `DataWrapper` instance.
                  */
                 getObject = (): Record<string, any> => {
-                    const result = {};
+                    const result: Record<string, any> = {};
                     for(let key in this._data) {
-                        if (this._data[key] && (this._data[key] as DataModel).getIsDataModel && (this._data[key] as DataModel).getIsDataModel()) {
-                            result[key] = (this._data[key] as DataModel).getObject();
+                        if (this._data[key] && (this._data[key] as InterfaceDataModel).getIsDataModel && (this._data[key] as InterfaceDataModel).getIsDataModel()) {
+                            result[key] = (this._data[key] as InterfaceDataModel).getObject();
                         } else {
                             result[key] = this._data[key];
                         }
@@ -12647,10 +12673,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} key The key to remove from the `DataWrapper`.
-                 * @returns {{ data: DataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
+                 * @returns {{ data: InterfaceDataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
                  * @throws {Error} If `key` is not a string.
                  */
-                remove = (key: string): { data: DataWrapper, result: boolean } => {
+                remove = (key: string): { data: InterfaceDataWrapper, result: boolean } => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     let result = false;
                     if (this._data.hasOwnProperty(key)) {
@@ -12793,7 +12819,7 @@ function createHison(): Hison {
              * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
              *
              */
-            DataModel : class implements DataModel {
+            DataModel : class implements InterfaceDataModel {
                 /**
                  * Creates a `DataModel` instance, which manages a structured table-like data format.
                  * The instance allows for efficient row and column management.
@@ -12833,7 +12859,7 @@ function createHison(): Hison {
                  *
                  * @constructor
                  * @param {Array | Object} [data] The initial dataset, which can be an array of objects, an array of column names, or a single object.
-                 * @returns {DataModel} A new instance of `DataModel`.
+                 * @returns {InterfaceDataModel} A new instance of `DataModel`.
                  */
                 constructor(data?: Record<string, any>[] | Record<string, any>) {
                     if (!data) return;
@@ -13014,7 +13040,7 @@ function createHison(): Hison {
                             this._addCol(key);
                         }
                     }
-                    const tempRow = {};
+                    const tempRow: Record<string, any> = {};
                     for(const col of this._cols) {
                         if (row.hasOwnProperty(col)) {
                             tempRow[col] = this._getValidRowValue(rowIndex, col, row[col]);
@@ -13042,10 +13068,10 @@ function createHison(): Hison {
                             return;
                         }
                     } else if (typeof data === 'object') {
-                        if (data && (data as DataWrapper).getIsDataWrapper && (data as DataWrapper).getIsDataWrapper()) {
+                        if (data && (data as InterfaceDataWrapper).getIsDataWrapper && (data as InterfaceDataWrapper).getIsDataWrapper()) {
                             throw new Error('You cannot construct a datamodel with datawrapper.');
-                        } else if (data && (data as DataModel).getIsDataModel && (data as DataModel).getIsDataModel()){
-                            for(const row of (data as DataModel).getRows() ) {
+                        } else if (data && (data as InterfaceDataModel).getIsDataModel && (data as InterfaceDataModel).getIsDataModel()){
+                            for(const row of (data as InterfaceDataModel).getRows() ) {
                                 this._addRow(rowIndex, row);
                                 rowIndex++;
                             }
@@ -13068,7 +13094,7 @@ function createHison(): Hison {
                 private _getDuplColumnFirstRowIndex = (column: string): number => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
-                    const checkedValues = [];
+                    const checkedValues: string[] = [];
                     for(let i = 0; i < this._rows.length; i++) {
                         if (checkedValues.includes(JSON.stringify(this._rows[i][column]))) {
                             return i;
@@ -13130,9 +13156,9 @@ function createHison(): Hison {
                  * console.log(clonedModel !== dataModel); // Output: true (Cloned instance is independent)
                  * ```
                  *
-                 * @returns {DataModel} A new `DataModel` instance with a copy of the stored rows.
+                 * @returns {InterfaceDataModel} A new `DataModel` instance with a copy of the stored rows.
                  */
-                clone = (): DataModel => {
+                clone = (): InterfaceDataModel => {
                     return new hison.data.DataModel(this._rows);
                 };
                 /**
@@ -13156,9 +13182,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns());  // Output: []
                  * ```
                  *
-                 * @returns {DataModel} The current `DataModel` instance after clearing all data.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after clearing all data.
                  */
-                clear = (): DataModel => {
+                clear = (): InterfaceDataModel => {
                     this._cols = [];
                     this._rows = [];
                     return this;
@@ -13309,10 +13335,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} column The name of the column to add.
-                 * @returns {DataModel} The current `DataModel` instance after adding the column.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the column.
                  * @throws {Error} If the column is invalid or already exists.
                  */
-                addColumn = (column: string): DataModel => {
+                addColumn = (column: string): InterfaceDataModel => {
                     this._addCol(column);
                     for(const row of this._rows) {
                         if (!row.hasOwnProperty(column)) {
@@ -13348,10 +13374,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string[]} columns An array of column names to add.
-                 * @returns {DataModel} The current `DataModel` instance after adding the columns.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the columns.
                  * @throws {Error} If `columns` is not an array or contains invalid column names.
                  */
-                addColumns = (columns: string[]): DataModel => {
+                addColumns = (columns: string[]): InterfaceDataModel => {
                     if (!Array.isArray(columns)) {
                         throw new Error('Only array contains strings can be inserted into columns.');
                     }
@@ -13397,10 +13423,10 @@ function createHison(): Hison {
                  *
                  * @param {string} column The name of the column to set the value for.
                  * @param {any} value The value to assign to all rows in the column.
-                 * @returns {DataModel} The current `DataModel` instance after updating the column.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after updating the column.
                  * @throws {Error} If `value` is `undefined` or if the column name is invalid.
                  */
-                setColumnSameValue = (column: string, value: any): DataModel => {
+                setColumnSameValue = (column: string, value: any): InterfaceDataModel => {
                     if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     column = this._getValidColValue(column);
                     if (!this._hasColumn(column)) this._addCol(column);
@@ -13447,10 +13473,10 @@ function createHison(): Hison {
                  *
                  * @param {string} column The name of the column to format.
                  * @param {DataModelFormatter} formatter A function that transforms each value in the column.
-                 * @returns {DataModel} The current `DataModel` instance after formatting the column.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after formatting the column.
                  * @throws {Error} If `formatter` is not a function or if the column does not exist.
                  */
-                setColumnSameFormat = (column: string, formatter: DataModelFormatter): DataModel => {
+                setColumnSameFormat = (column: string, formatter: DataModelFormatter): InterfaceDataModel => {
                     this._checkValidFunction(formatter);
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
@@ -13525,10 +13551,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {number} rowIndex The index of the row to retrieve.
-                 * @returns {DataModel} A new `DataModel` instance containing the row data.
+                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the row data.
                  * @throws {Error} If `rowIndex` is out of bounds.
                  */
-                getRowAsDataModel = (rowIndex: number): DataModel => {
+                getRowAsDataModel = (rowIndex: number): InterfaceDataModel => {
                     return new hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
                 /**
@@ -13572,15 +13598,15 @@ function createHison(): Hison {
                  *
                  * @param {number | Object} [rowIndexOrRow] The index at which to insert the row, or the row data.
                  * @param {Object} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
-                 * @returns {DataModel} The current `DataModel` instance after adding the row.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the row.
                  * @throws {Error} If columns are not defined or parameters are invalid.
                  */
-                addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): DataModel => {
+                addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): InterfaceDataModel => {
                     if (rowIndexOrRow === undefined && row === undefined) {
                         if (this._cols.length <= 0) {
                             throw new Error('Please define the column first.');
                         }
-                        const emptyRow = {};
+                        const emptyRow: Record<string, any> = {};
                         for (const col of this._cols) {
                             emptyRow[col] = null;
                         }
@@ -13590,7 +13616,7 @@ function createHison(): Hison {
                             throw new Error('Please define the column first.');
                         }
                         const validIndex = rowIndexOrRow >= this._rows.length ? this._rows.length : this._getValidRowIndex(rowIndexOrRow);
-                        const emptyRow = {};
+                        const emptyRow: Record<string, any> = {};
                         for (const col of this._cols) {
                             emptyRow[col] = null;
                         }
@@ -13600,8 +13626,8 @@ function createHison(): Hison {
                     } else if (typeof rowIndexOrRow === 'number' && typeof row === 'object') {
                         const validIndex = rowIndexOrRow >= this._rows.length ? this._rows.length : this._getValidRowIndex(rowIndexOrRow);
                         this._addRow(validIndex, row);
-                        const newRow = this._rows.pop();
-                        this._rows.splice(validIndex, 0, newRow);
+                        const newRow: Record<string, any> | undefined = this._rows.pop();
+                        if(newRow) this._rows.splice(validIndex, 0, newRow);
                     } else {
                         throw new Error('Invalid parameters for addRow method.');
                     }
@@ -13646,7 +13672,7 @@ function createHison(): Hison {
                  * @returns {Record<string, any>[]} An array of deep-copied rows.
                  * @throws {Error} If `startRow` or `endRow` is out of bounds.
                  */
-                getRows = (startRow: number = 0, endRow: number = null): Record<string, any>[] => {
+                getRows = (startRow: number = 0, endRow: number | null = null): Record<string, any>[] => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this._deepCopy(this._rows);
                     const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
@@ -13693,10 +13719,10 @@ function createHison(): Hison {
                  *
                  * @param {number} [startRow=0] The starting index of the row range.
                  * @param {number} [endRow=null] The ending index of the row range (inclusive).
-                 * @returns {DataModel} A new `DataModel` instance containing the selected rows.
+                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the selected rows.
                  * @throws {Error} If `startRow` or `endRow` is out of bounds.
                  */
-                getRowsAsDataModel = (startRow: number = 0, endRow: number = null): DataModel => {
+                getRowsAsDataModel = (startRow: number = 0, endRow: number | null = null): InterfaceDataModel => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this.clone();
                     const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
@@ -13737,10 +13763,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {Record<string, any>[]} rows An array of row objects to add.
-                 * @returns {DataModel} The current `DataModel` instance after adding the rows.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the rows.
                  * @throws {Error} If `rows` contain invalid data.
                  */
-                addRows = (rows: Record<string, any>[]): DataModel => {
+                addRows = (rows: Record<string, any>[]): InterfaceDataModel => {
                     this._put(rows);
                     return this;
                 };
@@ -13781,7 +13807,7 @@ function createHison(): Hison {
                  * @returns {Record<string, any>} A plain object representing the `DataModel` structure.
                  */
                 getObject = (): Record<string, any> => {
-                    const result = {};
+                    const result: Record<string, any> = {};
                     const copyCol = this._deepCopy(this._cols);
                     const copyRow = this._deepCopy(this._rows);
         
@@ -13873,10 +13899,10 @@ function createHison(): Hison {
                  * @param {number} rowIndex The index of the row where the value should be set.
                  * @param {string} column The column name where the value should be stored.
                  * @param {any} value The value to assign.
-                 * @returns {DataModel} The current `DataModel` instance after updating the value.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after updating the value.
                  * @throws {Error} If `value` is `undefined` or if `rowIndex` or `column` is invalid.
                  */
-                setValue = (rowIndex: number, column: string, value: any): DataModel => {
+                setValue = (rowIndex: number, column: string, value: any): InterfaceDataModel => {
                     if (value === undefined) throw new Error('You can not put a value of undefined type.');
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
@@ -13917,10 +13943,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} column The name of the column to remove.
-                 * @returns {DataModel} The current `DataModel` instance after removing the column.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after removing the column.
                  * @throws {Error} If `column` is invalid or does not exist.
                  */
-                removeColumn = (column: string): DataModel => {
+                removeColumn = (column: string): InterfaceDataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     for(const row of this._rows) {
@@ -13961,10 +13987,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string[]} columns An array of column names to remove.
-                 * @returns {DataModel} The current `DataModel` instance after removing the columns.
+                 * @returns {InterfaceDataModel} The current `DataModel` instance after removing the columns.
                  * @throws {Error} If any column does not exist.
                  */
-                removeColumns = (columns: string[]): DataModel => {
+                removeColumns = (columns: string[]): InterfaceDataModel => {
                     for(const column of columns) {
                         this.removeColumn(column);
                     }
@@ -14116,9 +14142,9 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string[]} columns An array of column names to retain.
-                 * @returns {DataModel} The modified `DataModel` instance with only the specified columns retained.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with only the specified columns retained.
                  */
-                setValidColumns = (columns: string[]): DataModel => {
+                setValidColumns = (columns: string[]): InterfaceDataModel => {
                     columns = this._cols.filter(oriColumn => !columns.includes(oriColumn));
                     this.removeColumns(columns);
                     return this;
@@ -14188,7 +14214,7 @@ function createHison(): Hison {
                  * @returns {Record<string, any> | null} The first row where the column has a `null` value, or `null` if none exist.
                  * @throws {Error} If `column` does not exist.
                  */
-                findFirstRowNullColumn = (column: string): Record<string, any> => {
+                findFirstRowNullColumn = (column: string): Record<string, any> | null => {
                     const nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column);
                     if (nullColumnFirstRowIndex === -1) {
                         return null
@@ -14261,7 +14287,7 @@ function createHison(): Hison {
                  * @returns {Record<string, any> | null} The first row where the column has a duplicate value, or `null` if none exist.
                  * @throws {Error} If `column` does not exist.
                  */
-                findFirstRowDuplColumn = (column: string): Record<string, any> => {
+                findFirstRowDuplColumn = (column: string): Record<string, any> | null => {
                     const duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column);
                     if (duplColumnFirstRowIndex === -1) {
                         return null
@@ -14343,7 +14369,7 @@ function createHison(): Hison {
                  * @returns {Record<string, any> | null} The first row with an invalid value, or `null` if all values are valid.
                  * @throws {Error} If `column` does not exist or `validator` is not a function.
                  */
-                findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): Record<string, any> => {
+                findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): Record<string, any> | null => {
                     const inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column, vaildator);
                     if (inValidColumnFirstRowIndex === -1) {
                         return null
@@ -14396,7 +14422,7 @@ function createHison(): Hison {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
-                    const matched = [];
+                    const matched: number[] = [];
                     _this._rows.forEach(function(row, index) {
                         let matchesCondition = true;
                         for (const key in condition) {
@@ -14460,7 +14486,7 @@ function createHison(): Hison {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
-                    const matched = [];
+                    const matched: Record<string, any>[] = [];
                     _this._rows.forEach(function(row) {
                         let matchesCondition = true;
                         for (const key in condition) {
@@ -14520,14 +14546,14 @@ function createHison(): Hison {
                  *
                  * @param {Record<string, any>} condition The key-value condition to match.
                  * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
-                 * @returns {DataModel} A new `DataModel` instance containing the matched rows.
+                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the matched rows.
                  * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
                  */
-                searchRowsAsDataModel = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
+                searchRowsAsDataModel = (condition: Record<string, any>, isNegative: boolean = false): InterfaceDataModel => {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
-                    const matched = [];
+                    const matched: Record<string, any>[] = [];
                     _this._rows.forEach(function(row) {
                         let matchesCondition = true;
                         for (const key in condition) {
@@ -14586,10 +14612,10 @@ function createHison(): Hison {
                  *
                  * @param {Record<string, any>} condition The key-value condition to match.
                  * @param {boolean} [isNegative=false] If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
-                 * @returns {DataModel} The modified `DataModel` instance after removing specified rows.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance after removing specified rows.
                  * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
                  */
-                searchAndModify = (condition: Record<string, any>, isNegative: boolean = false): DataModel => {
+                searchAndModify = (condition: Record<string, any>, isNegative: boolean = false): InterfaceDataModel => {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
@@ -14651,7 +14677,7 @@ function createHison(): Hison {
                 filterRowIndexes = (filter: DataModelFillter): number[] => {
                     const _this = this;
                     _this._checkValidFunction(filter);
-                    const matched = [];
+                    const matched: number[] = [];
                     _this._rows.forEach(function(row: Record<string, any>, index) {
                         if (filter(row)) {
                             matched.push(index);
@@ -14696,7 +14722,7 @@ function createHison(): Hison {
                 filterRows = (filter: DataModelFillter): Record<string, any>[] => {
                     const _this = this;
                     _this._checkValidFunction(filter);
-                    const matched = [];
+                    const matched: Record<string, any>[] = [];
                     _this._rows.forEach(function(row) {
                         if (filter(row)) {
                             matched.push(_this._deepCopy(row));
@@ -14735,13 +14761,13 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {DataModelFillter} filter A function that determines whether a row should be included.
-                 * @returns {DataModel} A new `DataModel` instance containing the filtered rows.
+                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the filtered rows.
                  * @throws {Error} If `filter` is not a valid function.
                  */
-                filterRowsAsDataModel = (filter: DataModelFillter): DataModel => {
+                filterRowsAsDataModel = (filter: DataModelFillter): InterfaceDataModel => {
                     const _this = this;
                     _this._checkValidFunction(filter);
-                    const matched = [];
+                    const matched: Record<string, any>[] = [];
                     _this._rows.forEach(function(row) {
                         if (filter(row)) {
                             matched.push(row);
@@ -14781,10 +14807,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {DataModelFillter} filter A function that determines whether a row should be retained.
-                 * @returns {DataModel} The modified `DataModel` instance after removing unmatched rows.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance after removing unmatched rows.
                  * @throws {Error} If `filter` is not a valid function.
                  */
-                filterAndModify = (filter: DataModelFillter): DataModel => {
+                filterAndModify = (filter: DataModelFillter): InterfaceDataModel => {
                     const _this = this;
                     _this._checkValidFunction(filter);
                     for (let i = 0; i < _this._rows.length; i++ ){
@@ -14824,10 +14850,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string[]} columns An array of column names in the desired order.
-                 * @returns {DataModel} The modified `DataModel` instance with reordered columns.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with reordered columns.
                  * @throws {Error} If `columns` is not an array or contains invalid column names.
                  */
-                setColumnSorting = (columns: string[]): DataModel => {
+                setColumnSorting = (columns: string[]): InterfaceDataModel => {
                     this._checkArray(columns);
                     const newColumns = [];
                     for(let column of columns) {
@@ -14864,9 +14890,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["age", "id", "name"]
                  * ```
                  *
-                 * @returns {DataModel} The modified `DataModel` instance with columns sorted in ascending order.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in ascending order.
                  */
-                sortColumnAscending = (): DataModel => {
+                sortColumnAscending = (): InterfaceDataModel => {
                     this._cols.sort();
                     return this;
                 };
@@ -14891,9 +14917,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
                  * ```
                  *
-                 * @returns {DataModel} The modified `DataModel` instance with columns sorted in descending order.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in descending order.
                  */
-                sortColumnDescending = (): DataModel => {
+                sortColumnDescending = (): InterfaceDataModel => {
                     this._cols.sort(function(a, b) {
                         if (a > b) {
                             return -1;
@@ -14926,9 +14952,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
                  * ```
                  *
-                 * @returns {DataModel} The modified `DataModel` instance with reversed column order.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed column order.
                  */
-                sortColumnReverse = (): DataModel => {
+                sortColumnReverse = (): InterfaceDataModel => {
                     this._cols.reverse();
                     return this;
                 };
@@ -14972,10 +14998,10 @@ function createHison(): Hison {
                  *
                  * @param {string} column The column name to sort by.
                  * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-                 * @returns {DataModel} The modified `DataModel` instance with rows sorted in ascending order.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in ascending order.
                  * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
                  */
-                sortRowAscending = (column: string, isIntegerOrder: boolean = false): DataModel => {
+                sortRowAscending = (column: string, isIntegerOrder: boolean = false): InterfaceDataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     this._checkBoolean(isIntegerOrder);
@@ -15046,10 +15072,10 @@ function createHison(): Hison {
                  *
                  * @param {string} column The column name to sort by.
                  * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-                 * @returns {DataModel} The modified `DataModel` instance with rows sorted in descending order.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in descending order.
                  * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
                  */
-                sortRowDescending = (column: string, isIntegerOrder: boolean = false): DataModel => {
+                sortRowDescending = (column: string, isIntegerOrder: boolean = false): InterfaceDataModel => {
                     column = this._getValidColValue(column);
                     this._checkColumn(column);
                     this._checkBoolean(isIntegerOrder);
@@ -15107,9 +15133,9 @@ function createHison(): Hison {
                  * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
                  * ```
                  *
-                 * @returns {DataModel} The modified `DataModel` instance with reversed row order.
+                 * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed row order.
                  */
-                sortRowReverse = (): DataModel => {
+                sortRowReverse = (): InterfaceDataModel => {
                     this._rows.reverse();
                     return this;
                 };
@@ -15173,7 +15199,7 @@ function createHison(): Hison {
              * - **Efficiently managing API response data** in web applications.
              * - **Supporting offline or low-latency scenarios** by using cached responses.
              */
-            CachingModule: class implements CachingModule {
+            CachingModule: class implements InterfaceCachingModule {
                 /**
                  * **Creates an instance of `CachingModule`, initializing an LRU cache and a WebSocket connection.**
                  *
@@ -15223,7 +15249,7 @@ function createHison(): Hison {
                         throw new Error('key is only a string.');
                     }
                 }
-                private _checkTypeFunction = (func: Function) => {
+                private _checkTypeFunction = (func: Function | null) => {
                     if (func && typeof func !== 'function') {
                         throw new Error('Please enter only the function.');
                     }
@@ -15329,7 +15355,7 @@ function createHison(): Hison {
                  * @param {string} key - The key to retrieve from the cache.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the cached response data.
                  */
-                get = (key: string): Promise<{ data: any; response: Response; }> => {
+                get = (key: string): Promise<{ data: any; response: Response; }> | null => {
                     this._checkTypeString(key);
                     return this._LRUCache.get(key);
                 };
@@ -15734,7 +15760,7 @@ function createHison(): Hison {
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiGet: class implements ApiGet {
+            ApiGet: class implements InterfaceApiGet {
                 /**
                  * **Creates an instance of `ApiGet`, initializing API request handling with optional caching.**
                  *
@@ -15776,13 +15802,13 @@ function createHison(): Hison {
                  * @param {string} [resourcePath=''] - The API resource path.
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  */
-                constructor(resourcePath: string = '', cachingModule: CachingModule = null) {
+                constructor(resourcePath: string = '', cachingModule: InterfaceCachingModule | null = null) {
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
                     this._resourcePath = resourcePath;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _resourcePath: string;
@@ -15852,7 +15878,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.get(this._resourcePath, options);
                 };
                 /**
@@ -16036,7 +16062,7 @@ function createHison(): Hison {
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiPost: class implements ApiPost {
+            ApiPost: class implements InterfaceApiPost {
                 /**
                  * **Creates an instance of `ApiPost`, initializing API request handling with optional caching.**
                  *
@@ -16082,14 +16108,14 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -16163,7 +16189,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.post(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -16351,7 +16377,7 @@ function createHison(): Hison {
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiPut: class implements ApiPut {
+            ApiPut: class implements InterfaceApiPut {
                 /**
                  * **Creates an instance of `ApiPut`, initializing API request handling with optional caching.**
                  *
@@ -16397,14 +16423,14 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -16478,7 +16504,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.put(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -16666,7 +16692,7 @@ function createHison(): Hison {
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiPatch: class implements ApiPatch {
+            ApiPatch: class implements InterfaceApiPatch {
                 /**
                  * **Creates an instance of `ApiPatch`, initializing API request handling with optional caching.**
                  *
@@ -16712,14 +16738,14 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -16793,7 +16819,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.patch(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -16981,7 +17007,7 @@ function createHison(): Hison {
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiDelete: class implements ApiDelete {
+            ApiDelete: class implements InterfaceApiDelete {
                 /**
                  * **Creates an instance of `ApiDelete`, initializing API request handling with optional caching.**
                  *
@@ -17027,14 +17053,14 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: CachingModule = null) {
+                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
                     if (!serviceCmd) throw new Error('Please enter the exact service command.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -17108,7 +17134,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.delete(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -17292,7 +17318,7 @@ function createHison(): Hison {
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiGetUrl: class implements ApiGetUrl {
+            ApiGetUrl: class implements InterfaceApiGetUrl {
                 /**
                  * **Creates an instance of `ApiGetUrl`, initializing API request handling with optional caching.**
                  *
@@ -17337,14 +17363,14 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `url` is not provided.
                  */
-                constructor(url: string, cachingModule: CachingModule = null) {
+                constructor(url: string, cachingModule: InterfaceCachingModule | null = null) {
                     if (!url) throw new Error('Please enter the request URL.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
                     this._url = url;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _url: string;
@@ -17402,7 +17428,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.getURL(this._url, options);
                 };
                 /**
@@ -17597,7 +17623,7 @@ function createHison(): Hison {
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiPostUrl: class implements ApiPostUrl {
+            ApiPostUrl: class implements InterfaceApiPostUrl {
                 /**
                  * **Creates an instance of `ApiPostUrl`, initializing API request handling with optional caching.**
                  *
@@ -17648,7 +17674,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `url` is not provided.
                  */
-                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                constructor(url: string, serviceCmd: string = '', cachingModule: InterfaceCachingModule | null = null) {
                     if (!url) throw new Error('Please enter the request URL.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
@@ -17656,7 +17682,7 @@ function createHison(): Hison {
                     this._url = url;
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -17724,7 +17750,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.postURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -17919,7 +17945,7 @@ function createHison(): Hison {
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiPutUrl: class implements ApiPutUrl {
+            ApiPutUrl: class implements InterfaceApiPutUrl {
                 /**
                  * **Creates an instance of `ApiPutUrl`, initializing API request handling with optional caching.**
                  *
@@ -17970,7 +17996,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `url` is not provided.
                  */
-                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                constructor(url: string, serviceCmd: string = '', cachingModule: InterfaceCachingModule | null = null) {
                     if (!url) throw new Error('Please enter the request URL.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
@@ -17978,7 +18004,7 @@ function createHison(): Hison {
                     this._url = url;
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -18046,7 +18072,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.putURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -18241,7 +18267,7 @@ function createHison(): Hison {
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiPatchUrl: class implements ApiPatchUrl {
+            ApiPatchUrl: class implements InterfaceApiPatchUrl {
                 /**
                  * **Creates an instance of `ApiPatchUrl`, initializing API request handling with optional caching.**
                  *
@@ -18292,7 +18318,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `url` is not provided.
                  */
-                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                constructor(url: string, serviceCmd: string = '', cachingModule: InterfaceCachingModule | null = null) {
                     if (!url) throw new Error('Please enter the request URL.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
@@ -18300,7 +18326,7 @@ function createHison(): Hison {
                     this._url = url;
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -18368,7 +18394,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.patchURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -18563,7 +18589,7 @@ function createHison(): Hison {
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
              */
-            ApiDeleteUrl: class implements ApiDeleteUrl {
+            ApiDeleteUrl: class implements InterfaceApiDeleteUrl {
                 /**
                  * **Creates an instance of `ApiDeleteUrl`, initializing API request handling with optional caching.**
                  *
@@ -18614,7 +18640,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `url` is not provided.
                  */
-                constructor(url: string, serviceCmd: string = '', cachingModule: CachingModule = null) {
+                constructor(url: string, serviceCmd: string = '', cachingModule: InterfaceCachingModule | null = null) {
                     if (!url) throw new Error('Please enter the request URL.');
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
@@ -18622,7 +18648,7 @@ function createHison(): Hison {
                     this._url = url;
                     this._serviceCmd = serviceCmd;
                 };
-                private _cachingModule: CachingModule = null;
+                private _cachingModule: InterfaceCachingModule | null = null;
                 private _eventEmitter: EventEmitter;
                 private _apiLink: ApiLink;
                 private _serviceCmd: string;
@@ -18690,7 +18716,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: any; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
                     return this._apiLink.deleteURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -20295,7 +20321,7 @@ function createHison(): Hison {
              * getDatetimeObject(new Date(2024, 1, 5, 14, 30, 45)); // { y: 2024, M: 2, d: 5, h: 14, m: 30, s: 45 }
              * getDatetimeObject("invalid"); // null
              */
-            getDatetimeObject(datetime: Date | string): DateTimeObject { return hison.utils.getDatetimeObject(datetime) },
+            getDatetimeObject(datetime: Date | string): DateTimeObject | null { return hison.utils.getDatetimeObject(datetime) },
             /**
              * Adds a specified amount of time to a given date or datetime.
              *
