@@ -9436,14 +9436,14 @@ function createHison(): Hison {
         private _cachingModule: InterfaceCachingModule | null = null;
         private _getRsultDataWrapper = (resultData: any): any => {
             let data = null;
-            if(resultData && resultData.constructor === Object && resultData.isDataWrapper === 'true'
+            if(resultData && resultData.constructor === Object && resultData.DATAWRAPPER === 'TRUE'
             ) {
                 data = new hison.data.DataWrapper();
                 for(const key of Object.keys(resultData)) {
                     if (resultData[key].constructor === Object || resultData[key].constructor === Array) {
                         data.putDataModel(key, new hison.data.DataModel(resultData[key]));
                     } else {
-                        if(key !== 'isDataWrapper') data.put(key, resultData[key]);
+                        if(key !== 'DATAWRAPPER') data.put(key, resultData[key]);
                     }
                 }
             } else {
