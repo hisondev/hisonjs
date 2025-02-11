@@ -15,7 +15,8 @@
     "hisondev",
     "hisonjs",
     "devtool",
-    "development"
+    "development",
+    "library"
   ],
   "author": "Hani Son",
   "license": "MIT",
