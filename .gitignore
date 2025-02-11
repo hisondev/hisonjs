@@ -31,4 +31,4 @@ yarn-error.log*
 Thumbs.db
 
 # 라이브러리/모듈 개발 중, 최종 사용자가 항상 최신 버전을 사용해야함
-#package-lock.json
+package-lock.json

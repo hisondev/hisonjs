@@ -2,15 +2,15 @@
     "compilerOptions": {
       "target": "ES5",
       "module": "ES6",
-      "lib": ["es2019", "dom"], // es2019 또는 그 이상의 버전 추가
+      "lib": ["es2019", "dom"],
       "strict": false,
       "esModuleInterop": true,
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
       "outDir": "./dist",
-      "declaration": true,       // Generate .d.ts files
-      "declarationDir": "./dist/types",  // Directory for .d.ts files
-      "sourceMap": true,         // Enable source maps
+      "declaration": true,
+      "declarationDir": "./dist/types",
+      "sourceMap": true,
       "moduleResolution": "node",
       "resolveJsonModule": true
     },
