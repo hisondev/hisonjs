@@ -760,12 +760,12 @@ interface Hison {
      * which is used throughout the `hisondev` solution to construct request URLs.
      *
      * - The new domain will be applied globally to all API requests.
-     * - Default value: `'localhost:8081'`
+     * - Default value: `'localhost:8080'`
      * - Example usage: `setDomain("api.example.com");` (Changes the API domain to `api.example.com`)
      *
      * ## Related Property
      * - **`domain`**: Defines the default domain for API requests.
-     *   - Default: `'localhost:8081'`
+     *   - Default: `'localhost:8080'`
      *   - Used in `ApiLink` to construct full request URLs.
      *
      * @param str The new domain string (e.g., `'api.example.com'` or `'192.168.1.100:3000'`).
@@ -831,12 +831,12 @@ interface Hison {
      * which is used throughout the `hisondev` solution to establish WebSocket connections.
      *
      * - The new endpoint will be applied globally to all WebSocket connections.
-     * - Default value: `'/hison-caching-websocket-endpoint'`
+     * - Default value: `'hison-websocket-endpoint'`
      * - Example usage: `setWebSocketEndPoint("/ws/data-stream");` (Changes the WebSocket endpoint)
      *
      * ## Related Property
      * - **`webSocketEndPoint`**: Defines the default WebSocket endpoint for API communication.
-     *   - Default: `'/hison-caching-websocket-endpoint'`
+     *   - Default: `'hison-websocket-endpoint'`
      *   - Used in `ApiLink` when establishing WebSocket connections.
      *
      * @param str The new WebSocket endpoint string (e.g., `'/ws/data-stream'` or `'/ws/notifications'`).
