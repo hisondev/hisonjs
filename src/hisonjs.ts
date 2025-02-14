@@ -846,12 +846,12 @@ interface Hison {
      * which is used throughout the `hisondev` solution to establish WebSocket connections.
      *
      * - The new endpoint will be applied globally to all WebSocket connections.
-     * - Default value: `'hison-websocket-endpoint'`
+     * - Default value: `'/hison-websocket-endpoint'`
      * - Example usage: `setWebSocketEndPoint("/ws/data-stream");` (Changes the WebSocket endpoint)
      *
      * ## Related Property
      * - **`webSocketEndPoint`**: Defines the default WebSocket endpoint for API communication.
-     *   - Default: `'hison-websocket-endpoint'`
+     *   - Default: `'/hison-websocket-endpoint'`
      *   - Used in `ApiLink` when establishing WebSocket connections.
      *
      * @param str The new WebSocket endpoint string (e.g., `'/ws/data-stream'` or `'/ws/notifications'`).
@@ -9253,10 +9253,10 @@ function createHison(): Hison {
             /**
              * The default WebSocket endpoint for caching-related communication.
              *
-             * - Default value: `'hison-websocket-endpoint'`
+             * - Default value: `'/hison-websocket-endpoint'`
              * - Used in `ApiLink` when establishing WebSocket connections.
              */
-            webSocketEndPoint : 'hison-websocket-endpoint',
+            webSocketEndPoint : '/hison-websocket-endpoint',
             /**
              * The caching limit for stored API responses.
              *
