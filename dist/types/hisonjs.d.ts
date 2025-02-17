@@ -831,12 +831,12 @@ interface Hison {
      * which is used throughout the `hisondev` solution to establish WebSocket connections.
      *
      * - The new endpoint will be applied globally to all WebSocket connections.
-     * - Default value: `'hison-websocket-endpoint'`
+     * - Default value: `'/hison-websocket-endpoint'`
      * - Example usage: `setWebSocketEndPoint("/ws/data-stream");` (Changes the WebSocket endpoint)
      *
      * ## Related Property
      * - **`webSocketEndPoint`**: Defines the default WebSocket endpoint for API communication.
-     *   - Default: `'hison-websocket-endpoint'`
+     *   - Default: `'/hison-websocket-endpoint'`
      *   - Used in `ApiLink` when establishing WebSocket connections.
      *
      * @param str The new WebSocket endpoint string (e.g., `'/ws/data-stream'` or `'/ws/notifications'`).
@@ -2882,7 +2882,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPost: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
+        ApiPost: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
         /**
          * **`ApiPut` - A class for handling HTTP PUT requests within the `hison.link` module.**
          *
@@ -2939,7 +2939,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPut: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
+        ApiPut: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
         /**
          * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
          *
@@ -2996,7 +2996,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPatch: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
+        ApiPatch: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
         /**
          * **`ApiDelete` - A class for handling HTTP DELETE requests within the `hison.link` module.**
          *
@@ -3053,7 +3053,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiDelete: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
+        ApiDelete: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
         /**
          * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
          *

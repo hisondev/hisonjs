@@ -2910,7 +2910,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPost: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
+        ApiPost: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
         /**
          * **`ApiPut` - A class for handling HTTP PUT requests within the `hison.link` module.**
          *
@@ -2967,7 +2967,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPut: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
+        ApiPut: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
         /**
          * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
          *
@@ -3024,7 +3024,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPatch: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
+        ApiPatch: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
         /**
          * **`ApiDelete` - A class for handling HTTP DELETE requests within the `hison.link` module.**
          *
@@ -3081,7 +3081,7 @@ interface Hison {
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiDelete: new (serviceCmd: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
+        ApiDelete: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
         /**
          * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
          *
@@ -9462,12 +9462,28 @@ function createHison(): Hison {
             return null;
         };
         private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string | null, requestData: any): Promise<any>[] => {
-            if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) {
+            if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) { //1
                 if (serviceCmd) requestData.putString('cmd', serviceCmd);
                 requestData = requestData.getSerialized();
-            } else if (requestData && typeof requestData === 'object'){
-                if (serviceCmd && requestData.constructor === Object) requestData.cmd = serviceCmd;
-                requestData = JSON.parse(requestData);
+            } else if (requestData && requestData.getIsDataModel && requestData.getIsDataModel()){  //2
+                requestData = requestData.getSerialized();
+            } else if (requestData && typeof requestData === 'object'){ //3
+                if (typeof requestData === 'string') {
+                    try {
+                        JSON.parse(requestData);
+                    } catch (e) {
+                        requestData = JSON.stringify({ data: requestData });
+                    }
+                } else if (Array.isArray(requestData)) {
+                    requestData = JSON.stringify(requestData);
+                } else if (typeof requestData === 'object') {
+                    if (serviceCmd && requestData.constructor === Object) {
+                        requestData.cmd = serviceCmd;
+                    }
+                    requestData = JSON.stringify(requestData);
+                } else {
+                    requestData = JSON.stringify({ data: requestData });
+                }
             }
             const fetchOptions: Record<string, any> = {
                 method: methodName,
@@ -16078,15 +16094,13 @@ function createHison(): Hison {
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
                  * ## **Initialization Process**
-                 * 1. **Validates the `serviceCmd`.**
-                 *    - If it is missing, an error is thrown (`"Please enter the exact service command."`).
-                 * 2. **Checks if a valid `CachingModule` is provided.**
+                 * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
-                 * 3. **Creates an `EventEmitter` instance.**
+                 * 2. **Creates an `EventEmitter` instance.**
                  *    - This allows event-driven request monitoring (e.g., request completed, error occurred).
-                 * 4. **Instantiates an `ApiLink` instance.**
+                 * 3. **Instantiates an `ApiLink` instance.**
                  *    - Handles actual request execution and response processing.
-                 * 5. **Stores the `serviceCmd`.**
+                 * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the POST request.
                  *
                  * ## **Example Usage**
@@ -16109,8 +16123,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
-                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                constructor(serviceCmd: string | null = null, cachingModule: InterfaceCachingModule | null = null) {
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
@@ -16393,15 +16406,13 @@ function createHison(): Hison {
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
                  * ## **Initialization Process**
-                 * 1. **Validates the `serviceCmd`.**
-                 *    - If it is missing, an error is thrown (`"Please enter the exact service command."`).
-                 * 2. **Checks if a valid `CachingModule` is provided.**
+                 * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
-                 * 3. **Creates an `EventEmitter` instance.**
+                 * 2. **Creates an `EventEmitter` instance.**
                  *    - This allows event-driven request monitoring (e.g., request completed, error occurred).
-                 * 4. **Instantiates an `ApiLink` instance.**
+                 * 3. **Instantiates an `ApiLink` instance.**
                  *    - Handles actual request execution and response processing.
-                 * 5. **Stores the `serviceCmd`.**
+                 * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the PUT request.
                  *
                  * ## **Example Usage**
@@ -16424,8 +16435,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
-                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                constructor(serviceCmd: string | null = null, cachingModule: InterfaceCachingModule | null = null) {
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
@@ -16708,15 +16718,13 @@ function createHison(): Hison {
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
                  * ## **Initialization Process**
-                 * 1. **Validates the `serviceCmd`.**
-                 *    - If it is missing, an error is thrown (`"Please enter the exact service command."`).
-                 * 2. **Checks if a valid `CachingModule` is provided.**
+                 * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
-                 * 3. **Creates an `EventEmitter` instance.**
+                 * 2. **Creates an `EventEmitter` instance.**
                  *    - This allows event-driven request monitoring (e.g., request completed, error occurred).
-                 * 4. **Instantiates an `ApiLink` instance.**
+                 * 3. **Instantiates an `ApiLink` instance.**
                  *    - Handles actual request execution and response processing.
-                 * 5. **Stores the `serviceCmd`.**
+                 * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the PATCH request.
                  *
                  * ## **Example Usage**
@@ -16739,8 +16747,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
-                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                constructor(serviceCmd: string | null = null, cachingModule: InterfaceCachingModule | null = null) {
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
@@ -17023,15 +17030,13 @@ function createHison(): Hison {
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
                  * ## **Initialization Process**
-                 * 1. **Validates the `serviceCmd`.**
-                 *    - If it is missing, an error is thrown (`"Please enter the exact service command."`).
-                 * 2. **Checks if a valid `CachingModule` is provided.**
+                 * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
-                 * 3. **Creates an `EventEmitter` instance.**
+                 * 2. **Creates an `EventEmitter` instance.**
                  *    - This allows event-driven request monitoring (e.g., request completed, error occurred).
-                 * 4. **Instantiates an `ApiLink` instance.**
+                 * 3. **Instantiates an `ApiLink` instance.**
                  *    - Handles actual request execution and response processing.
-                 * 5. **Stores the `serviceCmd`.**
+                 * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the DELETE request.
                  *
                  * ## **Example Usage**
@@ -17054,8 +17059,7 @@ function createHison(): Hison {
                  * @param {CachingModule} [cachingModule=null] - An optional caching module.
                  * @throws {Error} If `serviceCmd` is not provided.
                  */
-                constructor(serviceCmd: string, cachingModule: InterfaceCachingModule | null = null) {
-                    if (!serviceCmd) throw new Error('Please enter the exact service command.');
+                constructor(serviceCmd: string | null = null, cachingModule: InterfaceCachingModule | null = null) {
                     if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
                     this._eventEmitter = new EventEmitter();
                     this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
