@@ -1,24 +1,23 @@
 {
-    "compilerOptions": {
-      "target": "ES5",
-      "module": "ES6",
-      "lib": ["es2019", "dom"],
-      "strict": false,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "outDir": "./dist",
-      "declaration": true,
-      "declarationDir": "./dist/types",
-      "sourceMap": true,
-      "moduleResolution": "node",
-      "resolveJsonModule": true
-    },
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "node_modules"
-    ]
-  }
-  
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ES6",
+    "lib": ["es2019", "dom"],
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
