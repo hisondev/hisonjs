@@ -1,9 +1,9 @@
 {
   "name": "hisonjs",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "hisondev's client-side development support module",
   "main": "dist/hisonjs.bundle.js",
-  "types": "dist/types/hisonjs.d.ts",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
