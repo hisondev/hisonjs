@@ -2635,11 +2635,15 @@ interface Hison {
          * console.log(dataWrapper.getSerialized());
          * ```
          */
-        DataWrapper: new (keyOrObject?: Record<string, any> | string, value?: any) => InterfaceDataWrapper;
+        DataWrapper: new <T>(keyOrObject?: Record<string, InterfaceDataModel<T> | string> | string, value?: InterfaceDataModel<T> | string) => InterfaceDataWrapper;
         /**
-         * The `DataModel` class provides a structured way to manage tabular data within the `hisondev` solution.
-         * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency
-         * and validation. 
+         * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
+         * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
+         *
+         * ## Generic Type `<T>`
+         * - `T` represents the shape of each row in the `DataModel`.
+         * - By specifying `T`, developers can enforce type safety for row values.
+         * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
          * 
          * ## Core Features:
          * - **Column and Row Management:**
@@ -2654,10 +2658,10 @@ interface Hison {
          * - **Sorting and Structuring:**
          *   - Supports ascending, descending, and reverse sorting on both columns and rows.
          * - **Serialization and Cloning:**
-         *   - Enables deep copying of the entire `DataModel`.
+         *   - Enables deep copying of the entire `DataModel<T>`.
          *   - Provides `getSerialized()` to retrieve a JSON string of the model.
          * - **Integration with `DataWrapper`**
-         *   - DataWrapper is an instance for storing DataModel.
+         *   - `DataWrapper` is an instance for storing `DataModel<T>`.
          *
          * ## Data Consistency and Validation:
          * - Uses `_deepCopy()` to ensure stored objects are immutable.
@@ -2666,12 +2670,19 @@ interface Hison {
          *
          * ## Example Usage:
          * ```typescript
-         * const dataModel = new hison.data.DataModel([
+         * interface User {
+         *     id: number;
+         *     name: string;
+         *     age: number;
+         * }
+         * 
+         * // Creating a DataModel with a defined type
+         * const dataModel: InterfaceDataModel<User> = new hison.data.DataModel<User>([
          *     { id: 1, name: "Alice", age: 25 },
          *     { id: 2, name: "Bob", age: 30 }
          * ]);
          * 
-         * // Add a new column
+         * // Add a new column (TypeScript enforces type constraints)
          * dataModel.addColumn("gender");
          * 
          * // Set a default value for a column
@@ -2687,9 +2698,8 @@ interface Hison {
          *
          * ## Related Functions:
          * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
-         *
          */
-        DataModel: new (data?: Record<string, any>[] | Record<string, any>) => InterfaceDataModel;
+        DataModel: new <T>(data?: T[] | T) => InterfaceDataModel<T>;
     };
 
     //====================================================================================
@@ -3645,30 +3655,58 @@ interface InterfaceDataWrapper {
      * Retrieves the value associated with the specified key from the `DataWrapper`.
      * If the value exists, a deep copy is returned to prevent unintended modifications.
      *
+     * ## Generic Type `<T>`
+     * - `T` represents the shape of the `DataModel` rows.
+     * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
+     *
      * ## Parameters
      * - `key` **(string)**: The key associated with the value to retrieve.
      *
      * ## Behavior
      * - Throws an error if `key` is not a string.
-     * - If the key exists, returns a deep copy of the stored value.
+     * - If the key exists and contains a `DataModel<T>`, returns a deep copy of the stored `DataModel<T>`.
+     * - If the key exists but is a string, returns the stored string value.
      * - If the key does not exist, returns `null`.
      *
      * ## Returns
-     * - **`DataModel | string | null`**: A deep copy of the stored value, or `null` if the key is not found.
+     * - **`InterfaceDataModel<T> | string | null`**: 
+     *   - A deep copy of the `DataModel<T>` if stored under the key.
+     *   - The string value if a string was stored under the key.
+     *   - `null` if the key does not exist.
      *
      * ## Example Usage
      * ```typescript
-     * const dataWrapper = new hison.data.DataWrapper({ message: "Hello", users: new hison.data.DataModel([{ id: 1 }]) });
-     * 
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
+     *
+     * const dataWrapper = new hison.data.DataWrapper();
+     *
+     * // Storing a string value
+     * dataWrapper.put("message", "Hello");
      * console.log(dataWrapper.get("message")); // Output: "Hello"
-     * console.log(dataWrapper.get("users"));   // Output: Deep copy of the DataModel instance
+     *
+     * // Storing a DataModel with a defined type
+     * const userModel = new hison.data.DataModel<User>([
+     *     { id: 1, name: "Alice" },
+     *     { id: 2, name: "Bob" }
+     * ]);
+     * dataWrapper.put("users", userModel);
+     *
+     * // Retrieving with type inference
+     * const users = dataWrapper.get<User>("users");
+     * console.log(users?.getRowCount()); // Output: 2
+     * console.log(users?.getValue(0, "name").toUpperCase()); // Output: "ALICE"
+     *
+     * // Attempting to retrieve a non-existent key
      * console.log(dataWrapper.get("nonExistentKey")); // Output: null
      * ```
      *
      * @param {string} key The key to retrieve the associated value.
-     * @returns {InterfaceDataModel | string | null} A deep copy of the stored value, or `null` if the key is not found.
+     * @returns {InterfaceDataModel<T> | string | null} A deep copy of the stored value, or `null` if the key is not found.
      */
-    get(key: string): InterfaceDataModel | string | null;
+    get<T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null;
     /**
      * Retrieves the string value associated with the specified key from the `DataWrapper`.
      * Ensures that the retrieved value is explicitly a string before returning it.
@@ -3701,37 +3739,49 @@ interface InterfaceDataWrapper {
      */
     getString(key: string): string | null;
     /**
-     * Retrieves the `DataModel` instance associated with the specified key from the `DataWrapper`.
-     * Ensures that the retrieved value is a valid `DataModel` before returning a cloned copy.
+     * Retrieves the `DataModel<T>` instance associated with the specified key from the `DataWrapper`.
+     * Ensures that the retrieved value is a valid `DataModel<T>` before returning a cloned copy.
+     *
+     * ## Generic Type `<T>`
+     * - `T` represents the shape of each row in the `DataModel<T>`.
+     * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
      *
      * ## Parameters
-     * - `key` **(string)**: The key associated with the `DataModel` instance to retrieve.
+     * - `key` **(string)**: The key associated with the `DataModel<T>` instance to retrieve.
      *
      * ## Behavior
      * - Throws an error if `key` is not a string.
-     * - Throws an error if the value associated with `key` is not a valid `DataModel` instance.
-     * - Returns a deep-cloned copy of the `DataModel` to maintain data integrity.
+     * - Throws an error if the value associated with `key` is not a valid `DataModel<T>` instance.
+     * - Returns a deep-cloned copy of the `DataModel<T>` to maintain data integrity.
      *
      * ## Returns
-     * - **`DataModel`**: A cloned `DataModel` instance retrieved from the `DataWrapper`.
+     * - **`InterfaceDataModel<T>`**: A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
-     * const dataWrapper = new hison.data.DataWrapper({ users: dataModel });
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
      * 
-     * const clonedDataModel = dataWrapper.getDataModel("users");
+     * const userModel = new hison.data.DataModel<User>([{ id: 1, name: "Alice" }]);
+     * const dataWrapper = new hison.data.DataWrapper();
+     * dataWrapper.put("users", userModel);
+     * 
+     * // Retrieving with type inference
+     * const clonedDataModel = dataWrapper.getDataModel<User>("users");
      * console.log(clonedDataModel.getRowCount()); // Output: 1
+     * console.log(clonedDataModel.getValue(0, "name").toUpperCase()); // Output: "ALICE"
      *
      * // Throws an error: "The data does not contain the specified data-model value."
      * console.log(dataWrapper.getDataModel("nonExistentKey"));
      * ```
      *
-     * @param {string} key The key associated with the `DataModel` instance.
-     * @returns {InterfaceDataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
-     * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel`.
+     * @param {string} key The key associated with the `DataModel<T>` instance.
+     * @returns {InterfaceDataModel<T>} A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
+     * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel<T>`.
      */
-    getDataModel(key: string): InterfaceDataModel;
+    getDataModel<T = Record<string, any>>(key: string): InterfaceDataModel<T>;
     /**
      * Inserts or updates a key-value pair in the `DataWrapper`.
      * Allows storing primitive values, strings, and `DataModel` instances.
@@ -3839,11 +3889,11 @@ interface InterfaceDataWrapper {
      * ```
      *
      * @param {string} key The key under which the `DataModel` is stored.
-     * @param {InterfaceDataModel} value The `DataModel` instance to store.
+     * @param {InterfaceDataModel<any>} value The `DataModel` instance to store.
      * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
      * @throws {Error} If `key` is not a string or `value` is not a valid `DataModel`.
      */
-    putDataModel(key: string, value: InterfaceDataModel): InterfaceDataWrapper;
+    putDataModel(key: string, value: InterfaceDataModel<any>): InterfaceDataWrapper;
     /**
      * Converts the `DataWrapper` instance into a standard JavaScript object.
      * If the stored values include `DataModel` instances, they are converted into object representations.
@@ -3917,7 +3967,7 @@ interface InterfaceDataWrapper {
      */
     isEmpty(): boolean;
     /**
-     * Removes a key-value pair from the `DataWrapper` if the key exists.
+     * Removes a key-value pair from the `DataWrapper` if the key exists and returns the removed value.
      *
      * ## Parameters
      * - `key` **(string)**: The key to be removed from the `DataWrapper`.
@@ -3925,33 +3975,34 @@ interface InterfaceDataWrapper {
      * ## Behavior
      * - Throws an error if `key` is not a string.
      * - Checks if the key exists using `hasOwnProperty()`.
-     * - If the key exists, it is deleted from the internal data storage.
-     * - Returns an object containing the updated `DataWrapper` and a boolean indicating success.
+     * - If the key exists, retrieves the associated value and deletes the key.
+     * - Returns the removed value, which can be either a `DataModel` or a `string`.
+     * - If the key does not exist, returns `null`.
      *
      * ## Returns
-     * - **`{ data: DataWrapper, result: boolean }`**:
-     *   - `data`: The current `DataWrapper` instance after attempting removal.
-     *   - `result`: `true` if the key was successfully removed, otherwise `false`.
+     * - **`InterfaceDataModel<T> | string | null`**:
+     *   - The removed value if the key existed.
+     *   - `null` if the key was not found in the `DataWrapper`.
      *
      * ## Example Usage
      * ```typescript
-     * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+     * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
      * 
      * console.log(dataWrapper.containsKey("name")); // Output: true
      * 
-     * const { data: updatedWrapper, result } = dataWrapper.remove("name");
-     * console.log(result); // Output: true
-     * console.log(updatedWrapper.containsKey("name")); // Output: false
+     * const removedValue = dataWrapper.remove("name");
+     * console.log(removedValue); // Output: "Alice"
+     * console.log(dataWrapper.containsKey("name")); // Output: false
      *
-     * const { result: nonExistentResult } = dataWrapper.remove("nonExistentKey");
-     * console.log(nonExistentResult); // Output: false
+     * const nonExistentValue = dataWrapper.remove("nonExistentKey");
+     * console.log(nonExistentValue); // Output: null
      * ```
      *
      * @param {string} key The key to remove from the `DataWrapper`.
-     * @returns {{ data: InterfaceDataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
+     * @returns {InterfaceDataModel<T> | string | null} The removed value if it existed, otherwise `null`.
      * @throws {Error} If `key` is not a string.
      */
-    remove(key: string): { data: InterfaceDataWrapper, result: boolean };
+    remove<T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null;
     /**
      * Returns the number of key-value pairs stored in the `DataWrapper`.
      *
@@ -4017,15 +4068,19 @@ interface InterfaceDataWrapper {
      * console.log(dataWrapper.values()); // Output: ["Alice", 25, <cloned DataModel>]
      * ```
      *
-     * @returns {any[]} An array of deep-copied values stored in the `DataWrapper`.
+     * @returns {InterfaceDataModel<any>[] | string[]} An array of deep-copied values stored in the `DataWrapper`.
      */
-    values(): any[];
+    values(): InterfaceDataModel<any>[] | string[];
 };
 
 /**
- * The `DataModel` class provides a structured way to manage tabular data within the `hisondev` solution.
- * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency
- * and validation. 
+ * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
+ * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
+ *
+ * ## Generic Type `<T>`
+ * - `T` represents the shape of each row in the `DataModel`.
+ * - By specifying `T`, developers can enforce type safety for row values.
+ * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
  * 
  * ## Core Features:
  * - **Column and Row Management:**
@@ -4040,10 +4095,10 @@ interface InterfaceDataWrapper {
  * - **Sorting and Structuring:**
  *   - Supports ascending, descending, and reverse sorting on both columns and rows.
  * - **Serialization and Cloning:**
- *   - Enables deep copying of the entire `DataModel`.
+ *   - Enables deep copying of the entire `DataModel<T>`.
  *   - Provides `getSerialized()` to retrieve a JSON string of the model.
  * - **Integration with `DataWrapper`**
- *   - DataWrapper is an instance for storing DataModel.
+ *   - `DataWrapper` is an instance for storing `DataModel<T>`.
  *
  * ## Data Consistency and Validation:
  * - Uses `_deepCopy()` to ensure stored objects are immutable.
@@ -4052,12 +4107,19 @@ interface InterfaceDataWrapper {
  *
  * ## Example Usage:
  * ```typescript
- * const dataModel = new hison.data.DataModel([
+ * interface User {
+ *     id: number;
+ *     name: string;
+ *     age: number;
+ * }
+ * 
+ * // Creating a DataModel with a defined type
+ * const dataModel: InterfaceDataModel<User> = new hison.data.DataModel<User>([
  *     { id: 1, name: "Alice", age: 25 },
  *     { id: 2, name: "Bob", age: 30 }
  * ]);
  * 
- * // Add a new column
+ * // Add a new column (TypeScript enforces type constraints)
  * dataModel.addColumn("gender");
  * 
  * // Set a default value for a column
@@ -4073,9 +4135,8 @@ interface InterfaceDataWrapper {
  *
  * ## Related Functions:
  * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
- *
  */
-interface InterfaceDataModel {
+interface InterfaceDataModel<T> {
     /**
      * Checks whether the current instance is a `DataModel`.
      * This method is primarily used for type verification.
@@ -4113,9 +4174,9 @@ interface InterfaceDataModel {
      * console.log(clonedModel !== dataModel); // Output: true (Cloned instance is independent)
      * ```
      *
-     * @returns {InterfaceDataModel} A new `DataModel` instance with a copy of the stored rows.
+     * @returns {InterfaceDataModel<T>} A new `DataModel` instance with a copy of the stored rows.
      */
-    clone(): InterfaceDataModel;
+    clone(): InterfaceDataModel<T>;
     /**
      * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
      * 
@@ -4137,9 +4198,9 @@ interface InterfaceDataModel {
      * console.log(dataModel.getColumns());  // Output: []
      * ```
      *
-     * @returns {InterfaceDataModel} The current `DataModel` instance after clearing all data.
+     * @returns {InterfaceDataModel<T>} The current `DataModel` instance after clearing all data.
      */
-    clear(): InterfaceDataModel;
+    clear(): InterfaceDataModel<T>;
     /**
      * Serializes the `DataModel` instance into a JSON string representation.
      * Converts the stored row data into a JSON format for easy storage or transmission.
@@ -4216,35 +4277,45 @@ interface InterfaceDataModel {
      * Ensures that returned values are deep copies to prevent unintended modifications.
      *
      * ## Parameters
-     * - `column` **(string)**: The column name from which to retrieve values.
+     * - `column` **(K)**: The column name from which to retrieve values.
      *
      * ## Behavior
-     * - Throws an error if `column` is not a valid string.
+     * - Throws an error if `column` is not a valid key in `T`.
      * - Throws an error if the specified column does not exist.
      * - Iterates through all rows and extracts the values of the specified column.
      * - Uses `_deepCopy()` to return deep copies of the values.
+     * - The return type is inferred as `T[K][]`, maintaining strong type safety.
      *
      * ## Returns
-     * - **`any[]`**: An array containing all values from the specified column.
+     * - **`T[K][]`**: An array containing all values from the specified column.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
-     *     { id: 1, name: "Alice" },
-     *     { id: 2, name: "Bob" }
+     * interface User {
+     *     id: string;
+     *     age: number;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
+     *     { id: "U1", age: 25 },
+     *     { id: "U2", age: 30 }
      * ]);
      * 
-     * console.log(dataModel.getColumnValues("name")); // Output: ["Alice", "Bob"]
-     *
+     * const ids = dataModel.getColumnValues("id");  // Inferred as string[]
+     * console.log(ids); // Output: ["U1", "U2"]
+     * 
+     * const ages = dataModel.getColumnValues("age"); // Inferred as number[]
+     * console.log(ages); // Output: [25, 30]
+     * 
      * // Throws an error: "The column does not exist."
-     * console.log(dataModel.getColumnValues("age"));
+     * // console.log(dataModel.getColumnValues("name"));
      * ```
      *
-     * @param {string} column The column name from which to retrieve values.
-     * @returns {any[]} An array of values from the specified column.
+     * @param {K} column The column name from which to retrieve values.
+     * @returns {T[K][]} An array of values from the specified column.
      * @throws {Error} If the column is invalid or does not exist.
      */
-    getColumnValues(column: string): any[];
+    getColumnValues<K extends keyof T>(column: K): T[K][];
     /**
      * Adds a new column to the `DataModel`.
      * Ensures that all existing rows include the new column with a default value of `null`.
@@ -4257,6 +4328,9 @@ interface InterfaceDataModel {
      * - Calls `_addCol(column)` to validate and add the column.
      * - Iterates through `_rows` and ensures each row includes the new column, assigning `null` if missing.
      * - Returns the current `DataModel` instance for method chaining.
+     *
+     * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
+     * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      *
      * ## Returns
      * - **`DataModel`**: The current instance after adding the new column.
@@ -4272,10 +4346,10 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {string} column The name of the column to add.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the column.
+     * @returns {InterfaceDataModel<T>} The current `DataModel` instance after adding the column.
      * @throws {Error} If the column is invalid or already exists.
      */
-    addColumn(column: string): InterfaceDataModel;
+    addColumn(column: string): InterfaceDataModel<T>;
     /**
      * Adds multiple new columns to the `DataModel`.
      * Ensures that all existing rows include the newly added columns with a default value of `null`.
@@ -4288,6 +4362,9 @@ interface InterfaceDataModel {
      * - Iterates through the provided column names and calls `_addCol(column)` to validate and add each column.
      * - Ensures that all existing rows include the new columns, assigning `null` if missing.
      * - Returns the current `DataModel` instance for method chaining.
+     *
+     * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
+     * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      *
      * ## Returns
      * - **`DataModel`**: The current instance after adding the new columns.
@@ -4303,31 +4380,43 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {string[]} columns An array of column names to add.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the columns.
+     * @returns {InterfaceDataModel<T>} The current `DataModel` instance after adding the columns.
      * @throws {Error} If `columns` is not an array or contains invalid column names.
      */
-    addColumns(columns: string[]): InterfaceDataModel;
+    addColumns(columns: string[]): InterfaceDataModel<T>;
     /**
      * Sets the same value for all rows in the specified column.
      * If the column does not exist, it is created before assigning values.
+     * 
+     * Supports type safety when `T` is defined, while allowing dynamic usage when `T = Record<string, any>`.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to update.
-     * - `value` **(any)**: The value to be assigned to all rows in the specified column.
+     * - `column` **(K)**: The name of the column to update, constrained to keys of `T` if defined.
+     * - `value` **(`T[K]`)**: The value to be assigned to all rows in the specified column.
      *
      * ## Behavior
      * - Throws an error if `value` is `undefined`.
      * - Calls `_getValidColValue(column)` to validate the column name.
      * - If the column does not exist, `_addCol(column)` is called to add it.
      * - Iterates through all rows and assigns the specified value using `_getValidRowValue()`.
-     * - Returns the current `DataModel` instance for method chaining.
+     * - Ensures type consistency when `T` is specified.
+     * - Allows any column name when `T = Record<string, any>`.
      *
      * ## Returns
-     * - **`DataModel`**: The current instance after setting the column values.
+     * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after setting the column values.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }]);
+     * interface User {
+     *     id: number;
+     *     name: string;
+     *     status?: string;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
+     *     { id: 1, name: "Alice" },
+     *     { id: 2, name: "Bob" }
+     * ]);
      * 
      * // Set the same value for all rows in the "status" column
      * dataModel.setColumnSameValue("status", "active");
@@ -4335,36 +4424,45 @@ interface InterfaceDataModel {
      * 
      * // If the column does not exist, it is created automatically
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "status"]
+     * 
+     * // With default `Record<string, any>`, dynamic columns can be added without strict typing
+     * const flexibleModel = new hison.data.DataModel();
+     * flexibleModel.setColumnSameValue("newField", 123);
      * ```
      *
-     * @param {string} column The name of the column to set the value for.
-     * @param {any} value The value to assign to all rows in the column.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after updating the column.
+     * @param {K} column The name of the column to set the value for.
+     * @param {T[K]} value The value to assign to all rows in the column.
+     * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after updating the column.
      * @throws {Error} If `value` is `undefined` or if the column name is invalid.
      */
-    setColumnSameValue(column: string, value: any): InterfaceDataModel;
+    setColumnSameValue<K extends keyof T>(column: K, value: T[K]): InterfaceDataModel<T>;
     /**
      * Applies a formatting function to all values in the specified column.
-     * The formatter function transforms each row's value in the column.
+     * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to format.
-     * - `formatter` **(`DataModelFormatter`)**: A function that takes a value and returns a formatted version of it.
+     * - `column` **(K)**: The name of the column to format, constrained to keys of `T` if defined.
+     * - `formatter` **(`DataModelFormatter`)**: A function that transforms each value in the column.
      *
      * ## Behavior
      * - Throws an error if `formatter` is not a valid function.
-     * - Calls `_getValidColValue(column)` to validate the column name.
-     * - Throws an error if the specified column does not exist.
-     * - Iterates through all rows and applies the `formatter` function to each value in the column.
-     * - Ensures that the formatted value is valid using `_getValidRowValue()`.
-     * - Returns the current `DataModel` instance for method chaining.
+     * - Validates `column` using `_getValidColValue(column)`.
+     * - Throws an error if the column does not exist.
+     * - Iterates through all rows and applies `formatter` to each value in the column.
+     * - Ensures that the formatted values remain valid using `_getValidRowValue()`.
+     * - Allows any string as `column` if `T = Record<string, any>`.
      *
      * ## Returns
-     * - **`DataModel`**: The current instance after formatting the column values.
+     * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after formatting the column.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface Product {
+     *     id: number;
+     *     price: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<Product>([
      *     { id: 1, price: 1000 },
      *     { id: 2, price: 2000 }
      * ]);
@@ -4373,16 +4471,17 @@ interface InterfaceDataModel {
      * dataModel.setColumnSameFormat("price", value => `$${value}`);
      * console.log(dataModel.getColumnValues("price")); // Output: ["$1000", "$2000"]
      * 
-     * // Throws an error if the column does not exist
-     * // dataModel.setColumnSameFormat("discount", value => `${value}%`);
+     * // With default `Record<string, any>`, any column can be formatted dynamically
+     * const flexibleModel = new hison.data.DataModel();
+     * flexibleModel.setColumnSameFormat("randomColumn", value => `formatted-${value}`);
      * ```
      *
-     * @param {string} column The name of the column to format.
+     * @param {K} column The name of the column to format.
      * @param {DataModelFormatter} formatter A function that transforms each value in the column.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after formatting the column.
+     * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after formatting the column.
      * @throws {Error} If `formatter` is not a function or if the column does not exist.
      */
-    setColumnSameFormat(column: string, formatter: DataModelFormatter): InterfaceDataModel;
+    setColumnSameFormat<K extends keyof T>(column: K, formatter: DataModelFormatter): InterfaceDataModel<T>;
     /**
      * Retrieves a deep copy of the row at the specified index.
      * Ensures that modifications to the returned row do not affect the original data.
@@ -4395,7 +4494,7 @@ interface InterfaceDataModel {
      * - Uses `_deepCopy()` to return a copy of the row, preventing unintended modifications.
      *
      * ## Returns
-     * - **`Record<string, any>`**: A deep copy of the row data as an object.
+     * - **`T`**: A deep copy of the row data as an object.
      *
      * ## Example Usage
      * ```typescript
@@ -4411,10 +4510,10 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {number} rowIndex The index of the row to retrieve.
-     * @returns {Record<string, any>} A deep copy of the row data.
+     * @returns {T} A deep copy of the row data.
      * @throws {Error} If `rowIndex` is out of bounds.
      */
-    getRow(rowIndex: number): Record<string, any>;
+    getRow(rowIndex: number): T;
     /**
      * Retrieves the row at the specified index as a new `DataModel` instance.
      * Converts the row object into a `DataModel` for further structured operations.
@@ -4445,31 +4544,40 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {number} rowIndex The index of the row to retrieve.
-     * @returns {InterfaceDataModel} A new `DataModel` instance containing the row data.
+     * @returns {InterfaceDataModel<T>} A new `DataModel` instance containing the row data.
      * @throws {Error} If `rowIndex` is out of bounds.
      */
-    getRowAsDataModel(rowIndex: number): InterfaceDataModel;
+    getRowAsDataModel(rowIndex: number): InterfaceDataModel<T>;
     /**
-     * Adds a new row to the `DataModel` at the specified index or appends it to the end.
+     * Adds a new row to the `DataModel<T>` at the specified index or appends it to the end.
      * If no parameters are provided, an empty row is added.
      *
+     * ## Generic Type `<T>`
+     * - `T` represents the structure of each row in the `DataModel<T>`.
+     * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible row structures.
+     *
      * ## Parameters
-     * - `rowIndexOrRow` **(number | Object, optional)**: The index at which to insert the row, or the row data to insert.
-     * - `row` **(Object, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
+     * - `rowIndexOrRow` **(number | T, optional)**: The index at which to insert the row, or the row data to insert.
+     * - `row` **(T, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
      *
      * ## Behavior
      * - If **no parameters** are provided, an empty row is appended.
      * - If **only a number is provided**, an empty row is inserted at that index.
-     * - If **only an object is provided**, it is inserted as a new row at the end.
+     * - If **only an object (`T`) is provided**, it is inserted as a new row at the end.
      * - If **both a number and an object are provided**, the row is inserted at the specified index.
      * - Throws an error if attempting to add a row without first defining columns.
      *
      * ## Returns
-     * - **`DataModel`**: The current instance after adding the new row.
+     * - **`DataModel<T>`**: The current instance after adding the new row.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel(["id", "name"]);
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
      * 
      * // Add an empty row
      * dataModel.addRow();
@@ -4485,18 +4593,23 @@ interface InterfaceDataModel {
      * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
      * 
      * // Throws an error: "Please define the column first."
-     * // new hison.data.DataModel().addRow();
+     * // new hison.data.DataModel<User>().addRow();
      * ```
      *
-     * @param {number | Object} [rowIndexOrRow] The index at which to insert the row, or the row data.
-     * @param {Object} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
-     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the row.
+     * @param {number | T} [rowIndexOrRow] The index at which to insert the row, or the row data.
+     * @param {T} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
+     * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after adding the row.
      * @throws {Error} If columns are not defined or parameters are invalid.
      */
-    addRow(rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): InterfaceDataModel;
+    addRow(rowIndexOrRow?: number | T, row?: T): InterfaceDataModel<T>;
     /**
      * Retrieves a deep copy of a range of rows from the `DataModel`.
      * Ensures that modifications to the returned rows do not affect the original data.
+     *
+     * ## Generic Type `<T>`
+     * - `T` represents the structure of each row in the `DataModel`.
+     * - By specifying `T`, developers can enforce type safety when retrieving rows.
+     * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
      *
      * ## Parameters
      * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
@@ -4508,11 +4621,16 @@ interface InterfaceDataModel {
      * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
      *
      * ## Returns
-     * - **`Record<string, any>[]`**: An array of deep-copied row objects.
+     * - **`T[]`**: An array of deep-copied row objects, ensuring type safety.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
@@ -4529,11 +4647,11 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {number} [startRow=0] The starting index of the row range.
-     * @param {number} [endRow=null] The ending index of the row range (inclusive).
-     * @returns {Record<string, any>[]} An array of deep-copied rows.
+     * @param {number | null} [endRow=null] The ending index of the row range (inclusive).
+     * @returns {T[]} An array of deep-copied rows, preserving type safety.
      * @throws {Error} If `startRow` or `endRow` is out of bounds.
      */
-    getRows(startRow?: number, endRow?: number): Record<string, any>[];
+    getRows(startRow?: number, endRow?: number | null): T[];
     /**
      * Retrieves a range of rows as a new `DataModel` instance.
      * Ensures that the returned `DataModel` contains independent copies of the selected rows.
@@ -4569,17 +4687,22 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {number} [startRow=0] The starting index of the row range.
-     * @param {number} [endRow=null] The ending index of the row range (inclusive).
-     * @returns {InterfaceDataModel} A new `DataModel` instance containing the selected rows.
+     * @param {number | null} [endRow=null] The ending index of the row range (inclusive).
+     * @returns {InterfaceDataModel<T>} A new `DataModel` instance containing the selected rows.
      * @throws {Error} If `startRow` or `endRow` is out of bounds.
      */
-    getRowsAsDataModel(startRow?: number, endRow?: number): InterfaceDataModel;
+    getRowsAsDataModel(startRow?: number, endRow?: number | null): InterfaceDataModel<T>;
     /**
      * Adds multiple rows to the `DataModel`.
      * Each row is validated and inserted into the existing dataset.
      *
+     * ## Generic Type `<T>`
+     * - `T` represents the structure of each row in the `DataModel`.
+     * - By specifying `T`, developers can enforce type safety for inserted rows.
+     * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
+     *
      * ## Parameters
-     * - `rows` **(`Record<string, any>[]`)**: An array of row objects to be added.
+     * - `rows` **(`T[]`)**: An array of row objects to be added.
      *
      * ## Behavior
      * - Calls `_put(rows)` to process and insert the provided rows.
@@ -4587,11 +4710,16 @@ interface InterfaceDataModel {
      * - Returns the current `DataModel` instance for method chaining.
      *
      * ## Returns
-     * - **`DataModel`**: The current instance after adding the new rows.
+     * - **`InterfaceDataModel<T>`**: The current instance after adding the new rows.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel(["id", "name"]);
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
      * 
      * // Add multiple rows
      * dataModel.addRows([
@@ -4603,30 +4731,39 @@ interface InterfaceDataModel {
      * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
      * ```
      *
-     * @param {Record<string, any>[]} rows An array of row objects to add.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after adding the rows.
+     * @param {T[]} rows An array of row objects to add.
+     * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after adding the rows.
      * @throws {Error} If `rows` contain invalid data.
      */
-    addRows(rows: Record<string, any>[]): InterfaceDataModel;
+    addRows(rows: T[]): InterfaceDataModel<T>;
     /**
-     * Converts the `DataModel` instance into a standard JavaScript object.
+     * Converts the `DataModel` instance into a structured JavaScript object.
      * The returned object includes column definitions, row data, and metadata.
      *
      * ## Behavior
-     * - Uses `_deepCopy()` to ensure that returned data is independent of the original `DataModel`.
-     * - Includes the following properties in the returned object:
-     *   - `cols`: An array of column names.
-     *   - `rows`: An array of row objects.
+     * - Uses `_deepCopy()` to ensure the returned data is independent of the original `DataModel`.
+     * - The returned object contains:
+     *   - `cols`: An array of column names (`keyof T`).
+     *   - `rows`: An array of row objects (`T[]`).
      *   - `colCount`: The total number of columns.
      *   - `rowCount`: The total number of rows.
-     *   - `isDeclare`: A boolean indicating whether columns are defined.
+     *   - `isDeclare`: A boolean indicating whether columns are explicitly defined.
      *
      * ## Returns
-     * - **`Record<string, any>`**: A plain object representing the `DataModel` structure.
+     * - **`{ cols: (keyof T)[], rows: T[], colCount: number, rowCount: number, isDeclare: boolean }`**:
+     *   A structured object representing the `DataModel`.
+     *
+     * ⚠ **Note:** If `T` is explicitly defined, `cols` will reflect only the known keys of `T`.
+     * If `T` is the default `Record<string, any>`, `cols` may include dynamically added columns.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
@@ -4642,53 +4779,60 @@ interface InterfaceDataModel {
      * // }
      * ```
      *
-     * @returns {Record<string, any>} A plain object representing the `DataModel` structure.
+     * @returns {{ cols: (keyof T)[], rows: T[], colCount: number, rowCount: number, isDeclare: boolean }}
+     *          A structured object representing the `DataModel` structure.
      */
-    getObject(): Record<string, any>;
+    getObject(): { cols: (keyof T)[]; rows: T[]; colCount: number; rowCount: number; isDeclare: boolean; };
     /**
-     * Retrieves the value at the specified row index and column name.
-     * Ensures that the returned value is a deep copy to prevent unintended modifications.
+     * Retrieves a deep copy of the value at the specified row index and column name.
+     * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
      *
      * ## Parameters
-     * - `rowIndex` **(number)**: The index of the row from which to retrieve the value.
-     * - `column` **(string)**: The name of the column containing the desired value.
+     * - `rowIndex` **(number)**: The index of the row to retrieve the value from.
+     * - `column` **(K)**: The column name, constrained to the keys of `T` if defined.
      *
      * ## Behavior
-     * - Calls `_getValidColValue(column)` to validate the column name.
-     * - Throws an error if the specified column does not exist.
-     * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
-     * - Uses `_deepCopy()` to return an independent copy of the value.
+     * - Validates `column` and `rowIndex` before accessing the value.
+     * - Returns a deep copy to prevent unintended modifications.
+     * - Allows any string as `column` if `T = Record<string, any>`.
      *
      * ## Returns
-     * - **`any`**: A deep copy of the value stored at the specified row and column.
+     * - **`T[K]`**: A deep copy of the value stored at the specified row and column.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
-     *     { id: 1, name: "Alice" },
-     *     { id: 2, name: "Bob" }
+     * interface User {
+     *     id: string;
+     *     age: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
+     *     { id: "U1", age: 25 },
+     *     { id: "U2", age: 30 }
      * ]);
      * 
-     * console.log(dataModel.getValue(0, "name")); // Output: "Alice"
+     * console.log(dataModel.getValue(0, "age")); // Output: 25 (type: number)
+     * console.log(dataModel.getValue(0, "id"));  // Output: "U1" (type: string)
      * 
-     * // Throws an error if the column does not exist
-     * // console.log(dataModel.getValue(0, "age"));
+     * // With default `Record<string, any>`, any column can be accessed.
+     * const flexibleModel = new hison.data.DataModel();
+     * console.log(flexibleModel.getValue(0, "randomColumn")); // No TypeScript error
      * ```
      *
-     * @param {number} rowIndex The index of the row to retrieve the value from.
-     * @param {string} column The column name containing the value.
-     * @returns {any} A deep copy of the value stored at the specified row and column.
+     * @param {number} rowIndex The row index to retrieve the value from.
+     * @param {K} column The column name to retrieve the value from.
+     * @returns {T[K]} A deep copy of the value stored at the specified row and column.
      * @throws {Error} If `rowIndex` or `column` is invalid.
      */
-    getValue(rowIndex: number, column: string): any;
+    getValue<K extends keyof T>(rowIndex: number, column: K): T[K];
     /**
      * Sets a value at the specified row index and column name.
      * Ensures that the value is valid and maintains data integrity.
      *
      * ## Parameters
      * - `rowIndex` **(number)**: The index of the row where the value should be set.
-     * - `column` **(string)**: The name of the column where the value should be stored.
-     * - `value` **(any)**: The value to be assigned to the specified row and column.
+     * - `column` **(K)**: The name of the column where the value should be stored.
+     * - `value` **(T[K])**: The value to be assigned, ensuring type safety.
      *
      * ## Behavior
      * - Throws an error if `value` is `undefined`.
@@ -4699,12 +4843,21 @@ interface InterfaceDataModel {
      * - Updates the value at the specified row and column.
      * - Returns the current `DataModel` instance for method chaining.
      *
+     * ## Type Safety
+     * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
+     * - The `value` type is inferred as `T[K]`, preventing type mismatches.
+     *
      * ## Returns
-     * - **`DataModel`**: The current instance after updating the value.
+     * - **`InterfaceDataModel<T>`**: The current instance after updating the value.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
@@ -4720,18 +4873,18 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {number} rowIndex The index of the row where the value should be set.
-     * @param {string} column The column name where the value should be stored.
-     * @param {any} value The value to assign.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after updating the value.
+     * @param {K} column The column name where the value should be stored.
+     * @param {T[K]} value The value to assign, ensuring type safety.
+     * @returns {InterfaceDataModel<T>} The current `DataModel` instance after updating the value.
      * @throws {Error} If `value` is `undefined` or if `rowIndex` or `column` is invalid.
      */
-    setValue(rowIndex: number, column: string, value: any): InterfaceDataModel;
+    setValue<K extends keyof T>(rowIndex: number, column: K, value: T[K]): InterfaceDataModel<T>;
     /**
      * Removes a column from the `DataModel`, deleting its values from all rows.
      * Ensures that the column exists before attempting removal.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to remove.
+     * - `column` **(K)**: The name of the column to remove, ensuring type safety.
      *
      * ## Behavior
      * - Calls `_getValidColValue(column)` to validate the column name.
@@ -4739,13 +4892,26 @@ interface InterfaceDataModel {
      * - Iterates through all rows and removes the specified column.
      * - Updates `_cols` to exclude the removed column.
      * - Returns the current `DataModel` instance for method chaining.
+     * 
+     * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
+     * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+     * 
+     * ## Type Safety
+     * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
+     * - Prevents attempts to remove a column that does not exist in the defined type.
      *
      * ## Returns
-     * - **`DataModel`**: The current instance after removing the column.
+     * - **`InterfaceDataModel<T>`**: The current instance after removing the column.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     *   age: number;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 }
      * ]);
@@ -4759,29 +4925,40 @@ interface InterfaceDataModel {
      * // dataModel.removeColumn("salary");
      * ```
      *
-     * @param {string} column The name of the column to remove.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after removing the column.
+     * @param {K} column The name of the column to remove, ensuring type safety.
+     * @returns {InterfaceDataModel<T>} The current `DataModel` instance after removing the column.
      * @throws {Error} If `column` is invalid or does not exist.
      */
-    removeColumn(column: string): InterfaceDataModel;
+    removeColumn<K extends keyof T>(column: K): InterfaceDataModel<T>;
     /**
      * Removes multiple columns from the `DataModel`, deleting their values from all rows.
      * Ensures that each specified column exists before attempting removal.
      *
      * ## Parameters
-     * - `columns` **(string[])**: An array of column names to remove.
+     * - `columns` **(K[])**: An array of column names to remove, ensuring type safety.
      *
      * ## Behavior
+     * - Uses `<K extends keyof T>` to enforce that `columns` contain only valid keys of `T`.
      * - Iterates through the `columns` array and calls `removeColumn(column)` for each entry.
      * - If any column does not exist, `removeColumn` will throw an error.
      * - Returns the current `DataModel` instance for method chaining.
-     *
+     * 
+     * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
+     * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+     * 
      * ## Returns
-     * - **`DataModel`**: The current instance after removing the specified columns.
+     * - **`InterfaceDataModel<T>`**: The current instance after removing the specified columns.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     *   age: number;
+     *   city: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25, city: "New York" },
      *     { id: 2, name: "Bob", age: 30, city: "Los Angeles" }
      * ]);
@@ -4795,11 +4972,11 @@ interface InterfaceDataModel {
      * // dataModel.removeColumns(["salary", "bonus"]);
      * ```
      *
-     * @param {string[]} columns An array of column names to remove.
-     * @returns {InterfaceDataModel} The current `DataModel` instance after removing the columns.
+     * @param {K[]} columns An array of column names to remove, ensuring type safety.
+     * @returns {InterfaceDataModel<T>} The current `DataModel` instance after removing the columns.
      * @throws {Error} If any column does not exist.
      */
-    removeColumns(columns: string[]): InterfaceDataModel;
+    removeColumns<K extends keyof T>(columns: K[]): InterfaceDataModel<T>;
     /**
      * Removes a row from the `DataModel` at the specified index and returns the removed row.
      * Ensures that the row index is valid before removal.
@@ -4808,15 +4985,21 @@ interface InterfaceDataModel {
      * - `rowIndex` **(number, optional, default = `0`)**: The index of the row to remove.
      *
      * ## Behavior
+     * - Uses `<T>` to ensure that the returned row matches the structure of `T`.
      * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
      * - Uses `splice()` to remove the row from `_rows` and returns the removed row.
      *
      * ## Returns
-     * - **`Record<string, any>`**: The removed row object.
+     * - **`T`**: The removed row object, ensuring type safety based on `T`.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
@@ -4833,10 +5016,10 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {number} [rowIndex=0] The index of the row to remove.
-     * @returns {Record<string, any>} The removed row object.
+     * @returns {T} The removed row object, with type safety enforced.
      * @throws {Error} If `rowIndex` is out of bounds.
      */
-    removeRow(rowIndex?: number): Record<string, any>;
+    removeRow(rowIndex?: number): T;
     /**
      * Retrieves the total number of columns in the `DataModel`.
      *
@@ -4885,11 +5068,13 @@ interface InterfaceDataModel {
     getRowCount(): number;
     /**
      * Checks whether the `DataModel` contains a specified column.
+     * Uses `<K extends keyof T>` to ensure type safety when checking column names.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to check.
+     * - `column` **(K)**: The column name to check, constrained to keys of `T`.
      *
      * ## Behavior
+     * - Ensures type safety by restricting `column` to valid keys of `T`.
      * - Calls `_hasColumn(column)` to determine if the column exists.
      * - Returns `true` if the column is found in `_cols`, otherwise `false`.
      *
@@ -4898,34 +5083,49 @@ interface InterfaceDataModel {
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel(["id", "name"]);
+     * interface User {
+     *   id: number;
+     *   name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
      * 
      * console.log(dataModel.hasColumn("name")); // Output: true
-     * console.log(dataModel.hasColumn("age")); // Output: false
+     * console.log(dataModel.hasColumn("age"));  // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
      * ```
      *
-     * @param {string} column The column name to check.
+     * @param {K} column The column name to check, constrained to keys of `T`.
      * @returns {boolean} `true` if the column exists, otherwise `false`.
      */
-    hasColumn(column: string): boolean;
+    hasColumn<K extends keyof T>(column: K): boolean;
     /**
      * Restricts the `DataModel` to only the specified columns by removing all other columns.
-     * Ensures that only the columns listed in `columns` remain in the dataset.
+     * Uses `<K extends keyof T>` to enforce type safety when specifying valid columns.
      *
      * ## Parameters
-     * - `columns` **(string[])**: An array of column names to keep in the `DataModel`.
+     * - `columns` **(K[])**: An array of column names to retain, constrained to keys of `T`.
      *
      * ## Behavior
-     * - Filters `_cols` to identify columns that are **not** in the provided `columns` list.
-     * - Calls `removeColumns()` to remove those columns from the dataset.
+     * - Ensures type safety by allowing only existing keys of `T` as valid columns.
+     * - Identifies and removes columns that are **not** included in the provided `columns` list.
+     * - Calls `removeColumns()` to eliminate those columns from the dataset.
      * - Returns the modified `DataModel` instance for method chaining.
-     *
+     * 
+     * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
+     * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+     * 
      * ## Returns
-     * - **`DataModel`**: The modified `DataModel` instance with only the specified columns retained.
+     * - **`InterfaceDataModel<T>`**: The modified `DataModel` instance with only the specified columns retained.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     *   age: number;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 }
      * ]);
@@ -4935,19 +5135,24 @@ interface InterfaceDataModel {
      * // Keep only "id" and "name" columns
      * dataModel.setValidColumns(["id", "name"]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+     *
+     * // TypeScript Error: Argument of type '"salary"' is not assignable to parameter of type '"id" | "name" | "age"'.
+     * // dataModel.setValidColumns(["id", "salary"]);
      * ```
      *
-     * @param {string[]} columns An array of column names to retain.
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with only the specified columns retained.
+     * @param {K[]} columns An array of column names to retain, constrained to keys of `T`.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with only the specified columns retained.
      */
-    setValidColumns(columns: string[]): InterfaceDataModel;
+    setValidColumns<K extends keyof T>(columns: K[]): InterfaceDataModel<T>;
     /**
      * Checks whether a specified column contains only non-null values.
+     * Uses `<K extends keyof T>` to ensure type safety when specifying the column.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to check.
+     * - `column` **(K)**: The name of the column to check, constrained to keys of `T`.
      *
      * ## Behavior
+     * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getNullColumnFirstRowIndex(column)` to find the first occurrence of a `null` value in the column.
      * - If no `null` values are found, returns `true`; otherwise, returns `false`.
      *
@@ -4956,38 +5161,53 @@ interface InterfaceDataModel {
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string | null;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: null },
      *     { id: 3, name: "Charlie" }
      * ]);
      * 
-     * console.log(dataModel.isNotNullColumn("id")); // Output: true
+     * console.log(dataModel.isNotNullColumn("id"));   // Output: true
      * console.log(dataModel.isNotNullColumn("name")); // Output: false
+     *
+     * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+     * // console.log(dataModel.isNotNullColumn("age"));
      * ```
      *
-     * @param {string} column The column name to check.
+     * @param {K} column The column name to check, constrained to keys of `T`.
      * @returns {boolean} `true` if the column has no `null` values, otherwise `false`.
      * @throws {Error} If `column` does not exist.
      */
-    isNotNullColumn(column: string): boolean;
+    isNotNullColumn<K extends keyof T>(column: K): boolean;
     /**
      * Finds and returns the first row where the specified column contains a `null` value.
+     * Uses `<K extends keyof T>` to enforce type safety on the column name.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to check.
+     * - `column` **(K)**: The column name to check, constrained to keys of `T`.
      *
      * ## Behavior
-     * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value in the column.
+     * - Ensures type safety by restricting `column` to existing keys of `T`.
+     * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value.
      * - If no `null` values are found, returns `null`.
      * - If a `null` value is found, retrieves and returns the corresponding row using `getRow()`.
      *
      * ## Returns
-     * - **`Record<string, any> | null`**: The first row where the column has a `null` value, or `null` if no such row exists.
+     * - **`T | null`**: The first row where the column has a `null` value, or `null` if none exist.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string | null;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: null },
      *     { id: 3, name: "Charlie" }
@@ -4998,20 +5218,25 @@ interface InterfaceDataModel {
      * 
      * console.log(dataModel.findFirstRowNullColumn("id"));
      * // Output: null (no null values in the "id" column)
+     *
+     * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+     * // console.log(dataModel.findFirstRowNullColumn("age"));
      * ```
      *
-     * @param {string} column The column name to check for `null` values.
-     * @returns {Record<string, any> | null} The first row where the column has a `null` value, or `null` if none exist.
+     * @param {K} column The column name to check for `null` values.
+     * @returns {T | null} The first row where the column has a `null` value, or `null` if none exist.
      * @throws {Error} If `column` does not exist.
      */
-    findFirstRowNullColumn(column: string): Record<string, any> | null;
+    findFirstRowNullColumn<K extends keyof T>(column: K): T | null;
     /**
      * Checks whether a specified column contains only unique values (i.e., no duplicate values).
+     * Uses `<K extends keyof T>` to enforce type safety on the column name.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to check.
+     * - `column` **(K)**: The column name to check, constrained to keys of `T`.
      *
      * ## Behavior
+     * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getDuplColumnFirstRowIndex(column)` to find the first occurrence of a duplicate value in the column.
      * - If no duplicates are found, returns `true`; otherwise, returns `false`.
      *
@@ -5020,7 +5245,12 @@ interface InterfaceDataModel {
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Alice" }
@@ -5028,30 +5258,40 @@ interface InterfaceDataModel {
      * 
      * console.log(dataModel.isNotDuplColumn("id")); // Output: true
      * console.log(dataModel.isNotDuplColumn("name")); // Output: false
+     *
+     * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+     * // console.log(dataModel.isNotDuplColumn("age"));
      * ```
      *
-     * @param {string} column The column name to check for duplicate values.
+     * @param {K} column The column name to check for duplicate values.
      * @returns {boolean} `true` if the column has no duplicate values, otherwise `false`.
      * @throws {Error} If `column` does not exist.
      */
-    isNotDuplColumn(column: string): boolean;
+    isNotDuplColumn<K extends keyof T>(column: K): boolean;
     /**
      * Finds and returns the first row where the specified column contains a duplicate value.
+     * Uses `<K extends keyof T>` to ensure that the column exists in `T`, enforcing type safety.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to check for duplicate values.
+     * - `column` **(K)**: The column name to check for duplicate values, constrained to keys of `T`.
      *
      * ## Behavior
-     * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value in the column.
+     * - Ensures type safety by restricting `column` to existing keys of `T`.
+     * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value.
      * - If no duplicate values are found, returns `null`.
      * - If a duplicate value is found, retrieves and returns the corresponding row using `getRow()`.
      *
      * ## Returns
-     * - **`Record<string, any> | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
+     * - **`T | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   name: string;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Alice" }
@@ -5062,21 +5302,26 @@ interface InterfaceDataModel {
      * 
      * console.log(dataModel.findFirstRowDuplColumn("id"));
      * // Output: null (no duplicate values in the "id" column)
+     *
+     * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+     * // console.log(dataModel.findFirstRowDuplColumn("age"));
      * ```
      *
-     * @param {string} column The column name to check for duplicate values.
-     * @returns {Record<string, any> | null} The first row where the column has a duplicate value, or `null` if none exist.
+     * @param {K} column The column name to check for duplicate values.
+     * @returns {T | null} The first row where the column has a duplicate value, or `null` if none exist.
      * @throws {Error} If `column` does not exist.
      */
-    findFirstRowDuplColumn(column: string): Record<string, any> | null;
+    findFirstRowDuplColumn<K extends keyof T>(column: K): T | null;
     /**
      * Checks whether all values in the specified column satisfy a given validation function.
+     * Uses `<K extends keyof T>` to ensure type safety for column selection.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to validate.
+     * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
      * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
      *
      * ## Behavior
+     * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to check for invalid values.
      * - If no invalid values are found, returns `true`; otherwise, returns `false`.
      *
@@ -5085,10 +5330,15 @@ interface InterfaceDataModel {
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   age: number;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, age: 25 },
      *     { id: 2, age: 30 },
-     *     { id: 3, age: "invalid" }
+     *     { id: 3, age: "invalid" as any }
      * ]);
      * 
      * // Check if all values in "age" column are valid numbers
@@ -5097,34 +5347,44 @@ interface InterfaceDataModel {
      * 
      * console.log(dataModel.isValidValue("id", value => typeof value === "number"));
      * // Output: true
+     *
+     * // TypeScript Error: Argument of type '"name"' is not assignable to parameter of type '"id" | "age"'.
+     * // console.log(dataModel.isValidValue("name", value => typeof value === "string"));
      * ```
      *
-     * @param {string} column The column name to validate.
+     * @param {K} column The column name to validate.
      * @param {DataModelValidator} validator A function that checks if a value is valid.
      * @returns {boolean} `true` if all values in the column are valid, otherwise `false`.
      * @throws {Error} If `column` does not exist or `validator` is not a function.
      */
-    isValidValue(column: string, vaildator: DataModelValidator): boolean;
+    isValidValue<K extends keyof T>(column: K, vaildator: DataModelValidator): boolean;
     /**
      * Finds and returns the first row where the specified column contains an invalid value based on a given validation function.
+     * Uses `<K extends keyof T>` to ensure type safety for column selection.
      *
      * ## Parameters
-     * - `column` **(string)**: The name of the column to validate.
+     * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
      * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
      *
      * ## Behavior
+     * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to locate the first occurrence of an invalid value in the column.
      * - If no invalid values are found, returns `null`.
      * - If an invalid value is found, retrieves and returns the corresponding row using `getRow()`.
      *
      * ## Returns
-     * - **`Record<string, any> | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
+     * - **`T | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *   id: number;
+     *   age: number;
+     * }
+     *
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, age: 25 },
-     *     { id: 2, age: "invalid" },
+     *     { id: 2, age: "invalid" as any },
      *     { id: 3, age: 30 }
      * ]);
      * 
@@ -5134,36 +5394,49 @@ interface InterfaceDataModel {
      * 
      * console.log(dataModel.findFirstRowInvalidValue("id", value => typeof value === "number"));
      * // Output: null (all values in "id" are valid)
+     *
+     * // TypeScript Error: Argument of type '"name"' is not assignable to parameter of type '"id" | "age"'.
+     * // console.log(dataModel.findFirstRowInvalidValue("name", value => typeof value === "string"));
      * ```
      *
-     * @param {string} column The column name to validate.
+     * @param {K} column The column name to validate.
      * @param {DataModelValidator} validator A function that checks if a value is valid.
-     * @returns {Record<string, any> | null} The first row with an invalid value, or `null` if all values are valid.
+     * @returns {T | null} The first row with an invalid value, or `null` if all values are valid.
      * @throws {Error} If `column` does not exist or `validator` is not a function.
      */
-    findFirstRowInvalidValue(column: string, vaildator: DataModelValidator): Record<string, any> | null;
+    findFirstRowInvalidValue<K extends keyof T>(column: K, vaildator: DataModelValidator): T | null;
     /**
      * Searches for rows that match a given condition and returns their indexes.
-     * Allows for both positive and negative filtering based on the `isNegative` flag.
+     * Allows both positive and negative filtering based on the `isNegative` flag.
      *
      * ## Parameters
-     * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-     * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
+     * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+     * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
      *
      * ## Behavior
-     * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-     * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
-     * - Iterates through `_rows`, checking if each row meets the condition.
+     * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+     * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
+     * - Iterates through `_rows` to check if each row meets the condition.
      * - Uses `JSON.stringify()` for deep comparison of values.
      * - If `isNegative` is `false`, adds matching row indexes to the result.
      * - If `isNegative` is `true`, adds **non-matching** row indexes to the result.
+     *
+     * ## Type Safety
+     * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+     * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
      * ## Returns
      * - **`number[]`**: An array of indexes of rows that match (or do not match) the condition.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     *     age: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
@@ -5178,35 +5451,45 @@ interface InterfaceDataModel {
      * // Output: [1]
      * ```
      *
-     * @param {Record<string, any>} condition The key-value condition to match.
+     * @param {Record<K, T[K]>} condition The key-value condition to match.
      * @param {boolean} [isNegative=false] If `true`, returns indexes of rows that do **not** match the condition.
      * @returns {number[]} An array of indexes of rows that match or do not match the condition.
      * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
      */
-    searchRowIndexes(condition: Record<string, any>, isNegative?: boolean): number[];
+    searchRowIndexes<K extends keyof T>(condition: Record<K, T[K]>, isNegative?: boolean): number[];
     /**
      * Searches for rows that match a given condition and returns them as an array.
-     * Allows for both positive and negative filtering based on the `isNegative` flag.
+     * Allows both positive and negative filtering based on the `isNegative` flag.
      *
      * ## Parameters
-     * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-     * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
+     * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+     * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
      *
      * ## Behavior
-     * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-     * - Calls `_checkBoolean(isNegative)` to validate the flag.
+     * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+     * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows`, checking if each row meets the condition.
      * - Uses `JSON.stringify()` for deep comparison of values.
      * - If `isNegative` is `false`, adds matching rows to the result.
      * - If `isNegative` is `true`, adds **non-matching** rows to the result.
-     * - Returns a deep copy of the matched rows.
+     * - Returns a deep copy of the matched rows to ensure immutability.
+     *
+     * ## Type Safety
+     * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+     * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
      * ## Returns
-     * - **`Record<string, any>[]`**: An array of deep-copied rows that match (or do not match) the condition.
+     * - **`T[]`**: An array of deep-copied rows that match (or do not match) the condition.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     *     age: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
@@ -5221,35 +5504,45 @@ interface InterfaceDataModel {
      * // Output: [{ id: 2, name: "Bob", age: 30 }]
      * ```
      *
-     * @param {Record<string, any>} condition The key-value condition to match.
+     * @param {Record<K, T[K]>} condition The key-value condition to match.
      * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
-     * @returns {Record<string, any>[]} An array of deep-copied rows that match or do not match the condition.
+     * @returns {T[]} An array of deep-copied rows that match or do not match the condition.
      * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
      */
-    searchRows(condition: Record<string, any>, isNegative?: boolean): Record<string, any>[];
+    searchRows<K extends keyof T>(condition: Record<K, T[K]>, isNegative?: boolean): T[];
     /**
      * Searches for rows that match a given condition and returns them as a new `DataModel` instance.
-     * Allows for both positive and negative filtering based on the `isNegative` flag.
+     * Allows both positive and negative filtering based on the `isNegative` flag.
      *
      * ## Parameters
-     * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-     * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
+     * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+     * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
      *
      * ## Behavior
-     * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-     * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+     * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+     * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows`, checking if each row meets the condition.
      * - Uses `JSON.stringify()` for deep comparison of values.
      * - If `isNegative` is `false`, adds matching rows to the result.
      * - If `isNegative` is `true`, adds **non-matching** rows to the result.
-     * - Returns a new `DataModel` containing the filtered rows.
+     * - Returns a new `DataModel<T>` containing the filtered rows.
+     *
+     * ## Type Safety
+     * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+     * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
      * ## Returns
-     * - **`DataModel`**: A new `DataModel` instance containing the matched rows.
+     * - **`InterfaceDataModel<T>`**: A new `DataModel<T>` instance containing the matched rows.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     *     age: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
@@ -5267,35 +5560,49 @@ interface InterfaceDataModel {
      * // Output: [{ id: 2, name: "Bob", age: 30 }]
      * ```
      *
-     * @param {Record<string, any>} condition The key-value condition to match.
+     * @param {Record<K, T[K]>} condition The key-value condition to match.
      * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
-     * @returns {InterfaceDataModel} A new `DataModel` instance containing the matched rows.
+     * @returns {InterfaceDataModel<T>} A new `DataModel<T>` instance containing the matched rows.
      * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
      */
-    searchRowsAsDataModel(condition: Record<string, any>, isNegative?: boolean): InterfaceDataModel;
+    searchRowsAsDataModel<K extends keyof T>(condition: Record<K, T[K]>, isNegative?: boolean): InterfaceDataModel<T>;
     /**
-     * Searches for rows that match a given condition and **modifies** the original `DataModel` by removing matched or unmatched rows.
-     * This method directly updates the existing dataset instead of returning a new instance.
+     * Searches for rows that match a given condition and **modifies** the original `DataModel` 
+     * by removing matched or unmatched rows. Unlike `searchRowsAsDataModel`, this method directly 
+     * updates the existing dataset instead of returning a new instance.
      *
      * ## Parameters
-     * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-     * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
+     * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+     * - `isNegative` **(`boolean`, optional, default = `false`)**: 
+     *   - If `false` (default), removes rows that **do not** match the condition.
+     *   - If `true`, removes rows that **do** match the condition.
      *
      * ## Behavior
-     * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-     * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+     * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+     * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows`, checking if each row meets the condition.
      * - Uses `JSON.stringify()` for deep comparison of values.
-     * - If `isNegative` is `false`, removes rows that **do not** match the condition.
-     * - If `isNegative` is `true`, removes rows that **do** match the condition.
-     * - Returns the modified `DataModel` instance for method chaining.
+     * - Removes rows based on the `isNegative` flag:
+     *   - If `false`, keeps only matching rows.
+     *   - If `true`, removes matching rows.
+     * - Returns the modified `DataModel<T>` instance for method chaining.
+     *
+     * ## Type Safety
+     * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+     * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
      * ## Returns
-     * - **`DataModel`**: The modified `DataModel` instance after removing specified rows.
+     * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance after removing specified rows.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     *     age: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
@@ -5312,12 +5619,12 @@ interface InterfaceDataModel {
      * // Output: []
      * ```
      *
-     * @param {Record<string, any>} condition The key-value condition to match.
+     * @param {Record<K, T[K]>} condition The key-value condition to match.
      * @param {boolean} [isNegative=false] If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
-     * @returns {InterfaceDataModel} The modified `DataModel` instance after removing specified rows.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance after removing specified rows.
      * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
      */
-    searchAndModify(condition: Record<string, any>, isNegative?: boolean): InterfaceDataModel;
+    searchAndModify<K extends keyof T>(condition: Record<K, T[K]>, isNegative?: boolean): InterfaceDataModel<T>;
     /**
      * Filters rows in the `DataModel` based on a custom filtering function and returns their indexes.
      * Allows for efficiently identifying row positions that match a given condition.
@@ -5365,7 +5672,7 @@ interface InterfaceDataModel {
      * - Returns an array of matching rows.
      *
      * ## Returns
-     * - **`Record<string, any>[]`**: An array of deep-copied rows that match the filter condition.
+     * - **`T[]`**: An array of deep-copied rows that match the filter condition.
      *
      * ## Example Usage
      * ```typescript
@@ -5382,10 +5689,10 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {DataModelFillter} filter A function that determines whether a row should be included.
-     * @returns {Record<string, any>[]} An array of deep-copied rows that match the filter condition.
+     * @returns {T[]} An array of deep-copied rows that match the filter condition.
      * @throws {Error} If `filter` is not a valid function.
      */
-    filterRows(filter: DataModelFillter): Record<string, any>[];
+    filterRows(filter: DataModelFillter): T[];
     /**
      * Filters rows in the `DataModel` based on a custom filtering function and returns a new `DataModel` containing the matched rows.
      * Allows for extracting a subset of the dataset while preserving the structured format.
@@ -5417,10 +5724,10 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {DataModelFillter} filter A function that determines whether a row should be included.
-     * @returns {InterfaceDataModel} A new `DataModel` instance containing the filtered rows.
+     * @returns {InterfaceDataModel<T>} A new `DataModel` instance containing the filtered rows.
      * @throws {Error} If `filter` is not a valid function.
      */
-    filterRowsAsDataModel(filter: DataModelFillter): InterfaceDataModel;
+    filterRowsAsDataModel(filter: DataModelFillter): InterfaceDataModel<T>;
     /**
      * Filters rows in the `DataModel` based on a custom filtering function and **modifies** the original `DataModel` by removing unmatched rows.
      * This method directly updates the existing dataset instead of returning a new instance.
@@ -5453,30 +5760,39 @@ interface InterfaceDataModel {
      * ```
      *
      * @param {DataModelFillter} filter A function that determines whether a row should be retained.
-     * @returns {InterfaceDataModel} The modified `DataModel` instance after removing unmatched rows.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel` instance after removing unmatched rows.
      * @throws {Error} If `filter` is not a valid function.
      */
-    filterAndModify(filter: DataModelFillter): InterfaceDataModel;
+    filterAndModify(filter: DataModelFillter): InterfaceDataModel<T>;
     /**
      * Reorders the columns in the `DataModel` based on the specified order.
      * Ensures that all existing columns are included, maintaining the defined structure.
      *
      * ## Parameters
-     * - `columns` **(string[])**: An array of column names in the desired order.
+     * - `columns` **(`K[]`)**: An array of column names in the desired order.
      *
      * ## Behavior
      * - Calls `_checkArray(columns)` to validate the input as an array.
-     * - Iterates through `columns`, ensuring each column is valid and exists in the `DataModel`.
-     * - Creates a new column order, appending any remaining columns that were not specified.
+     * - Ensures that each column in `columns` exists in the `DataModel` using `_checkColumn(column)`.
+     * - Constructs a new column order by placing unspecified columns at the end.
      * - Updates `_cols` with the new column order.
-     * - Returns the modified `DataModel` instance for method chaining.
+     * - Returns the modified `DataModel<T>` instance for method chaining.
+     *
+     * ## Type Safety
+     * - Uses `<K extends keyof T>` to ensure that `columns` only contain valid keys of `T`.
      *
      * ## Returns
-     * - **`DataModel`**: The modified `DataModel` instance with reordered columns.
+     * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with reordered columns.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
+     * interface User {
+     *     id: number;
+     *     name: string;
+     *     age: number;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>(["id", "name", "age"]);
      * 
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
      * 
@@ -5485,11 +5801,11 @@ interface InterfaceDataModel {
      * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
      * ```
      *
-     * @param {string[]} columns An array of column names in the desired order.
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with reordered columns.
+     * @param {K[]} columns An array of column names in the desired order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance with reordered columns.
      * @throws {Error} If `columns` is not an array or contains invalid column names.
      */
-    setColumnSorting(columns: string[]): InterfaceDataModel;
+    setColumnSorting<K extends keyof T>(columns: K[]): InterfaceDataModel<T>;
     /**
      * Sorts the columns of the `DataModel` in ascending (A-Z) order.
      * The sorting is applied alphabetically based on column names.
@@ -5511,9 +5827,9 @@ interface InterfaceDataModel {
      * console.log(dataModel.getColumns()); // Output: ["age", "id", "name"]
      * ```
      *
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in ascending order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with columns sorted in ascending order.
      */
-    sortColumnAscending(): InterfaceDataModel;
+    sortColumnAscending(): InterfaceDataModel<T>;
     /**
      * Sorts the columns of the `DataModel` in descending (Z-A) order.
      * The sorting is applied alphabetically based on column names.
@@ -5535,9 +5851,9 @@ interface InterfaceDataModel {
      * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
      * ```
      *
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in descending order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with columns sorted in descending order.
      */
-    sortColumnDescending(): InterfaceDataModel;
+    sortColumnDescending(): InterfaceDataModel<T>;
     /**
      * Reverses the order of columns in the `DataModel`.
      * The column order is flipped without sorting alphabetically.
@@ -5559,33 +5875,41 @@ interface InterfaceDataModel {
      * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
      * ```
      *
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed column order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with reversed column order.
      */
-    sortColumnReverse(): InterfaceDataModel;
+    sortColumnReverse(): InterfaceDataModel<T>;
     /**
      * Sorts the rows of the `DataModel` in ascending order based on the specified column.
      * Optionally supports integer-based sorting for numerical values.
      *
      * ## Parameters
-     * - `column` **(string)**: The column name to sort by.
-     * - `isIntegerOrder` **(boolean, optional, default = `false`)**: If `true`, treats values as integers for sorting.
+     * - `column` **(`K`)**: The column name to sort by.
+     * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
      *
      * ## Behavior
-     * - Calls `_getValidColValue(column)` to validate the column name.
-     * - Throws an error if the specified column does not exist.
-     * - Calls `_checkBoolean(isIntegerOrder)` to validate the boolean flag.
-     * - Uses the native `Array.sort()` method to arrange rows in ascending order.
-     * - Handles `null` values by placing them at the end of the sorted list.
-     * - Converts object values to JSON strings for sorting.
+     * - Validates `column` using `_getValidColValue(column)`.
+     * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
+     * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
+     * - Uses `Array.sort()` to sort rows in ascending order.
+     * - Places `null` values at the end of the sorted list.
+     * - Converts object values to JSON strings for sorting consistency.
      * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
-     * - Throws an error if a non-numeric value is encountered during integer sorting.
+     * - Throws an error if a non-numeric value is encountered in integer sorting mode.
+     *
+     * ## Type Safety
+     * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
      *
      * ## Returns
-     * - **`DataModel`**: The modified `DataModel` instance with rows sorted in ascending order.
+     * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in ascending order.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 3, name: "Charlie" },
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
@@ -5600,36 +5924,44 @@ interface InterfaceDataModel {
      * dataModel.sortRowAscending("id", true);
      * ```
      *
-     * @param {string} column The column name to sort by.
+     * @param {K} column The column name to sort by.
      * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in ascending order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance with rows sorted in ascending order.
      * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
      */
-    sortRowAscending(column: string, isIntegerOrder?: boolean): InterfaceDataModel;
+    sortRowAscending<K extends keyof T>(column: K, isIntegerOrder?: boolean): InterfaceDataModel<T>;
     /**
      * Sorts the rows of the `DataModel` in descending order based on the specified column.
      * Optionally supports integer-based sorting for numerical values.
      *
      * ## Parameters
-     * - `column` **(string)**: The column name to sort by.
-     * - `isIntegerOrder` **(boolean, optional, default = `false`)**: If `true`, treats values as integers for sorting.
+     * - `column` **(`K`)**: The column name to sort by.
+     * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
      *
      * ## Behavior
-     * - Calls `_getValidColValue(column)` to validate the column name.
-     * - Throws an error if the specified column does not exist.
-     * - Calls `_checkBoolean(isIntegerOrder)` to validate the boolean flag.
-     * - Uses the native `Array.sort()` method to arrange rows in descending order.
-     * - Handles `null` values by placing them at the beginning of the sorted list.
-     * - Converts object values to JSON strings for sorting.
+     * - Validates `column` using `_getValidColValue(column)`.
+     * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
+     * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
+     * - Uses `Array.sort()` to sort rows in descending order.
+     * - Places `null` values at the beginning of the sorted list.
+     * - Converts object values to JSON strings for sorting consistency.
      * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
-     * - Throws an error if a non-numeric value is encountered during integer sorting.
+     * - Throws an error if a non-numeric value is encountered in integer sorting mode.
+     *
+     * ## Type Safety
+     * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
      *
      * ## Returns
-     * - **`DataModel`**: The modified `DataModel` instance with rows sorted in descending order.
+     * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in descending order.
      *
      * ## Example Usage
      * ```typescript
-     * const dataModel = new hison.data.DataModel([
+     * interface User {
+     *     id: number;
+     *     name: string;
+     * }
+     * 
+     * const dataModel = new hison.data.DataModel<User>([
      *     { id: 3, name: "Charlie" },
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
@@ -5644,12 +5976,12 @@ interface InterfaceDataModel {
      * dataModel.sortRowDescending("id", true);
      * ```
      *
-     * @param {string} column The column name to sort by.
+     * @param {K} column The column name to sort by.
      * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in descending order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance with rows sorted in descending order.
      * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
      */
-    sortRowDescending(column: string, isIntegerOrder?: boolean): InterfaceDataModel;
+    sortRowDescending<K extends keyof T>(column: K, isIntegerOrder?: boolean): InterfaceDataModel<T>;
     /**
      * Reverses the order of rows in the `DataModel`.
      * This method flips the row order without sorting by a specific column.
@@ -5677,9 +6009,9 @@ interface InterfaceDataModel {
      * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
      * ```
      *
-     * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed row order.
+     * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with reversed row order.
      */
-    sortRowReverse(): InterfaceDataModel;
+    sortRowReverse(): InterfaceDataModel<T>;
 };
 /**
  * Defines a function signature for formatting values in a `DataModel` column.
@@ -12151,34 +12483,43 @@ function createHison(): Hison {
             DataWrapper : class implements InterfaceDataWrapper {
                 /**
                  * Creates an instance of `DataWrapper`, which serves as a key-value storage container.
-                 * It allows storing various data types, including primitive values and `DataModel` instances.
+                 * It allows storing primitive values and `DataModel` instances with flexible key-value mappings.
                  *
                  * ## Parameters
-                 * - `keyOrObject` **(Object | string, optional)**: This parameter can be:
-                 *   - An **object** containing multiple key-value pairs, where each key is mapped to a value.
-                 *   - A **single string key** when paired with a `value` parameter.
-                 * - `value` **(*, optional)**: The value associated with the provided key. This parameter is 
-                 *   required only when `keyOrObject` is a string.
+                 * - `keyOrObject` **(Record<string, InterfaceDataModel<any> | string> | string, optional)**: 
+                 *   This parameter can be:
+                 *   - An **object** where each key is mapped to either a `DataModel` instance or a string.
+                 *   - A **single string key**, when paired with the `value` parameter.
+                 * - `value` **(`InterfaceDataModel<any> | string`, optional)**: The value associated with 
+                 *   the provided key, required only when `keyOrObject` is a string.
                  *
                  * ## Behavior
                  * - If an **object** is provided, all key-value pairs from the object are stored in the `DataWrapper`.
                  * - If a **string and value** are provided, a single key-value pair is stored.
-                 * - If neither of these conditions are met, an error is thrown.
+                 * - If neither condition is met, an error is thrown.
+                 *
+                 * ## Returns
+                 * - A new `DataWrapper` instance with the specified key-value pairs stored.
                  *
                  * ## Example Usage
                  * ```typescript
                  * // Creating a DataWrapper with an object
-                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
                  * console.log(dataWrapper.getString("name")); // Output: "Alice"
                  *
-                 * // Creating a DataWrapper with a single key-value pair
-                 * const dataWrapper = new hison.data.DataWrapper("status", "active");
-                 * console.log(dataWrapper.getString("status")); // Output: "active"
+                 * // Storing a DataModel inside DataWrapper
+                 * const userModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+                 * const modelWrapper = new hison.data.DataWrapper("users", userModel);
+                 * console.log(modelWrapper.getDataModel("users").getRowCount()); // Output: 1
                  * ```
                  *
                  * @constructor
+                 * @param {Record<string, InterfaceDataModel<any> | string> | string} [keyOrObject] The initial data 
+                 *     for storage, either as an object or a single key.
+                 * @param {InterfaceDataModel<any> | string} [value] The value to be associated with a single key.
+                 * @throws {Error} If the provided arguments do not match the expected format.
                  */
-                constructor(keyOrObject?: Record<string, any> | string, value?: any) {
+                constructor(keyOrObject?: Record<string, InterfaceDataModel<any> | string> | string, value?: InterfaceDataModel<any> | string) {
                     this._data = {};
                     if (keyOrObject === undefined) return;
                     if (typeof keyOrObject === 'object' && keyOrObject !== null) {
@@ -12191,7 +12532,7 @@ function createHison(): Hison {
                         throw new Error('Invalid arguments. Provide an object or a key-value pair.');
                     }
                 }
-                private _data: Record<string, InterfaceDataModel | string | null>;
+                private _data: Record<string, InterfaceDataModel<any> | string | null>;
                 private _isDataWrapper = true;
                 private _put = (key: string, value: any) => {
                     if (typeof key !== 'string') {
@@ -12326,8 +12667,11 @@ function createHison(): Hison {
                     
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
-                            if (this._data[key] && (this._data[key] as InterfaceDataModel).getIsDataModel && (this._data[key] as InterfaceDataModel).getIsDataModel()) {
-                                data[key] = (this._data[key] as InterfaceDataModel).getRows();
+                            if (this._data[key] &&
+                                (this._data[key] as InterfaceDataModel<any>).getIsDataModel &&
+                                (this._data[key] as InterfaceDataModel<any>).getIsDataModel()
+                            ) {
+                                data[key] = (this._data[key] as InterfaceDataModel<any>).getRows();
                             } else {
                                 data[key] = this._data[key];
                             }
@@ -12339,30 +12683,58 @@ function createHison(): Hison {
                  * Retrieves the value associated with the specified key from the `DataWrapper`.
                  * If the value exists, a deep copy is returned to prevent unintended modifications.
                  *
+                 * ## Generic Type `<T>`
+                 * - `T` represents the shape of the `DataModel` rows.
+                 * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
+                 *
                  * ## Parameters
                  * - `key` **(string)**: The key associated with the value to retrieve.
                  *
                  * ## Behavior
                  * - Throws an error if `key` is not a string.
-                 * - If the key exists, returns a deep copy of the stored value.
+                 * - If the key exists and contains a `DataModel<T>`, returns a deep copy of the stored `DataModel<T>`.
+                 * - If the key exists but is a string, returns the stored string value.
                  * - If the key does not exist, returns `null`.
                  *
                  * ## Returns
-                 * - **`DataModel | string | null`**: A deep copy of the stored value, or `null` if the key is not found.
+                 * - **`InterfaceDataModel<T> | string | null`**: 
+                 *   - A deep copy of the `DataModel<T>` if stored under the key.
+                 *   - The string value if a string was stored under the key.
+                 *   - `null` if the key does not exist.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataWrapper = new hison.data.DataWrapper({ message: "Hello", users: new hison.data.DataModel([{ id: 1 }]) });
-                 * 
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 *
+                 * const dataWrapper = new hison.data.DataWrapper();
+                 *
+                 * // Storing a string value
+                 * dataWrapper.put("message", "Hello");
                  * console.log(dataWrapper.get("message")); // Output: "Hello"
-                 * console.log(dataWrapper.get("users"));   // Output: Deep copy of the DataModel instance
+                 *
+                 * // Storing a DataModel with a defined type
+                 * const userModel = new hison.data.DataModel<User>([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
+                 * dataWrapper.put("users", userModel);
+                 *
+                 * // Retrieving with type inference
+                 * const users = dataWrapper.get<User>("users");
+                 * console.log(users?.getRowCount()); // Output: 2
+                 * console.log(users?.getValue(0, "name").toUpperCase()); // Output: "ALICE"
+                 *
+                 * // Attempting to retrieve a non-existent key
                  * console.log(dataWrapper.get("nonExistentKey")); // Output: null
                  * ```
                  *
                  * @param {string} key The key to retrieve the associated value.
-                 * @returns {DataModel | string | null} A deep copy of the stored value, or `null` if the key is not found.
+                 * @returns {InterfaceDataModel<T = Record<string, any>> | string | null} A deep copy of the stored value, or `null` if the key is not found.
                  */
-                get = (key: string): InterfaceDataModel | string | null => {
+                get = <T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     return this._data[key] ? hison.utils.deepCopyObject(this._data[key]) : null;
                 };
@@ -12402,40 +12774,52 @@ function createHison(): Hison {
                     return this._data[key] ? this._data[key] as string : null;
                 };
                 /**
-                 * Retrieves the `DataModel` instance associated with the specified key from the `DataWrapper`.
-                 * Ensures that the retrieved value is a valid `DataModel` before returning a cloned copy.
+                 * Retrieves the `DataModel<T>` instance associated with the specified key from the `DataWrapper`.
+                 * Ensures that the retrieved value is a valid `DataModel<T>` before returning a cloned copy.
+                 *
+                 * ## Generic Type `<T>`
+                 * - `T` represents the shape of each row in the `DataModel<T>`.
+                 * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
                  *
                  * ## Parameters
-                 * - `key` **(string)**: The key associated with the `DataModel` instance to retrieve.
+                 * - `key` **(string)**: The key associated with the `DataModel<T>` instance to retrieve.
                  *
                  * ## Behavior
                  * - Throws an error if `key` is not a string.
-                 * - Throws an error if the value associated with `key` is not a valid `DataModel` instance.
-                 * - Returns a deep-cloned copy of the `DataModel` to maintain data integrity.
+                 * - Throws an error if the value associated with `key` is not a valid `DataModel<T>` instance.
+                 * - Returns a deep-cloned copy of the `DataModel<T>` to maintain data integrity.
                  *
                  * ## Returns
-                 * - **`DataModel`**: A cloned `DataModel` instance retrieved from the `DataWrapper`.
+                 * - **`InterfaceDataModel<T>`**: A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
-                 * const dataWrapper = new hison.data.DataWrapper({ users: dataModel });
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
                  * 
-                 * const clonedDataModel = dataWrapper.getDataModel("users");
+                 * const userModel = new hison.data.DataModel<User>([{ id: 1, name: "Alice" }]);
+                 * const dataWrapper = new hison.data.DataWrapper();
+                 * dataWrapper.put("users", userModel);
+                 * 
+                 * // Retrieving with type inference
+                 * const clonedDataModel = dataWrapper.getDataModel<User>("users");
                  * console.log(clonedDataModel.getRowCount()); // Output: 1
+                 * console.log(clonedDataModel.getValue(0, "name").toUpperCase()); // Output: "ALICE"
                  *
                  * // Throws an error: "The data does not contain the specified data-model value."
                  * console.log(dataWrapper.getDataModel("nonExistentKey"));
                  * ```
                  *
-                 * @param {string} key The key associated with the `DataModel` instance.
-                 * @returns {InterfaceDataModel} A cloned `DataModel` instance retrieved from the `DataWrapper`.
-                 * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel`.
+                 * @param {string} key The key associated with the `DataModel<T>` instance.
+                 * @returns {InterfaceDataModel<T>} A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
+                 * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel<T>`.
                  */
-                getDataModel = (key: string): InterfaceDataModel => {
+                getDataModel = <T = Record<string, any>>(key: string): InterfaceDataModel<T> => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
-                    if (!this._data[key] || !(this._data[key] as InterfaceDataModel).getIsDataModel || !(this._data[key] as InterfaceDataModel).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
-                    return (this._data[key] as InterfaceDataModel).clone();
+                    if (!this._data[key] || !(this._data[key] as InterfaceDataModel<T>).getIsDataModel || !(this._data[key] as InterfaceDataModel<T>).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
+                    return (this._data[key] as InterfaceDataModel<T>).clone();
                 };
                 /**
                  * Inserts or updates a key-value pair in the `DataWrapper`.
@@ -12559,11 +12943,11 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} key The key under which the `DataModel` is stored.
-                 * @param {InterfaceDataModel} value The `DataModel` instance to store.
+                 * @param {InterfaceDataModel<any>} value The `DataModel` instance to store.
                  * @returns {InterfaceDataWrapper} The current `DataWrapper` instance after insertion.
                  * @throws {Error} If `key` is not a string or `value` is not a valid `DataModel`.
                  */
-                putDataModel = (key: string, value: InterfaceDataModel): InterfaceDataWrapper => {
+                putDataModel = (key: string, value: InterfaceDataModel<any>): InterfaceDataWrapper => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
                     if (value === null || !value.getIsDataModel || !value.getIsDataModel()) {
                         throw new Error('Please insert only values of data-model type.');
@@ -12598,8 +12982,8 @@ function createHison(): Hison {
                 getObject = (): Record<string, any> => {
                     const result: Record<string, any> = {};
                     for(let key in this._data) {
-                        if (this._data[key] && (this._data[key] as InterfaceDataModel).getIsDataModel && (this._data[key] as InterfaceDataModel).getIsDataModel()) {
-                            result[key] = (this._data[key] as InterfaceDataModel).getObject();
+                        if (this._data[key] && (this._data[key] as InterfaceDataModel<any>).getIsDataModel && (this._data[key] as InterfaceDataModel<any>).getIsDataModel()) {
+                            result[key] = (this._data[key] as InterfaceDataModel<any>).getObject();
                         } else {
                             result[key] = this._data[key];
                         }
@@ -12659,7 +13043,7 @@ function createHison(): Hison {
                     return Object.keys(this._data).length === 0;
                 };
                 /**
-                 * Removes a key-value pair from the `DataWrapper` if the key exists.
+                 * Removes a key-value pair from the `DataWrapper` if the key exists and returns the removed value.
                  *
                  * ## Parameters
                  * - `key` **(string)**: The key to be removed from the `DataWrapper`.
@@ -12667,40 +13051,41 @@ function createHison(): Hison {
                  * ## Behavior
                  * - Throws an error if `key` is not a string.
                  * - Checks if the key exists using `hasOwnProperty()`.
-                 * - If the key exists, it is deleted from the internal data storage.
-                 * - Returns an object containing the updated `DataWrapper` and a boolean indicating success.
+                 * - If the key exists, retrieves the associated value and deletes the key.
+                 * - Returns the removed value, which can be either a `DataModel` or a `string`.
+                 * - If the key does not exist, returns `null`.
                  *
                  * ## Returns
-                 * - **`{ data: DataWrapper, result: boolean }`**:
-                 *   - `data`: The current `DataWrapper` instance after attempting removal.
-                 *   - `result`: `true` if the key was successfully removed, otherwise `false`.
+                 * - **`InterfaceDataModel<T> | string | null`**:
+                 *   - The removed value if the key existed.
+                 *   - `null` if the key was not found in the `DataWrapper`.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
+                 * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
                  * 
                  * console.log(dataWrapper.containsKey("name")); // Output: true
                  * 
-                 * const { data: updatedWrapper, result } = dataWrapper.remove("name");
-                 * console.log(result); // Output: true
-                 * console.log(updatedWrapper.containsKey("name")); // Output: false
+                 * const removedValue = dataWrapper.remove("name");
+                 * console.log(removedValue); // Output: "Alice"
+                 * console.log(dataWrapper.containsKey("name")); // Output: false
                  *
-                 * const { result: nonExistentResult } = dataWrapper.remove("nonExistentKey");
-                 * console.log(nonExistentResult); // Output: false
+                 * const nonExistentValue = dataWrapper.remove("nonExistentKey");
+                 * console.log(nonExistentValue); // Output: null
                  * ```
                  *
                  * @param {string} key The key to remove from the `DataWrapper`.
-                 * @returns {{ data: InterfaceDataWrapper, result: boolean }} An object containing the updated `DataWrapper` and a success flag.
+                 * @returns {InterfaceDataModel<T> | string | null} The removed value if it existed, otherwise `null`.
                  * @throws {Error} If `key` is not a string.
                  */
-                remove = (key: string): { data: InterfaceDataWrapper, result: boolean } => {
+                remove = <T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null => {
                     if (typeof key !== 'string') throw new Error('Keys must always be strings.');
-                    let result = false;
+                    let result: InterfaceDataModel<T> | string | null = null;
                     if (this._data.hasOwnProperty(key)) {
-                        result = true;
+                        result = this._data[key];
                         delete this._data[key];
                     }
-                    return { data: this, result };
+                    return result;
                 };
                 /**
                  * Returns the number of key-value pairs stored in the `DataWrapper`.
@@ -12759,7 +13144,7 @@ function createHison(): Hison {
                  * - If the `DataWrapper` is empty, returns an empty array.
                  *
                  * ## Returns
-                 * - **`any[]`**: An array containing deep copies of all stored values.
+                 * - **`InterfaceDataModel<any>[] | string[]`**: An array containing deep copies of all stored values.
                  *
                  * ## Example Usage
                  * ```typescript
@@ -12771,10 +13156,10 @@ function createHison(): Hison {
                  * console.log(dataWrapper.values()); // Output: ["Alice", 25, <cloned DataModel>]
                  * ```
                  *
-                 * @returns {any[]} An array of deep-copied values stored in the `DataWrapper`.
+                 * @returns {InterfaceDataModel<any>[] | string[]} An array of deep-copied values stored in the `DataWrapper`.
                  */
-                values = (): any[] => {
-                    const values = [];
+                values = (): InterfaceDataModel<any>[] | string[] => {
+                    const values:InterfaceDataModel<any>[] | string[] = [];
                     for (let key in this._data) {
                         if (this._data.hasOwnProperty(key)) {
                             values.push(hison.utils.deepCopyObject(this._data[key]));
@@ -12784,9 +13169,13 @@ function createHison(): Hison {
                 };
             },
             /**
-             * The `DataModel` class provides a structured way to manage tabular data within the `hisondev` solution.
-             * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency
-             * and validation. 
+             * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
+             * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
+             *
+             * ## Generic Type `<T>`
+             * - `T` represents the shape of each row in the `DataModel`.
+             * - By specifying `T`, developers can enforce type safety for row values.
+             * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
              * 
              * ## Core Features:
              * - **Column and Row Management:**
@@ -12801,10 +13190,10 @@ function createHison(): Hison {
              * - **Sorting and Structuring:**
              *   - Supports ascending, descending, and reverse sorting on both columns and rows.
              * - **Serialization and Cloning:**
-             *   - Enables deep copying of the entire `DataModel`.
+             *   - Enables deep copying of the entire `DataModel<T>`.
              *   - Provides `getSerialized()` to retrieve a JSON string of the model.
              * - **Integration with `DataWrapper`**
-             *   - DataWrapper is an instance for storing DataModel.
+             *   - `DataWrapper` is an instance for storing `DataModel<T>`.
              *
              * ## Data Consistency and Validation:
              * - Uses `_deepCopy()` to ensure stored objects are immutable.
@@ -12813,12 +13202,19 @@ function createHison(): Hison {
              *
              * ## Example Usage:
              * ```typescript
-             * const dataModel = new hison.data.DataModel([
+             * interface User {
+             *     id: number;
+             *     name: string;
+             *     age: number;
+             * }
+             * 
+             * // Creating a DataModel with a defined type
+             * const dataModel: InterfaceDataModel<User> = new hison.data.DataModel<User>([
              *     { id: 1, name: "Alice", age: 25 },
              *     { id: 2, name: "Bob", age: 30 }
              * ]);
              * 
-             * // Add a new column
+             * // Add a new column (TypeScript enforces type constraints)
              * dataModel.addColumn("gender");
              * 
              * // Set a default value for a column
@@ -12834,30 +13230,38 @@ function createHison(): Hison {
              *
              * ## Related Functions:
              * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
-             *
              */
-            DataModel : class implements InterfaceDataModel {
+            DataModel : class<T extends Record<string, any> = Record<string, any>> implements InterfaceDataModel<T> {
                 /**
-                 * Creates a `DataModel` instance, which manages a structured table-like data format.
+                 * Creates a `DataModel<T>` instance, which manages a structured table-like data format.
                  * The instance allows for efficient row and column management.
                  *
+                 * ## Generic Type `<T>`
+                 * - `T` represents the structure of each row in the `DataModel<T>`.
+                 * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible structures.
+                 *
                  * ## Parameters
-                 * - `data` **(Array | Object, optional)**: The initial dataset, which can be:
-                 *   - An **array of objects**, where each object represents a row and its keys represent columns.
-                 *   - An **array of strings**, which initializes column names.
-                 *   - A **single object**, representing a single-row initialization.
+                 * - `data` **(T[] | T, optional)**: The initial dataset, which can be:
+                 *   - An **array of objects (`T[]`)**, where each object represents a row and its keys represent columns.
+                 *   - A **single object (`T`)**, representing a single-row initialization.
+                 *   - An **array of strings**, which initializes column names (if `T` is `Record<string, any>`).
                  *
                  * ## Behavior
-                 * - If no data is provided, an empty `DataModel` is created.
+                 * - If no data is provided, an empty `DataModel<T>` is created.
                  * - Calls `_put(data)`, which processes the input and initializes `_cols` and `_rows` accordingly.
                  *
                  * ## Returns
-                 * - **`DataModel`**: A new instance containing structured tabular data.
+                 * - **`DataModel<T>`**: A new instance containing structured tabular data.
                  *
                  * ## Example Usage
                  * ```typescript
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 * 
                  * // Creating a DataModel with an array of objects (rows)
-                 * const dataModel = new hison.data.DataModel([
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" }
                  * ]);
@@ -12865,25 +13269,20 @@ function createHison(): Hison {
                  * console.log(dataModel.getRowCount()); // Output: 2
                  * console.log(dataModel.getColumns()); // Output: ["id", "name"]
                  *
-                 * // Creating a DataModel with column names only
-                 * const dataModel = new hison.data.DataModel(["id", "name"]);
-                 * console.log(dataModel.getColumns()); // Output: ["id", "name"]
-                 *
                  * // Creating a DataModel with a single object (one row)
-                 * const dataModel = new hison.data.DataModel({ id: 1, name: "Alice" });
-                 * console.log(dataModel.getRowCount()); // Output: 1
+                 * const singleRowModel = new hison.data.DataModel<User>({ id: 1, name: "Alice" });
+                 * console.log(singleRowModel.getRowCount()); // Output: 1
                  * ```
                  *
                  * @constructor
-                 * @param {Array | Object} [data] The initial dataset, which can be an array of objects, an array of column names, or a single object.
-                 * @returns {InterfaceDataModel} A new instance of `DataModel`.
+                 * @param {T[] | T} [data] The initial dataset, which can be an array of objects, an array of column names, or a single object.
                  */
-                constructor(data?: Record<string, any>[] | Record<string, any>) {
+                constructor(data?: T[] | T) {
                     if (!data) return;
                     this._put(data);
                 }
                 private _cols: string[] = [];
-                private _rows: Record<string, any>[] = [];
+                private _rows: T[] = [];
                 private _isDataModel = true;
                 private _deepCopy = (object: any, visited?: { source: any, copy: any }[]): any => {
                     if (object === null || typeof object !== 'object') {
@@ -13044,7 +13443,7 @@ function createHison(): Hison {
                         throw new Error('There are duplicate columns to add. column : ' + value);
                     }
                 }
-                private _addRow = (rowIndex: number, row: Record<string, any>) => {
+                private _addRow = (rowIndex: number, row: T) => {
                     if (!row) {
                         throw new Error('Please insert vaild object');
                     }
@@ -13057,7 +13456,7 @@ function createHison(): Hison {
                             this._addCol(key);
                         }
                     }
-                    const tempRow: Record<string, any> = {};
+                    const tempRow: any = {};
                     for(const col of this._cols) {
                         if (row.hasOwnProperty(col)) {
                             tempRow[col] = this._getValidRowValue(rowIndex, col, row[col]);
@@ -13066,7 +13465,7 @@ function createHison(): Hison {
                             tempRow[col] = null;
                         }
                     }
-                    this._rows.push(tempRow);
+                    this._rows.push(tempRow as T);
                 }
                 private _put = (data: Record<string, any>[] | Record<string, any>) => {
                     let rowIndex = this._rows.length;
@@ -13087,14 +13486,14 @@ function createHison(): Hison {
                     } else if (typeof data === 'object') {
                         if (data && (data as InterfaceDataWrapper).getIsDataWrapper && (data as InterfaceDataWrapper).getIsDataWrapper()) {
                             throw new Error('You cannot construct a datamodel with datawrapper.');
-                        } else if (data && (data as InterfaceDataModel).getIsDataModel && (data as InterfaceDataModel).getIsDataModel()){
-                            for(const row of (data as InterfaceDataModel).getRows() ) {
-                                this._addRow(rowIndex, row);
+                        } else if (data && (data as InterfaceDataModel<T>).getIsDataModel && (data as InterfaceDataModel<T>).getIsDataModel()){
+                            for(const row of (data as InterfaceDataModel<T>).getRows() ) {
+                                this._addRow(rowIndex, row as T);
                                 rowIndex++;
                             }
                             return;
                         } else if (data.constructor === Object) {
-                            this._addRow(rowIndex, data);
+                            this._addRow(rowIndex, data as T);
                             return;
                         }
                     }
@@ -13173,10 +13572,10 @@ function createHison(): Hison {
                  * console.log(clonedModel !== dataModel); // Output: true (Cloned instance is independent)
                  * ```
                  *
-                 * @returns {InterfaceDataModel} A new `DataModel` instance with a copy of the stored rows.
+                 * @returns {InterfaceDataModel<T>} A new `DataModel` instance with a copy of the stored rows.
                  */
-                clone = (): InterfaceDataModel => {
-                    return new hison.data.DataModel(this._rows);
+                clone = (): InterfaceDataModel<T> => {
+                    return new hison.data.DataModel<T>(this._rows);
                 };
                 /**
                  * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
@@ -13199,9 +13598,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns());  // Output: []
                  * ```
                  *
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after clearing all data.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel` instance after clearing all data.
                  */
-                clear = (): InterfaceDataModel => {
+                clear = (): InterfaceDataModel<T> => {
                     this._cols = [];
                     this._rows = [];
                     return this;
@@ -13288,37 +13687,47 @@ function createHison(): Hison {
                  * Ensures that returned values are deep copies to prevent unintended modifications.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The column name from which to retrieve values.
+                 * - `column` **(K)**: The column name from which to retrieve values.
                  *
                  * ## Behavior
-                 * - Throws an error if `column` is not a valid string.
+                 * - Throws an error if `column` is not a valid key in `T`.
                  * - Throws an error if the specified column does not exist.
                  * - Iterates through all rows and extracts the values of the specified column.
                  * - Uses `_deepCopy()` to return deep copies of the values.
+                 * - The return type is inferred as `T[K][]`, maintaining strong type safety.
                  *
                  * ## Returns
-                 * - **`any[]`**: An array containing all values from the specified column.
+                 * - **`T[K][]`**: An array containing all values from the specified column.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
-                 *     { id: 1, name: "Alice" },
-                 *     { id: 2, name: "Bob" }
+                 * interface User {
+                 *     id: string;
+                 *     age: number;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
+                 *     { id: "U1", age: 25 },
+                 *     { id: "U2", age: 30 }
                  * ]);
                  * 
-                 * console.log(dataModel.getColumnValues("name")); // Output: ["Alice", "Bob"]
-                 *
+                 * const ids = dataModel.getColumnValues("id");  // Inferred as string[]
+                 * console.log(ids); // Output: ["U1", "U2"]
+                 * 
+                 * const ages = dataModel.getColumnValues("age"); // Inferred as number[]
+                 * console.log(ages); // Output: [25, 30]
+                 * 
                  * // Throws an error: "The column does not exist."
-                 * console.log(dataModel.getColumnValues("age"));
+                 * // console.log(dataModel.getColumnValues("name"));
                  * ```
                  *
-                 * @param {string} column The column name from which to retrieve values.
-                 * @returns {any[]} An array of values from the specified column.
+                 * @param {K} column The column name from which to retrieve values.
+                 * @returns {T[K][]} An array of values from the specified column.
                  * @throws {Error} If the column is invalid or does not exist.
                  */
-                getColumnValues = (column: string): any[] => {
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                getColumnValues = <K extends keyof T>(column: K): T[K][] => {
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
                     const result = [];
                     for(const row of this._rows) {
                         result.push(this._deepCopy(row[column]));
@@ -13338,6 +13747,9 @@ function createHison(): Hison {
                  * - Iterates through `_rows` and ensures each row includes the new column, assigning `null` if missing.
                  * - Returns the current `DataModel` instance for method chaining.
                  *
+                 * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
+                 * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+                 *
                  * ## Returns
                  * - **`DataModel`**: The current instance after adding the new column.
                  *
@@ -13352,14 +13764,14 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string} column The name of the column to add.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the column.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel` instance after adding the column.
                  * @throws {Error} If the column is invalid or already exists.
                  */
-                addColumn = (column: string): InterfaceDataModel => {
+                addColumn = (column: string): InterfaceDataModel<T> => {
                     this._addCol(column);
                     for(const row of this._rows) {
                         if (!row.hasOwnProperty(column)) {
-                            row[column] = null;
+                            (row as Record<string, any>)[column] = null;
                         }
                     }
                     return this;
@@ -13377,6 +13789,9 @@ function createHison(): Hison {
                  * - Ensures that all existing rows include the new columns, assigning `null` if missing.
                  * - Returns the current `DataModel` instance for method chaining.
                  *
+                 * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
+                 * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+                 *
                  * ## Returns
                  * - **`DataModel`**: The current instance after adding the new columns.
                  *
@@ -13391,10 +13806,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {string[]} columns An array of column names to add.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the columns.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel` instance after adding the columns.
                  * @throws {Error} If `columns` is not an array or contains invalid column names.
                  */
-                addColumns = (columns: string[]): InterfaceDataModel => {
+                addColumns = (columns: string[]): InterfaceDataModel<T> => {
                     if (!Array.isArray(columns)) {
                         throw new Error('Only array contains strings can be inserted into columns.');
                     }
@@ -13402,7 +13817,7 @@ function createHison(): Hison {
                         this._addCol(column);
                         for(const row of this._rows) {
                             if (!row.hasOwnProperty(column)) {
-                                row[column] = null;
+                                (row as Record<string, any>)[column] = null;
                             }
                         }
                     }
@@ -13411,24 +13826,36 @@ function createHison(): Hison {
                 /**
                  * Sets the same value for all rows in the specified column.
                  * If the column does not exist, it is created before assigning values.
+                 * 
+                 * Supports type safety when `T` is defined, while allowing dynamic usage when `T = Record<string, any>`.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to update.
-                 * - `value` **(any)**: The value to be assigned to all rows in the specified column.
+                 * - `column` **(K)**: The name of the column to update, constrained to keys of `T` if defined.
+                 * - `value` **(`T[K]`)**: The value to be assigned to all rows in the specified column.
                  *
                  * ## Behavior
                  * - Throws an error if `value` is `undefined`.
                  * - Calls `_getValidColValue(column)` to validate the column name.
                  * - If the column does not exist, `_addCol(column)` is called to add it.
                  * - Iterates through all rows and assigns the specified value using `_getValidRowValue()`.
-                 * - Returns the current `DataModel` instance for method chaining.
+                 * - Ensures type consistency when `T` is specified.
+                 * - Allows any column name when `T = Record<string, any>`.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The current instance after setting the column values.
+                 * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after setting the column values.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }]);
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 *     status?: string;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
+                 *     { id: 1, name: "Alice" },
+                 *     { id: 2, name: "Bob" }
+                 * ]);
                  * 
                  * // Set the same value for all rows in the "status" column
                  * dataModel.setColumnSameValue("status", "active");
@@ -13436,46 +13863,55 @@ function createHison(): Hison {
                  * 
                  * // If the column does not exist, it is created automatically
                  * console.log(dataModel.getColumns()); // Output: ["id", "name", "status"]
+                 * 
+                 * // With default `Record<string, any>`, dynamic columns can be added without strict typing
+                 * const flexibleModel = new hison.data.DataModel();
+                 * flexibleModel.setColumnSameValue("newField", 123);
                  * ```
                  *
-                 * @param {string} column The name of the column to set the value for.
-                 * @param {any} value The value to assign to all rows in the column.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after updating the column.
+                 * @param {K} column The name of the column to set the value for.
+                 * @param {T[K]} value The value to assign to all rows in the column.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after updating the column.
                  * @throws {Error} If `value` is `undefined` or if the column name is invalid.
                  */
-                setColumnSameValue = (column: string, value: any): InterfaceDataModel => {
+                setColumnSameValue = <K extends keyof T>(column: K, value: T[K]): InterfaceDataModel<T> => {
                     if (value === undefined) throw new Error('You can not put a value of undefined type.');
-                    column = this._getValidColValue(column);
-                    if (!this._hasColumn(column)) this._addCol(column);
+                    column = this._getValidColValue(column as string) as K;
+                    if (!this._hasColumn(column as string)) this._addCol(column as string);
                     let rowIndex = 0;
                     for(const row of this._rows) {
-                        row[column] = this._getValidRowValue(rowIndex, column, value);
+                        (row as Record<string, any>)[column as string] = this._getValidRowValue(rowIndex, column as string, value);
                         rowIndex++;
                     }
                     return this;
                 };
                 /**
                  * Applies a formatting function to all values in the specified column.
-                 * The formatter function transforms each row's value in the column.
+                 * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to format.
-                 * - `formatter` **(`DataModelFormatter`)**: A function that takes a value and returns a formatted version of it.
+                 * - `column` **(K)**: The name of the column to format, constrained to keys of `T` if defined.
+                 * - `formatter` **(`DataModelFormatter`)**: A function that transforms each value in the column.
                  *
                  * ## Behavior
                  * - Throws an error if `formatter` is not a valid function.
-                 * - Calls `_getValidColValue(column)` to validate the column name.
-                 * - Throws an error if the specified column does not exist.
-                 * - Iterates through all rows and applies the `formatter` function to each value in the column.
-                 * - Ensures that the formatted value is valid using `_getValidRowValue()`.
-                 * - Returns the current `DataModel` instance for method chaining.
+                 * - Validates `column` using `_getValidColValue(column)`.
+                 * - Throws an error if the column does not exist.
+                 * - Iterates through all rows and applies `formatter` to each value in the column.
+                 * - Ensures that the formatted values remain valid using `_getValidRowValue()`.
+                 * - Allows any string as `column` if `T = Record<string, any>`.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The current instance after formatting the column values.
+                 * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after formatting the column.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface Product {
+                 *     id: number;
+                 *     price: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<Product>([
                  *     { id: 1, price: 1000 },
                  *     { id: 2, price: 2000 }
                  * ]);
@@ -13484,22 +13920,23 @@ function createHison(): Hison {
                  * dataModel.setColumnSameFormat("price", value => `$${value}`);
                  * console.log(dataModel.getColumnValues("price")); // Output: ["$1000", "$2000"]
                  * 
-                 * // Throws an error if the column does not exist
-                 * // dataModel.setColumnSameFormat("discount", value => `${value}%`);
+                 * // With default `Record<string, any>`, any column can be formatted dynamically
+                 * const flexibleModel = new hison.data.DataModel();
+                 * flexibleModel.setColumnSameFormat("randomColumn", value => `formatted-${value}`);
                  * ```
                  *
-                 * @param {string} column The name of the column to format.
+                 * @param {K} column The name of the column to format.
                  * @param {DataModelFormatter} formatter A function that transforms each value in the column.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after formatting the column.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after formatting the column.
                  * @throws {Error} If `formatter` is not a function or if the column does not exist.
                  */
-                setColumnSameFormat = (column: string, formatter: DataModelFormatter): InterfaceDataModel => {
+                setColumnSameFormat = <K extends keyof T>(column: K, formatter: DataModelFormatter): InterfaceDataModel<T> => {
                     this._checkValidFunction(formatter);
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
                     let rowIndex = 0;
                     for(const row of this._rows) {
-                        row[column] = this._getValidRowValue(rowIndex, column, formatter(row[column]));
+                        (row as Record<string, any>)[column as string] = this._getValidRowValue(rowIndex, column as string, formatter(row[column]));
                         rowIndex++;
                     }
                     return this;
@@ -13516,7 +13953,7 @@ function createHison(): Hison {
                  * - Uses `_deepCopy()` to return a copy of the row, preventing unintended modifications.
                  *
                  * ## Returns
-                 * - **`Record<string, any>`**: A deep copy of the row data as an object.
+                 * - **`T`**: A deep copy of the row data as an object.
                  *
                  * ## Example Usage
                  * ```typescript
@@ -13532,10 +13969,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {number} rowIndex The index of the row to retrieve.
-                 * @returns {Record<string, any>} A deep copy of the row data.
+                 * @returns {T} A deep copy of the row data.
                  * @throws {Error} If `rowIndex` is out of bounds.
                  */
-                getRow = (rowIndex: number): Record<string, any> => {
+                getRow = (rowIndex: number): T => {
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
                 /**
@@ -13568,33 +14005,42 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {number} rowIndex The index of the row to retrieve.
-                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the row data.
+                 * @returns {InterfaceDataModel<T>} A new `DataModel` instance containing the row data.
                  * @throws {Error} If `rowIndex` is out of bounds.
                  */
-                getRowAsDataModel = (rowIndex: number): InterfaceDataModel => {
-                    return new hison.data.DataModel(this._rows[this._getValidRowIndex(rowIndex)]);
+                getRowAsDataModel = (rowIndex: number): InterfaceDataModel<T> => {
+                    return new hison.data.DataModel<T>(this._rows[this._getValidRowIndex(rowIndex)]);
                 };
                 /**
-                 * Adds a new row to the `DataModel` at the specified index or appends it to the end.
+                 * Adds a new row to the `DataModel<T>` at the specified index or appends it to the end.
                  * If no parameters are provided, an empty row is added.
                  *
+                 * ## Generic Type `<T>`
+                 * - `T` represents the structure of each row in the `DataModel<T>`.
+                 * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible row structures.
+                 *
                  * ## Parameters
-                 * - `rowIndexOrRow` **(number | Object, optional)**: The index at which to insert the row, or the row data to insert.
-                 * - `row` **(Object, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
+                 * - `rowIndexOrRow` **(number | T, optional)**: The index at which to insert the row, or the row data to insert.
+                 * - `row` **(T, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
                  *
                  * ## Behavior
                  * - If **no parameters** are provided, an empty row is appended.
                  * - If **only a number is provided**, an empty row is inserted at that index.
-                 * - If **only an object is provided**, it is inserted as a new row at the end.
+                 * - If **only an object (`T`) is provided**, it is inserted as a new row at the end.
                  * - If **both a number and an object are provided**, the row is inserted at the specified index.
                  * - Throws an error if attempting to add a row without first defining columns.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The current instance after adding the new row.
+                 * - **`DataModel<T>`**: The current instance after adding the new row.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
                  * 
                  * // Add an empty row
                  * dataModel.addRow();
@@ -13610,15 +14056,15 @@ function createHison(): Hison {
                  * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
                  * 
                  * // Throws an error: "Please define the column first."
-                 * // new hison.data.DataModel().addRow();
+                 * // new hison.data.DataModel<User>().addRow();
                  * ```
                  *
-                 * @param {number | Object} [rowIndexOrRow] The index at which to insert the row, or the row data.
-                 * @param {Object} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the row.
+                 * @param {number | T} [rowIndexOrRow] The index at which to insert the row, or the row data.
+                 * @param {T} [row] The row data to insert (only required if `rowIndexOrRow` is a number).
+                 * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after adding the row.
                  * @throws {Error} If columns are not defined or parameters are invalid.
                  */
-                addRow = (rowIndexOrRow?: number | Record<string, any>, row?: Record<string, any>): InterfaceDataModel => {
+                addRow = (rowIndexOrRow?: number | T, row?: T): InterfaceDataModel<T> => {
                     if (rowIndexOrRow === undefined && row === undefined) {
                         if (this._cols.length <= 0) {
                             throw new Error('Please define the column first.');
@@ -13627,7 +14073,7 @@ function createHison(): Hison {
                         for (const col of this._cols) {
                             emptyRow[col] = null;
                         }
-                        this._rows.push(emptyRow);
+                        this._rows.push(emptyRow as T);
                     } else if (typeof rowIndexOrRow === 'number' && row === undefined) {
                         if (this._cols.length <= 0) {
                             throw new Error('Please define the column first.');
@@ -13637,14 +14083,14 @@ function createHison(): Hison {
                         for (const col of this._cols) {
                             emptyRow[col] = null;
                         }
-                        this._rows.splice(validIndex, 0, emptyRow);
+                        this._rows.splice(validIndex, 0, emptyRow as T);
                     } else if (typeof rowIndexOrRow === 'object' && row === undefined) {
                         this._addRow(this._rows.length, rowIndexOrRow);
                     } else if (typeof rowIndexOrRow === 'number' && typeof row === 'object') {
                         const validIndex = rowIndexOrRow >= this._rows.length ? this._rows.length : this._getValidRowIndex(rowIndexOrRow);
                         this._addRow(validIndex, row);
                         const newRow: Record<string, any> | undefined = this._rows.pop();
-                        if(newRow) this._rows.splice(validIndex, 0, newRow);
+                        if(newRow) this._rows.splice(validIndex, 0, newRow as T);
                     } else {
                         throw new Error('Invalid parameters for addRow method.');
                     }
@@ -13653,6 +14099,11 @@ function createHison(): Hison {
                 /**
                  * Retrieves a deep copy of a range of rows from the `DataModel`.
                  * Ensures that modifications to the returned rows do not affect the original data.
+                 *
+                 * ## Generic Type `<T>`
+                 * - `T` represents the structure of each row in the `DataModel`.
+                 * - By specifying `T`, developers can enforce type safety when retrieving rows.
+                 * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
                  *
                  * ## Parameters
                  * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
@@ -13664,11 +14115,16 @@ function createHison(): Hison {
                  * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
                  *
                  * ## Returns
-                 * - **`Record<string, any>[]`**: An array of deep-copied row objects.
+                 * - **`T[]`**: An array of deep-copied row objects, ensuring type safety.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" },
                  *     { id: 3, name: "Charlie" }
@@ -13686,10 +14142,10 @@ function createHison(): Hison {
                  *
                  * @param {number} [startRow=0] The starting index of the row range.
                  * @param {number} [endRow=null] The ending index of the row range (inclusive).
-                 * @returns {Record<string, any>[]} An array of deep-copied rows.
+                 * @returns {T[]} An array of deep-copied rows, preserving type safety.
                  * @throws {Error} If `startRow` or `endRow` is out of bounds.
                  */
-                getRows = (startRow: number = 0, endRow: number | null = null): Record<string, any>[] => {
+                getRows = (startRow: number = 0, endRow: number | null = null): T[] => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this._deepCopy(this._rows);
                     const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
@@ -13736,10 +14192,10 @@ function createHison(): Hison {
                  *
                  * @param {number} [startRow=0] The starting index of the row range.
                  * @param {number} [endRow=null] The ending index of the row range (inclusive).
-                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the selected rows.
+                 * @returns {InterfaceDataModel<T>} A new `DataModel` instance containing the selected rows.
                  * @throws {Error} If `startRow` or `endRow` is out of bounds.
                  */
-                getRowsAsDataModel = (startRow: number = 0, endRow: number | null = null): InterfaceDataModel => {
+                getRowsAsDataModel = (startRow: number = 0, endRow: number | null = null): InterfaceDataModel<T> => {
                     const sRow = this._getValidRowIndex(startRow);
                     if(sRow === 0 && endRow === null) return this.clone();
                     const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
@@ -13748,14 +14204,19 @@ function createHison(): Hison {
                         if(!this._rows[i]) break;
                         result.push(this._deepCopy(this._rows[i]));
                     }
-                    return new hison.data.DataModel(result);
+                    return new hison.data.DataModel<T>(result);
                 };
                 /**
                  * Adds multiple rows to the `DataModel`.
                  * Each row is validated and inserted into the existing dataset.
                  *
+                 * ## Generic Type `<T>`
+                 * - `T` represents the structure of each row in the `DataModel`.
+                 * - By specifying `T`, developers can enforce type safety for inserted rows.
+                 * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
+                 *
                  * ## Parameters
-                 * - `rows` **(`Record<string, any>[]`)**: An array of row objects to be added.
+                 * - `rows` **(`T[]`)**: An array of row objects to be added.
                  *
                  * ## Behavior
                  * - Calls `_put(rows)` to process and insert the provided rows.
@@ -13763,11 +14224,16 @@ function createHison(): Hison {
                  * - Returns the current `DataModel` instance for method chaining.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The current instance after adding the new rows.
+                 * - **`InterfaceDataModel<T>`**: The current instance after adding the new rows.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
                  * 
                  * // Add multiple rows
                  * dataModel.addRows([
@@ -13779,33 +14245,42 @@ function createHison(): Hison {
                  * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
                  * ```
                  *
-                 * @param {Record<string, any>[]} rows An array of row objects to add.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after adding the rows.
+                 * @param {T[]} rows An array of row objects to add.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel<T>` instance after adding the rows.
                  * @throws {Error} If `rows` contain invalid data.
                  */
-                addRows = (rows: Record<string, any>[]): InterfaceDataModel => {
+                addRows = (rows: T[]): InterfaceDataModel<T> => {
                     this._put(rows);
                     return this;
                 };
                 /**
-                 * Converts the `DataModel` instance into a standard JavaScript object.
+                 * Converts the `DataModel` instance into a structured JavaScript object.
                  * The returned object includes column definitions, row data, and metadata.
                  *
                  * ## Behavior
-                 * - Uses `_deepCopy()` to ensure that returned data is independent of the original `DataModel`.
-                 * - Includes the following properties in the returned object:
-                 *   - `cols`: An array of column names.
-                 *   - `rows`: An array of row objects.
+                 * - Uses `_deepCopy()` to ensure the returned data is independent of the original `DataModel`.
+                 * - The returned object contains:
+                 *   - `cols`: An array of column names (`keyof T`).
+                 *   - `rows`: An array of row objects (`T[]`).
                  *   - `colCount`: The total number of columns.
                  *   - `rowCount`: The total number of rows.
-                 *   - `isDeclare`: A boolean indicating whether columns are defined.
+                 *   - `isDeclare`: A boolean indicating whether columns are explicitly defined.
                  *
                  * ## Returns
-                 * - **`Record<string, any>`**: A plain object representing the `DataModel` structure.
+                 * - **`{ cols: (keyof T)[], rows: T[], colCount: number, rowCount: number, isDeclare: boolean }`**:
+                 *   A structured object representing the `DataModel`.
+                 *
+                 * ⚠ **Note:** If `T` is explicitly defined, `cols` will reflect only the known keys of `T`.
+                 * If `T` is the default `Record<string, any>`, `cols` may include dynamically added columns.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" }
                  * ]);
@@ -13821,58 +14296,65 @@ function createHison(): Hison {
                  * // }
                  * ```
                  *
-                 * @returns {Record<string, any>} A plain object representing the `DataModel` structure.
+                 * @returns {{ cols: (keyof T)[]; rows: T[], colCount: number, rowCount: number, isDeclare: boolean }}
+                 *          A structured object representing the `DataModel` structure.
                  */
-                getObject = (): Record<string, any> => {
-                    const result: Record<string, any> = {};
+                getObject = (): { cols: (keyof T)[]; rows: T[]; colCount: number; rowCount: number; isDeclare: boolean; } => {
                     const copyCol = this._deepCopy(this._cols);
                     const copyRow = this._deepCopy(this._rows);
-        
-                    result['cols'] = copyCol;
-                    result['rows'] = copyRow;
-                    result['colCount'] = copyCol.length;
-                    result['rowCount'] = copyRow.length;
-                    result['isDeclare'] = this.isDeclare();
+                    const result = {
+                        cols: copyCol,
+                        rows: copyRow,
+                        colCount: copyCol.length,
+                        rowCount: copyRow.length,
+                        isDeclare: this.isDeclare(),
+                    };
                     return result;
                 };
                 /**
-                 * Retrieves the value at the specified row index and column name.
-                 * Ensures that the returned value is a deep copy to prevent unintended modifications.
+                 * Retrieves a deep copy of the value at the specified row index and column name.
+                 * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
                  *
                  * ## Parameters
-                 * - `rowIndex` **(number)**: The index of the row from which to retrieve the value.
-                 * - `column` **(string)**: The name of the column containing the desired value.
+                 * - `rowIndex` **(number)**: The index of the row to retrieve the value from.
+                 * - `column` **(K)**: The column name, constrained to the keys of `T` if defined.
                  *
                  * ## Behavior
-                 * - Calls `_getValidColValue(column)` to validate the column name.
-                 * - Throws an error if the specified column does not exist.
-                 * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
-                 * - Uses `_deepCopy()` to return an independent copy of the value.
+                 * - Validates `column` and `rowIndex` before accessing the value.
+                 * - Returns a deep copy to prevent unintended modifications.
+                 * - Allows any string as `column` if `T = Record<string, any>`.
                  *
                  * ## Returns
-                 * - **`any`**: A deep copy of the value stored at the specified row and column.
+                 * - **`T[K]`**: A deep copy of the value stored at the specified row and column.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
-                 *     { id: 1, name: "Alice" },
-                 *     { id: 2, name: "Bob" }
+                 * interface User {
+                 *     id: string;
+                 *     age: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
+                 *     { id: "U1", age: 25 },
+                 *     { id: "U2", age: 30 }
                  * ]);
                  * 
-                 * console.log(dataModel.getValue(0, "name")); // Output: "Alice"
+                 * console.log(dataModel.getValue(0, "age")); // Output: 25 (type: number)
+                 * console.log(dataModel.getValue(0, "id"));  // Output: "U1" (type: string)
                  * 
-                 * // Throws an error if the column does not exist
-                 * // console.log(dataModel.getValue(0, "age"));
+                 * // With default `Record<string, any>`, any column can be accessed.
+                 * const flexibleModel = new hison.data.DataModel();
+                 * console.log(flexibleModel.getValue(0, "randomColumn")); // No TypeScript error
                  * ```
                  *
-                 * @param {number} rowIndex The index of the row to retrieve the value from.
-                 * @param {string} column The column name containing the value.
-                 * @returns {any} A deep copy of the value stored at the specified row and column.
+                 * @param {number} rowIndex The row index to retrieve the value from.
+                 * @param {K} column The column name to retrieve the value from.
+                 * @returns {T[K]} A deep copy of the value stored at the specified row and column.
                  * @throws {Error} If `rowIndex` or `column` is invalid.
                  */
-                getValue = (rowIndex: number, column: string): any => {
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                getValue = <K extends keyof T>(rowIndex: number, column: K): T[K] => {
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
                     return this._deepCopy(this._rows[this._getValidRowIndex(rowIndex)][column]);
                 };
                 /**
@@ -13881,8 +14363,8 @@ function createHison(): Hison {
                  *
                  * ## Parameters
                  * - `rowIndex` **(number)**: The index of the row where the value should be set.
-                 * - `column` **(string)**: The name of the column where the value should be stored.
-                 * - `value` **(any)**: The value to be assigned to the specified row and column.
+                 * - `column` **(K)**: The name of the column where the value should be stored.
+                 * - `value` **(T[K])**: The value to be assigned, ensuring type safety.
                  *
                  * ## Behavior
                  * - Throws an error if `value` is `undefined`.
@@ -13893,12 +14375,21 @@ function createHison(): Hison {
                  * - Updates the value at the specified row and column.
                  * - Returns the current `DataModel` instance for method chaining.
                  *
+                 * ## Type Safety
+                 * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
+                 * - The `value` type is inferred as `T[K]`, preventing type mismatches.
+                 *
                  * ## Returns
-                 * - **`DataModel`**: The current instance after updating the value.
+                 * - **`InterfaceDataModel<T>`**: The current instance after updating the value.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" }
                  * ]);
@@ -13914,16 +14405,16 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {number} rowIndex The index of the row where the value should be set.
-                 * @param {string} column The column name where the value should be stored.
-                 * @param {any} value The value to assign.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after updating the value.
+                 * @param {K} column The column name where the value should be stored.
+                 * @param {T[K]} value The value to assign, ensuring type safety.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel` instance after updating the value.
                  * @throws {Error} If `value` is `undefined` or if `rowIndex` or `column` is invalid.
                  */
-                setValue = (rowIndex: number, column: string, value: any): InterfaceDataModel => {
+                setValue = <K extends keyof T>(rowIndex: number, column: K, value: T[K]): InterfaceDataModel<T> => {
                     if (value === undefined) throw new Error('You can not put a value of undefined type.');
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
-                    this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(rowIndex, column, value);
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
+                    this._rows[this._getValidRowIndex(rowIndex)][column] = this._getValidRowValue(rowIndex, column as string, value);
                     return this;
                 };
                 /**
@@ -13931,7 +14422,7 @@ function createHison(): Hison {
                  * Ensures that the column exists before attempting removal.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to remove.
+                 * - `column` **(K)**: The name of the column to remove, ensuring type safety.
                  *
                  * ## Behavior
                  * - Calls `_getValidColValue(column)` to validate the column name.
@@ -13939,13 +14430,26 @@ function createHison(): Hison {
                  * - Iterates through all rows and removes the specified column.
                  * - Updates `_cols` to exclude the removed column.
                  * - Returns the current `DataModel` instance for method chaining.
+                 * 
+                 * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
+                 * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+                 * 
+                 * ## Type Safety
+                 * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
+                 * - Prevents attempts to remove a column that does not exist in the defined type.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The current instance after removing the column.
+                 * - **`InterfaceDataModel<T>`**: The current instance after removing the column.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 *   age: number;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25 },
                  *     { id: 2, name: "Bob", age: 30 }
                  * ]);
@@ -13959,17 +14463,17 @@ function createHison(): Hison {
                  * // dataModel.removeColumn("salary");
                  * ```
                  *
-                 * @param {string} column The name of the column to remove.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after removing the column.
+                 * @param {K} column The name of the column to remove, ensuring type safety.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel` instance after removing the column.
                  * @throws {Error} If `column` is invalid or does not exist.
                  */
-                removeColumn = (column: string): InterfaceDataModel => {
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                removeColumn = <K extends keyof T>(column: K): InterfaceDataModel<T> => {
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
                     for(const row of this._rows) {
                         delete row[column]
                     }
-                    this._cols = this._cols.filter(oriColumn => oriColumn !== column);
+                    this._cols = this._cols.filter(oriColumn => oriColumn !== column as string);
                     return this;
                 };
                 /**
@@ -13977,19 +14481,30 @@ function createHison(): Hison {
                  * Ensures that each specified column exists before attempting removal.
                  *
                  * ## Parameters
-                 * - `columns` **(string[])**: An array of column names to remove.
+                 * - `columns` **(K[])**: An array of column names to remove, ensuring type safety.
                  *
                  * ## Behavior
+                 * - Uses `<K extends keyof T>` to enforce that `columns` contain only valid keys of `T`.
                  * - Iterates through the `columns` array and calls `removeColumn(column)` for each entry.
                  * - If any column does not exist, `removeColumn` will throw an error.
                  * - Returns the current `DataModel` instance for method chaining.
-                 *
+                 * 
+                 * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
+                 * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+                 * 
                  * ## Returns
-                 * - **`DataModel`**: The current instance after removing the specified columns.
+                 * - **`InterfaceDataModel<T>`**: The current instance after removing the specified columns.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 *   age: number;
+                 *   city: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25, city: "New York" },
                  *     { id: 2, name: "Bob", age: 30, city: "Los Angeles" }
                  * ]);
@@ -14003,11 +14518,11 @@ function createHison(): Hison {
                  * // dataModel.removeColumns(["salary", "bonus"]);
                  * ```
                  *
-                 * @param {string[]} columns An array of column names to remove.
-                 * @returns {InterfaceDataModel} The current `DataModel` instance after removing the columns.
+                 * @param {K[]} columns An array of column names to remove, ensuring type safety.
+                 * @returns {InterfaceDataModel<T>} The current `DataModel` instance after removing the columns.
                  * @throws {Error} If any column does not exist.
                  */
-                removeColumns = (columns: string[]): InterfaceDataModel => {
+                removeColumns = <K extends keyof T>(columns: K[]): InterfaceDataModel<T> => {
                     for(const column of columns) {
                         this.removeColumn(column);
                     }
@@ -14021,15 +14536,21 @@ function createHison(): Hison {
                  * - `rowIndex` **(number, optional, default = `0`)**: The index of the row to remove.
                  *
                  * ## Behavior
+                 * - Uses `<T>` to ensure that the returned row matches the structure of `T`.
                  * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
                  * - Uses `splice()` to remove the row from `_rows` and returns the removed row.
                  *
                  * ## Returns
-                 * - **`Record<string, any>`**: The removed row object.
+                 * - **`T`**: The removed row object, ensuring type safety based on `T`.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" },
                  *     { id: 3, name: "Charlie" }
@@ -14046,10 +14567,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {number} [rowIndex=0] The index of the row to remove.
-                 * @returns {Record<string, any>} The removed row object.
+                 * @returns {T} The removed row object, with type safety enforced.
                  * @throws {Error} If `rowIndex` is out of bounds.
                  */
-                removeRow = (rowIndex: number = 0): Record<string, any> => {
+                removeRow = (rowIndex: number = 0): T => {
                     return this._rows.splice(this._getValidRowIndex(rowIndex), 1)[0];
                 };
                 /**
@@ -14104,11 +14625,13 @@ function createHison(): Hison {
                 };
                 /**
                  * Checks whether the `DataModel` contains a specified column.
+                 * Uses `<K extends keyof T>` to ensure type safety when checking column names.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to check.
+                 * - `column` **(K)**: The column name to check, constrained to keys of `T`.
                  *
                  * ## Behavior
+                 * - Ensures type safety by restricting `column` to valid keys of `T`.
                  * - Calls `_hasColumn(column)` to determine if the column exists.
                  * - Returns `true` if the column is found in `_cols`, otherwise `false`.
                  *
@@ -14117,36 +14640,51 @@ function createHison(): Hison {
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel(["id", "name"]);
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
                  * 
                  * console.log(dataModel.hasColumn("name")); // Output: true
-                 * console.log(dataModel.hasColumn("age")); // Output: false
+                 * console.log(dataModel.hasColumn("age"));  // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
                  * ```
                  *
-                 * @param {string} column The column name to check.
+                 * @param {K} column The column name to check, constrained to keys of `T`.
                  * @returns {boolean} `true` if the column exists, otherwise `false`.
                  */
-                hasColumn = (column: string): boolean => {
-                    return this._hasColumn(column);
+                hasColumn = <K extends keyof T>(column: K): boolean => {
+                    return this._hasColumn(column as string);
                 };
                 /**
                  * Restricts the `DataModel` to only the specified columns by removing all other columns.
-                 * Ensures that only the columns listed in `columns` remain in the dataset.
+                 * Uses `<K extends keyof T>` to enforce type safety when specifying valid columns.
                  *
                  * ## Parameters
-                 * - `columns` **(string[])**: An array of column names to keep in the `DataModel`.
+                 * - `columns` **(K[])**: An array of column names to retain, constrained to keys of `T`.
                  *
                  * ## Behavior
-                 * - Filters `_cols` to identify columns that are **not** in the provided `columns` list.
-                 * - Calls `removeColumns()` to remove those columns from the dataset.
+                 * - Ensures type safety by allowing only existing keys of `T` as valid columns.
+                 * - Identifies and removes columns that are **not** included in the provided `columns` list.
+                 * - Calls `removeColumns()` to eliminate those columns from the dataset.
                  * - Returns the modified `DataModel` instance for method chaining.
-                 *
+                 * 
+                 * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
+                 * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
+                 * 
                  * ## Returns
-                 * - **`DataModel`**: The modified `DataModel` instance with only the specified columns retained.
+                 * - **`InterfaceDataModel<T>`**: The modified `DataModel` instance with only the specified columns retained.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 *   age: number;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25 },
                  *     { id: 2, name: "Bob", age: 30 }
                  * ]);
@@ -14156,23 +14694,28 @@ function createHison(): Hison {
                  * // Keep only "id" and "name" columns
                  * dataModel.setValidColumns(["id", "name"]);
                  * console.log(dataModel.getColumns()); // Output: ["id", "name"]
+                 *
+                 * // TypeScript Error: Argument of type '"salary"' is not assignable to parameter of type '"id" | "name" | "age"'.
+                 * // dataModel.setValidColumns(["id", "salary"]);
                  * ```
                  *
-                 * @param {string[]} columns An array of column names to retain.
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with only the specified columns retained.
+                 * @param {K[]} columns An array of column names to retain, constrained to keys of `T`.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with only the specified columns retained.
                  */
-                setValidColumns = (columns: string[]): InterfaceDataModel => {
-                    columns = this._cols.filter(oriColumn => !columns.includes(oriColumn));
+                setValidColumns = <K extends keyof T>(columns: K[]): InterfaceDataModel<T> => {
+                    columns = this._cols.filter(oriColumn => !columns.includes(oriColumn as K)) as K[];
                     this.removeColumns(columns);
                     return this;
                 };
                 /**
                  * Checks whether a specified column contains only non-null values.
+                 * Uses `<K extends keyof T>` to ensure type safety when specifying the column.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to check.
+                 * - `column` **(K)**: The name of the column to check, constrained to keys of `T`.
                  *
                  * ## Behavior
+                 * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getNullColumnFirstRowIndex(column)` to find the first occurrence of a `null` value in the column.
                  * - If no `null` values are found, returns `true`; otherwise, returns `false`.
                  *
@@ -14181,40 +14724,55 @@ function createHison(): Hison {
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string | null;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: null },
                  *     { id: 3, name: "Charlie" }
                  * ]);
                  * 
-                 * console.log(dataModel.isNotNullColumn("id")); // Output: true
+                 * console.log(dataModel.isNotNullColumn("id"));   // Output: true
                  * console.log(dataModel.isNotNullColumn("name")); // Output: false
+                 *
+                 * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+                 * // console.log(dataModel.isNotNullColumn("age"));
                  * ```
                  *
-                 * @param {string} column The column name to check.
+                 * @param {K} column The column name to check, constrained to keys of `T`.
                  * @returns {boolean} `true` if the column has no `null` values, otherwise `false`.
                  * @throws {Error} If `column` does not exist.
                  */
-                isNotNullColumn = (column: string): boolean => {
-                    return this._getNullColumnFirstRowIndex(column) === -1;
+                isNotNullColumn = <K extends keyof T>(column: K): boolean => {
+                    return this._getNullColumnFirstRowIndex(column as string) === -1;
                 };
                 /**
                  * Finds and returns the first row where the specified column contains a `null` value.
+                 * Uses `<K extends keyof T>` to enforce type safety on the column name.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to check.
+                 * - `column` **(K)**: The column name to check, constrained to keys of `T`.
                  *
                  * ## Behavior
-                 * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value in the column.
+                 * - Ensures type safety by restricting `column` to existing keys of `T`.
+                 * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value.
                  * - If no `null` values are found, returns `null`.
                  * - If a `null` value is found, retrieves and returns the corresponding row using `getRow()`.
                  *
                  * ## Returns
-                 * - **`Record<string, any> | null`**: The first row where the column has a `null` value, or `null` if no such row exists.
+                 * - **`T | null`**: The first row where the column has a `null` value, or `null` if none exist.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string | null;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: null },
                  *     { id: 3, name: "Charlie" }
@@ -14225,14 +14783,17 @@ function createHison(): Hison {
                  * 
                  * console.log(dataModel.findFirstRowNullColumn("id"));
                  * // Output: null (no null values in the "id" column)
+                 *
+                 * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+                 * // console.log(dataModel.findFirstRowNullColumn("age"));
                  * ```
                  *
-                 * @param {string} column The column name to check for `null` values.
-                 * @returns {Record<string, any> | null} The first row where the column has a `null` value, or `null` if none exist.
+                 * @param {K} column The column name to check for `null` values.
+                 * @returns {T | null} The first row where the column has a `null` value, or `null` if none exist.
                  * @throws {Error} If `column` does not exist.
                  */
-                findFirstRowNullColumn = (column: string): Record<string, any> | null => {
-                    const nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column);
+                findFirstRowNullColumn = <K extends keyof T>(column: K): T | null => {
+                    const nullColumnFirstRowIndex = this._getNullColumnFirstRowIndex(column as string);
                     if (nullColumnFirstRowIndex === -1) {
                         return null
                     } else {
@@ -14241,11 +14802,13 @@ function createHison(): Hison {
                 };
                 /**
                  * Checks whether a specified column contains only unique values (i.e., no duplicate values).
+                 * Uses `<K extends keyof T>` to enforce type safety on the column name.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to check.
+                 * - `column` **(K)**: The column name to check, constrained to keys of `T`.
                  *
                  * ## Behavior
+                 * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getDuplColumnFirstRowIndex(column)` to find the first occurrence of a duplicate value in the column.
                  * - If no duplicates are found, returns `true`; otherwise, returns `false`.
                  *
@@ -14254,7 +14817,12 @@ function createHison(): Hison {
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" },
                  *     { id: 3, name: "Alice" }
@@ -14262,32 +14830,42 @@ function createHison(): Hison {
                  * 
                  * console.log(dataModel.isNotDuplColumn("id")); // Output: true
                  * console.log(dataModel.isNotDuplColumn("name")); // Output: false
+                 *
+                 * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+                 * // console.log(dataModel.isNotDuplColumn("age"));
                  * ```
                  *
-                 * @param {string} column The column name to check for duplicate values.
+                 * @param {K} column The column name to check for duplicate values.
                  * @returns {boolean} `true` if the column has no duplicate values, otherwise `false`.
                  * @throws {Error} If `column` does not exist.
                  */
-                isNotDuplColumn = (column: string): boolean => {
-                    return this._getDuplColumnFirstRowIndex(column) === -1;
+                isNotDuplColumn = <K extends keyof T>(column: K): boolean => {
+                    return this._getDuplColumnFirstRowIndex(column as string) === -1;
                 };
                 /**
                  * Finds and returns the first row where the specified column contains a duplicate value.
+                 * Uses `<K extends keyof T>` to ensure that the column exists in `T`, enforcing type safety.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to check for duplicate values.
+                 * - `column` **(K)**: The column name to check for duplicate values, constrained to keys of `T`.
                  *
                  * ## Behavior
-                 * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value in the column.
+                 * - Ensures type safety by restricting `column` to existing keys of `T`.
+                 * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value.
                  * - If no duplicate values are found, returns `null`.
                  * - If a duplicate value is found, retrieves and returns the corresponding row using `getRow()`.
                  *
                  * ## Returns
-                 * - **`Record<string, any> | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
+                 * - **`T | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   name: string;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" },
                  *     { id: 3, name: "Alice" }
@@ -14298,14 +14876,17 @@ function createHison(): Hison {
                  * 
                  * console.log(dataModel.findFirstRowDuplColumn("id"));
                  * // Output: null (no duplicate values in the "id" column)
+                 *
+                 * // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
+                 * // console.log(dataModel.findFirstRowDuplColumn("age"));
                  * ```
                  *
-                 * @param {string} column The column name to check for duplicate values.
-                 * @returns {Record<string, any> | null} The first row where the column has a duplicate value, or `null` if none exist.
+                 * @param {K} column The column name to check for duplicate values.
+                 * @returns {T | null} The first row where the column has a duplicate value, or `null` if none exist.
                  * @throws {Error} If `column` does not exist.
                  */
-                findFirstRowDuplColumn = (column: string): Record<string, any> | null => {
-                    const duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column);
+                findFirstRowDuplColumn = <K extends keyof T>(column: K): T | null => {
+                    const duplColumnFirstRowIndex = this._getDuplColumnFirstRowIndex(column as string);
                     if (duplColumnFirstRowIndex === -1) {
                         return null
                     } else {
@@ -14314,12 +14895,14 @@ function createHison(): Hison {
                 };
                 /**
                  * Checks whether all values in the specified column satisfy a given validation function.
+                 * Uses `<K extends keyof T>` to ensure type safety for column selection.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to validate.
+                 * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
                  * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
                  *
                  * ## Behavior
+                 * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to check for invalid values.
                  * - If no invalid values are found, returns `true`; otherwise, returns `false`.
                  *
@@ -14328,10 +14911,15 @@ function createHison(): Hison {
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   age: number;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, age: 25 },
                  *     { id: 2, age: 30 },
-                 *     { id: 3, age: "invalid" }
+                 *     { id: 3, age: "invalid" as any }
                  * ]);
                  * 
                  * // Check if all values in "age" column are valid numbers
@@ -14340,36 +14928,46 @@ function createHison(): Hison {
                  * 
                  * console.log(dataModel.isValidValue("id", value => typeof value === "number"));
                  * // Output: true
+                 *
+                 * // TypeScript Error: Argument of type '"name"' is not assignable to parameter of type '"id" | "age"'.
+                 * // console.log(dataModel.isValidValue("name", value => typeof value === "string"));
                  * ```
                  *
-                 * @param {string} column The column name to validate.
+                 * @param {K} column The column name to validate.
                  * @param {DataModelValidator} validator A function that checks if a value is valid.
                  * @returns {boolean} `true` if all values in the column are valid, otherwise `false`.
                  * @throws {Error} If `column` does not exist or `validator` is not a function.
                  */
-                isValidValue = (column: string, vaildator: DataModelValidator): boolean => {
-                    return this._getInValidColumnFirstRowIndex(column, vaildator) === -1;
+                isValidValue = <K extends keyof T>(column: K, vaildator: DataModelValidator): boolean => {
+                    return this._getInValidColumnFirstRowIndex(column as string, vaildator) === -1;
                 };
                 /**
                  * Finds and returns the first row where the specified column contains an invalid value based on a given validation function.
+                 * Uses `<K extends keyof T>` to ensure type safety for column selection.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The name of the column to validate.
+                 * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
                  * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
                  *
                  * ## Behavior
+                 * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to locate the first occurrence of an invalid value in the column.
                  * - If no invalid values are found, returns `null`.
                  * - If an invalid value is found, retrieves and returns the corresponding row using `getRow()`.
                  *
                  * ## Returns
-                 * - **`Record<string, any> | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
+                 * - **`T | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *   id: number;
+                 *   age: number;
+                 * }
+                 *
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, age: 25 },
-                 *     { id: 2, age: "invalid" },
+                 *     { id: 2, age: "invalid" as any },
                  *     { id: 3, age: 30 }
                  * ]);
                  * 
@@ -14379,15 +14977,18 @@ function createHison(): Hison {
                  * 
                  * console.log(dataModel.findFirstRowInvalidValue("id", value => typeof value === "number"));
                  * // Output: null (all values in "id" are valid)
+                 *
+                 * // TypeScript Error: Argument of type '"name"' is not assignable to parameter of type '"id" | "age"'.
+                 * // console.log(dataModel.findFirstRowInvalidValue("name", value => typeof value === "string"));
                  * ```
                  *
-                 * @param {string} column The column name to validate.
+                 * @param {K} column The column name to validate.
                  * @param {DataModelValidator} validator A function that checks if a value is valid.
-                 * @returns {Record<string, any> | null} The first row with an invalid value, or `null` if all values are valid.
+                 * @returns {T | null} The first row with an invalid value, or `null` if all values are valid.
                  * @throws {Error} If `column` does not exist or `validator` is not a function.
                  */
-                findFirstRowInvalidValue = (column: string, vaildator: DataModelValidator): Record<string, any> | null => {
-                    const inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column, vaildator);
+                findFirstRowInvalidValue = <K extends keyof T>(column: K, vaildator: DataModelValidator): T | null => {
+                    const inValidColumnFirstRowIndex = this._getInValidColumnFirstRowIndex(column as string, vaildator);
                     if (inValidColumnFirstRowIndex === -1) {
                         return null
                     } else {
@@ -14396,26 +14997,36 @@ function createHison(): Hison {
                 };
                 /**
                  * Searches for rows that match a given condition and returns their indexes.
-                 * Allows for both positive and negative filtering based on the `isNegative` flag.
+                 * Allows both positive and negative filtering based on the `isNegative` flag.
                  *
                  * ## Parameters
-                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
+                 * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
                  *
                  * ## Behavior
-                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-                 * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
-                 * - Iterates through `_rows`, checking if each row meets the condition.
+                 * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+                 * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
+                 * - Iterates through `_rows` to check if each row meets the condition.
                  * - Uses `JSON.stringify()` for deep comparison of values.
                  * - If `isNegative` is `false`, adds matching row indexes to the result.
                  * - If `isNegative` is `true`, adds **non-matching** row indexes to the result.
+                 *
+                 * ## Type Safety
+                 * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+                 * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
                  * ## Returns
                  * - **`number[]`**: An array of indexes of rows that match (or do not match) the condition.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 *     age: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25 },
                  *     { id: 2, name: "Bob", age: 30 },
                  *     { id: 3, name: "Charlie", age: 25 }
@@ -14430,12 +15041,12 @@ function createHison(): Hison {
                  * // Output: [1]
                  * ```
                  *
-                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {Record<K, T[K]>} condition The key-value condition to match.
                  * @param {boolean} [isNegative=false] If `true`, returns indexes of rows that do **not** match the condition.
                  * @returns {number[]} An array of indexes of rows that match or do not match the condition.
                  * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
                  */
-                searchRowIndexes = (condition: Record<string, any>, isNegative: boolean = false): number[] => {
+                searchRowIndexes = <K extends keyof T>(condition: Record<K, T[K]>, isNegative: boolean = false): number[] => {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
@@ -14459,27 +15070,37 @@ function createHison(): Hison {
                 };
                 /**
                  * Searches for rows that match a given condition and returns them as an array.
-                 * Allows for both positive and negative filtering based on the `isNegative` flag.
+                 * Allows both positive and negative filtering based on the `isNegative` flag.
                  *
                  * ## Parameters
-                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
+                 * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
                  *
                  * ## Behavior
-                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-                 * - Calls `_checkBoolean(isNegative)` to validate the flag.
+                 * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+                 * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows`, checking if each row meets the condition.
                  * - Uses `JSON.stringify()` for deep comparison of values.
                  * - If `isNegative` is `false`, adds matching rows to the result.
                  * - If `isNegative` is `true`, adds **non-matching** rows to the result.
-                 * - Returns a deep copy of the matched rows.
+                 * - Returns a deep copy of the matched rows to ensure immutability.
+                 *
+                 * ## Type Safety
+                 * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+                 * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
                  * ## Returns
-                 * - **`Record<string, any>[]`**: An array of deep-copied rows that match (or do not match) the condition.
+                 * - **`T[]`**: An array of deep-copied rows that match (or do not match) the condition.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 *     age: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25 },
                  *     { id: 2, name: "Bob", age: 30 },
                  *     { id: 3, name: "Charlie", age: 25 }
@@ -14494,16 +15115,16 @@ function createHison(): Hison {
                  * // Output: [{ id: 2, name: "Bob", age: 30 }]
                  * ```
                  *
-                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {Record<K, T[K]>} condition The key-value condition to match.
                  * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
-                 * @returns {Record<string, any>[]} An array of deep-copied rows that match or do not match the condition.
+                 * @returns {T[]} An array of deep-copied rows that match or do not match the condition.
                  * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
                  */
-                searchRows = (condition: Record<string, any>, isNegative: boolean = false): Record<string, any>[] => {
+                searchRows = <K extends keyof T>(condition: Record<K, T[K]>, isNegative: boolean = false): T[] => {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
-                    const matched: Record<string, any>[] = [];
+                    const matched: T[] = [];
                     _this._rows.forEach(function(row) {
                         let matchesCondition = true;
                         for (const key in condition) {
@@ -14523,27 +15144,37 @@ function createHison(): Hison {
                 };
                 /**
                  * Searches for rows that match a given condition and returns them as a new `DataModel` instance.
-                 * Allows for both positive and negative filtering based on the `isNegative` flag.
+                 * Allows both positive and negative filtering based on the `isNegative` flag.
                  *
                  * ## Parameters
-                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
+                 * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
                  *
                  * ## Behavior
-                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-                 * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+                 * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+                 * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows`, checking if each row meets the condition.
                  * - Uses `JSON.stringify()` for deep comparison of values.
                  * - If `isNegative` is `false`, adds matching rows to the result.
                  * - If `isNegative` is `true`, adds **non-matching** rows to the result.
-                 * - Returns a new `DataModel` containing the filtered rows.
+                 * - Returns a new `DataModel<T>` containing the filtered rows.
+                 *
+                 * ## Type Safety
+                 * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+                 * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
                  * ## Returns
-                 * - **`DataModel`**: A new `DataModel` instance containing the matched rows.
+                 * - **`InterfaceDataModel<T>`**: A new `DataModel<T>` instance containing the matched rows.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 *     age: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25 },
                  *     { id: 2, name: "Bob", age: 30 },
                  *     { id: 3, name: "Charlie", age: 25 }
@@ -14561,16 +15192,16 @@ function createHison(): Hison {
                  * // Output: [{ id: 2, name: "Bob", age: 30 }]
                  * ```
                  *
-                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {Record<K, T[K]>} condition The key-value condition to match.
                  * @param {boolean} [isNegative=false] If `true`, returns rows that do **not** match the condition.
-                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the matched rows.
+                 * @returns {InterfaceDataModel<T>} A new `DataModel<T>` instance containing the matched rows.
                  * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
                  */
-                searchRowsAsDataModel = (condition: Record<string, any>, isNegative: boolean = false): InterfaceDataModel => {
+                searchRowsAsDataModel = <K extends keyof T>(condition: Record<K, T[K]>, isNegative: boolean = false): InterfaceDataModel<T> => {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
-                    const matched: Record<string, any>[] = [];
+                    const matched: T[] = [];
                     _this._rows.forEach(function(row) {
                         let matchesCondition = true;
                         for (const key in condition) {
@@ -14589,28 +15220,42 @@ function createHison(): Hison {
                     return new hison.data.DataModel(matched);
                 };
                 /**
-                 * Searches for rows that match a given condition and **modifies** the original `DataModel` by removing matched or unmatched rows.
-                 * This method directly updates the existing dataset instead of returning a new instance.
+                 * Searches for rows that match a given condition and **modifies** the original `DataModel` 
+                 * by removing matched or unmatched rows. Unlike `searchRowsAsDataModel`, this method directly 
+                 * updates the existing dataset instead of returning a new instance.
                  *
                  * ## Parameters
-                 * - `condition` **(Record<string, any>)**: An object representing the key-value conditions to match.
-                 * - `isNegative` **(boolean, optional, default = `false`)**: If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
+                 * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
+                 * - `isNegative` **(`boolean`, optional, default = `false`)**: 
+                 *   - If `false` (default), removes rows that **do not** match the condition.
+                 *   - If `true`, removes rows that **do** match the condition.
                  *
                  * ## Behavior
-                 * - Calls `_checkOriginObject(condition)` to ensure the condition is a valid object.
-                 * - Calls `_checkBoolean(isNegative)` to validate the boolean flag.
+                 * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
+                 * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows`, checking if each row meets the condition.
                  * - Uses `JSON.stringify()` for deep comparison of values.
-                 * - If `isNegative` is `false`, removes rows that **do not** match the condition.
-                 * - If `isNegative` is `true`, removes rows that **do** match the condition.
-                 * - Returns the modified `DataModel` instance for method chaining.
+                 * - Removes rows based on the `isNegative` flag:
+                 *   - If `false`, keeps only matching rows.
+                 *   - If `true`, removes matching rows.
+                 * - Returns the modified `DataModel<T>` instance for method chaining.
+                 *
+                 * ## Type Safety
+                 * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
+                 * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The modified `DataModel` instance after removing specified rows.
+                 * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance after removing specified rows.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 *     age: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 1, name: "Alice", age: 25 },
                  *     { id: 2, name: "Bob", age: 30 },
                  *     { id: 3, name: "Charlie", age: 25 }
@@ -14627,12 +15272,12 @@ function createHison(): Hison {
                  * // Output: []
                  * ```
                  *
-                 * @param {Record<string, any>} condition The key-value condition to match.
+                 * @param {Record<K, T[K]>} condition The key-value condition to match.
                  * @param {boolean} [isNegative=false] If `true`, removes rows that **match** the condition; otherwise, removes rows that **do not** match the condition.
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance after removing specified rows.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance after removing specified rows.
                  * @throws {Error} If `condition` is not a valid object or `isNegative` is not a boolean.
                  */
-                searchAndModify = (condition: Record<string, any>, isNegative: boolean = false): InterfaceDataModel => {
+                searchAndModify = <K extends keyof T>(condition: Record<K, T[K]>, isNegative: boolean = false): InterfaceDataModel<T> => {
                     const _this = this;
                     _this._checkOriginObject(condition);
                     _this._checkBoolean(isNegative);
@@ -14716,7 +15361,7 @@ function createHison(): Hison {
                  * - Returns an array of matching rows.
                  *
                  * ## Returns
-                 * - **`Record<string, any>[]`**: An array of deep-copied rows that match the filter condition.
+                 * - **`T[]`**: An array of deep-copied rows that match the filter condition.
                  *
                  * ## Example Usage
                  * ```typescript
@@ -14733,13 +15378,13 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {DataModelFillter} filter A function that determines whether a row should be included.
-                 * @returns {Record<string, any>[]} An array of deep-copied rows that match the filter condition.
+                 * @returns {T[]} An array of deep-copied rows that match the filter condition.
                  * @throws {Error} If `filter` is not a valid function.
                  */
-                filterRows = (filter: DataModelFillter): Record<string, any>[] => {
+                filterRows = (filter: DataModelFillter): T[] => {
                     const _this = this;
                     _this._checkValidFunction(filter);
-                    const matched: Record<string, any>[] = [];
+                    const matched: T[] = [];
                     _this._rows.forEach(function(row) {
                         if (filter(row)) {
                             matched.push(_this._deepCopy(row));
@@ -14778,13 +15423,13 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {DataModelFillter} filter A function that determines whether a row should be included.
-                 * @returns {InterfaceDataModel} A new `DataModel` instance containing the filtered rows.
+                 * @returns {InterfaceDataModel<T>} A new `DataModel` instance containing the filtered rows.
                  * @throws {Error} If `filter` is not a valid function.
                  */
-                filterRowsAsDataModel = (filter: DataModelFillter): InterfaceDataModel => {
+                filterRowsAsDataModel = (filter: DataModelFillter): InterfaceDataModel<T> => {
                     const _this = this;
                     _this._checkValidFunction(filter);
-                    const matched: Record<string, any>[] = [];
+                    const matched: T[] = [];
                     _this._rows.forEach(function(row) {
                         if (filter(row)) {
                             matched.push(row);
@@ -14824,10 +15469,10 @@ function createHison(): Hison {
                  * ```
                  *
                  * @param {DataModelFillter} filter A function that determines whether a row should be retained.
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance after removing unmatched rows.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel` instance after removing unmatched rows.
                  * @throws {Error} If `filter` is not a valid function.
                  */
-                filterAndModify = (filter: DataModelFillter): InterfaceDataModel => {
+                filterAndModify = (filter: DataModelFillter): InterfaceDataModel<T> => {
                     const _this = this;
                     _this._checkValidFunction(filter);
                     for (let i = 0; i < _this._rows.length; i++ ){
@@ -14843,21 +15488,30 @@ function createHison(): Hison {
                  * Ensures that all existing columns are included, maintaining the defined structure.
                  *
                  * ## Parameters
-                 * - `columns` **(string[])**: An array of column names in the desired order.
+                 * - `columns` **(`K[]`)**: An array of column names in the desired order.
                  *
                  * ## Behavior
                  * - Calls `_checkArray(columns)` to validate the input as an array.
-                 * - Iterates through `columns`, ensuring each column is valid and exists in the `DataModel`.
-                 * - Creates a new column order, appending any remaining columns that were not specified.
+                 * - Ensures that each column in `columns` exists in the `DataModel` using `_checkColumn(column)`.
+                 * - Constructs a new column order by placing unspecified columns at the end.
                  * - Updates `_cols` with the new column order.
-                 * - Returns the modified `DataModel` instance for method chaining.
+                 * - Returns the modified `DataModel<T>` instance for method chaining.
+                 *
+                 * ## Type Safety
+                 * - Uses `<K extends keyof T>` to ensure that `columns` only contain valid keys of `T`.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The modified `DataModel` instance with reordered columns.
+                 * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with reordered columns.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 *     age: number;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>(["id", "name", "age"]);
                  * 
                  * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
                  * 
@@ -14866,16 +15520,16 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
                  * ```
                  *
-                 * @param {string[]} columns An array of column names in the desired order.
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with reordered columns.
+                 * @param {K[]} columns An array of column names in the desired order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance with reordered columns.
                  * @throws {Error} If `columns` is not an array or contains invalid column names.
                  */
-                setColumnSorting = (columns: string[]): InterfaceDataModel => {
+                setColumnSorting = <K extends keyof T>(columns: K[]): InterfaceDataModel<T> => {
                     this._checkArray(columns);
                     const newColumns = [];
                     for(let column of columns) {
-                        column = this._getValidColValue(column);
-                        this._checkColumn(column);
+                        column = this._getValidColValue(column as string) as K;
+                        this._checkColumn(column as string);
                         newColumns.push(column);
                     }
                     for(const column of this._cols) {
@@ -14907,9 +15561,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["age", "id", "name"]
                  * ```
                  *
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in ascending order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with columns sorted in ascending order.
                  */
-                sortColumnAscending = (): InterfaceDataModel => {
+                sortColumnAscending = (): InterfaceDataModel<T> => {
                     this._cols.sort();
                     return this;
                 };
@@ -14934,9 +15588,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
                  * ```
                  *
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with columns sorted in descending order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with columns sorted in descending order.
                  */
-                sortColumnDescending = (): InterfaceDataModel => {
+                sortColumnDescending = (): InterfaceDataModel<T> => {
                     this._cols.sort(function(a, b) {
                         if (a > b) {
                             return -1;
@@ -14969,9 +15623,9 @@ function createHison(): Hison {
                  * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
                  * ```
                  *
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed column order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with reversed column order.
                  */
-                sortColumnReverse = (): InterfaceDataModel => {
+                sortColumnReverse = (): InterfaceDataModel<T> => {
                     this._cols.reverse();
                     return this;
                 };
@@ -14980,25 +15634,33 @@ function createHison(): Hison {
                  * Optionally supports integer-based sorting for numerical values.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The column name to sort by.
-                 * - `isIntegerOrder` **(boolean, optional, default = `false`)**: If `true`, treats values as integers for sorting.
+                 * - `column` **(`K`)**: The column name to sort by.
+                 * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
                  *
                  * ## Behavior
-                 * - Calls `_getValidColValue(column)` to validate the column name.
-                 * - Throws an error if the specified column does not exist.
-                 * - Calls `_checkBoolean(isIntegerOrder)` to validate the boolean flag.
-                 * - Uses the native `Array.sort()` method to arrange rows in ascending order.
-                 * - Handles `null` values by placing them at the end of the sorted list.
-                 * - Converts object values to JSON strings for sorting.
+                 * - Validates `column` using `_getValidColValue(column)`.
+                 * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
+                 * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
+                 * - Uses `Array.sort()` to sort rows in ascending order.
+                 * - Places `null` values at the end of the sorted list.
+                 * - Converts object values to JSON strings for sorting consistency.
                  * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
-                 * - Throws an error if a non-numeric value is encountered during integer sorting.
+                 * - Throws an error if a non-numeric value is encountered in integer sorting mode.
+                 *
+                 * ## Type Safety
+                 * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The modified `DataModel` instance with rows sorted in ascending order.
+                 * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in ascending order.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 3, name: "Charlie" },
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" }
@@ -15013,18 +15675,18 @@ function createHison(): Hison {
                  * dataModel.sortRowAscending("id", true);
                  * ```
                  *
-                 * @param {string} column The column name to sort by.
+                 * @param {K} column The column name to sort by.
                  * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in ascending order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance with rows sorted in ascending order.
                  * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
                  */
-                sortRowAscending = (column: string, isIntegerOrder: boolean = false): InterfaceDataModel => {
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                sortRowAscending = <K extends keyof T>(column: K, isIntegerOrder: boolean = false): InterfaceDataModel<T> => {
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
                     this._checkBoolean(isIntegerOrder);
                     this._rows.sort(function(a, b) {
-                        let valueA = a[column];
-                        let valueB = b[column];
+                        let valueA: any = a[column];
+                        let valueB: any = b[column];
                         if (valueA === null || valueB === null) {
                             return valueA === null ? 1 : -1;
                         }
@@ -15054,25 +15716,33 @@ function createHison(): Hison {
                  * Optionally supports integer-based sorting for numerical values.
                  *
                  * ## Parameters
-                 * - `column` **(string)**: The column name to sort by.
-                 * - `isIntegerOrder` **(boolean, optional, default = `false`)**: If `true`, treats values as integers for sorting.
+                 * - `column` **(`K`)**: The column name to sort by.
+                 * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
                  *
                  * ## Behavior
-                 * - Calls `_getValidColValue(column)` to validate the column name.
-                 * - Throws an error if the specified column does not exist.
-                 * - Calls `_checkBoolean(isIntegerOrder)` to validate the boolean flag.
-                 * - Uses the native `Array.sort()` method to arrange rows in descending order.
-                 * - Handles `null` values by placing them at the beginning of the sorted list.
-                 * - Converts object values to JSON strings for sorting.
+                 * - Validates `column` using `_getValidColValue(column)`.
+                 * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
+                 * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
+                 * - Uses `Array.sort()` to sort rows in descending order.
+                 * - Places `null` values at the beginning of the sorted list.
+                 * - Converts object values to JSON strings for sorting consistency.
                  * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
-                 * - Throws an error if a non-numeric value is encountered during integer sorting.
+                 * - Throws an error if a non-numeric value is encountered in integer sorting mode.
+                 *
+                 * ## Type Safety
+                 * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
                  *
                  * ## Returns
-                 * - **`DataModel`**: The modified `DataModel` instance with rows sorted in descending order.
+                 * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in descending order.
                  *
                  * ## Example Usage
                  * ```typescript
-                 * const dataModel = new hison.data.DataModel([
+                 * interface User {
+                 *     id: number;
+                 *     name: string;
+                 * }
+                 * 
+                 * const dataModel = new hison.data.DataModel<User>([
                  *     { id: 3, name: "Charlie" },
                  *     { id: 1, name: "Alice" },
                  *     { id: 2, name: "Bob" }
@@ -15087,18 +15757,18 @@ function createHison(): Hison {
                  * dataModel.sortRowDescending("id", true);
                  * ```
                  *
-                 * @param {string} column The column name to sort by.
+                 * @param {K} column The column name to sort by.
                  * @param {boolean} [isIntegerOrder=false] If `true`, treats values as integers for sorting.
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with rows sorted in descending order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel<T>` instance with rows sorted in descending order.
                  * @throws {Error} If `column` is invalid or contains non-numeric values in integer mode.
                  */
-                sortRowDescending = (column: string, isIntegerOrder: boolean = false): InterfaceDataModel => {
-                    column = this._getValidColValue(column);
-                    this._checkColumn(column);
+                sortRowDescending = <K extends keyof T>(column: K, isIntegerOrder: boolean = false): InterfaceDataModel<T> => {
+                    column = this._getValidColValue(column as string) as K;
+                    this._checkColumn(column as string);
                     this._checkBoolean(isIntegerOrder);
                     this._rows.sort(function(a, b) {
-                        let valueA = a[column];
-                        let valueB = b[column];
+                        let valueA: any = a[column];
+                        let valueB: any = b[column];
                         if (valueA === null || valueB === null) {
                             return valueA === null ? -1 : 1;
                         }
@@ -15150,9 +15820,9 @@ function createHison(): Hison {
                  * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
                  * ```
                  *
-                 * @returns {InterfaceDataModel} The modified `DataModel` instance with reversed row order.
+                 * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with reversed row order.
                  */
-                sortRowReverse = (): InterfaceDataModel => {
+                sortRowReverse = (): InterfaceDataModel<T> => {
                     this._rows.reverse();
                     return this;
                 };
