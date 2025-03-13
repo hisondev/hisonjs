@@ -10,7 +10,7 @@
  * - **Data Handling**: Utilize structured models for data storage and transformation.
  * - **Communication Support**: Simplify API requests with promise-based networking.
  *
- * ## Core Modules
+ * ### Core Modules
  *
  * The `Hison` solution consists of the following primary components:
  *
@@ -20,13 +20,13 @@
  * - **hison.link**: Enables promise-based communication and API request handling.
  *
  * ---
- * ## Object Creation and Encapsulation
+ * ### Object Creation and Encapsulation
  * - The `Hison` object is instantiated via the `createHison()` function, encapsulating its implementation within a closure.
  * - This design pattern ensures that internal states remain private while exposing necessary functionalities.
  * - The returned object includes a set of methods that allow developers to interact with `Hison` safely and efficiently.
  *
  * ---
- * ## Customization and Configuration
+ * ### Customization and Configuration
  *
  * `Hison` provides setter methods to modify `CustomOption` properties, allowing developers to configure behavior dynamically.
  *
@@ -47,7 +47,7 @@
  * These configurations ensure compatibility with different project requirements, encoding formats, and locale settings.
  *
  * ---
- * ## Security Features
+ * ### Security Features
  *
  * The `hison.shield` module provides multiple layers of security, including:
  * - **Object Freezing** (`setIsFreeze(true)`) to prevent modifications.
@@ -63,7 +63,7 @@
  * ```
  *
  * ---
- * ## Utility Functions (`hison.utils`)
+ * ### Utility Functions (`hison.utils`)
  *
  * The `utils` module offers a variety of helper functions for validation, formatting, and data manipulation:
  *
@@ -85,7 +85,7 @@
  * ```
  *
  * ---
- * ## Data Handling (`hison.data`)
+ * ### Data Handling (`hison.data`)
  *
  * The `data` module provides structured storage via `DataWrapper` and `DataModel`:
  *
@@ -101,7 +101,7 @@
  * ```
  *
  * ---
- * ## API Communication (`hison.link`)
+ * ### API Communication (`hison.link`)
  *
  * The `link` module simplifies API interactions with promise-based requests:
  *
@@ -115,7 +115,7 @@
  * The `hison.link` module also supports caching and WebSocket integration.
  *
  * ---
- * ## Summary
+ * ### Summary
  *
  * The `Hison` object provides a robust and flexible framework for managing configurations, security, utilities, structured data, and communication.
  * It is designed to improve development efficiency while offering customization and security controls.
@@ -134,7 +134,7 @@ interface Hison {
      * - Default value: `'yyyy-MM-dd'`
      * - Example output after setting format: `'02/04/2025'` (for `'MM/dd/yyyy'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`dateFormat`**: Defines the default date format.
      *   - Default: `'yyyy-MM-dd'`
      *   - Example output: `'2025-02-04'`
@@ -152,7 +152,7 @@ interface Hison {
      * - Default value: `'hh:mm:ss'`
      * - Example output after setting format: `'14:30'` (for `'HH:mm'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`timeFormat`**: Defines the default time format.
      *   - Default: `'hh:mm:ss'`
      *   - Example output: `'14:30:15'`
@@ -170,7 +170,7 @@ interface Hison {
      * - Default value: `'yyyy-MM-dd hh:mm:ss'`
      * - Example output after setting format: `'02/04/2025 14:30'` (for `'MM/dd/yyyy HH:mm'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`datetimeFormat`**: Defines the default date-time format.
      *   - Default: `'yyyy-MM-dd hh:mm:ss'`
      *   - Example output: `'2025-02-04 14:30:15'`
@@ -188,7 +188,7 @@ interface Hison {
      * - Default value: `'yyyy'`
      * - Example output after setting format: `'25'` (for `'yy'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`yearFormat`**: Defines the default year format.
      *   - Default: `'yyyy'`
      *   - Example output: `'2025'`
@@ -206,7 +206,7 @@ interface Hison {
      * - Default value: `'M'`
      * - Example output after setting format: `'02'` (for `'MM'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`monthFormat`**: Defines the default month format.
      *   - Default: `'M'`
      *   - Example output: `'2'` (for February)
@@ -224,7 +224,7 @@ interface Hison {
      * - Default value: `'MMMM'`
      * - Example output after setting format: `'Feb'` (for `'MMM'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`monthNameFormat`**: Defines the default full month name format.
      *   - Default: `'MMMM'`
      *   - Example output: `'February'`
@@ -242,7 +242,7 @@ interface Hison {
      * - Default value: `'yyyy-MM'`
      * - Example output after setting format: `'02/2025'` (for `'MM/yyyy'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`yearMonthFormat`**: Defines the default year and month format.
      *   - Default: `'yyyy-MM'`
      *   - Example output: `'2025-02'`
@@ -260,7 +260,7 @@ interface Hison {
      * - Default value: `'d'`
      * - Example output after setting format: `'04'` (for `'dd'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`dayFormat`**: Defines the default day format.
      *   - Default: `'d'`
      *   - Example output: `'4'` (for the 4th day of the month)
@@ -278,7 +278,7 @@ interface Hison {
      * - Default value: `'d'`
      * - Example output after setting format: `'Wed'` (for `'EEE'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`dayOfWeekFormat`**: Defines the default day-of-week format.
      *   - Default: `'d'`
      *   - Example output: `'3'` (where 3 represents Wednesday depending on locale settings)
@@ -296,7 +296,7 @@ interface Hison {
      * - Default value: `'h'`
      * - Example output after setting format: `'14'` (for `'HH'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`hourFormat`**: Defines the default hour format.
      *   - Default: `'h'`
      *   - Example output: `'2'` (for 2 AM or 2 PM, depending on the time format setting)
@@ -314,7 +314,7 @@ interface Hison {
      * - Default value: `'hh:mm'`
      * - Example output after setting format: `'14:30'` (for `'HH:mm'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`hourMinuteFormat`**: Defines the default hour-minute format.
      *   - Default: `'hh:mm'`
      *   - Example output: `'02:30'` (for 2:30 AM or PM, depending on the time format setting)
@@ -332,7 +332,7 @@ interface Hison {
      * - Default value: `'m'`
      * - Example output after setting format: `'05'` (for `'mm'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`minuteFormat`**: Defines the default minute format.
      *   - Default: `'m'`
      *   - Example output: `'5'` (for the 5th minute of the hour)
@@ -350,7 +350,7 @@ interface Hison {
      * - Default value: `'s'`
      * - Example output after setting format: `'09'` (for `'ss'`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`secondFormat`**: Defines the default second format.
      *   - Default: `'s'`
      *   - Example output: `'45'` (for the 45th second of the minute)
@@ -368,7 +368,7 @@ interface Hison {
      * - Default value: `"#,##0.##"`
      * - Example output after setting format: `"1.234,56"` (for `"#.###,##"` in European style)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`numberFormat`**: Defines the default number format.
      *   - Default: `"#,##0.##"`
      *   - Example output: `"1,234.56"` (for the number `1234.56`)
@@ -386,7 +386,7 @@ interface Hison {
      * - Default value: `2`
      * - Example usage: `setCharByteLess2047(3);` (Changes encoding size to 3 bytes)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`LESSOREQ_0X7FF_BYTE`**: Defines the byte size for `charCode <= 0x7FF`.
      *   - Default: `2`
      *   - Represents characters with `charCode <= 0x7FF`
@@ -404,7 +404,7 @@ interface Hison {
      * - Default value: `3`
      * - Example usage: `setCharByteLess65535(4);` (Changes encoding size to 4 bytes)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`LESSOREQ_0XFFFF_BYTE`**: Defines the byte size for `charCode <= 0xFFFF`.
      *   - Default: `3`
      *   - Represents characters with `charCode <= 0xFFFF`
@@ -422,7 +422,7 @@ interface Hison {
      * - Default value: `4`
      * - Example usage: `setCharByteGreater65535(5);` (Changes encoding size to 5 bytes)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`GREATER_0XFFFF_BYTE`**: Defines the byte size for `charCode > 0xFFFF`.
      *   - Default: `4`
      *   - Represents characters with `charCode > 0xFFFF`
@@ -581,7 +581,7 @@ interface Hison {
      * - Default value: `""` (empty string, meaning no restriction)
      * - Example usage: `setShieldURL("https://secure.example.com");`
      *
-     * ## Related Property
+     * ### Related Property
      * - **`shieldURL`**: Defines the security enforcement URL.
      *   - Default: `""`
      *   - Used in `shield.excute(hison: Hison)` to validate URL access.
@@ -599,7 +599,7 @@ interface Hison {
      * - Default value: `["0:0:0:0:0:0:0:1"]` (allows localhost)
      * - Example usage: `setExposeIpList(["192.168.1.1", "203.0.113.45"]);`
      *
-     * ## Related Property
+     * ### Related Property
      * - **`exposeIpList`**: Defines the list of allowed IP addresses.
      *   - Default: `["0:0:0:0:0:0:0:1"]`
      *   - Used in `shield.excute(hison: Hison)` to verify access permissions.
@@ -617,7 +617,7 @@ interface Hison {
      * - Default value: `true`
      * - Example usage: `setIsFreeze(false);` (Allows modifications to the `Hison` instance)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`isFreeze`**: Determines if the `Hison` object should be frozen.
      *   - Default: `true`
      *   - Used in `shield.excute(hison: Hison)`, where `deepFreeze(hison)` is applied.
@@ -635,7 +635,7 @@ interface Hison {
      * - Default value: `false`
      * - Example usage: `setIsPossibleGoBack(true);` (Allows back navigation)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`isPossibleGoBack`**: Determines if browser back navigation is allowed.
      *   - Default: `false`
      *     to disable the back button.
@@ -654,7 +654,7 @@ interface Hison {
      * - Default value: `false`
      * - Example usage: `setIsPossibleOpenDevTool(true);` (Allows developer tools to be opened)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`isPossibleOpenDevTool`**: Determines if developer tools can be opened.
      *   - Default: `false`
      *
@@ -716,12 +716,12 @@ interface Hison {
      * - Default behavior: Returns the input value unchanged.
      * - Example use case: Formatting `Date` objects before storage.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`convertValue`**: Defines a function for transforming special values.
      *   - Default: Returns the value unchanged.
      *   - Used in `DataModel._deepCopy()` to handle non-plain objects.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setConvertValue(function(value) {
      *     if (value instanceof Date) {
@@ -737,7 +737,7 @@ interface Hison {
      * });
      * ```
      *
-     * ## Notes:
+     * ### Notes:
      * 1. Special values not processed by `convertValue` are stored in the `DataModel` as references.
      *    Changes to the original object will also reflect in the `DataModel`.
      * 2. Ensure the function returns the original value for all cases not explicitly handled.
@@ -760,7 +760,7 @@ interface Hison {
      * - Default value: `'http://'`
      * - Example usage: `setProtocol("https://");` (Switches API communication to HTTPS)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`protocol`**: Defines the default protocol for API requests.
      *   - Default: `'http://'`
      *   - Used in `ApiLink` to construct full request URLs.
@@ -778,7 +778,7 @@ interface Hison {
      * - Default value: `'localhost:8080'`
      * - Example usage: `setDomain("api.example.com");` (Changes the API domain to `api.example.com`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`domain`**: Defines the default domain for API requests.
      *   - Default: `'localhost:8080'`
      *   - Used in `ApiLink` to construct full request URLs.
@@ -796,7 +796,7 @@ interface Hison {
      * - Default value: `'/hison-api-link'`
      * - Example usage: `setControllerPath("/api/v1");` (Changes the API path to `/api/v1`)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`controllerPath`**: Defines the default API controller path.
      *   - Default: `'/hison-api-link'`
      *   - Used in `ApiLink` to construct full request URLs.
@@ -814,7 +814,7 @@ interface Hison {
      * - Default value: `10000` (10 seconds)
      * - Example usage: `setTimeout(5000);` (Sets the timeout to 5 seconds)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`timeout`**: Defines the request timeout duration in milliseconds.
      *   - Default: `10000`
      *
@@ -831,7 +831,7 @@ interface Hison {
      * - Default value: `'ws://'`
      * - Example usage: `setWebSocketProtocol("wss://");` (Switches WebSocket communication to a secure protocol)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`webSocketProtocol`**: Defines the default protocol for WebSocket connections.
      *   - Default: `'ws://'`
      *   - Used in `ApiLink` when initializing WebSocket communication.
@@ -849,7 +849,7 @@ interface Hison {
      * - Default value: `'/hison-websocket-endpoint'`
      * - Example usage: `setWebSocketEndPoint("/ws/data-stream");` (Changes the WebSocket endpoint)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`webSocketEndPoint`**: Defines the default WebSocket endpoint for API communication.
      *   - Default: `'/hison-websocket-endpoint'`
      *   - Used in `ApiLink` when establishing WebSocket connections.
@@ -867,7 +867,7 @@ interface Hison {
      * - Default value: `10`
      * - Example usage: `setCachingLimit(20);` (Increases the caching limit to 20 responses)
      *
-     * ## Related Property
+     * ### Related Property
      * - **`cachingLimit`**: Defines the maximum number of cached API responses.
      *   - Default: `10`
      *
@@ -940,12 +940,12 @@ interface Hison {
      * - The new function will be applied globally to all `GET` requests.
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`beforeGetRequst`**: A hook function executed before a `GET` request.
      *   - Default: Returns `true`
      *   - Used in `ApiGet.call()` to determine if a request should proceed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setBeforeGetRequst((resourcePath, options) => {
      *     console.log("GET request intercepted:", resourcePath);
@@ -966,12 +966,12 @@ interface Hison {
      * - The new function will be applied globally to all `POST` requests.
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`beforePostRequst`**: A hook function executed before a `POST` request.
      *   - Default: Returns `true`
      *   - Used in `ApiPost.call()` to determine if a request should proceed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setBeforePostRequst((requestDw, options) => {
      *     console.log("POST request intercepted:", requestDw);
@@ -992,12 +992,12 @@ interface Hison {
      * - The new function will be applied globally to all `PUT` requests.
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`beforePutRequst`**: A hook function executed before a `PUT` request.
      *   - Default: Returns `true`
      *   - Used in `ApiPut.call()` to determine if a request should proceed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setBeforePutRequst((requestDw, options) => {
      *     console.log("PUT request intercepted:", requestDw);
@@ -1018,12 +1018,12 @@ interface Hison {
      * - The new function will be applied globally to all `PATCH` requests.
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`beforePatchRequst`**: A hook function executed before a `PATCH` request.
      *   - Default: Returns `true`
      *   - Used in `ApiPatch.call()` to determine if a request should proceed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setBeforePatchRequst((requestDw, options) => {
      *     console.log("PATCH request intercepted:", requestDw);
@@ -1044,12 +1044,12 @@ interface Hison {
      * - The new function will be applied globally to all `DELETE` requests.
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`beforeDeleteRequst`**: A hook function executed before a `DELETE` request.
      *   - Default: Returns `true`
      *   - Used in `ApiDelete.call()` to determine if a request should proceed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setBeforeDeleteRequst((requestDw, options) => {
      *     console.log("DELETE request intercepted:", requestDw);
@@ -1070,12 +1070,12 @@ interface Hison {
      * - The new function will be applied globally to all API responses.
      * - Default behavior: Returns `true`, allowing the response to be processed normally.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`interceptApiResult`**: A hook function executed after receiving an API response.
      *   - Default: Returns `true`
      *   - Used in `ApiLink._request()` to determine if the response should be processed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setInterceptApiResult((result, response) => {
      *     console.log("API response intercepted:", result);
@@ -1096,12 +1096,12 @@ interface Hison {
      * - The new function will be applied globally to all API error responses.
      * - Default behavior: Returns `true`, allowing the error to be processed normally.
      *
-     * ## Related Property
+     * ### Related Property
      * - **`interceptApiError`**: A hook function executed when an API request encounters an error.
      *   - Default: Returns `true`
      *   - Used in `ApiLink._request()` to determine if the error should be processed.
      *
-     * ## Example Usage:
+     * ### Example Usage:
      * ```typescript
      * setInterceptApiError((error) => {
      *     console.error("API error intercepted:", error);
@@ -1124,7 +1124,7 @@ interface Hison {
      * key configurations such as date formats, numeric precision, and byte encoding rules.
      *
      * ---
-     * ## Core Features & Functionality
+     * ### Core Features & Functionality
      *
      * ### 1. **Configurable Utility Behaviors**
      * - Many utility functions reference properties in `CustomOption`, which can be modified using `Hison`'s `set` methods.
@@ -1162,7 +1162,7 @@ interface Hison {
      * - **File Operations**: Extract metadata with `getFileExtension()` and `getFileName()`.
      *
      * ---
-     * ## Integration with `CustomOption`
+     * ### Integration with `CustomOption`
      * Many methods in `hison.utils` utilize configurable properties from `CustomOption.utils`. These properties can be modified
      * using `Hison`'s setter methods to accommodate different project requirements.
      *
@@ -1180,7 +1180,7 @@ interface Hison {
      *   ```
      *
      * ---
-     * ## Related Utility Methods
+     * ### Related Utility Methods
      * - `hison.utils.isAlpha(str: string): boolean` → Checks if a string contains only alphabetic characters.
      * - `hison.utils.getDateWithFormat(datetime: DateTimeObject | string, format: string): string` → Formats a date.
      * - `hison.utils.getByteLength(str: string): number` → Computes byte length using configurable encoding settings.
@@ -2432,7 +2432,7 @@ interface Hison {
      * `customOption.shield` to determine the applied security policies.
      *
      * ---
-     * ## Security Features & Execution Flow
+     * ### Security Features & Execution Flow
      *
      * ### 1. **Validation of `hison` Parameter**
      * - If `hison` is not provided, an error is thrown:  
@@ -2470,7 +2470,7 @@ interface Hison {
      *   - Displays a warning message and prevents further execution if dev tools are detected.
      *
      * ---
-     * ## Related Methods
+     * ### Related Methods
      * - `hison.setShieldURL(url: string)` → Sets the URL restriction for access control.
      * - `hison.setExposeIpList(ipList: string[])` → Defines a whitelist of allowed IP addresses.
      * - `hison.setIsFreeze(state: boolean)` → Enables or disables object freezing.
@@ -2540,7 +2540,7 @@ interface Hison {
      * These components enable **efficient data storage, retrieval, validation, and transformation** 
      * while maintaining type safety and structural consistency.
      *
-     * ## Core Features
+     * ### Core Features
      *
      * ### **1. Structured Data Management**
      * - `DataWrapper` provides **key-value storage**, allowing easy organization of structured data.
@@ -2559,7 +2559,7 @@ interface Hison {
      * - `DataWrapper` can **store and retrieve** `DataModel` instances seamlessly.
      * - Allows flexible conversion between **key-value storage** and **structured table data**.
      *
-     * ## Example Usage
+     * ### Example Usage
      *
      * ### **Using `DataWrapper` for Key-Value Storage**
      * ```typescript
@@ -2587,7 +2587,7 @@ interface Hison {
      * console.log(dataWrapper.getDataModel("users").getRowCount()); // Output: 1
      * ```
      *
-     * ## Related Functions
+     * ### Related Functions
      * - **`hison.setConvertValue(func)`**: 
      *   - Allows defining a **custom value transformation function** for `DataModel`.
      *   - Useful for formatting **Date objects** or handling special types before insertion.
@@ -2602,7 +2602,7 @@ interface Hison {
          * within the `hisondev` solution. It allows storing various data types,
          * including string value and `DataModel` instances.
          *
-         * ## Core Features:
+         * ### Core Features:
          * - **Key-Value Storage:**
          *   - Supports dynamic insertion and retrieval of key-value pairs.
          *   - Ensures that keys are always strings.
@@ -2616,11 +2616,11 @@ interface Hison {
          *   - Ensures type safety for values stored in `DataWrapper`.
          *   - Throws errors when attempting to insert invalid types.
          *
-         * ## Data Integrity & Deep Copying:
+         * ### Data Integrity & Deep Copying:
          * - Uses `hison.utils.deepCopyObject()` to ensure stored objects are immutable.
          * - Prevents unintended modifications by returning cloned values.
          *
-         * ## Example Usage:
+         * ### Example Usage:
          * ```typescript
          * // Creating a DataWrapper with key-value pairs
          * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
@@ -2640,12 +2640,12 @@ interface Hison {
          * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
          * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
          *
-         * ## Generic Type `<T>`
+         * ### Generic Type `<T>`
          * - `T` represents the shape of each row in the `DataModel`.
          * - By specifying `T`, developers can enforce type safety for row values.
          * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
          * 
-         * ## Core Features:
+         * ### Core Features:
          * - **Column and Row Management:**
          *   - Supports dynamic addition and removal of columns and rows.
          *   - Ensures column consistency when inserting data.
@@ -2663,12 +2663,12 @@ interface Hison {
          * - **Integration with `DataWrapper`**
          *   - `DataWrapper` is an instance for storing `DataModel<T>`.
          *
-         * ## Data Consistency and Validation:
+         * ### Data Consistency and Validation:
          * - Uses `_deepCopy()` to ensure stored objects are immutable.
          * - Prevents invalid data types using `_getValidRowValue()`.
          * - Ensures uniform column data types to maintain consistency.
          *
-         * ## Example Usage:
+         * ### Example Usage:
          * ```typescript
          * interface User {
          *     id: number;
@@ -2696,7 +2696,7 @@ interface Hison {
          * console.log(filtered);
          * ```
          *
-         * ## Related Functions:
+         * ### Related Functions:
          * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
          */
         DataModel: new <T>(data?: T[] | T) => InterfaceDataModel<T>;
@@ -2709,20 +2709,20 @@ interface Hison {
      * The `hison.link` object provides core communication modules for interacting with the hisondev platform.
      * It serves as a central hub for API requests, caching, and WebSocket communication.
      *
-     * ## Key Components
+     * ### Key Components
      * - **`CachingModule`**: Manages API response caching using an LRU (Least Recently Used) strategy.
      * - **`ApiGet`, `ApiPost`, `ApiPut`, `ApiPatch`, `ApiDelete`**: Handle REST API calls by encapsulating request logic.
      * - **`ApiGetUrl`, `ApiPostUrl`, `ApiPutUrl`, `ApiPatchUrl`, `ApiDeleteUrl`**: Similar to the above, but allow direct URL-based requests.
      *
      * These components simplify API integration and provide caching and event-driven request handling.
      *
-     * ## How It Works
+     * ### How It Works
      * - **API requests are wrapped in `DataWrapper` instances**, which store key-value data.
      * - **The `cmd` property in `DataWrapper` determines the service path**, directing the request to the appropriate business logic on the server.
      * - **`CachingModule` enables response caching**, reducing redundant network calls for frequently accessed resources.
      * - **`EventEmitter` allows developers to listen for request events**, such as completion, errors, or specific triggers.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * // Creating an API request
      * const requestData = new hison.data.DataWrapper();
@@ -2747,7 +2747,7 @@ interface Hison {
      * });
      * ```
      *
-     * ## Internal Structure
+     * ### Internal Structure
      * - **Uses `ApiLink` for handling network requests**.
      * - **Utilizes `EventEmitter` for event-driven communication**.
      * - **Supports WebSocket integration via `CachingModule`**.
@@ -2760,7 +2760,7 @@ interface Hison {
          * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy** 
          * while integrating **WebSocket communication** for real-time data updates.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **LRU Cache for API Responses**: Stores API responses with a configurable limit, reducing redundant network requests.
          * - **WebSocket Support**: Maintains a persistent WebSocket connection for real-time data updates.
          * - **Cache Management Methods**: Supports cache operations (`get`, `put`, `remove`, `clear`, etc.).
@@ -2768,13 +2768,13 @@ interface Hison {
          * - **Flexible Configuration**: Uses `CustomOption` settings for cache limits and WebSocket parameters.
          * - **Validation Methods**: Ensures proper data types for cache keys and event listeners.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - **API responses are stored in an LRUCache instance**, avoiding redundant network calls.
          * - **When a WebSocket connection is established**, data updates can be received in real-time.
          * - **Cache data can be accessed and managed using `get`, `put`, `remove`, and `clear` methods.**
          * - **WebSocket event handlers can be set up for real-time notifications.**
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Create a CachingModule instance with a cache limit of 20
          * const cachingModule = new hison.link.CachingModule(20);
@@ -2790,22 +2790,22 @@ interface Hison {
          * cachingModule.onmessage = event => console.log("New Message:", event.data);
          * ```
          *
-         * ## **Internal Structure**
+         * ### **Internal Structure**
          * - **Uses `LRUCache`** to manage cached responses with a defined limit.
          * - **Maintains a WebSocket connection** to receive real-time data updates.
          * - **Supports configurable options via `CustomOption`**, such as WebSocket endpoint and cache size.
          * - **Provides utility methods** for cache validation, data retrieval, and event handling.
          *
-         * ## **Related Components**
+         * ### **Related Components**
          * - **`LRUCache`**: Handles the caching logic for API responses.
          * - **`WebSocket`**: Establishes a real-time connection for live data updates.
          * - **`CustomOption`**: Provides configurable options for WebSocket and cache settings.
          * - **`ApiLink`**: Uses this module to fetch and store API responses efficiently.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This module **returns an instance of `CachingModule`**, which allows cache operations and WebSocket event management.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Reducing unnecessary API calls** by storing frequently accessed responses.
          * - **Receiving real-time updates** from the server without polling.
          * - **Efficiently managing API response data** in web applications.
@@ -2818,19 +2818,19 @@ interface Hison {
          * The `ApiGet` class is responsible for sending HTTP GET requests to a specified API resource. 
          * It integrates with `ApiLink` to handle request execution, event emissions, and optional response caching.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP GET requests** using `ApiLink`.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows setting event listeners** for request completion, errors, and other key events.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiGet` stores the API resource path and an optional `CachingModule` instance.
          * - The `call()` method triggers a GET request to the specified resource path.
          * - If caching is enabled, previously stored responses may be returned instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiGet without caching
          * const apiGet = new hison.link.ApiGet("/users");
@@ -2850,15 +2850,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-based request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiGet`, which provides methods for executing GET requests and managing request events.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Fetching data from a REST API** with minimal setup.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -2870,20 +2870,20 @@ interface Hison {
          * The `ApiPost` class is responsible for sending HTTP POST requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP POST requests** using `ApiLink`.
          * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiPost` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a POST request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPost
          * const apiPost = new hison.link.ApiPost("UserService.createUser");
@@ -2907,15 +2907,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiPost`, providing methods for executing POST requests and managing request events.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -2927,20 +2927,20 @@ interface Hison {
          * The `ApiPut` class is responsible for sending HTTP PUT requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP PUT requests** using `ApiLink`.
          * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiPut` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a PUT request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPut
          * const apiPut = new hison.link.ApiPut("UserService.createUser");
@@ -2964,15 +2964,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiPut`, providing methods for executing PUT requests and managing request events.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -2984,20 +2984,20 @@ interface Hison {
          * The `ApiPatch` class is responsible for sending HTTP PATCH requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP PATCH requests** using `ApiLink`.
          * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiPatch` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a PATCH request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPatch
          * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
@@ -3021,15 +3021,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiPatch`, providing methods for executing PATCH requests and managing request events.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -3041,20 +3041,20 @@ interface Hison {
          * The `ApiDelete` class is responsible for sending HTTP DELETE requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP DELETE requests** using `ApiLink`.
          * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiDelete` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a DELETE request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiDelete
          * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
@@ -3078,15 +3078,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiDelete`, providing methods for executing DELETE requests and managing request events.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -3098,20 +3098,20 @@ interface Hison {
          * The `ApiGetUrl` class is responsible for sending HTTP GET requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP GET requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined API resource path.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiGetUrl` requires a valid URL.
          * - The `call()` method triggers a GET request to the specified URL.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiGetUrl without caching
          * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
@@ -3131,15 +3131,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiGetUrl`, which provides methods for executing GET requests to a specific URL.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Fetching data from an external API** by specifying a full URL.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -3151,7 +3151,7 @@ interface Hison {
          * The `ApiPostUrl` class is responsible for sending HTTP POST requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP POST requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined service command.
          * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -3159,13 +3159,13 @@ interface Hison {
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiPostUrl` requires a valid URL and an optional `serviceCmd`.
          * - The `call()` method sends a POST request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPostUrl
          * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
@@ -3189,15 +3189,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiPostUrl`, which provides methods for executing POST requests to a specific URL.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
@@ -3210,7 +3210,7 @@ interface Hison {
          * The `ApiPutUrl` class is responsible for sending HTTP PUT requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP PUT requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined service command.
          * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -3218,13 +3218,13 @@ interface Hison {
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiPutUrl` requires a valid URL and an optional `serviceCmd`.
          * - The `call()` method sends a PUT request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPutUrl
          * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
@@ -3248,15 +3248,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiPutUrl`, which provides methods for executing PUT requests to a specific URL.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
@@ -3269,7 +3269,7 @@ interface Hison {
          * The `ApiPatchUrl` class is responsible for sending HTTP PATCH requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP PATCH requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined service command.
          * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -3277,13 +3277,13 @@ interface Hison {
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiPatchUrl` requires a valid URL and an optional `serviceCmd`.
          * - The `call()` method sends a PATCH request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPatchUrl
          * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
@@ -3307,15 +3307,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiPatchUrl`, which provides methods for executing PATCH requests to a specific URL.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
@@ -3328,7 +3328,7 @@ interface Hison {
          * The `ApiDeleteUrl` class is responsible for sending HTTP DELETE requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
          *
-         * ## **Key Features**
+         * ### **Key Features**
          * - **Executes HTTP DELETE requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined service command.
          * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -3336,13 +3336,13 @@ interface Hison {
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
          *
-         * ## **How It Works**
+         * ### **How It Works**
          * - When instantiated, `ApiDeleteUrl` requires a valid URL and an optional `serviceCmd`.
          * - The `call()` method sends a DELETE request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
-         * ## **Example Usage**
+         * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiDeleteUrl
          * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
@@ -3366,15 +3366,15 @@ interface Hison {
          * });
          * ```
          *
-         * ## **Internal Components**
+         * ### **Internal Components**
          * - **`ApiLink`**: Handles request execution and response processing.
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ## **Return Value**
+         * ### **Return Value**
          * - This class returns an instance of `ApiDeleteUrl`, which provides methods for executing DELETE requests to a specific URL.
          *
-         * ## **Typical Use Cases**
+         * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
@@ -3521,7 +3521,7 @@ interface ConvertValue {
  * within the `hisondev` solution. It allows storing various data types,
  * including string value and `DataModel` instances.
  *
- * ## Core Features:
+ * ### Core Features:
  * - **Key-Value Storage:**
  *   - Supports dynamic insertion and retrieval of key-value pairs.
  *   - Ensures that keys are always strings.
@@ -3535,11 +3535,11 @@ interface ConvertValue {
  *   - Ensures type safety for values stored in `DataWrapper`.
  *   - Throws errors when attempting to insert invalid types.
  *
- * ## Data Integrity & Deep Copying:
+ * ### Data Integrity & Deep Copying:
  * - Uses `hison.utils.deepCopyObject()` to ensure stored objects are immutable.
  * - Prevents unintended modifications by returning cloned values.
  *
- * ## Example Usage:
+ * ### Example Usage:
  * ```typescript
  * // Creating a DataWrapper with key-value pairs
  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
@@ -3559,10 +3559,10 @@ interface InterfaceDataWrapper {
      * Checks whether the current instance is a `DataWrapper`.
      * This method is primarily used for type verification.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: Returns `true` if the instance is a `DataWrapper`, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ key: "value" });
      * console.log(dataWrapper.getIsDataWrapper()); // Output: true
@@ -3576,16 +3576,16 @@ interface InterfaceDataWrapper {
      * This method ensures that all stored key-value pairs are fully cloned, 
      * preventing unintended modifications between the original and copied instances.
      *
-     * ## Implementation Details
+     * ### Implementation Details
      * - Uses `hison.utils.deepCopyObject()` to recursively copy nested objects and arrays.
      * - Supports cloning `DataModel` instances stored within the `DataWrapper`.
      * - Prevents circular references by tracking previously copied objects.
      * - Ensures that modifications in the cloned instance do not affect the original instance.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataWrapper`**: A new `DataWrapper` instance containing a deep copy of the original data.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * const clonedWrapper = dataWrapper.clone();
@@ -3607,14 +3607,14 @@ interface InterfaceDataWrapper {
     /**
      * Removes all stored key-value pairs in the `DataWrapper`, resetting it to an empty state.
      * 
-     * ## Behavior
+     * ### Behavior
      * - Clears the internal storage by setting `_data` to an empty object.
      * - Returns the same `DataWrapper` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataWrapper`**: The current instance after clearing all stored data.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ key1: "value1", key2: "value2" });
      * console.log(dataWrapper.size()); // Output: 2
@@ -3630,16 +3630,16 @@ interface InterfaceDataWrapper {
      * Serializes the `DataWrapper` into a JSON string representation.
      * Converts stored `DataModel` instances into their row data format for proper serialization.
      *
-     * ## Behavior
+     * ### Behavior
      * - Iterates through all key-value pairs in the `DataWrapper`.
      * - If a value is a `DataModel`, it is converted to an array of rows using `getRows()`.
      * - Other values are stored as-is.
      * - The final object is serialized into a JSON string.
      *
-     * ## Returns
+     * ### Returns
      * - **`string`**: A JSON string representation of the `DataWrapper` contents.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
@@ -3655,26 +3655,26 @@ interface InterfaceDataWrapper {
      * Retrieves the value associated with the specified key from the `DataWrapper`.
      * If the value exists, a deep copy is returned to prevent unintended modifications.
      *
-     * ## Generic Type `<T>`
+     * ### Generic Type `<T>`
      * - `T` represents the shape of the `DataModel` rows.
      * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key associated with the value to retrieve.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - If the key exists and contains a `DataModel<T>`, returns a deep copy of the stored `DataModel<T>`.
      * - If the key exists but is a string, returns the stored string value.
      * - If the key does not exist, returns `null`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T> | string | null`**: 
      *   - A deep copy of the `DataModel<T>` if stored under the key.
      *   - The string value if a string was stored under the key.
      *   - `null` if the key does not exist.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -3711,18 +3711,18 @@ interface InterfaceDataWrapper {
      * Retrieves the string value associated with the specified key from the `DataWrapper`.
      * Ensures that the retrieved value is explicitly a string before returning it.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key associated with the string value to retrieve.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - Throws an error if the value associated with `key` is not a string.
      * - Returns the string value if it exists; otherwise, returns `null`.
      *
-     * ## Returns
+     * ### Returns
      * - **`string | null`**: The associated string value, or `null` if the key is not found.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ status: "active", count: 5 });
      * 
@@ -3742,22 +3742,22 @@ interface InterfaceDataWrapper {
      * Retrieves the `DataModel<T>` instance associated with the specified key from the `DataWrapper`.
      * Ensures that the retrieved value is a valid `DataModel<T>` before returning a cloned copy.
      *
-     * ## Generic Type `<T>`
+     * ### Generic Type `<T>`
      * - `T` represents the shape of each row in the `DataModel<T>`.
      * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key associated with the `DataModel<T>` instance to retrieve.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - Throws an error if the value associated with `key` is not a valid `DataModel<T>` instance.
      * - Returns a deep-cloned copy of the `DataModel<T>` to maintain data integrity.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -3786,19 +3786,19 @@ interface InterfaceDataWrapper {
      * Inserts or updates a key-value pair in the `DataWrapper`.
      * Allows storing primitive values, strings, and `DataModel` instances.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key under which the value will be stored.
      * - `value` **(any)**: The value to be stored. Can be a string, number, boolean, `DataModel`, or other valid types.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls the internal `_put()` method to validate and store the value.
      * - If the key already exists, its value is updated.
      * - Returns the current `DataWrapper` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataWrapper`**: The current instance after inserting/updating the value.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
      * 
@@ -3821,21 +3821,21 @@ interface InterfaceDataWrapper {
      * Inserts or updates a key-value pair in the `DataWrapper`, ensuring that the value is a string-convertible type.
      * Only accepts primitive types (`string`, `number`, `boolean`, `bigint`, `symbol`) or `null`.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key under which the value will be stored.
      * - `value` **(string | number | boolean | bigint | symbol | null)**: The value to be stored, 
      *   restricted to types that can be converted to a string.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - Throws an error if `value` is not of a valid type.
      * - Calls the internal `_put()` method to store the value.
      * - Returns the current `DataWrapper` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataWrapper`**: The current instance after inserting/updating the value.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
      * 
@@ -3861,20 +3861,20 @@ interface InterfaceDataWrapper {
      * Inserts or updates a `DataModel` instance in the `DataWrapper`.
      * Ensures that the stored value is a valid `DataModel`.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key under which the `DataModel` will be stored.
      * - `value` **(`DataModel`)**: The `DataModel` instance to be stored.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - Throws an error if `value` is not a valid `DataModel` instance.
      * - Calls the internal `_put()` method to store the `DataModel`.
      * - Returns the current `DataWrapper` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataWrapper`**: The current instance after inserting/updating the `DataModel`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
      * 
@@ -3898,16 +3898,16 @@ interface InterfaceDataWrapper {
      * Converts the `DataWrapper` instance into a standard JavaScript object.
      * If the stored values include `DataModel` instances, they are converted into object representations.
      *
-     * ## Behavior
+     * ### Behavior
      * - Iterates through all key-value pairs in the `DataWrapper`.
      * - If a value is a `DataModel`, it is converted using `getObject()`.
      * - Other values are returned as-is.
      * - Returns a plain JavaScript object representation of the `DataWrapper`.
      *
-     * ## Returns
+     * ### Returns
      * - **`Record<string, any>`**: A plain object containing all stored key-value pairs.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
@@ -3922,17 +3922,17 @@ interface InterfaceDataWrapper {
     /**
      * Checks whether the `DataWrapper` contains a specified key.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key to check for existence in the `DataWrapper`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - Uses `hasOwnProperty()` to determine if the key exists in the stored data.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if the key exists, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * 
@@ -3948,13 +3948,13 @@ interface InterfaceDataWrapper {
     /**
      * Checks whether the `DataWrapper` is empty (i.e., contains no key-value pairs).
      *
-     * ## Behavior
+     * ### Behavior
      * - Determines emptiness by checking if the number of stored keys is `0`.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if the `DataWrapper` contains no data, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
      * console.log(dataWrapper.isEmpty()); // Output: true
@@ -3969,22 +3969,22 @@ interface InterfaceDataWrapper {
     /**
      * Removes a key-value pair from the `DataWrapper` if the key exists and returns the removed value.
      *
-     * ## Parameters
+     * ### Parameters
      * - `key` **(string)**: The key to be removed from the `DataWrapper`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `key` is not a string.
      * - Checks if the key exists using `hasOwnProperty()`.
      * - If the key exists, retrieves the associated value and deletes the key.
      * - Returns the removed value, which can be either a `DataModel` or a `string`.
      * - If the key does not exist, returns `null`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T> | string | null`**:
      *   - The removed value if the key existed.
      *   - `null` if the key was not found in the `DataWrapper`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
      * 
@@ -4006,13 +4006,13 @@ interface InterfaceDataWrapper {
     /**
      * Returns the number of key-value pairs stored in the `DataWrapper`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Counts the number of keys present in the internal data storage.
      *
-     * ## Returns
+     * ### Returns
      * - **`number`**: The total number of stored key-value pairs.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * console.log(dataWrapper.size()); // Output: 2
@@ -4027,14 +4027,14 @@ interface InterfaceDataWrapper {
     /**
      * Retrieves an array of all keys stored in the `DataWrapper`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Returns a list of all keys currently stored in the `DataWrapper`.
      * - If the `DataWrapper` is empty, returns an empty array.
      *
-     * ## Returns
+     * ### Returns
      * - **`string[]`**: An array containing all stored keys.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * console.log(dataWrapper.keys()); // Output: ["name", "age"]
@@ -4050,15 +4050,15 @@ interface InterfaceDataWrapper {
      * Retrieves an array of all values stored in the `DataWrapper`.
      * Ensures that stored values are returned as deep copies to prevent unintended modifications.
      *
-     * ## Behavior
+     * ### Behavior
      * - Iterates through all key-value pairs in the `DataWrapper`.
      * - Uses `hison.utils.deepCopyObject()` to return deep copies of stored values.
      * - If the `DataWrapper` is empty, returns an empty array.
      *
-     * ## Returns
+     * ### Returns
      * - **`any[]`**: An array containing deep copies of all stored values.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * console.log(dataWrapper.values()); // Output: ["Alice", 25]
@@ -4077,12 +4077,12 @@ interface InterfaceDataWrapper {
  * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
  * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
  *
- * ## Generic Type `<T>`
+ * ### Generic Type `<T>`
  * - `T` represents the shape of each row in the `DataModel`.
  * - By specifying `T`, developers can enforce type safety for row values.
  * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
  * 
- * ## Core Features:
+ * ### Core Features:
  * - **Column and Row Management:**
  *   - Supports dynamic addition and removal of columns and rows.
  *   - Ensures column consistency when inserting data.
@@ -4100,12 +4100,12 @@ interface InterfaceDataWrapper {
  * - **Integration with `DataWrapper`**
  *   - `DataWrapper` is an instance for storing `DataModel<T>`.
  *
- * ## Data Consistency and Validation:
+ * ### Data Consistency and Validation:
  * - Uses `_deepCopy()` to ensure stored objects are immutable.
  * - Prevents invalid data types using `_getValidRowValue()`.
  * - Ensures uniform column data types to maintain consistency.
  *
- * ## Example Usage:
+ * ### Example Usage:
  * ```typescript
  * interface User {
  *     id: number;
@@ -4133,7 +4133,7 @@ interface InterfaceDataWrapper {
  * console.log(filtered);
  * ```
  *
- * ## Related Functions:
+ * ### Related Functions:
  * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
  */
 interface InterfaceDataModel<T> {
@@ -4141,10 +4141,10 @@ interface InterfaceDataModel<T> {
      * Checks whether the current instance is a `DataModel`.
      * This method is primarily used for type verification.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: Returns `true` if the instance is a `DataModel`, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getIsDataModel()); // Output: true
@@ -4158,14 +4158,14 @@ interface InterfaceDataModel<T> {
      * The cloned instance contains independent copies of all stored rows, 
      * ensuring that modifications in the cloned instance do not affect the original instance.
      *
-     * ## Behavior
+     * ### Behavior
      * - Uses the internal `_rows` data to initialize a new `DataModel` instance.
      * - Ensures that all row data is duplicated to maintain data integrity.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: A new `DataModel` instance containing a copy of the original rows.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * const clonedModel = dataModel.clone();
@@ -4180,15 +4180,15 @@ interface InterfaceDataModel<T> {
     /**
      * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
      * 
-     * ## Behavior
+     * ### Behavior
      * - Clears the `_cols` array, removing all column definitions.
      * - Clears the `_rows` array, removing all stored data.
      * - Returns the same `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The current instance after clearing all stored data.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getRowCount()); // Output: 1
@@ -4205,14 +4205,14 @@ interface InterfaceDataModel<T> {
      * Serializes the `DataModel` instance into a JSON string representation.
      * Converts the stored row data into a JSON format for easy storage or transmission.
      *
-     * ## Behavior
+     * ### Behavior
      * - Uses `JSON.stringify()` to serialize the `_rows` array.
      * - Column definitions (`_cols`) are not included in the serialized output.
      *
-     * ## Returns
+     * ### Returns
      * - **`string`**: A JSON string representation of the stored row data.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice" },
@@ -4230,14 +4230,14 @@ interface InterfaceDataModel<T> {
      * Checks whether the `DataModel` has defined columns.
      * This method determines if the `DataModel` has been initialized with at least one column.
      *
-     * ## Behavior
+     * ### Behavior
      * - Returns `true` if `_cols` contains at least one column.
      * - Returns `false` if no columns have been defined.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if columns are defined, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name"]);
      * console.log(dataModel.isDeclare()); // Output: true
@@ -4253,14 +4253,14 @@ interface InterfaceDataModel<T> {
      * Retrieves an array of all column names defined in the `DataModel`.
      * Returns a deep copy of the `_cols` array to prevent unintended modifications.
      *
-     * ## Behavior
+     * ### Behavior
      * - Uses `_deepCopy()` to return a copy of `_cols`, ensuring data integrity.
      * - If no columns are defined, returns an empty array.
      *
-     * ## Returns
+     * ### Returns
      * - **`string[]`**: An array of column names.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name"]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -4276,20 +4276,20 @@ interface InterfaceDataModel<T> {
      * Retrieves an array of all values in the specified column.
      * Ensures that returned values are deep copies to prevent unintended modifications.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name from which to retrieve values.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `column` is not a valid key in `T`.
      * - Throws an error if the specified column does not exist.
      * - Iterates through all rows and extracts the values of the specified column.
      * - Uses `_deepCopy()` to return deep copies of the values.
      * - The return type is inferred as `T[K][]`, maintaining strong type safety.
      *
-     * ## Returns
+     * ### Returns
      * - **`T[K][]`**: An array containing all values from the specified column.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: string;
@@ -4320,10 +4320,10 @@ interface InterfaceDataModel<T> {
      * Adds a new column to the `DataModel`.
      * Ensures that all existing rows include the new column with a default value of `null`.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(string)**: The name of the column to be added.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `column` is not a valid string.
      * - Calls `_addCol(column)` to validate and add the column.
      * - Iterates through `_rows` and ensures each row includes the new column, assigning `null` if missing.
@@ -4332,10 +4332,10 @@ interface InterfaceDataModel<T> {
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The current instance after adding the new column.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -4354,10 +4354,10 @@ interface InterfaceDataModel<T> {
      * Adds multiple new columns to the `DataModel`.
      * Ensures that all existing rows include the newly added columns with a default value of `null`.
      *
-     * ## Parameters
+     * ### Parameters
      * - `columns` **(string[])**: An array of column names to be added.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `columns` is not an array.
      * - Iterates through the provided column names and calls `_addCol(column)` to validate and add each column.
      * - Ensures that all existing rows include the new columns, assigning `null` if missing.
@@ -4366,10 +4366,10 @@ interface InterfaceDataModel<T> {
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The current instance after adding the new columns.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -4390,11 +4390,11 @@ interface InterfaceDataModel<T> {
      * 
      * Supports type safety when `T` is defined, while allowing dynamic usage when `T = Record<string, any>`.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The name of the column to update, constrained to keys of `T` if defined.
      * - `value` **(`T[K]`)**: The value to be assigned to all rows in the specified column.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `value` is `undefined`.
      * - Calls `_getValidColValue(column)` to validate the column name.
      * - If the column does not exist, `_addCol(column)` is called to add it.
@@ -4402,10 +4402,10 @@ interface InterfaceDataModel<T> {
      * - Ensures type consistency when `T` is specified.
      * - Allows any column name when `T = Record<string, any>`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after setting the column values.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -4440,11 +4440,11 @@ interface InterfaceDataModel<T> {
      * Applies a formatting function to all values in the specified column.
      * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The name of the column to format, constrained to keys of `T` if defined.
      * - `formatter` **(`DataModelFormatter`)**: A function that transforms each value in the column.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `formatter` is not a valid function.
      * - Validates `column` using `_getValidColValue(column)`.
      * - Throws an error if the column does not exist.
@@ -4452,10 +4452,10 @@ interface InterfaceDataModel<T> {
      * - Ensures that the formatted values remain valid using `_getValidRowValue()`.
      * - Allows any string as `column` if `T = Record<string, any>`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after formatting the column.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface Product {
      *     id: number;
@@ -4486,17 +4486,17 @@ interface InterfaceDataModel<T> {
      * Retrieves a deep copy of the row at the specified index.
      * Ensures that modifications to the returned row do not affect the original data.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rowIndex` **(number)**: The index of the row to retrieve.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
      * - Uses `_deepCopy()` to return a copy of the row, preventing unintended modifications.
      *
-     * ## Returns
+     * ### Returns
      * - **`T`**: A deep copy of the row data as an object.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice" },
@@ -4518,17 +4518,17 @@ interface InterfaceDataModel<T> {
      * Retrieves the row at the specified index as a new `DataModel` instance.
      * Converts the row object into a `DataModel` for further structured operations.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rowIndex` **(number)**: The index of the row to retrieve.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
      * - Initializes a new `DataModel` using the retrieved row data.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: A new `DataModel` instance containing the specified row.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice" },
@@ -4552,25 +4552,25 @@ interface InterfaceDataModel<T> {
      * Adds a new row to the `DataModel<T>` at the specified index or appends it to the end.
      * If no parameters are provided, an empty row is added.
      *
-     * ## Generic Type `<T>`
+     * ### Generic Type `<T>`
      * - `T` represents the structure of each row in the `DataModel<T>`.
      * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible row structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rowIndexOrRow` **(number | T, optional)**: The index at which to insert the row, or the row data to insert.
      * - `row` **(T, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
      *
-     * ## Behavior
+     * ### Behavior
      * - If **no parameters** are provided, an empty row is appended.
      * - If **only a number is provided**, an empty row is inserted at that index.
      * - If **only an object (`T`) is provided**, it is inserted as a new row at the end.
      * - If **both a number and an object are provided**, the row is inserted at the specified index.
      * - Throws an error if attempting to add a row without first defining columns.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel<T>`**: The current instance after adding the new row.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -4606,24 +4606,24 @@ interface InterfaceDataModel<T> {
      * Retrieves a deep copy of a range of rows from the `DataModel`.
      * Ensures that modifications to the returned rows do not affect the original data.
      *
-     * ## Generic Type `<T>`
+     * ### Generic Type `<T>`
      * - `T` represents the structure of each row in the `DataModel`.
      * - By specifying `T`, developers can enforce type safety when retrieving rows.
      * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
      * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
      * - If `endRow` is `null`, retrieves rows from `startRow` to the last row.
      * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
      *
-     * ## Returns
+     * ### Returns
      * - **`T[]`**: An array of deep-copied row objects, ensuring type safety.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -4656,20 +4656,20 @@ interface InterfaceDataModel<T> {
      * Retrieves a range of rows as a new `DataModel` instance.
      * Ensures that the returned `DataModel` contains independent copies of the selected rows.
      *
-     * ## Parameters
+     * ### Parameters
      * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
      * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
      * - If `startRow` is `0` and `endRow` is `null`, returns a clone of the entire `DataModel`.
      * - Uses `_deepCopy()` to ensure the returned rows are independent.
      * - Returns a new `DataModel` containing the selected rows.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: A new `DataModel` instance containing the selected row range.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice" },
@@ -4696,23 +4696,23 @@ interface InterfaceDataModel<T> {
      * Adds multiple rows to the `DataModel`.
      * Each row is validated and inserted into the existing dataset.
      *
-     * ## Generic Type `<T>`
+     * ### Generic Type `<T>`
      * - `T` represents the structure of each row in the `DataModel`.
      * - By specifying `T`, developers can enforce type safety for inserted rows.
      * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rows` **(`T[]`)**: An array of row objects to be added.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_put(rows)` to process and insert the provided rows.
      * - Ensures that column structures are maintained.
      * - Returns the current `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The current instance after adding the new rows.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -4740,7 +4740,7 @@ interface InterfaceDataModel<T> {
      * Converts the `DataModel` instance into a structured JavaScript object.
      * The returned object includes column definitions, row data, and metadata.
      *
-     * ## Behavior
+     * ### Behavior
      * - Uses `_deepCopy()` to ensure the returned data is independent of the original `DataModel`.
      * - The returned object contains:
      *   - `cols`: An array of column names (`keyof T`).
@@ -4749,14 +4749,14 @@ interface InterfaceDataModel<T> {
      *   - `rowCount`: The total number of rows.
      *   - `isDeclare`: A boolean indicating whether columns are explicitly defined.
      *
-     * ## Returns
+     * ### Returns
      * - **`{ cols: (keyof T)[], rows: T[], colCount: number, rowCount: number, isDeclare: boolean }`**:
      *   A structured object representing the `DataModel`.
      *
      * ⚠ **Note:** If `T` is explicitly defined, `cols` will reflect only the known keys of `T`.
      * If `T` is the default `Record<string, any>`, `cols` may include dynamically added columns.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -4787,19 +4787,19 @@ interface InterfaceDataModel<T> {
      * Retrieves a deep copy of the value at the specified row index and column name.
      * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rowIndex` **(number)**: The index of the row to retrieve the value from.
      * - `column` **(K)**: The column name, constrained to the keys of `T` if defined.
      *
-     * ## Behavior
+     * ### Behavior
      * - Validates `column` and `rowIndex` before accessing the value.
      * - Returns a deep copy to prevent unintended modifications.
      * - Allows any string as `column` if `T = Record<string, any>`.
      *
-     * ## Returns
+     * ### Returns
      * - **`T[K]`**: A deep copy of the value stored at the specified row and column.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: string;
@@ -4829,12 +4829,12 @@ interface InterfaceDataModel<T> {
      * Sets a value at the specified row index and column name.
      * Ensures that the value is valid and maintains data integrity.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rowIndex` **(number)**: The index of the row where the value should be set.
      * - `column` **(K)**: The name of the column where the value should be stored.
      * - `value` **(T[K])**: The value to be assigned, ensuring type safety.
      *
-     * ## Behavior
+     * ### Behavior
      * - Throws an error if `value` is `undefined`.
      * - Calls `_getValidColValue(column)` to validate the column name.
      * - Throws an error if the specified column does not exist.
@@ -4843,14 +4843,14 @@ interface InterfaceDataModel<T> {
      * - Updates the value at the specified row and column.
      * - Returns the current `DataModel` instance for method chaining.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
      * - The `value` type is inferred as `T[K]`, preventing type mismatches.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The current instance after updating the value.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -4883,10 +4883,10 @@ interface InterfaceDataModel<T> {
      * Removes a column from the `DataModel`, deleting its values from all rows.
      * Ensures that the column exists before attempting removal.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The name of the column to remove, ensuring type safety.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_getValidColValue(column)` to validate the column name.
      * - Throws an error if the specified column does not exist.
      * - Iterates through all rows and removes the specified column.
@@ -4896,14 +4896,14 @@ interface InterfaceDataModel<T> {
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      * 
-     * ## Type Safety
+     * ### Type Safety
      * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
      * - Prevents attempts to remove a column that does not exist in the defined type.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The current instance after removing the column.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -4934,10 +4934,10 @@ interface InterfaceDataModel<T> {
      * Removes multiple columns from the `DataModel`, deleting their values from all rows.
      * Ensures that each specified column exists before attempting removal.
      *
-     * ## Parameters
+     * ### Parameters
      * - `columns` **(K[])**: An array of column names to remove, ensuring type safety.
      *
-     * ## Behavior
+     * ### Behavior
      * - Uses `<K extends keyof T>` to enforce that `columns` contain only valid keys of `T`.
      * - Iterates through the `columns` array and calls `removeColumn(column)` for each entry.
      * - If any column does not exist, `removeColumn` will throw an error.
@@ -4946,10 +4946,10 @@ interface InterfaceDataModel<T> {
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      * 
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The current instance after removing the specified columns.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -4981,18 +4981,18 @@ interface InterfaceDataModel<T> {
      * Removes a row from the `DataModel` at the specified index and returns the removed row.
      * Ensures that the row index is valid before removal.
      *
-     * ## Parameters
+     * ### Parameters
      * - `rowIndex` **(number, optional, default = `0`)**: The index of the row to remove.
      *
-     * ## Behavior
+     * ### Behavior
      * - Uses `<T>` to ensure that the returned row matches the structure of `T`.
      * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
      * - Uses `splice()` to remove the row from `_rows` and returns the removed row.
      *
-     * ## Returns
+     * ### Returns
      * - **`T`**: The removed row object, ensuring type safety based on `T`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5023,13 +5023,13 @@ interface InterfaceDataModel<T> {
     /**
      * Retrieves the total number of columns in the `DataModel`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Returns the length of the `_cols` array, which represents the column definitions.
      *
-     * ## Returns
+     * ### Returns
      * - **`number`**: The total number of columns in the `DataModel`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
      * console.log(dataModel.getColumnCount()); // Output: 3
@@ -5044,13 +5044,13 @@ interface InterfaceDataModel<T> {
     /**
      * Retrieves the total number of rows in the `DataModel`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Returns the length of the `_rows` array, which represents the stored data rows.
      *
-     * ## Returns
+     * ### Returns
      * - **`number`**: The total number of rows in the `DataModel`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice" },
@@ -5070,18 +5070,18 @@ interface InterfaceDataModel<T> {
      * Checks whether the `DataModel` contains a specified column.
      * Uses `<K extends keyof T>` to ensure type safety when checking column names.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name to check, constrained to keys of `T`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to valid keys of `T`.
      * - Calls `_hasColumn(column)` to determine if the column exists.
      * - Returns `true` if the column is found in `_cols`, otherwise `false`.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if the column exists, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5102,10 +5102,10 @@ interface InterfaceDataModel<T> {
      * Restricts the `DataModel` to only the specified columns by removing all other columns.
      * Uses `<K extends keyof T>` to enforce type safety when specifying valid columns.
      *
-     * ## Parameters
+     * ### Parameters
      * - `columns` **(K[])**: An array of column names to retain, constrained to keys of `T`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by allowing only existing keys of `T` as valid columns.
      * - Identifies and removes columns that are **not** included in the provided `columns` list.
      * - Calls `removeColumns()` to eliminate those columns from the dataset.
@@ -5114,10 +5114,10 @@ interface InterfaceDataModel<T> {
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
      * 
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The modified `DataModel` instance with only the specified columns retained.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5148,18 +5148,18 @@ interface InterfaceDataModel<T> {
      * Checks whether a specified column contains only non-null values.
      * Uses `<K extends keyof T>` to ensure type safety when specifying the column.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The name of the column to check, constrained to keys of `T`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getNullColumnFirstRowIndex(column)` to find the first occurrence of a `null` value in the column.
      * - If no `null` values are found, returns `true`; otherwise, returns `false`.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if the column has no `null` values, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5188,19 +5188,19 @@ interface InterfaceDataModel<T> {
      * Finds and returns the first row where the specified column contains a `null` value.
      * Uses `<K extends keyof T>` to enforce type safety on the column name.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name to check, constrained to keys of `T`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value.
      * - If no `null` values are found, returns `null`.
      * - If a `null` value is found, retrieves and returns the corresponding row using `getRow()`.
      *
-     * ## Returns
+     * ### Returns
      * - **`T | null`**: The first row where the column has a `null` value, or `null` if none exist.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5232,18 +5232,18 @@ interface InterfaceDataModel<T> {
      * Checks whether a specified column contains only unique values (i.e., no duplicate values).
      * Uses `<K extends keyof T>` to enforce type safety on the column name.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name to check, constrained to keys of `T`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getDuplColumnFirstRowIndex(column)` to find the first occurrence of a duplicate value in the column.
      * - If no duplicates are found, returns `true`; otherwise, returns `false`.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if the column has no duplicate values, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5272,19 +5272,19 @@ interface InterfaceDataModel<T> {
      * Finds and returns the first row where the specified column contains a duplicate value.
      * Uses `<K extends keyof T>` to ensure that the column exists in `T`, enforcing type safety.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name to check for duplicate values, constrained to keys of `T`.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value.
      * - If no duplicate values are found, returns `null`.
      * - If a duplicate value is found, retrieves and returns the corresponding row using `getRow()`.
      *
-     * ## Returns
+     * ### Returns
      * - **`T | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5316,19 +5316,19 @@ interface InterfaceDataModel<T> {
      * Checks whether all values in the specified column satisfy a given validation function.
      * Uses `<K extends keyof T>` to ensure type safety for column selection.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
      * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to check for invalid values.
      * - If no invalid values are found, returns `true`; otherwise, returns `false`.
      *
-     * ## Returns
+     * ### Returns
      * - **`boolean`**: `true` if all values in the column are valid, otherwise `false`.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5362,20 +5362,20 @@ interface InterfaceDataModel<T> {
      * Finds and returns the first row where the specified column contains an invalid value based on a given validation function.
      * Uses `<K extends keyof T>` to ensure type safety for column selection.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
      * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures type safety by restricting `column` to existing keys of `T`.
      * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to locate the first occurrence of an invalid value in the column.
      * - If no invalid values are found, returns `null`.
      * - If an invalid value is found, retrieves and returns the corresponding row using `getRow()`.
      *
-     * ## Returns
+     * ### Returns
      * - **`T | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *   id: number;
@@ -5409,11 +5409,11 @@ interface InterfaceDataModel<T> {
      * Searches for rows that match a given condition and returns their indexes.
      * Allows both positive and negative filtering based on the `isNegative` flag.
      *
-     * ## Parameters
+     * ### Parameters
      * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
      * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
      * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows` to check if each row meets the condition.
@@ -5421,14 +5421,14 @@ interface InterfaceDataModel<T> {
      * - If `isNegative` is `false`, adds matching row indexes to the result.
      * - If `isNegative` is `true`, adds **non-matching** row indexes to the result.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
      * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
-     * ## Returns
+     * ### Returns
      * - **`number[]`**: An array of indexes of rows that match (or do not match) the condition.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5461,11 +5461,11 @@ interface InterfaceDataModel<T> {
      * Searches for rows that match a given condition and returns them as an array.
      * Allows both positive and negative filtering based on the `isNegative` flag.
      *
-     * ## Parameters
+     * ### Parameters
      * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
      * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
      * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows`, checking if each row meets the condition.
@@ -5474,14 +5474,14 @@ interface InterfaceDataModel<T> {
      * - If `isNegative` is `true`, adds **non-matching** rows to the result.
      * - Returns a deep copy of the matched rows to ensure immutability.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
      * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
-     * ## Returns
+     * ### Returns
      * - **`T[]`**: An array of deep-copied rows that match (or do not match) the condition.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5514,11 +5514,11 @@ interface InterfaceDataModel<T> {
      * Searches for rows that match a given condition and returns them as a new `DataModel` instance.
      * Allows both positive and negative filtering based on the `isNegative` flag.
      *
-     * ## Parameters
+     * ### Parameters
      * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
      * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
      * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows`, checking if each row meets the condition.
@@ -5527,14 +5527,14 @@ interface InterfaceDataModel<T> {
      * - If `isNegative` is `true`, adds **non-matching** rows to the result.
      * - Returns a new `DataModel<T>` containing the filtered rows.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
      * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: A new `DataModel<T>` instance containing the matched rows.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5571,13 +5571,13 @@ interface InterfaceDataModel<T> {
      * by removing matched or unmatched rows. Unlike `searchRowsAsDataModel`, this method directly 
      * updates the existing dataset instead of returning a new instance.
      *
-     * ## Parameters
+     * ### Parameters
      * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
      * - `isNegative` **(`boolean`, optional, default = `false`)**: 
      *   - If `false` (default), removes rows that **do not** match the condition.
      *   - If `true`, removes rows that **do** match the condition.
      *
-     * ## Behavior
+     * ### Behavior
      * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
      * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
      * - Iterates through `_rows`, checking if each row meets the condition.
@@ -5587,14 +5587,14 @@ interface InterfaceDataModel<T> {
      *   - If `true`, removes matching rows.
      * - Returns the modified `DataModel<T>` instance for method chaining.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
      * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance after removing specified rows.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5629,18 +5629,18 @@ interface InterfaceDataModel<T> {
      * Filters rows in the `DataModel` based on a custom filtering function and returns their indexes.
      * Allows for efficiently identifying row positions that match a given condition.
      *
-     * ## Parameters
+     * ### Parameters
      * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
      * - Iterates through `_rows`, applying the filter function to each row.
      * - Collects the indexes of rows that satisfy the filter condition.
      *
-     * ## Returns
+     * ### Returns
      * - **`number[]`**: An array of indexes of rows that match the filter condition.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice", age: 25 },
@@ -5662,19 +5662,19 @@ interface InterfaceDataModel<T> {
      * Filters rows in the `DataModel` based on a custom filtering function.
      * Returns an array of rows that satisfy the provided filter condition.
      *
-     * ## Parameters
+     * ### Parameters
      * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
      * - Iterates through `_rows`, applying the filter function to each row.
      * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
      * - Returns an array of matching rows.
      *
-     * ## Returns
+     * ### Returns
      * - **`T[]`**: An array of deep-copied rows that match the filter condition.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice", age: 25 },
@@ -5697,19 +5697,19 @@ interface InterfaceDataModel<T> {
      * Filters rows in the `DataModel` based on a custom filtering function and returns a new `DataModel` containing the matched rows.
      * Allows for extracting a subset of the dataset while preserving the structured format.
      *
-     * ## Parameters
+     * ### Parameters
      * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
      * - Iterates through `_rows`, applying the filter function to each row.
      * - Collects rows that satisfy the filter condition.
      * - Returns a new `DataModel` instance containing the filtered rows.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: A new `DataModel` instance containing the filtered rows.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice", age: 25 },
@@ -5732,19 +5732,19 @@ interface InterfaceDataModel<T> {
      * Filters rows in the `DataModel` based on a custom filtering function and **modifies** the original `DataModel` by removing unmatched rows.
      * This method directly updates the existing dataset instead of returning a new instance.
      *
-     * ## Parameters
+     * ### Parameters
      * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be retained.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
      * - Iterates through `_rows`, applying the filter function to each row.
      * - Removes rows that do **not** satisfy the filter condition.
      * - Returns the modified `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The modified `DataModel` instance with only the filtered rows.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice", age: 25 },
@@ -5768,23 +5768,23 @@ interface InterfaceDataModel<T> {
      * Reorders the columns in the `DataModel` based on the specified order.
      * Ensures that all existing columns are included, maintaining the defined structure.
      *
-     * ## Parameters
+     * ### Parameters
      * - `columns` **(`K[]`)**: An array of column names in the desired order.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls `_checkArray(columns)` to validate the input as an array.
      * - Ensures that each column in `columns` exists in the `DataModel` using `_checkColumn(column)`.
      * - Constructs a new column order by placing unspecified columns at the end.
      * - Updates `_cols` with the new column order.
      * - Returns the modified `DataModel<T>` instance for method chaining.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - Uses `<K extends keyof T>` to ensure that `columns` only contain valid keys of `T`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with reordered columns.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5810,14 +5810,14 @@ interface InterfaceDataModel<T> {
      * Sorts the columns of the `DataModel` in ascending (A-Z) order.
      * The sorting is applied alphabetically based on column names.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls the native `Array.sort()` method on `_cols` to rearrange columns in ascending order.
      * - Returns the modified `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The modified `DataModel` instance with columns sorted in ascending order.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
      * 
@@ -5834,14 +5834,14 @@ interface InterfaceDataModel<T> {
      * Sorts the columns of the `DataModel` in descending (Z-A) order.
      * The sorting is applied alphabetically based on column names.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls the native `Array.sort()` method on `_cols` with a custom comparator to sort columns in descending order.
      * - Returns the modified `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The modified `DataModel` instance with columns sorted in descending order.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
      * 
@@ -5858,14 +5858,14 @@ interface InterfaceDataModel<T> {
      * Reverses the order of columns in the `DataModel`.
      * The column order is flipped without sorting alphabetically.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls the native `Array.reverse()` method on `_cols` to reverse the column order.
      * - Returns the modified `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The modified `DataModel` instance with reversed column order.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
      * 
@@ -5882,11 +5882,11 @@ interface InterfaceDataModel<T> {
      * Sorts the rows of the `DataModel` in ascending order based on the specified column.
      * Optionally supports integer-based sorting for numerical values.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(`K`)**: The column name to sort by.
      * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
      *
-     * ## Behavior
+     * ### Behavior
      * - Validates `column` using `_getValidColValue(column)`.
      * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
      * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
@@ -5896,13 +5896,13 @@ interface InterfaceDataModel<T> {
      * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
      * - Throws an error if a non-numeric value is encountered in integer sorting mode.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in ascending order.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5934,11 +5934,11 @@ interface InterfaceDataModel<T> {
      * Sorts the rows of the `DataModel` in descending order based on the specified column.
      * Optionally supports integer-based sorting for numerical values.
      *
-     * ## Parameters
+     * ### Parameters
      * - `column` **(`K`)**: The column name to sort by.
      * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
      *
-     * ## Behavior
+     * ### Behavior
      * - Validates `column` using `_getValidColValue(column)`.
      * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
      * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
@@ -5948,13 +5948,13 @@ interface InterfaceDataModel<T> {
      * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
      * - Throws an error if a non-numeric value is encountered in integer sorting mode.
      *
-     * ## Type Safety
+     * ### Type Safety
      * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
      *
-     * ## Returns
+     * ### Returns
      * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in descending order.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * interface User {
      *     id: number;
@@ -5986,14 +5986,14 @@ interface InterfaceDataModel<T> {
      * Reverses the order of rows in the `DataModel`.
      * This method flips the row order without sorting by a specific column.
      *
-     * ## Behavior
+     * ### Behavior
      * - Calls the native `Array.reverse()` method on `_rows` to reverse the row order.
      * - Returns the modified `DataModel` instance for method chaining.
      *
-     * ## Returns
+     * ### Returns
      * - **`DataModel`**: The modified `DataModel` instance with reversed row order.
      *
-     * ## Example Usage
+     * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel([
      *     { id: 1, name: "Alice" },
@@ -6019,7 +6019,7 @@ interface InterfaceDataModel<T> {
  * - This function takes a value as input and returns a transformed version of it.
  * - Used in `DataModel.setColumnSameFormat()` to apply consistent formatting across a column.
  * 
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * const formatCurrency: DataModelFormatter = (value) => `$${value.toFixed(2)}`;
  * console.log(formatCurrency(1000)); // "$1000.00"
@@ -6036,7 +6036,7 @@ interface DataModelFormatter{(value: any): any;};
  * - This function takes a value as input and returns a boolean indicating validity.
  * - Used in `DataModel.isValidValue()` to check if all column values meet the validation criteria.
  * 
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * const isNumber: DataModelValidator = (value) => typeof value === "number";
  * console.log(isNumber(123)); // true
@@ -6054,7 +6054,7 @@ interface DataModelValidator{(value: any): boolean;};
  * - This function takes a row (as an object) and returns `true` if it should be included.
  * - Used in `DataModel.filterRowIndexes()` to filter row indexes based on the given condition.
  * 
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * const filterByAge: DataModelFillter = (row) => row.age > 25;
  * console.log(filterByAge({ age: 30 })); // true
@@ -6075,7 +6075,7 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
  * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy** 
  * while integrating **WebSocket communication** for real-time data updates.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **LRU Cache for API Responses**: Stores API responses with a configurable limit, reducing redundant network requests.
  * - **WebSocket Support**: Maintains a persistent WebSocket connection for real-time data updates.
  * - **Cache Management Methods**: Supports cache operations (`get`, `put`, `remove`, `clear`, etc.).
@@ -6083,13 +6083,13 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
  * - **Flexible Configuration**: Uses `CustomOption` settings for cache limits and WebSocket parameters.
  * - **Validation Methods**: Ensures proper data types for cache keys and event listeners.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - **API responses are stored in an LRUCache instance**, avoiding redundant network calls.
  * - **When a WebSocket connection is established**, data updates can be received in real-time.
  * - **Cache data can be accessed and managed using `get`, `put`, `remove`, and `clear` methods.**
  * - **WebSocket event handlers can be set up for real-time notifications.**
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Create a CachingModule instance with a cache limit of 20
  * const cachingModule = new hison.link.CachingModule(20);
@@ -6105,22 +6105,22 @@ interface DataModelFillter{(row: Record<string, any>): boolean;};
  * cachingModule.onmessage = event => console.log("New Message:", event.data);
  * ```
  *
- * ## **Internal Structure**
+ * ### **Internal Structure**
  * - **Uses `LRUCache`** to manage cached responses with a defined limit.
  * - **Maintains a WebSocket connection** to receive real-time data updates.
  * - **Supports configurable options via `CustomOption`**, such as WebSocket endpoint and cache size.
  * - **Provides utility methods** for cache validation, data retrieval, and event handling.
  *
- * ## **Related Components**
+ * ### **Related Components**
  * - **`LRUCache`**: Handles the caching logic for API responses.
  * - **`WebSocket`**: Establishes a real-time connection for live data updates.
  * - **`CustomOption`**: Provides configurable options for WebSocket and cache settings.
  * - **`ApiLink`**: Uses this module to fetch and store API responses efficiently.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This module **returns an instance of `CachingModule`**, which allows cache operations and WebSocket event management.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Reducing unnecessary API calls** by storing frequently accessed responses.
  * - **Receiving real-time updates** from the server without polling.
  * - **Efficiently managing API response data** in web applications.
@@ -6134,17 +6134,17 @@ interface InterfaceCachingModule {
      * is recognized as a `CachingModule`. This is useful for validating whether 
      * an instance supports caching functionalities.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - `true` if this instance is a caching module.
      * - `false` if caching is not enabled.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * console.log(cachingModule.getIsCachingModule()); // true
      * ```
      *
-     * ## **Related Properties**
+     * ### **Related Properties**
      * - **`_isCachingModule`** *(boolean)* - Stores the module's caching capability status.
      *
      * @returns {boolean} `true` if this instance is a caching module.
@@ -6157,14 +6157,14 @@ interface InterfaceCachingModule {
      * that the key is a valid string and then delegates the check to the underlying 
      * `LRUCache` instance.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `key` *(string)* - The key to check in the cache.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - `true` if the cache contains the specified key.
      * - `false` if the key is not found in the cache.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
@@ -6172,7 +6172,7 @@ interface InterfaceCachingModule {
      * console.log(cachingModule.hasKey("user456")); // false
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`_checkTypeString(key)`** - Ensures the key is a valid string before performing the cache check.
      * - **`_LRUCache.hasKey(key)`** - The internal method that checks the existence of the key in the cache.
      *
@@ -6186,16 +6186,16 @@ interface InterfaceCachingModule {
      * This method fetches the cached API response associated with the specified `key`.
      * Before accessing the cache, it validates that the key is a string.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `key` *(string)* - The key of the cached data.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing:
      *   - `data` *(any)* - The cached API response data.
      *   - `response` *(Response)* - The original HTTP response object.
      * - If the key does not exist in the cache, `null` is returned.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6206,7 +6206,7 @@ interface InterfaceCachingModule {
      * cachingModule.get("user123").then(data => console.log(data));
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`put(key, value)`** - Stores API responses in the cache.
      * - **`hasKey(key)`** - Checks if a key exists in the cache.
      * - **`remove(key)`** - Removes a key from the cache.
@@ -6221,18 +6221,18 @@ interface InterfaceCachingModule {
      * This method saves the provided `value` (API response) in the cache with the specified `key`.
      * Before storing the data, it validates that the `key` is a string.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `key` *(string)* - The cache key under which the response will be stored.
      * - `value` *(Promise<{ data: any; response: Response }>)*
      *   - A promise resolving to an object containing:
      *     - `data` *(any)* - The API response data.
      *     - `response` *(Response)* - The original HTTP response object.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - If the `key` already exists, the old value is **replaced** with the new one.
      * - If the cache reaches its limit, the **least recently used (LRU) entry is removed**.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6240,7 +6240,7 @@ interface InterfaceCachingModule {
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`get(key)`** - Retrieves cached data for a given key.
      * - **`hasKey(key)`** - Checks if a key exists in the cache.
      * - **`remove(key)`** - Removes a specific key from the cache.
@@ -6255,14 +6255,14 @@ interface InterfaceCachingModule {
      * This method deletes the cached API response associated with the given `key`.
      * Before performing the removal, it ensures that the `key` is a valid string.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `key` *(string)* - The cache key to be removed.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - If the specified `key` exists in the cache, it is deleted.
      * - If the `key` does not exist, no action is taken.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6276,7 +6276,7 @@ interface InterfaceCachingModule {
      * console.log(cachingModule.hasKey("user123")); // false
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`put(key, value)`** - Stores API responses in the cache.
      * - **`get(key)`** - Retrieves cached data for a given key.
      * - **`clear()`** - Removes all cached entries.
@@ -6289,7 +6289,7 @@ interface InterfaceCachingModule {
      *
      * This method returns the entire cache as a record where each key corresponds to a cached API response.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Record<string, Promise<{ data: any; response: Response }>>` representing all cached entries.
      * - Each entry consists of:
      *   - `key` *(string)* - The cache key.
@@ -6297,7 +6297,7 @@ interface InterfaceCachingModule {
      *     - `data` *(any)* - The API response data.
      *     - `response` *(Response)* - The original HTTP response object.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6309,7 +6309,7 @@ interface InterfaceCachingModule {
      * console.log(cachingModule.getAll());
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`put(key, value)`** - Stores API responses in the cache.
      * - **`get(key)`** - Retrieves cached data for a given key.
      * - **`getKeys()`** - Retrieves all cache keys.
@@ -6323,10 +6323,10 @@ interface InterfaceCachingModule {
      *
      * This method returns an array of all keys currently stored in the cache.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - An array of strings representing the cache keys.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6338,7 +6338,7 @@ interface InterfaceCachingModule {
      * console.log(cachingModule.getKeys()); // ["user123", "posts"]
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`put(key, value)`** - Stores API responses in the cache.
      * - **`get(key)`** - Retrieves cached data for a given key.
      * - **`getAll()`** - Retrieves all cached data as a key-value object.
@@ -6352,11 +6352,11 @@ interface InterfaceCachingModule {
      *
      * This method removes all entries from the cache, resetting it to an empty state.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - All cached responses are permanently deleted.
      * - The cache size is reset to zero.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6371,7 +6371,7 @@ interface InterfaceCachingModule {
      * console.log(cachingModule.getKeys()); // []
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`put(key, value)`** - Stores API responses in the cache.
      * - **`get(key)`** - Retrieves cached data for a given key.
      * - **`getAll()`** - Retrieves all cached data as a key-value object.
@@ -6385,15 +6385,15 @@ interface InterfaceCachingModule {
      *
      * This method assigns a custom event handler to be executed when the WebSocket connection is successfully opened.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `func` *(function | null)* - A callback function to handle the WebSocket `open` event.
      *   - If `null` is provided, the event handler is cleared.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Ensures that the provided function is valid before assigning it as the event handler.
      * - When the WebSocket connection is established, the specified function is invoked.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6403,7 +6403,7 @@ interface InterfaceCachingModule {
      * };
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
      * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
      * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -6417,15 +6417,15 @@ interface InterfaceCachingModule {
      * This method assigns a custom event handler to be executed whenever a message is received 
      * through the WebSocket connection.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `func` *(function | null)* - A callback function to handle incoming WebSocket messages.
      *   - If `null` is provided, the event handler is cleared.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Ensures that the provided function is valid before assigning it as the event handler.
      * - When a message is received, the specified function is invoked with the event data.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6435,7 +6435,7 @@ interface InterfaceCachingModule {
      * };
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
      * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
      * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -6448,15 +6448,15 @@ interface InterfaceCachingModule {
      *
      * This method assigns a custom event handler to be executed when the WebSocket connection is closed.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `func` *(function | null)* - A callback function to handle the WebSocket `close` event.
      *   - If `null` is provided, the event handler is cleared.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Ensures that the provided function is valid before assigning it as the event handler.
      * - When the WebSocket connection is closed, the specified function is invoked with the event data.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6466,7 +6466,7 @@ interface InterfaceCachingModule {
      * };
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
      * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
      * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -6479,17 +6479,17 @@ interface InterfaceCachingModule {
      *
      * This method assigns a custom event handler to be executed when a WebSocket error occurs.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `func` *(function | null)* - A callback function to handle WebSocket errors.
      *   - If `null` is provided, the event handler is cleared.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Ensures that the provided function is valid before assigning it as the event handler.
      * - When an error occurs in the WebSocket connection, the specified function is invoked with the event data.
      * - **Note:** The implementation currently assigns the function to `onclose` instead of `onerror`,
      *   which may require correction.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6499,7 +6499,7 @@ interface InterfaceCachingModule {
      * };
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
      * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
      * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
@@ -6512,16 +6512,16 @@ interface InterfaceCachingModule {
      *
      * This method returns an integer representing the current status of the WebSocket connection.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - `1` → The WebSocket connection is open.
      * - `0` → The WebSocket connection is in the process of connecting.
      * - `-1` → The WebSocket connection is closed or unavailable.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Internally calls `_checkWebSocketConnection()` to determine the WebSocket state.
      * - Useful for monitoring connection status and handling reconnection logic if needed.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
      * 
@@ -6530,7 +6530,7 @@ interface InterfaceCachingModule {
      * console.log(status); // Output: 1 (open), 0 (connecting), or -1 (closed)
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
      * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
      * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -6545,19 +6545,19 @@ interface InterfaceCachingModule {
  * The `ApiGet` class is responsible for sending HTTP GET requests to a specified API resource. 
  * It integrates with `ApiLink` to handle request execution, event emissions, and optional response caching.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP GET requests** using `ApiLink`.
  * - **Supports response caching** via an optional `CachingModule`.
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows setting event listeners** for request completion, errors, and other key events.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiGet` stores the API resource path and an optional `CachingModule` instance.
  * - The `call()` method triggers a GET request to the specified resource path.
  * - If caching is enabled, previously stored responses may be returned instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiGet without caching
  * const apiGet = new hison.link.ApiGet("/users");
@@ -6577,15 +6577,15 @@ interface InterfaceCachingModule {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-based request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiGet`, which provides methods for executing GET requests and managing request events.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Fetching data from a REST API** with minimal setup.
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -6598,27 +6598,27 @@ interface InterfaceApiGet {
      * It also **invokes a pre-request hook** (`hison.setBeforeGetRequst`) and **emits a request-start event** 
      * (`"requestStarted_GET"`) before execution.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or query parameters.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Pre-Request Handling**
+     * ### **Pre-Request Handling**
      * - **`hison.setBeforeGetRequst((resourcePath, options) => {})`**
      *   - A customizable hook executed **before sending the GET request**.
      *   - If it returns `false`, the request is **prevented from execution**.
      *   - **Use Case:** Validating request parameters or implementing conditional request logic.
      *
-     * ## **Event Emission**
+     * ### **Event Emission**
      * - **`"requestStarted_GET"` Event**
      *   - This event is emitted **before the GET request is executed**.
      *   - Can be used for logging, request tracking, or debugging.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing:
      *   - `data` *(any)* - The API response data.
      *   - `response` *(Response)* - The original HTTP response object.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
      * - If the data is not cached, it makes an HTTP GET request to `_resourcePath`.
      * - Before executing the request:
@@ -6626,7 +6626,7 @@ interface InterfaceApiGet {
      *   - The **event `"requestStarted_GET"`** is emitted.
      * - Once the request is completed, the response is returned and optionally stored in the cache.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
      * 
@@ -6650,7 +6650,7 @@ interface InterfaceApiGet {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
      * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
      *
@@ -6664,18 +6664,18 @@ interface InterfaceApiGet {
      * This method retrieves only the headers from the specified resource without downloading the response body.
      * It is useful for checking metadata such as content type, content length, and caching information.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - The method delegates the request execution to `ApiLink.head()`.
      * - The response body is **not** included in the result, only headers are returned.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
      * 
@@ -6690,7 +6690,7 @@ interface InterfaceApiGet {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(options)`** - Sends a GET request to retrieve full response data.
      * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
      *
@@ -6704,18 +6704,18 @@ interface InterfaceApiGet {
      * This method retrieves the list of allowed HTTP methods for the specified resource 
      * without performing an actual data operation.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - The method delegates the request execution to `ApiLink.options()`.
      * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
      * 
@@ -6730,7 +6730,7 @@ interface InterfaceApiGet {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(options)`** - Sends a GET request to retrieve full response data.
      * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
      *
@@ -6744,17 +6744,17 @@ interface InterfaceApiGet {
      * This method allows attaching a callback function to be executed when a specified event 
      * occurs during the execution of a GET request.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `eventName` *(string)* - The name of the event to listen for.
      * - `eventFunc` *(function)* - The callback function to be executed when the event occurs.
      *
-     * ## **Supported Events**
+     * ### **Supported Events**
      * - `"requestStarted_GET"` - Triggered when a GET request begins.
      * - `"requestCompleted_Response"` - Triggered when the API response is received.
      * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
      * - `"requestError"` - Triggered when an error occurs during the request.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
      * 
@@ -6769,7 +6769,7 @@ interface InterfaceApiGet {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(options)`** - Sends a GET request, triggering events during execution.
      *
      * @param {string} eventName - The name of the event to listen for.
@@ -6783,20 +6783,20 @@ interface InterfaceApiGet {
  * The `ApiPost` class is responsible for sending HTTP POST requests to a specified service command.
  * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP POST requests** using `ApiLink`.
  * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
  * - **Supports response caching** via an optional `CachingModule`.
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiPost` requires a `serviceCmd` that specifies the business logic endpoint.
  * - The `call()` method sends a POST request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiPost
  * const apiPost = new hison.link.ApiPost("UserService.createUser");
@@ -6820,15 +6820,15 @@ interface InterfaceApiGet {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiPost`, providing methods for executing POST requests and managing request events.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to a REST API** with structured payloads.
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -6840,30 +6840,30 @@ interface InterfaceApiPost {
      * This method sends a POST request using `ApiLink`, encapsulating request data in a `DataWrapper`
      * and invoking necessary pre-request hooks and event emissions.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `requestData` *(any, required)* - The data to be sent in the request.
      *   - If it is a `DataWrapper`, it is sent as-is.
      *   - If it is a standard object, it is converted to a JSON payload.
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Pre-Request Handling**
+     * ### **Pre-Request Handling**
      * - **`hison.setBeforePostRequst((requestData, options) => {})`**
      *   - A customizable hook executed **before sending the POST request**.
      *   - If it returns `false`, the request is **prevented from execution**.
      *   - **Use Case:** Validating request parameters, modifying request data dynamically.
      *
-     * ## **Event Emission**
+     * ### **Event Emission**
      * - **`"requestStarted_POST"` Event**
      *   - This event is emitted **before the POST request is executed**.
      *   - Can be used for logging, request tracking, or debugging.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing:
      *   - `data` *(any)* - The API response data.
      *   - `response` *(Response)* - The original HTTP response object.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
      * - If the data is not cached, it makes an HTTP POST request to `_serviceCmd`.
      * - Before executing the request:
@@ -6871,7 +6871,7 @@ interface InterfaceApiPost {
      *   - The **event `"requestStarted_POST"`** is emitted.
      * - Once the request is completed, the response is returned and optionally stored in the cache.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
      * 
@@ -6896,7 +6896,7 @@ interface InterfaceApiPost {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
      * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
      *
@@ -6911,18 +6911,18 @@ interface InterfaceApiPost {
      * This method retrieves only the headers from the API without downloading the response body.
      * It is useful for checking metadata such as content type, content length, and caching information.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
      * - The response body is **not** included in the result; only headers are returned.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
      * 
@@ -6937,7 +6937,7 @@ interface InterfaceApiPost {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
      * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
      *
@@ -6951,18 +6951,18 @@ interface InterfaceApiPost {
      * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
      * It is useful for checking which HTTP methods are permitted for a specific endpoint.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
      * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
      * 
@@ -6977,7 +6977,7 @@ interface InterfaceApiPost {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
      * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
      *
@@ -6991,21 +6991,21 @@ interface InterfaceApiPost {
      * This method allows attaching a callback function to be executed when a specified event 
      * occurs during the execution of a POST request.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `eventName` *(string, required)* - The name of the event to listen for.
      * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
      *
-     * ## **Supported Events**
+     * ### **Supported Events**
      * - `"requestStarted_POST"` - Triggered when a POST request begins.
      * - `"requestCompleted_Response"` - Triggered when the API response is received.
      * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
      * - `"requestError"` - Triggered when an error occurs during the request.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"POST"` as the method type.
      * - The provided `eventFunc` is executed whenever the specified event is emitted.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
      * 
@@ -7020,7 +7020,7 @@ interface InterfaceApiPost {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a POST request, triggering events during execution.
      *
      * @param {string} eventName - The name of the event to listen for.
@@ -7034,20 +7034,20 @@ interface InterfaceApiPost {
  * The `ApiPut` class is responsible for sending HTTP PUT requests to a specified service command.
  * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP PUT requests** using `ApiLink`.
  * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
  * - **Supports response caching** via an optional `CachingModule`.
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiPut` requires a `serviceCmd` that specifies the business logic endpoint.
  * - The `call()` method sends a PUT request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiPut
  * const apiPut = new hison.link.ApiPut("UserService.createUser");
@@ -7071,15 +7071,15 @@ interface InterfaceApiPost {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiPut`, providing methods for executing PUT requests and managing request events.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to a REST API** with structured payloads.
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -7091,30 +7091,30 @@ interface InterfaceApiPut {
      * This method sends a PUT request using `ApiLink`, encapsulating request data in a `DataWrapper`
      * and invoking necessary pre-request hooks and event emissions.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `requestData` *(any, required)* - The data to be sent in the request.
      *   - If it is a `DataWrapper`, it is sent as-is.
      *   - If it is a standard object, it is converted to a JSON payload.
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Pre-Request Handling**
+     * ### **Pre-Request Handling**
      * - **`hison.setBeforePutRequst((requestData, options) => {})`**
      *   - A customizable hook executed **before sending the PUT request**.
      *   - If it returns `false`, the request is **prevented from execution**.
      *   - **Use Case:** Validating request parameters, modifying request data dynamically.
      *
-     * ## **Event Emission**
+     * ### **Event Emission**
      * - **`"requestStarted_PUT"` Event**
      *   - This event is emitted **before the PUT request is executed**.
      *   - Can be used for logging, request tracking, or debugging.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing:
      *   - `data` *(any)* - The API response data.
      *   - `response` *(Response)* - The original HTTP response object.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
      * - If the data is not cached, it makes an HTTP PUT request to `_serviceCmd`.
      * - Before executing the request:
@@ -7122,7 +7122,7 @@ interface InterfaceApiPut {
      *   - The **event `"requestStarted_PUT"`** is emitted.
      * - Once the request is completed, the response is returned and optionally stored in the cache.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
      * 
@@ -7147,7 +7147,7 @@ interface InterfaceApiPut {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
      * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
      *
@@ -7162,18 +7162,18 @@ interface InterfaceApiPut {
      * This method retrieves only the headers from the API without downloading the response body.
      * It is useful for checking metadata such as content type, content length, and caching information.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
      * - The response body is **not** included in the result; only headers are returned.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
      * 
@@ -7188,7 +7188,7 @@ interface InterfaceApiPut {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
      * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
      *
@@ -7202,18 +7202,18 @@ interface InterfaceApiPut {
      * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
      * It is useful for checking which HTTP methods are permitted for a specific endpoint.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PUT", "OPTIONS"]`).
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
      * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
      * 
@@ -7228,7 +7228,7 @@ interface InterfaceApiPut {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
      * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
      *
@@ -7242,21 +7242,21 @@ interface InterfaceApiPut {
      * This method allows attaching a callback function to be executed when a specified event 
      * occurs during the execution of a PUT request.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `eventName` *(string, required)* - The name of the event to listen for.
      * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
      *
-     * ## **Supported Events**
+     * ### **Supported Events**
      * - `"requestStarted_PUT"` - Triggered when a PUT request begins.
      * - `"requestCompleted_Response"` - Triggered when the API response is received.
      * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
      * - `"requestError"` - Triggered when an error occurs during the request.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PUT"` as the method type.
      * - The provided `eventFunc` is executed whenever the specified event is emitted.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
      * 
@@ -7271,7 +7271,7 @@ interface InterfaceApiPut {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a PUT request, triggering events during execution.
      *
      * @param {string} eventName - The name of the event to listen for.
@@ -7285,20 +7285,20 @@ interface InterfaceApiPut {
  * The `ApiPatch` class is responsible for sending HTTP PATCH requests to a specified service command.
  * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP PATCH requests** using `ApiLink`.
  * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
  * - **Supports response caching** via an optional `CachingModule`.
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiPatch` requires a `serviceCmd` that specifies the business logic endpoint.
  * - The `call()` method sends a PATCH request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiPatch
  * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
@@ -7322,15 +7322,15 @@ interface InterfaceApiPut {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiPatch`, providing methods for executing PATCH requests and managing request events.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to a REST API** with structured payloads.
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -7342,30 +7342,30 @@ interface InterfaceApiPatch {
      * This method sends a PATCH request using `ApiLink`, encapsulating request data in a `DataWrapper`
      * and invoking necessary pre-request hooks and event emissions.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `requestData` *(any, required)* - The data to be sent in the request.
      *   - If it is a `DataWrapper`, it is sent as-is.
      *   - If it is a standard object, it is converted to a JSON payload.
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Pre-Request Handling**
+     * ### **Pre-Request Handling**
      * - **`hison.setBeforePatchRequst((requestData, options) => {})`**
      *   - A customizable hook executed **before sending the PATCH request**.
      *   - If it returns `false`, the request is **prevented from execution**.
      *   - **Use Case:** Validating request parameters, modifying request data dynamically.
      *
-     * ## **Event Emission**
+     * ### **Event Emission**
      * - **`"requestStarted_PATCH"` Event**
      *   - This event is emitted **before the PATCH request is executed**.
      *   - Can be used for logging, request tracking, or debugging.
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing:
      *   - `data` *(any)* - The API response data.
      *   - `response` *(Response)* - The original HTTP response object.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
      * - If the data is not cached, it makes an HTTP PATCH request to `_serviceCmd`.
      * - Before executing the request:
@@ -7373,7 +7373,7 @@ interface InterfaceApiPatch {
      *   - The **event `"requestStarted_PATCH"`** is emitted.
      * - Once the request is completed, the response is returned and optionally stored in the cache.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
      * 
@@ -7398,7 +7398,7 @@ interface InterfaceApiPatch {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
      * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
      *
@@ -7413,18 +7413,18 @@ interface InterfaceApiPatch {
      * This method retrieves only the headers from the API without downloading the response body.
      * It is useful for checking metadata such as content type, content length, and caching information.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
      * - The response body is **not** included in the result; only headers are returned.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
      * 
@@ -7439,7 +7439,7 @@ interface InterfaceApiPatch {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
      * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
      *
@@ -7453,18 +7453,18 @@ interface InterfaceApiPatch {
      * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
      * It is useful for checking which HTTP methods are permitted for a specific endpoint.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
      *   - **Default:** `{}` (empty object)
      *
-     * ## **Return Value**
+     * ### **Return Value**
      * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PATCH", "OPTIONS"]`).
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
      * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
      * 
@@ -7479,7 +7479,7 @@ interface InterfaceApiPatch {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
      * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
      *
@@ -7493,21 +7493,21 @@ interface InterfaceApiPatch {
      * This method allows attaching a callback function to be executed when a specified event 
      * occurs during the execution of a PATCH request.
      *
-     * ## **Parameters**
+     * ### **Parameters**
      * - `eventName` *(string, required)* - The name of the event to listen for.
      * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
      *
-     * ## **Supported Events**
+     * ### **Supported Events**
      * - `"requestStarted_PATCH"` - Triggered when a PATCH request begins.
      * - `"requestCompleted_Response"` - Triggered when the API response is received.
      * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
      * - `"requestError"` - Triggered when an error occurs during the request.
      *
-     * ## **Behavior**
+     * ### **Behavior**
      * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PATCH"` as the method type.
      * - The provided `eventFunc` is executed whenever the specified event is emitted.
      *
-     * ## **Example Usage**
+     * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
      * 
@@ -7522,7 +7522,7 @@ interface InterfaceApiPatch {
      * });
      * ```
      *
-     * ## **Related Methods**
+     * ### **Related Methods**
      * - **`call(requestData, options)`** - Sends a PATCH request, triggering events during execution.
      *
      * @param {string} eventName - The name of the event to listen for.
@@ -7536,20 +7536,20 @@ interface InterfaceApiPatch {
  * The `ApiDelete` class is responsible for sending HTTP DELETE requests to a specified service command.
  * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP DELETE requests** using `ApiLink`.
  * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
  * - **Supports response caching** via an optional `CachingModule`.
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiDelete` requires a `serviceCmd` that specifies the business logic endpoint.
  * - The `call()` method sends a DELETE request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiDelete
  * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
@@ -7573,15 +7573,15 @@ interface InterfaceApiPatch {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiDelete`, providing methods for executing DELETE requests and managing request events.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to a REST API** with structured payloads.
  * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -7593,30 +7593,30 @@ interface InterfaceApiDelete {
     * This method sends a DELETE request using `ApiLink`, encapsulating request data in a `DataWrapper`
     * and invoking necessary pre-request hooks and event emissions.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `requestData` *(any, required)* - The data to be sent in the request.
     *   - If it is a `DataWrapper`, it is sent as-is.
     *   - If it is a standard object, it is converted to a JSON payload.
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Pre-Request Handling**
+    * ### **Pre-Request Handling**
     * - **`hison.setBeforeDeleteRequst((requestData, options) => {})`**
     *   - A customizable hook executed **before sending the DELETE request**.
     *   - If it returns `false`, the request is **prevented from execution**.
     *   - **Use Case:** Validating request parameters, modifying request data dynamically.
     *
-    * ## **Event Emission**
+    * ### **Event Emission**
     * - **`"requestStarted_DELETE"` Event**
     *   - This event is emitted **before the DELETE request is executed**.
     *   - Can be used for logging, request tracking, or debugging.
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing:
     *   - `data` *(any)* - The API response data.
     *   - `response` *(Response)* - The original HTTP response object.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
     * - If the data is not cached, it makes an HTTP DELETE request to `_serviceCmd`.
     * - Before executing the request:
@@ -7624,7 +7624,7 @@ interface InterfaceApiDelete {
     *   - The **event `"requestStarted_DELETE"`** is emitted.
     * - Once the request is completed, the response is returned and optionally stored in the cache.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
     * 
@@ -7649,7 +7649,7 @@ interface InterfaceApiDelete {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
     * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
     *
@@ -7664,18 +7664,18 @@ interface InterfaceApiDelete {
     * This method retrieves only the headers from the API without downloading the response body.
     * It is useful for checking metadata such as content type, content length, and caching information.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
     * - The response body is **not** included in the result; only headers are returned.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
     * 
@@ -7690,7 +7690,7 @@ interface InterfaceApiDelete {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
     * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
     *
@@ -7704,18 +7704,18 @@ interface InterfaceApiDelete {
     * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
     * It is useful for checking which HTTP methods are permitted for a specific endpoint.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "DELETE", "OPTIONS"]`).
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
     * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
     * 
@@ -7730,7 +7730,7 @@ interface InterfaceApiDelete {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
     * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
     *
@@ -7744,21 +7744,21 @@ interface InterfaceApiDelete {
     * This method allows attaching a callback function to be executed when a specified event 
     * occurs during the execution of a DELETE request.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `eventName` *(string, required)* - The name of the event to listen for.
     * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
     *
-    * ## **Supported Events**
+    * ### **Supported Events**
     * - `"requestStarted_DELETE"` - Triggered when a DELETE request begins.
     * - `"requestCompleted_Response"` - Triggered when the API response is received.
     * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
     * - `"requestError"` - Triggered when an error occurs during the request.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"DELETE"` as the method type.
     * - The provided `eventFunc` is executed whenever the specified event is emitted.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
     * 
@@ -7773,7 +7773,7 @@ interface InterfaceApiDelete {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a DELETE request, triggering events during execution.
     *
     * @param {string} eventName - The name of the event to listen for.
@@ -7787,20 +7787,20 @@ interface InterfaceApiDelete {
  * The `ApiGetUrl` class is responsible for sending HTTP GET requests to a provided URL.
  * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP GET requests** using `ApiLink`.
  * - **Accepts a direct URL** instead of using a predefined API resource path.
  * - **Supports response caching** via an optional `CachingModule`.
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiGetUrl` requires a valid URL.
  * - The `call()` method triggers a GET request to the specified URL.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiGetUrl without caching
  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
@@ -7820,15 +7820,15 @@ interface InterfaceApiDelete {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiGetUrl`, which provides methods for executing GET requests to a specific URL.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Fetching data from an external API** by specifying a full URL.
  * - **Using cached responses** to reduce redundant API calls.
  * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -7840,33 +7840,33 @@ interface InterfaceApiGetUrl {
     * This method sends a GET request using `ApiLink.getURL()`, optionally applying caching if a `CachingModule` is provided.
     * It also **emits a request-start event** (`"requestStarted_GET"`) before execution.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or query parameters.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Pre-Request Handling**
+    * ### **Pre-Request Handling**
     * - **`"requestStarted_GET"` Event**
     *   - This event is emitted **before the GET request is executed**.
     *   - Can be used for logging, request tracking, or debugging.
     *
-    * ## **Caching Mechanism**
+    * ### **Caching Mechanism**
     * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
     * - If cached data is found, it is returned **without making a new network request**.
     * - If no cached data exists, a new GET request is executed, and the response may be stored in the cache.
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing:
     *   - `data` *(any)* - The API response data.
     *   - `response` *(Response)* - The original HTTP response object.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.getURL(this._url, options)`, which:
     *   - Emits `"requestStarted_GET"` before making the request.
     *   - Checks if the requested data is cached and returns it if available.
     *   - If not cached, makes an HTTP GET request to `_url`.
     *   - Returns the response and optionally stores it in the cache.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
     * 
@@ -7881,7 +7881,7 @@ interface InterfaceApiGetUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
     * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
     *
@@ -7895,20 +7895,20 @@ interface InterfaceApiGetUrl {
     * This method retrieves only the headers from the specified URL without downloading the response body.
     * It is useful for checking metadata such as content type, content length, and caching information.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.head(this._url, options)`, which:
     *   - Sends an HTTP HEAD request to `_url`.
     *   - Extracts and returns the response headers.
     *   - Does **not** include the response body.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
     * 
@@ -7923,7 +7923,7 @@ interface InterfaceApiGetUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(options)`** - Sends a GET request to retrieve full response data.
     * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
     *
@@ -7938,20 +7938,20 @@ interface InterfaceApiGetUrl {
     * without performing an actual data operation. It is useful for checking which 
     * HTTP methods are permitted for a specific endpoint.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.options(this._url, options)`, which:
     *   - Sends an HTTP OPTIONS request to `_url`.
     *   - Extracts the `Allow` header from the response.
     *   - Parses and returns the list of permitted HTTP methods.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
     * 
@@ -7966,7 +7966,7 @@ interface InterfaceApiGetUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(options)`** - Sends a GET request to retrieve full response data.
     * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
     *
@@ -7980,21 +7980,21 @@ interface InterfaceApiGetUrl {
     * This method allows attaching a callback function to be executed when a specified event 
     * occurs during the execution of a GET request to a specified URL.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `eventName` *(string, required)* - The name of the event to listen for.
     * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
     *
-    * ## **Supported Events**
+    * ### **Supported Events**
     * - `"requestStarted_GET"` - Triggered when a GET request begins.
     * - `"requestCompleted_Response"` - Triggered when the API response is received.
     * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
     * - `"requestError"` - Triggered when an error occurs during the request.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"GET"` as the method type.
     * - The provided `eventFunc` is executed whenever the specified event is emitted.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
     * 
@@ -8009,7 +8009,7 @@ interface InterfaceApiGetUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(options)`** - Sends a GET request, triggering events during execution.
     *
     * @param {string} eventName - The name of the event to listen for.
@@ -8023,7 +8023,7 @@ interface InterfaceApiGetUrl {
  * The `ApiPostUrl` class is responsible for sending HTTP POST requests to a provided URL.
  * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP POST requests** using `ApiLink`.
  * - **Accepts a direct URL** instead of using a predefined service command.
  * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -8031,13 +8031,13 @@ interface InterfaceApiGetUrl {
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiPostUrl` requires a valid URL and an optional `serviceCmd`.
  * - The `call()` method sends a POST request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiPostUrl
  * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
@@ -8061,15 +8061,15 @@ interface InterfaceApiGetUrl {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiPostUrl`, which provides methods for executing POST requests to a specific URL.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to an external API** using a full URL.
  * - **Passing a `serviceCmd` for structured request routing**.
  * - **Using cached responses** to reduce redundant API calls.
@@ -8082,37 +8082,37 @@ interface InterfaceApiPostUrl {
     * This method sends a POST request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
     * and invoking necessary pre-request hooks and event emissions.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `requestData` *(any, required)* - The data to be sent in the request.
     *   - If it is a `DataWrapper`, it is sent as-is.
     *   - If it is a standard object, it is converted to a JSON payload.
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Pre-Request Handling**
+    * ### **Pre-Request Handling**
     * - **`"requestStarted_POST"` Event**
     *   - This event is emitted **before the POST request is executed**.
     *   - It includes the `serviceCmd`, request options, and request data.
     *   - Can be used for logging, request tracking, or debugging.
     *
-    * ## **Caching Mechanism**
+    * ### **Caching Mechanism**
     * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
     * - If cached data is found, it is returned **without making a new network request**.
     * - If no cached data exists, a new POST request is executed, and the response may be stored in the cache.
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing:
     *   - `data` *(any)* - The API response data.
     *   - `response` *(Response)* - The original HTTP response object.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
     *   - Emits `"requestStarted_POST"` before making the request.
     *   - Checks if the requested data is cached and returns it if available.
     *   - If not cached, makes an HTTP POST request to `_url` with the provided `serviceCmd`.
     *   - Returns the response and optionally stores it in the cache.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8131,7 +8131,7 @@ interface InterfaceApiPostUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
     * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
     *
@@ -8146,20 +8146,20 @@ interface InterfaceApiPostUrl {
     * This method retrieves only the headers from the specified URL without downloading the response body.
     * It is useful for checking metadata such as content type, content length, and caching information.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.headURL(this._url, options)`, which:
     *   - Sends an HTTP HEAD request to `_url`.
     *   - Extracts and returns the response headers.
     *   - Does **not** include the response body.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8174,7 +8174,7 @@ interface InterfaceApiPostUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
     * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
     *
@@ -8189,20 +8189,20 @@ interface InterfaceApiPostUrl {
     * without performing an actual data operation. It is useful for checking which 
     * HTTP methods are permitted for a specific endpoint.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.options(this._url, options)`, which:
     *   - Sends an HTTP OPTIONS request to `_url`.
     *   - Extracts the `Allow` header from the response.
     *   - Parses and returns the list of permitted HTTP methods.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8217,7 +8217,7 @@ interface InterfaceApiPostUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
     * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
     *
@@ -8231,21 +8231,21 @@ interface InterfaceApiPostUrl {
     * This method allows attaching a callback function to be executed when a specified event 
     * occurs during the execution of a POST request to a specified URL.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `eventName` *(string, required)* - The name of the event to listen for.
     * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
     *
-    * ## **Supported Events**
+    * ### **Supported Events**
     * - `"requestStarted_POST"` - Triggered when a POST request begins.
     * - `"requestCompleted_Response"` - Triggered when the API response is received.
     * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
     * - `"requestError"` - Triggered when an error occurs during the request.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"POST"` as the method type.
     * - The provided `eventFunc` is executed whenever the specified event is emitted.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8260,7 +8260,7 @@ interface InterfaceApiPostUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a POST request, triggering events during execution.
     *
     * @param {string} eventName - The name of the event to listen for.
@@ -8274,7 +8274,7 @@ interface InterfaceApiPostUrl {
  * The `ApiPutUrl` class is responsible for sending HTTP PUT requests to a provided URL.
  * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP PUT requests** using `ApiLink`.
  * - **Accepts a direct URL** instead of using a predefined service command.
  * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -8282,13 +8282,13 @@ interface InterfaceApiPostUrl {
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiPutUrl` requires a valid URL and an optional `serviceCmd`.
  * - The `call()` method sends a PUT request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiPutUrl
  * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
@@ -8312,15 +8312,15 @@ interface InterfaceApiPostUrl {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiPutUrl`, which provides methods for executing PUT requests to a specific URL.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to an external API** using a full URL.
  * - **Passing a `serviceCmd` for structured request routing**.
  * - **Using cached responses** to reduce redundant API calls.
@@ -8333,37 +8333,37 @@ interface InterfaceApiPutUrl {
     * This method sends a PUT request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
     * and invoking necessary pre-request hooks and event emissions.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `requestData` *(any, required)* - The data to be sent in the request.
     *   - If it is a `DataWrapper`, it is sent as-is.
     *   - If it is a standard object, it is converted to a JSON payload.
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Pre-Request Handling**
+    * ### **Pre-Request Handling**
     * - **`"requestStarted_PUT"` Event**
     *   - This event is emitted **before the PUT request is executed**.
     *   - It includes the `serviceCmd`, request options, and request data.
     *   - Can be used for logging, request tracking, or debugging.
     *
-    * ## **Caching Mechanism**
+    * ### **Caching Mechanism**
     * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
     * - If cached data is found, it is returned **without making a new network request**.
     * - If no cached data exists, a new PUT request is executed, and the response may be stored in the cache.
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing:
     *   - `data` *(any)* - The API response data.
     *   - `response` *(Response)* - The original HTTP response object.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
     *   - Emits `"requestStarted_PUT"` before making the request.
     *   - Checks if the requested data is cached and returns it if available.
     *   - If not cached, makes an HTTP PUT request to `_url` with the provided `serviceCmd`.
     *   - Returns the response and optionally stores it in the cache.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8382,7 +8382,7 @@ interface InterfaceApiPutUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
     * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
     *
@@ -8397,20 +8397,20 @@ interface InterfaceApiPutUrl {
     * This method retrieves only the headers from the specified URL without downloading the response body.
     * It is useful for checking metadata such as content type, content length, and caching information.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.headURL(this._url, options)`, which:
     *   - Sends an HTTP HEAD request to `_url`.
     *   - Extracts and returns the response headers.
     *   - Does **not** include the response body.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8425,7 +8425,7 @@ interface InterfaceApiPutUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
     * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
     *
@@ -8440,20 +8440,20 @@ interface InterfaceApiPutUrl {
     * without performing an actual data operation. It is useful for checking which 
     * HTTP methods are permitted for a specific endpoint.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PUT", "OPTIONS"]`).
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.options(this._url, options)`, which:
     *   - Sends an HTTP OPTIONS request to `_url`.
     *   - Extracts the `Allow` header from the response.
     *   - Parses and returns the list of permitted HTTP methods.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8468,7 +8468,7 @@ interface InterfaceApiPutUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
     * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
     *
@@ -8482,21 +8482,21 @@ interface InterfaceApiPutUrl {
     * This method allows attaching a callback function to be executed when a specified event 
     * occurs during the execution of a PUT request to a specified URL.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `eventName` *(string, required)* - The name of the event to listen for.
     * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
     *
-    * ## **Supported Events**
+    * ### **Supported Events**
     * - `"requestStarted_PUT"` - Triggered when a PUT request begins.
     * - `"requestCompleted_Response"` - Triggered when the API response is received.
     * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
     * - `"requestError"` - Triggered when an error occurs during the request.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PUT"` as the method type.
     * - The provided `eventFunc` is executed whenever the specified event is emitted.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8511,7 +8511,7 @@ interface InterfaceApiPutUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a PUT request, triggering events during execution.
     *
     * @param {string} eventName - The name of the event to listen for.
@@ -8525,7 +8525,7 @@ interface InterfaceApiPutUrl {
  * The `ApiPatchUrl` class is responsible for sending HTTP PATCH requests to a provided URL.
  * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP PATCH requests** using `ApiLink`.
  * - **Accepts a direct URL** instead of using a predefined service command.
  * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -8533,13 +8533,13 @@ interface InterfaceApiPutUrl {
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiPatchUrl` requires a valid URL and an optional `serviceCmd`.
  * - The `call()` method sends a PATCH request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiPatchUrl
  * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
@@ -8563,15 +8563,15 @@ interface InterfaceApiPutUrl {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiPatchUrl`, which provides methods for executing PATCH requests to a specific URL.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to an external API** using a full URL.
  * - **Passing a `serviceCmd` for structured request routing**.
  * - **Using cached responses** to reduce redundant API calls.
@@ -8584,37 +8584,37 @@ interface InterfaceApiPatchUrl {
     * This method sends a PATCH request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
     * and invoking necessary pre-request hooks and event emissions.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `requestData` *(any, required)* - The data to be sent in the request.
     *   - If it is a `DataWrapper`, it is sent as-is.
     *   - If it is a standard object, it is converted to a JSON payload.
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Pre-Request Handling**
+    * ### **Pre-Request Handling**
     * - **`"requestStarted_PATCH"` Event**
     *   - This event is emitted **before the PATCH request is executed**.
     *   - It includes the `serviceCmd`, request options, and request data.
     *   - Can be used for logging, request tracking, or debugging.
     *
-    * ## **Caching Mechanism**
+    * ### **Caching Mechanism**
     * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
     * - If cached data is found, it is returned **without making a new network request**.
     * - If no cached data exists, a new PATCH request is executed, and the response may be stored in the cache.
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing:
     *   - `data` *(any)* - The API response data.
     *   - `response` *(Response)* - The original HTTP response object.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
     *   - Emits `"requestStarted_PATCH"` before making the request.
     *   - Checks if the requested data is cached and returns it if available.
     *   - If not cached, makes an HTTP PATCH request to `_url` with the provided `serviceCmd`.
     *   - Returns the response and optionally stores it in the cache.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8633,7 +8633,7 @@ interface InterfaceApiPatchUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
     * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
     *
@@ -8648,20 +8648,20 @@ interface InterfaceApiPatchUrl {
     * This method retrieves only the headers from the specified URL without downloading the response body.
     * It is useful for checking metadata such as content type, content length, and caching information.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.headURL(this._url, options)`, which:
     *   - Sends an HTTP HEAD request to `_url`.
     *   - Extracts and returns the response headers.
     *   - Does **not** include the response body.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8676,7 +8676,7 @@ interface InterfaceApiPatchUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
     * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
     *
@@ -8691,20 +8691,20 @@ interface InterfaceApiPatchUrl {
     * without performing an actual data operation. It is useful for checking which 
     * HTTP methods are permitted for a specific endpoint.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PATCH", "OPTIONS"]`).
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.options(this._url, options)`, which:
     *   - Sends an HTTP OPTIONS request to `_url`.
     *   - Extracts the `Allow` header from the response.
     *   - Parses and returns the list of permitted HTTP methods.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8719,7 +8719,7 @@ interface InterfaceApiPatchUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
     * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
     *
@@ -8733,21 +8733,21 @@ interface InterfaceApiPatchUrl {
     * This method allows attaching a callback function to be executed when a specified event 
     * occurs during the execution of a PATCH request to a specified URL.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `eventName` *(string, required)* - The name of the event to listen for.
     * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
     *
-    * ## **Supported Events**
+    * ### **Supported Events**
     * - `"requestStarted_PATCH"` - Triggered when a PATCH request begins.
     * - `"requestCompleted_Response"` - Triggered when the API response is received.
     * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
     * - `"requestError"` - Triggered when an error occurs during the request.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PATCH"` as the method type.
     * - The provided `eventFunc` is executed whenever the specified event is emitted.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8762,7 +8762,7 @@ interface InterfaceApiPatchUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a PATCH request, triggering events during execution.
     *
     * @param {string} eventName - The name of the event to listen for.
@@ -8776,7 +8776,7 @@ interface InterfaceApiPatchUrl {
  * The `ApiDeleteUrl` class is responsible for sending HTTP DELETE requests to a provided URL.
  * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
  *
- * ## **Key Features**
+ * ### **Key Features**
  * - **Executes HTTP DELETE requests** using `ApiLink`.
  * - **Accepts a direct URL** instead of using a predefined service command.
  * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -8784,13 +8784,13 @@ interface InterfaceApiPatchUrl {
  * - **Emits request lifecycle events** using `EventEmitter`.
  * - **Allows event listeners** for monitoring request execution.
  *
- * ## **How It Works**
+ * ### **How It Works**
  * - When instantiated, `ApiDeleteUrl` requires a valid URL and an optional `serviceCmd`.
  * - The `call()` method sends a DELETE request with the provided request data.
  * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
- * ## **Example Usage**
+ * ### **Example Usage**
  * ```typescript
  * // Creating an instance of ApiDeleteUrl
  * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
@@ -8814,15 +8814,15 @@ interface InterfaceApiPatchUrl {
  * });
  * ```
  *
- * ## **Internal Components**
+ * ### **Internal Components**
  * - **`ApiLink`**: Handles request execution and response processing.
  * - **`EventEmitter`**: Manages event-driven request handling.
  * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
  *
- * ## **Return Value**
+ * ### **Return Value**
  * - This class returns an instance of `ApiDeleteUrl`, which provides methods for executing DELETE requests to a specific URL.
  *
- * ## **Typical Use Cases**
+ * ### **Typical Use Cases**
  * - **Sending data to an external API** using a full URL.
  * - **Passing a `serviceCmd` for structured request routing**.
  * - **Using cached responses** to reduce redundant API calls.
@@ -8835,37 +8835,37 @@ interface InterfaceApiDeleteUrl {
     * This method sends a DELETE request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
     * and invoking necessary pre-request hooks and event emissions.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `requestData` *(any, required)* - The data to be sent in the request.
     *   - If it is a `DataWrapper`, it is sent as-is.
     *   - If it is a standard object, it is converted to a JSON payload.
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Pre-Request Handling**
+    * ### **Pre-Request Handling**
     * - **`"requestStarted_DELETE"` Event**
     *   - This event is emitted **before the DELETE request is executed**.
     *   - It includes the `serviceCmd`, request options, and request data.
     *   - Can be used for logging, request tracking, or debugging.
     *
-    * ## **Caching Mechanism**
+    * ### **Caching Mechanism**
     * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
     * - If cached data is found, it is returned **without making a new network request**.
     * - If no cached data exists, a new DELETE request is executed, and the response may be stored in the cache.
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing:
     *   - `data` *(any)* - The API response data.
     *   - `response` *(Response)* - The original HTTP response object.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
     *   - Emits `"requestStarted_DELETE"` before making the request.
     *   - Checks if the requested data is cached and returns it if available.
     *   - If not cached, makes an HTTP DELETE request to `_url` with the provided `serviceCmd`.
     *   - Returns the response and optionally stores it in the cache.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8884,7 +8884,7 @@ interface InterfaceApiDeleteUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
     * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
     *
@@ -8899,20 +8899,20 @@ interface InterfaceApiDeleteUrl {
     * This method retrieves only the headers from the specified URL without downloading the response body.
     * It is useful for checking metadata such as content type, content length, and caching information.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.headURL(this._url, options)`, which:
     *   - Sends an HTTP HEAD request to `_url`.
     *   - Extracts and returns the response headers.
     *   - Does **not** include the response body.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8927,7 +8927,7 @@ interface InterfaceApiDeleteUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
     * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
     *
@@ -8942,20 +8942,20 @@ interface InterfaceApiDeleteUrl {
     * without performing an actual data operation. It is useful for checking which 
     * HTTP methods are permitted for a specific endpoint.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
     *   - **Default:** `{}` (empty object)
     *
-    * ## **Return Value**
+    * ### **Return Value**
     * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "DELETE", "OPTIONS"]`).
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Calls `this._apiLink.options(this._url, options)`, which:
     *   - Sends an HTTP OPTIONS request to `_url`.
     *   - Extracts the `Allow` header from the response.
     *   - Parses and returns the list of permitted HTTP methods.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -8970,7 +8970,7 @@ interface InterfaceApiDeleteUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
     * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
     *
@@ -8984,21 +8984,21 @@ interface InterfaceApiDeleteUrl {
     * This method allows attaching a callback function to be executed when a specified event 
     * occurs during the execution of a DELETE request to a specified URL.
     *
-    * ## **Parameters**
+    * ### **Parameters**
     * - `eventName` *(string, required)* - The name of the event to listen for.
     * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
     *
-    * ## **Supported Events**
+    * ### **Supported Events**
     * - `"requestStarted_DELETE"` - Triggered when a DELETE request begins.
     * - `"requestCompleted_Response"` - Triggered when the API response is received.
     * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
     * - `"requestError"` - Triggered when an error occurs during the request.
     *
-    * ## **Behavior**
+    * ### **Behavior**
     * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"DELETE"` as the method type.
     * - The provided `eventFunc` is executed whenever the specified event is emitted.
     *
-    * ## **Example Usage**
+    * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
     * 
@@ -9013,7 +9013,7 @@ interface InterfaceApiDeleteUrl {
     * });
     * ```
     *
-    * ## **Related Methods**
+    * ### **Related Methods**
     * - **`call(requestData, options)`** - Sends a DELETE request, triggering events during execution.
     *
     * @param {string} eventName - The name of the event to listen for.
@@ -9025,15 +9025,15 @@ interface InterfaceApiDeleteUrl {
  * Defines a function type for handling API GET requests before they are sent.
  * This allows developers to modify request options or cancel the request.
  *
- * ## Parameters
+ * ### Parameters
  * - `resourcePath` *(optional, string)*: The API endpoint URL for the GET request.
  * - `options` *(optional, Record<string, any>)*: Additional request options, such as headers or timeout settings.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to prevent the GET request from being executed.
  * - Returns `void` or `true` to proceed with the request.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setBeforeGetRequst((resourcePath, options) => {
  *     console.log("Preparing GET request to:", resourcePath);
@@ -9047,15 +9047,15 @@ interface BeforeGetRequst {(resourcePath?: string, options?: Record<string, any>
  * Defines a function type for handling API POST requests before they are sent.
  * This allows modifying request data, headers, or preventing the request.
  *
- * ## Parameters
+ * ### Parameters
  * - `requestDw` *(optional, DataWrapper)*: The request payload wrapped in `DataWrapper`.
  * - `options` *(optional, Record<string, any>)*: Additional request options.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to cancel the POST request.
  * - Returns `void` or `true` to proceed with the request.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setBeforePostRequst((requestDw, options) => {
  *     requestDw.putString("timestamp", Date.now().toString());
@@ -9068,15 +9068,15 @@ interface BeforePostRequst {(requestDw?: InterfaceDataWrapper, options?: Record<
  * Defines a function type for handling API PUT requests before they are sent.
  * Similar to `BeforePostRequst`, this allows modifying request payload or settings.
  *
- * ## Parameters
+ * ### Parameters
  * - `requestDw` *(optional, DataWrapper)*: The request payload.
  * - `options` *(optional, Record<string, any>)*: Additional request options.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to cancel the PUT request.
  * - Returns `void` or `true` to proceed.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setBeforePutRequst((requestDw, options) => {
  *     requestDw.putString("modified", "true");
@@ -9088,15 +9088,15 @@ interface BeforePutRequst {(requestDw?: InterfaceDataWrapper, options?: Record<s
  * Defines a function type for handling API PATCH requests before they are sent.
  * This allows modifying partial update data before execution.
  *
- * ## Parameters
+ * ### Parameters
  * - `requestDw` *(optional, DataWrapper)*: The partial update payload.
  * - `options` *(optional, Record<string, any>)*: Additional request options.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to cancel the PATCH request.
  * - Returns `void` or `true` to proceed.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setBeforePatchRequst((requestDw, options) => {
  *     requestDw.putString("lastUpdated", new Date().toISOString());
@@ -9108,15 +9108,15 @@ interface BeforePatchRequst {(requestDw?: InterfaceDataWrapper, options?: Record
  * Defines a function type for handling API DELETE requests before they are sent.
  * This allows validating or modifying delete operations before execution.
  *
- * ## Parameters
+ * ### Parameters
  * - `requestDw` *(optional, DataWrapper)*: The delete request payload.
  * - `options` *(optional, Record<string, any>)*: Additional request options.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to cancel the DELETE request.
  * - Returns `void` or `true` to proceed.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setBeforeDeleteRequst((requestDw, options) => {
  *     if (!requestDw.hasKey("id")) return false;
@@ -9128,15 +9128,15 @@ interface BeforeDeleteRequst {(requestDw?: InterfaceDataWrapper, options?: Recor
  * Defines a function type for intercepting API response results.
  * This allows modifying API responses before they are returned to the caller.
  *
- * ## Parameters
+ * ### Parameters
  * - `result` *(DataWrapper | undefined)*: The API response data wrapped in `DataWrapper`.
  * - `response` *(Response)*: The original HTTP response object.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to prevent the response from being processed further.
  * - Returns `void` or `true` to allow normal response handling.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setInterceptApiResult((result, response) => {
  *     console.log("Received API result:", result);
@@ -9149,14 +9149,14 @@ interface InterceptApiResult {(result: InterfaceDataWrapper | undefined, respons
  * Defines a function type for handling API errors before they are propagated.
  * This allows logging or modifying error responses before they are thrown.
  *
- * ## Parameters
+ * ### Parameters
  * - `error` *(any)*: The error object thrown by the API request.
  *
- * ## Return Value
+ * ### Return Value
  * - Returns `false` to suppress the error.
  * - Returns `void` or `true` to propagate the error as normal.
  *
- * ## Example Usage
+ * ### Example Usage
  * ```typescript
  * hison.setInterceptApiError((error) => {
  *     console.error("API error occurred:", error);
@@ -9171,7 +9171,7 @@ interface InterceptApiError {(error: any): boolean | void;};
 /**
  * Creates and returns an instance of `Hison`, the core object of the `hisondev` solution.
  * 
- * ## **Overview**
+ * ### **Overview**
  * The `createHison()` function **encapsulates the creation of the `Hison` object** using a **closure pattern**.
  * This ensures that:
  * - **Internal states remain private** while exposing necessary functionalities.
@@ -9182,13 +9182,13 @@ interface InterceptApiError {(error: any): boolean | void;};
  * structured data handling, and API communication.
  * 
  * ---
- * ## **Encapsulation with Closure**
+ * ### **Encapsulation with Closure**
  * - Internally, `createHison()` initializes a **`HisonCore` object**, which holds the actual implementations.
  * - The **returned object only exposes a selected set of methods**, ensuring safe interaction.
  * - This design provides **data encapsulation** and **prevents unintended modifications**.
  * 
  * ---
- * ## **Core Functionalities of `Hison`**
+ * ### **Core Functionalities of `Hison`**
  * 
  * The `Hison` object provides a **modular and extensible API** with the following key components:
  * 
@@ -9260,13 +9260,13 @@ interface InterceptApiError {(error: any): boolean | void;};
  * ```
  *
  * ---
- * ## **Encapsulation Benefits**
+ * ### **Encapsulation Benefits**
  * - **Prevents direct access to internal states**.
  * - **Ensures safe API exposure** while protecting core logic.
  * - **Maintains clean separation between implementation and interface**.
  *
  * ---
- * ## **Summary**
+ * ### **Summary**
  * The `createHison()` function returns an instance of `Hison`, a **comprehensive framework** for managing:
  * - Configuration settings
  * - Security controls
@@ -9518,7 +9518,7 @@ function createHison(): Hison {
              * - Developers can override this function to implement custom conversion logic.
              * - Used in `DataModel._deepCopy(object)`, where it is applied to non-plain objects.
              *
-             * ## Usage in `DataModel`
+             * ### Usage in `DataModel`
              * When copying an object, if it is not a plain `Object` or `Array`, `convertValue` is called:
              * ```typescript
              * if (object.constructor !== Object && object.constructor !== Array) {
@@ -9527,7 +9527,7 @@ function createHison(): Hison {
              * }
              * ```
              *
-             * ## Example: Customizing `convertValue` to Handle `Date` Objects
+             * ### Example: Customizing `convertValue` to Handle `Date` Objects
              * ```typescript
              * hison.setConvertValue((value: any) => {
              *     return value instanceof Date ? value.getTime() : value;
@@ -12303,7 +12303,7 @@ function createHison(): Hison {
              * It utilizes configuration settings from `customOption.shield` to determine the applied security policies.
              *
              * ---
-             * ## Security Features & Execution Flow
+             * ### Security Features & Execution Flow
              *
              * ### 1. **Validation of `hison` Parameter**
              * - If `hison` is not provided, an error is thrown:  
@@ -12339,7 +12339,7 @@ function createHison(): Hison {
              *   - Displays a warning message and prevents further execution if dev tools are detected.
              *
              * ---
-             * ## Related Methods
+             * ### Related Methods
              * - `hison.setShieldURL(url: string)`
              * - `hison.setExposeIpList(ipList: string[])`
              * - `hison.setIsFreeze(state: boolean)`
@@ -12447,7 +12447,7 @@ function createHison(): Hison {
              * within the `hisondev` solution. It allows storing various data types,
              * including string value and `DataModel` instances.
              *
-             * ## Core Features:
+             * ### Core Features:
              * - **Key-Value Storage:**
              *   - Supports dynamic insertion and retrieval of key-value pairs.
              *   - Ensures that keys are always strings.
@@ -12461,11 +12461,11 @@ function createHison(): Hison {
              *   - Ensures type safety for values stored in `DataWrapper`.
              *   - Throws errors when attempting to insert invalid types.
              *
-             * ## Data Integrity & Deep Copying:
+             * ### Data Integrity & Deep Copying:
              * - Uses `hison.utils.deepCopyObject()` to ensure stored objects are immutable.
              * - Prevents unintended modifications by returning cloned values.
              *
-             * ## Example Usage:
+             * ### Example Usage:
              * ```typescript
              * // Creating a DataWrapper with key-value pairs
              * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
@@ -12485,7 +12485,7 @@ function createHison(): Hison {
                  * Creates an instance of `DataWrapper`, which serves as a key-value storage container.
                  * It allows storing primitive values and `DataModel` instances with flexible key-value mappings.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `keyOrObject` **(Record<string, InterfaceDataModel<any> | string> | string, optional)**: 
                  *   This parameter can be:
                  *   - An **object** where each key is mapped to either a `DataModel` instance or a string.
@@ -12493,15 +12493,15 @@ function createHison(): Hison {
                  * - `value` **(`InterfaceDataModel<any> | string`, optional)**: The value associated with 
                  *   the provided key, required only when `keyOrObject` is a string.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - If an **object** is provided, all key-value pairs from the object are stored in the `DataWrapper`.
                  * - If a **string and value** are provided, a single key-value pair is stored.
                  * - If neither condition is met, an error is thrown.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - A new `DataWrapper` instance with the specified key-value pairs stored.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * // Creating a DataWrapper with an object
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
@@ -12560,10 +12560,10 @@ function createHison(): Hison {
                  * Checks whether the current instance is a `DataWrapper`.
                  * This method is primarily used for type verification.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: Returns `true` if the instance is a `DataWrapper`, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ key: "value" });
                  * console.log(dataWrapper.getIsDataWrapper()); // Output: true
@@ -12579,16 +12579,16 @@ function createHison(): Hison {
                  * This method ensures that all stored key-value pairs are fully cloned, 
                  * preventing unintended modifications between the original and copied instances.
                  *
-                 * ## Implementation Details
+                 * ### Implementation Details
                  * - Uses `hison.utils.deepCopyObject()` to recursively copy nested objects and arrays.
                  * - Supports cloning `DataModel` instances stored within the `DataWrapper`.
                  * - Prevents circular references by tracking previously copied objects.
                  * - Ensures that modifications in the cloned instance do not affect the original instance.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataWrapper`**: A new `DataWrapper` instance containing a deep copy of the original data.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
                  * const clonedWrapper = dataWrapper.clone();
@@ -12616,14 +12616,14 @@ function createHison(): Hison {
                 /**
                  * Removes all stored key-value pairs in the `DataWrapper`, resetting it to an empty state.
                  * 
-                 * ## Behavior
+                 * ### Behavior
                  * - Clears the internal storage by setting `_data` to an empty object.
                  * - Returns the same `DataWrapper` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataWrapper`**: The current instance after clearing all stored data.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ key1: "value1", key2: "value2" });
                  * console.log(dataWrapper.size()); // Output: 2
@@ -12642,16 +12642,16 @@ function createHison(): Hison {
                  * Serializes the `DataWrapper` into a JSON string representation.
                  * Converts stored `DataModel` instances into their row data format for proper serialization.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Iterates through all key-value pairs in the `DataWrapper`.
                  * - If a value is a `DataModel`, it is converted to an array of rows using `getRows()`.
                  * - Other values are stored as-is.
                  * - The final object is serialized into a JSON string.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`string`**: A JSON string representation of the `DataWrapper` contents.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
@@ -12683,26 +12683,26 @@ function createHison(): Hison {
                  * Retrieves the value associated with the specified key from the `DataWrapper`.
                  * If the value exists, a deep copy is returned to prevent unintended modifications.
                  *
-                 * ## Generic Type `<T>`
+                 * ### Generic Type `<T>`
                  * - `T` represents the shape of the `DataModel` rows.
                  * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key associated with the value to retrieve.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - If the key exists and contains a `DataModel<T>`, returns a deep copy of the stored `DataModel<T>`.
                  * - If the key exists but is a string, returns the stored string value.
                  * - If the key does not exist, returns `null`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T> | string | null`**: 
                  *   - A deep copy of the `DataModel<T>` if stored under the key.
                  *   - The string value if a string was stored under the key.
                  *   - `null` if the key does not exist.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -12742,18 +12742,18 @@ function createHison(): Hison {
                  * Retrieves the string value associated with the specified key from the `DataWrapper`.
                  * Ensures that the retrieved value is explicitly a string before returning it.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key associated with the string value to retrieve.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - Throws an error if the value associated with `key` is not a string.
                  * - Returns the string value if it exists; otherwise, returns `null`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`string | null`**: The associated string value, or `null` if the key is not found.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ status: "active", count: 5 });
                  * 
@@ -12777,22 +12777,22 @@ function createHison(): Hison {
                  * Retrieves the `DataModel<T>` instance associated with the specified key from the `DataWrapper`.
                  * Ensures that the retrieved value is a valid `DataModel<T>` before returning a cloned copy.
                  *
-                 * ## Generic Type `<T>`
+                 * ### Generic Type `<T>`
                  * - `T` represents the shape of each row in the `DataModel<T>`.
                  * - If `T` is not specified, it defaults to `Record<string, any>`, allowing dynamic structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key associated with the `DataModel<T>` instance to retrieve.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - Throws an error if the value associated with `key` is not a valid `DataModel<T>` instance.
                  * - Returns a deep-cloned copy of the `DataModel<T>` to maintain data integrity.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -12825,19 +12825,19 @@ function createHison(): Hison {
                  * Inserts or updates a key-value pair in the `DataWrapper`.
                  * Allows storing primitive values, strings, and `DataModel` instances.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key under which the value will be stored.
                  * - `value` **(any)**: The value to be stored. Can be a string, number, boolean, `DataModel`, or other valid types.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls the internal `_put()` method to validate and store the value.
                  * - If the key already exists, its value is updated.
                  * - Returns the current `DataWrapper` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataWrapper`**: The current instance after inserting/updating the value.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper();
                  * 
@@ -12863,21 +12863,21 @@ function createHison(): Hison {
                  * Inserts or updates a key-value pair in the `DataWrapper`, ensuring that the value is a string-convertible type.
                  * Only accepts primitive types (`string`, `number`, `boolean`, `bigint`, `symbol`) or `null`.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key under which the value will be stored.
                  * - `value` **(string | number | boolean | bigint | symbol | null)**: The value to be stored, 
                  *   restricted to types that can be converted to a string.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - Throws an error if `value` is not of a valid type.
                  * - Calls the internal `_put()` method to store the value.
                  * - Returns the current `DataWrapper` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataWrapper`**: The current instance after inserting/updating the value.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper();
                  * 
@@ -12915,20 +12915,20 @@ function createHison(): Hison {
                  * Inserts or updates a `DataModel` instance in the `DataWrapper`.
                  * Ensures that the stored value is a valid `DataModel`.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key under which the `DataModel` will be stored.
                  * - `value` **(`DataModel`)**: The `DataModel` instance to be stored.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - Throws an error if `value` is not a valid `DataModel` instance.
                  * - Calls the internal `_put()` method to store the `DataModel`.
                  * - Returns the current `DataWrapper` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataWrapper`**: The current instance after inserting/updating the `DataModel`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper();
                  * 
@@ -12959,16 +12959,16 @@ function createHison(): Hison {
                  * Converts the `DataWrapper` instance into a standard JavaScript object.
                  * If the stored values include `DataModel` instances, they are converted into object representations.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Iterates through all key-value pairs in the `DataWrapper`.
                  * - If a value is a `DataModel`, it is converted using `getObject()`.
                  * - Other values are returned as-is.
                  * - Returns a plain JavaScript object representation of the `DataWrapper`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`Record<string, any>`**: A plain object containing all stored key-value pairs.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
@@ -12993,17 +12993,17 @@ function createHison(): Hison {
                 /**
                  * Checks whether the `DataWrapper` contains a specified key.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key to check for existence in the `DataWrapper`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - Uses `hasOwnProperty()` to determine if the key exists in the stored data.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if the key exists, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
                  * 
@@ -13022,13 +13022,13 @@ function createHison(): Hison {
                 /**
                  * Checks whether the `DataWrapper` is empty (i.e., contains no key-value pairs).
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Determines emptiness by checking if the number of stored keys is `0`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if the `DataWrapper` contains no data, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper();
                  * console.log(dataWrapper.isEmpty()); // Output: true
@@ -13045,22 +13045,22 @@ function createHison(): Hison {
                 /**
                  * Removes a key-value pair from the `DataWrapper` if the key exists and returns the removed value.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `key` **(string)**: The key to be removed from the `DataWrapper`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `key` is not a string.
                  * - Checks if the key exists using `hasOwnProperty()`.
                  * - If the key exists, retrieves the associated value and deletes the key.
                  * - Returns the removed value, which can be either a `DataModel` or a `string`.
                  * - If the key does not exist, returns `null`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T> | string | null`**:
                  *   - The removed value if the key existed.
                  *   - `null` if the key was not found in the `DataWrapper`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
                  * 
@@ -13090,13 +13090,13 @@ function createHison(): Hison {
                 /**
                  * Returns the number of key-value pairs stored in the `DataWrapper`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Counts the number of keys present in the internal data storage.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`number`**: The total number of stored key-value pairs.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
                  * console.log(dataWrapper.size()); // Output: 2
@@ -13113,14 +13113,14 @@ function createHison(): Hison {
                 /**
                  * Retrieves an array of all keys stored in the `DataWrapper`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Returns a list of all keys currently stored in the `DataWrapper`.
                  * - If the `DataWrapper` is empty, returns an empty array.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`string[]`**: An array containing all stored keys.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
                  * console.log(dataWrapper.keys()); // Output: ["name", "age"]
@@ -13138,15 +13138,15 @@ function createHison(): Hison {
                  * Retrieves an array of all values stored in the `DataWrapper`.
                  * Ensures that stored values are returned as deep copies to prevent unintended modifications.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Iterates through all key-value pairs in the `DataWrapper`.
                  * - Uses `hison.utils.deepCopyObject()` to return deep copies of stored values.
                  * - If the `DataWrapper` is empty, returns an empty array.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<any>[] | string[]`**: An array containing deep copies of all stored values.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
                  * console.log(dataWrapper.values()); // Output: ["Alice", 25]
@@ -13172,12 +13172,12 @@ function createHison(): Hison {
              * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
              * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
              *
-             * ## Generic Type `<T>`
+             * ### Generic Type `<T>`
              * - `T` represents the shape of each row in the `DataModel`.
              * - By specifying `T`, developers can enforce type safety for row values.
              * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
              * 
-             * ## Core Features:
+             * ### Core Features:
              * - **Column and Row Management:**
              *   - Supports dynamic addition and removal of columns and rows.
              *   - Ensures column consistency when inserting data.
@@ -13195,12 +13195,12 @@ function createHison(): Hison {
              * - **Integration with `DataWrapper`**
              *   - `DataWrapper` is an instance for storing `DataModel<T>`.
              *
-             * ## Data Consistency and Validation:
+             * ### Data Consistency and Validation:
              * - Uses `_deepCopy()` to ensure stored objects are immutable.
              * - Prevents invalid data types using `_getValidRowValue()`.
              * - Ensures uniform column data types to maintain consistency.
              *
-             * ## Example Usage:
+             * ### Example Usage:
              * ```typescript
              * interface User {
              *     id: number;
@@ -13228,7 +13228,7 @@ function createHison(): Hison {
              * console.log(filtered);
              * ```
              *
-             * ## Related Functions:
+             * ### Related Functions:
              * - `hison.setConvertValue()`: Sets the conversion logic for special values before insertion.
              */
             DataModel : class<T extends Record<string, any> = Record<string, any>> implements InterfaceDataModel<T> {
@@ -13236,24 +13236,24 @@ function createHison(): Hison {
                  * Creates a `DataModel<T>` instance, which manages a structured table-like data format.
                  * The instance allows for efficient row and column management.
                  *
-                 * ## Generic Type `<T>`
+                 * ### Generic Type `<T>`
                  * - `T` represents the structure of each row in the `DataModel<T>`.
                  * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `data` **(T[] | T, optional)**: The initial dataset, which can be:
                  *   - An **array of objects (`T[]`)**, where each object represents a row and its keys represent columns.
                  *   - A **single object (`T`)**, representing a single-row initialization.
                  *   - An **array of strings**, which initializes column names (if `T` is `Record<string, any>`).
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - If no data is provided, an empty `DataModel<T>` is created.
                  * - Calls `_put(data)`, which processes the input and initializes `_cols` and `_rows` accordingly.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel<T>`**: A new instance containing structured tabular data.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -13537,10 +13537,10 @@ function createHison(): Hison {
                  * Checks whether the current instance is a `DataModel`.
                  * This method is primarily used for type verification.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: Returns `true` if the instance is a `DataModel`, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * console.log(dataModel.getIsDataModel()); // Output: true
@@ -13556,14 +13556,14 @@ function createHison(): Hison {
                  * The cloned instance contains independent copies of all stored rows, 
                  * ensuring that modifications in the cloned instance do not affect the original instance.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Uses the internal `_rows` data to initialize a new `DataModel` instance.
                  * - Ensures that all row data is duplicated to maintain data integrity.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: A new `DataModel` instance containing a copy of the original rows.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * const clonedModel = dataModel.clone();
@@ -13580,15 +13580,15 @@ function createHison(): Hison {
                 /**
                  * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
                  * 
-                 * ## Behavior
+                 * ### Behavior
                  * - Clears the `_cols` array, removing all column definitions.
                  * - Clears the `_rows` array, removing all stored data.
                  * - Returns the same `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The current instance after clearing all stored data.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * console.log(dataModel.getRowCount()); // Output: 1
@@ -13609,14 +13609,14 @@ function createHison(): Hison {
                  * Serializes the `DataModel` instance into a JSON string representation.
                  * Converts the stored row data into a JSON format for easy storage or transmission.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Uses `JSON.stringify()` to serialize the `_rows` array.
                  * - Column definitions (`_cols`) are not included in the serialized output.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`string`**: A JSON string representation of the stored row data.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice" },
@@ -13636,14 +13636,14 @@ function createHison(): Hison {
                  * Checks whether the `DataModel` has defined columns.
                  * This method determines if the `DataModel` has been initialized with at least one column.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Returns `true` if `_cols` contains at least one column.
                  * - Returns `false` if no columns have been defined.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if columns are defined, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel(["id", "name"]);
                  * console.log(dataModel.isDeclare()); // Output: true
@@ -13661,14 +13661,14 @@ function createHison(): Hison {
                  * Retrieves an array of all column names defined in the `DataModel`.
                  * Returns a deep copy of the `_cols` array to prevent unintended modifications.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Uses `_deepCopy()` to return a copy of `_cols`, ensuring data integrity.
                  * - If no columns are defined, returns an empty array.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`string[]`**: An array of column names.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel(["id", "name"]);
                  * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -13686,20 +13686,20 @@ function createHison(): Hison {
                  * Retrieves an array of all values in the specified column.
                  * Ensures that returned values are deep copies to prevent unintended modifications.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name from which to retrieve values.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `column` is not a valid key in `T`.
                  * - Throws an error if the specified column does not exist.
                  * - Iterates through all rows and extracts the values of the specified column.
                  * - Uses `_deepCopy()` to return deep copies of the values.
                  * - The return type is inferred as `T[K][]`, maintaining strong type safety.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T[K][]`**: An array containing all values from the specified column.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: string;
@@ -13738,10 +13738,10 @@ function createHison(): Hison {
                  * Adds a new column to the `DataModel`.
                  * Ensures that all existing rows include the new column with a default value of `null`.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(string)**: The name of the column to be added.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `column` is not a valid string.
                  * - Calls `_addCol(column)` to validate and add the column.
                  * - Iterates through `_rows` and ensures each row includes the new column, assigning `null` if missing.
@@ -13750,10 +13750,10 @@ function createHison(): Hison {
                  * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
                  * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The current instance after adding the new column.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -13780,10 +13780,10 @@ function createHison(): Hison {
                  * Adds multiple new columns to the `DataModel`.
                  * Ensures that all existing rows include the newly added columns with a default value of `null`.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `columns` **(string[])**: An array of column names to be added.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `columns` is not an array.
                  * - Iterates through the provided column names and calls `_addCol(column)` to validate and add each column.
                  * - Ensures that all existing rows include the new columns, assigning `null` if missing.
@@ -13792,10 +13792,10 @@ function createHison(): Hison {
                  * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically added columns.
                  * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The current instance after adding the new columns.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
                  * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -13829,11 +13829,11 @@ function createHison(): Hison {
                  * 
                  * Supports type safety when `T` is defined, while allowing dynamic usage when `T = Record<string, any>`.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The name of the column to update, constrained to keys of `T` if defined.
                  * - `value` **(`T[K]`)**: The value to be assigned to all rows in the specified column.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `value` is `undefined`.
                  * - Calls `_getValidColValue(column)` to validate the column name.
                  * - If the column does not exist, `_addCol(column)` is called to add it.
@@ -13841,10 +13841,10 @@ function createHison(): Hison {
                  * - Ensures type consistency when `T` is specified.
                  * - Allows any column name when `T = Record<string, any>`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after setting the column values.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -13889,11 +13889,11 @@ function createHison(): Hison {
                  * Applies a formatting function to all values in the specified column.
                  * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The name of the column to format, constrained to keys of `T` if defined.
                  * - `formatter` **(`DataModelFormatter`)**: A function that transforms each value in the column.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `formatter` is not a valid function.
                  * - Validates `column` using `_getValidColValue(column)`.
                  * - Throws an error if the column does not exist.
@@ -13901,10 +13901,10 @@ function createHison(): Hison {
                  * - Ensures that the formatted values remain valid using `_getValidRowValue()`.
                  * - Allows any string as `column` if `T = Record<string, any>`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The current `DataModel` instance after formatting the column.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface Product {
                  *     id: number;
@@ -13945,17 +13945,17 @@ function createHison(): Hison {
                  * Retrieves a deep copy of the row at the specified index.
                  * Ensures that modifications to the returned row do not affect the original data.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rowIndex` **(number)**: The index of the row to retrieve.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
                  * - Uses `_deepCopy()` to return a copy of the row, preventing unintended modifications.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T`**: A deep copy of the row data as an object.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice" },
@@ -13979,17 +13979,17 @@ function createHison(): Hison {
                  * Retrieves the row at the specified index as a new `DataModel` instance.
                  * Converts the row object into a `DataModel` for further structured operations.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rowIndex` **(number)**: The index of the row to retrieve.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
                  * - Initializes a new `DataModel` using the retrieved row data.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: A new `DataModel` instance containing the specified row.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice" },
@@ -14015,25 +14015,25 @@ function createHison(): Hison {
                  * Adds a new row to the `DataModel<T>` at the specified index or appends it to the end.
                  * If no parameters are provided, an empty row is added.
                  *
-                 * ## Generic Type `<T>`
+                 * ### Generic Type `<T>`
                  * - `T` represents the structure of each row in the `DataModel<T>`.
                  * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible row structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rowIndexOrRow` **(number | T, optional)**: The index at which to insert the row, or the row data to insert.
                  * - `row` **(T, optional)**: The row data to insert (only required when `rowIndexOrRow` is a number).
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - If **no parameters** are provided, an empty row is appended.
                  * - If **only a number is provided**, an empty row is inserted at that index.
                  * - If **only an object (`T`) is provided**, it is inserted as a new row at the end.
                  * - If **both a number and an object are provided**, the row is inserted at the specified index.
                  * - Throws an error if attempting to add a row without first defining columns.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel<T>`**: The current instance after adding the new row.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -14100,24 +14100,24 @@ function createHison(): Hison {
                  * Retrieves a deep copy of a range of rows from the `DataModel`.
                  * Ensures that modifications to the returned rows do not affect the original data.
                  *
-                 * ## Generic Type `<T>`
+                 * ### Generic Type `<T>`
                  * - `T` represents the structure of each row in the `DataModel`.
                  * - By specifying `T`, developers can enforce type safety when retrieving rows.
                  * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
                  * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
                  * - If `endRow` is `null`, retrieves rows from `startRow` to the last row.
                  * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T[]`**: An array of deep-copied row objects, ensuring type safety.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -14160,20 +14160,20 @@ function createHison(): Hison {
                  * Retrieves a range of rows as a new `DataModel` instance.
                  * Ensures that the returned `DataModel` contains independent copies of the selected rows.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `startRow` **(number, optional, default = `0`)**: The starting index of the row range.
                  * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
                  * - If `startRow` is `0` and `endRow` is `null`, returns a clone of the entire `DataModel`.
                  * - Uses `_deepCopy()` to ensure the returned rows are independent.
                  * - Returns a new `DataModel` containing the selected rows.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: A new `DataModel` instance containing the selected row range.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice" },
@@ -14210,23 +14210,23 @@ function createHison(): Hison {
                  * Adds multiple rows to the `DataModel`.
                  * Each row is validated and inserted into the existing dataset.
                  *
-                 * ## Generic Type `<T>`
+                 * ### Generic Type `<T>`
                  * - `T` represents the structure of each row in the `DataModel`.
                  * - By specifying `T`, developers can enforce type safety for inserted rows.
                  * - If no type is provided, `T` defaults to `Record<string, any>`, allowing flexible data structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rows` **(`T[]`)**: An array of row objects to be added.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_put(rows)` to process and insert the provided rows.
                  * - Ensures that column structures are maintained.
                  * - Returns the current `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The current instance after adding the new rows.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -14257,7 +14257,7 @@ function createHison(): Hison {
                  * Converts the `DataModel` instance into a structured JavaScript object.
                  * The returned object includes column definitions, row data, and metadata.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Uses `_deepCopy()` to ensure the returned data is independent of the original `DataModel`.
                  * - The returned object contains:
                  *   - `cols`: An array of column names (`keyof T`).
@@ -14266,14 +14266,14 @@ function createHison(): Hison {
                  *   - `rowCount`: The total number of rows.
                  *   - `isDeclare`: A boolean indicating whether columns are explicitly defined.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`{ cols: (keyof T)[], rows: T[], colCount: number, rowCount: number, isDeclare: boolean }`**:
                  *   A structured object representing the `DataModel`.
                  *
                  * ⚠ **Note:** If `T` is explicitly defined, `cols` will reflect only the known keys of `T`.
                  * If `T` is the default `Record<string, any>`, `cols` may include dynamically added columns.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14315,19 +14315,19 @@ function createHison(): Hison {
                  * Retrieves a deep copy of the value at the specified row index and column name.
                  * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rowIndex` **(number)**: The index of the row to retrieve the value from.
                  * - `column` **(K)**: The column name, constrained to the keys of `T` if defined.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Validates `column` and `rowIndex` before accessing the value.
                  * - Returns a deep copy to prevent unintended modifications.
                  * - Allows any string as `column` if `T = Record<string, any>`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T[K]`**: A deep copy of the value stored at the specified row and column.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: string;
@@ -14361,12 +14361,12 @@ function createHison(): Hison {
                  * Sets a value at the specified row index and column name.
                  * Ensures that the value is valid and maintains data integrity.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rowIndex` **(number)**: The index of the row where the value should be set.
                  * - `column` **(K)**: The name of the column where the value should be stored.
                  * - `value` **(T[K])**: The value to be assigned, ensuring type safety.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Throws an error if `value` is `undefined`.
                  * - Calls `_getValidColValue(column)` to validate the column name.
                  * - Throws an error if the specified column does not exist.
@@ -14375,14 +14375,14 @@ function createHison(): Hison {
                  * - Updates the value at the specified row and column.
                  * - Returns the current `DataModel` instance for method chaining.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
                  * - The `value` type is inferred as `T[K]`, preventing type mismatches.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The current instance after updating the value.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14421,10 +14421,10 @@ function createHison(): Hison {
                  * Removes a column from the `DataModel`, deleting its values from all rows.
                  * Ensures that the column exists before attempting removal.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The name of the column to remove, ensuring type safety.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_getValidColValue(column)` to validate the column name.
                  * - Throws an error if the specified column does not exist.
                  * - Iterates through all rows and removes the specified column.
@@ -14434,14 +14434,14 @@ function createHison(): Hison {
                  * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
                  * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
                  * 
-                 * ## Type Safety
+                 * ### Type Safety
                  * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
                  * - Prevents attempts to remove a column that does not exist in the defined type.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The current instance after removing the column.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14480,10 +14480,10 @@ function createHison(): Hison {
                  * Removes multiple columns from the `DataModel`, deleting their values from all rows.
                  * Ensures that each specified column exists before attempting removal.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `columns` **(K[])**: An array of column names to remove, ensuring type safety.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Uses `<K extends keyof T>` to enforce that `columns` contain only valid keys of `T`.
                  * - Iterates through the `columns` array and calls `removeColumn(column)` for each entry.
                  * - If any column does not exist, `removeColumn` will throw an error.
@@ -14492,10 +14492,10 @@ function createHison(): Hison {
                  * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
                  * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
                  * 
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The current instance after removing the specified columns.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14532,18 +14532,18 @@ function createHison(): Hison {
                  * Removes a row from the `DataModel` at the specified index and returns the removed row.
                  * Ensures that the row index is valid before removal.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `rowIndex` **(number, optional, default = `0`)**: The index of the row to remove.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Uses `<T>` to ensure that the returned row matches the structure of `T`.
                  * - Calls `_getValidRowIndex(rowIndex)` to validate the row index.
                  * - Uses `splice()` to remove the row from `_rows` and returns the removed row.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T`**: The removed row object, ensuring type safety based on `T`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14576,13 +14576,13 @@ function createHison(): Hison {
                 /**
                  * Retrieves the total number of columns in the `DataModel`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Returns the length of the `_cols` array, which represents the column definitions.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`number`**: The total number of columns in the `DataModel`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
                  * console.log(dataModel.getColumnCount()); // Output: 3
@@ -14599,13 +14599,13 @@ function createHison(): Hison {
                 /**
                  * Retrieves the total number of rows in the `DataModel`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Returns the length of the `_rows` array, which represents the stored data rows.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`number`**: The total number of rows in the `DataModel`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice" },
@@ -14627,18 +14627,18 @@ function createHison(): Hison {
                  * Checks whether the `DataModel` contains a specified column.
                  * Uses `<K extends keyof T>` to ensure type safety when checking column names.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name to check, constrained to keys of `T`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to valid keys of `T`.
                  * - Calls `_hasColumn(column)` to determine if the column exists.
                  * - Returns `true` if the column is found in `_cols`, otherwise `false`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if the column exists, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14661,10 +14661,10 @@ function createHison(): Hison {
                  * Restricts the `DataModel` to only the specified columns by removing all other columns.
                  * Uses `<K extends keyof T>` to enforce type safety when specifying valid columns.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `columns` **(K[])**: An array of column names to retain, constrained to keys of `T`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by allowing only existing keys of `T` as valid columns.
                  * - Identifies and removes columns that are **not** included in the provided `columns` list.
                  * - Calls `removeColumns()` to eliminate those columns from the dataset.
@@ -14673,10 +14673,10 @@ function createHison(): Hison {
                  * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
                  * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
                  * 
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The modified `DataModel` instance with only the specified columns retained.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14711,18 +14711,18 @@ function createHison(): Hison {
                  * Checks whether a specified column contains only non-null values.
                  * Uses `<K extends keyof T>` to ensure type safety when specifying the column.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The name of the column to check, constrained to keys of `T`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getNullColumnFirstRowIndex(column)` to find the first occurrence of a `null` value in the column.
                  * - If no `null` values are found, returns `true`; otherwise, returns `false`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if the column has no `null` values, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14753,19 +14753,19 @@ function createHison(): Hison {
                  * Finds and returns the first row where the specified column contains a `null` value.
                  * Uses `<K extends keyof T>` to enforce type safety on the column name.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name to check, constrained to keys of `T`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getNullColumnFirstRowIndex(column)` to locate the first occurrence of a `null` value.
                  * - If no `null` values are found, returns `null`.
                  * - If a `null` value is found, retrieves and returns the corresponding row using `getRow()`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T | null`**: The first row where the column has a `null` value, or `null` if none exist.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14804,18 +14804,18 @@ function createHison(): Hison {
                  * Checks whether a specified column contains only unique values (i.e., no duplicate values).
                  * Uses `<K extends keyof T>` to enforce type safety on the column name.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name to check, constrained to keys of `T`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getDuplColumnFirstRowIndex(column)` to find the first occurrence of a duplicate value in the column.
                  * - If no duplicates are found, returns `true`; otherwise, returns `false`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if the column has no duplicate values, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14846,19 +14846,19 @@ function createHison(): Hison {
                  * Finds and returns the first row where the specified column contains a duplicate value.
                  * Uses `<K extends keyof T>` to ensure that the column exists in `T`, enforcing type safety.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name to check for duplicate values, constrained to keys of `T`.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getDuplColumnFirstRowIndex(column)` to locate the first occurrence of a duplicate value.
                  * - If no duplicate values are found, returns `null`.
                  * - If a duplicate value is found, retrieves and returns the corresponding row using `getRow()`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T | null`**: The first row where the column has a duplicate value, or `null` if no duplicates exist.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14897,19 +14897,19 @@ function createHison(): Hison {
                  * Checks whether all values in the specified column satisfy a given validation function.
                  * Uses `<K extends keyof T>` to ensure type safety for column selection.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
                  * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to check for invalid values.
                  * - If no invalid values are found, returns `true`; otherwise, returns `false`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`boolean`**: `true` if all values in the column are valid, otherwise `false`.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14945,20 +14945,20 @@ function createHison(): Hison {
                  * Finds and returns the first row where the specified column contains an invalid value based on a given validation function.
                  * Uses `<K extends keyof T>` to ensure type safety for column selection.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(K)**: The column name to validate, constrained to keys of `T`.
                  * - `validator` **(`DataModelValidator`)**: A function that takes a value as input and returns `true` if the value is valid.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures type safety by restricting `column` to existing keys of `T`.
                  * - Calls `_getInValidColumnFirstRowIndex(column, validator)` to locate the first occurrence of an invalid value in the column.
                  * - If no invalid values are found, returns `null`.
                  * - If an invalid value is found, retrieves and returns the corresponding row using `getRow()`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T | null`**: The first row where the column has an invalid value, or `null` if all values are valid.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *   id: number;
@@ -14999,11 +14999,11 @@ function createHison(): Hison {
                  * Searches for rows that match a given condition and returns their indexes.
                  * Allows both positive and negative filtering based on the `isNegative` flag.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
                  * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns indexes of rows that **do not** match the condition.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
                  * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows` to check if each row meets the condition.
@@ -15011,14 +15011,14 @@ function createHison(): Hison {
                  * - If `isNegative` is `false`, adds matching row indexes to the result.
                  * - If `isNegative` is `true`, adds **non-matching** row indexes to the result.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
                  * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`number[]`**: An array of indexes of rows that match (or do not match) the condition.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15072,11 +15072,11 @@ function createHison(): Hison {
                  * Searches for rows that match a given condition and returns them as an array.
                  * Allows both positive and negative filtering based on the `isNegative` flag.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
                  * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
                  * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows`, checking if each row meets the condition.
@@ -15085,14 +15085,14 @@ function createHison(): Hison {
                  * - If `isNegative` is `true`, adds **non-matching** rows to the result.
                  * - Returns a deep copy of the matched rows to ensure immutability.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
                  * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T[]`**: An array of deep-copied rows that match (or do not match) the condition.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15146,11 +15146,11 @@ function createHison(): Hison {
                  * Searches for rows that match a given condition and returns them as a new `DataModel` instance.
                  * Allows both positive and negative filtering based on the `isNegative` flag.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
                  * - `isNegative` **(`boolean`, optional, default = `false`)**: If `true`, returns rows that **do not** match the condition.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
                  * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows`, checking if each row meets the condition.
@@ -15159,14 +15159,14 @@ function createHison(): Hison {
                  * - If `isNegative` is `true`, adds **non-matching** rows to the result.
                  * - Returns a new `DataModel<T>` containing the filtered rows.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
                  * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: A new `DataModel<T>` instance containing the matched rows.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15224,13 +15224,13 @@ function createHison(): Hison {
                  * by removing matched or unmatched rows. Unlike `searchRowsAsDataModel`, this method directly 
                  * updates the existing dataset instead of returning a new instance.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
                  * - `isNegative` **(`boolean`, optional, default = `false`)**: 
                  *   - If `false` (default), removes rows that **do not** match the condition.
                  *   - If `true`, removes rows that **do** match the condition.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Ensures `condition` is a valid object using `_checkOriginObject(condition)`.
                  * - Validates `isNegative` as a boolean using `_checkBoolean(isNegative)`.
                  * - Iterates through `_rows`, checking if each row meets the condition.
@@ -15240,14 +15240,14 @@ function createHison(): Hison {
                  *   - If `true`, removes matching rows.
                  * - Returns the modified `DataModel<T>` instance for method chaining.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - The generic type `<K extends keyof T>` ensures that `condition` keys must exist in `T`.
                  * - `T[K]` enforces that values in `condition` match the expected type of the corresponding column.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance after removing specified rows.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15308,18 +15308,18 @@ function createHison(): Hison {
                  * Filters rows in the `DataModel` based on a custom filtering function and returns their indexes.
                  * Allows for efficiently identifying row positions that match a given condition.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
                  * - Iterates through `_rows`, applying the filter function to each row.
                  * - Collects the indexes of rows that satisfy the filter condition.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`number[]`**: An array of indexes of rows that match the filter condition.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice", age: 25 },
@@ -15351,19 +15351,19 @@ function createHison(): Hison {
                  * Filters rows in the `DataModel` based on a custom filtering function.
                  * Returns an array of rows that satisfy the provided filter condition.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
                  * - Iterates through `_rows`, applying the filter function to each row.
                  * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
                  * - Returns an array of matching rows.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`T[]`**: An array of deep-copied rows that match the filter condition.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice", age: 25 },
@@ -15396,19 +15396,19 @@ function createHison(): Hison {
                  * Filters rows in the `DataModel` based on a custom filtering function and returns a new `DataModel` containing the matched rows.
                  * Allows for extracting a subset of the dataset while preserving the structured format.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be included.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
                  * - Iterates through `_rows`, applying the filter function to each row.
                  * - Collects rows that satisfy the filter condition.
                  * - Returns a new `DataModel` instance containing the filtered rows.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: A new `DataModel` instance containing the filtered rows.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice", age: 25 },
@@ -15441,19 +15441,19 @@ function createHison(): Hison {
                  * Filters rows in the `DataModel` based on a custom filtering function and **modifies** the original `DataModel` by removing unmatched rows.
                  * This method directly updates the existing dataset instead of returning a new instance.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `filter` **(`DataModelFillter`)**: A function that takes a row as input and returns `true` if the row should be retained.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_checkValidFunction(filter)` to ensure `filter` is a valid function.
                  * - Iterates through `_rows`, applying the filter function to each row.
                  * - Removes rows that do **not** satisfy the filter condition.
                  * - Returns the modified `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The modified `DataModel` instance with only the filtered rows.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice", age: 25 },
@@ -15487,23 +15487,23 @@ function createHison(): Hison {
                  * Reorders the columns in the `DataModel` based on the specified order.
                  * Ensures that all existing columns are included, maintaining the defined structure.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `columns` **(`K[]`)**: An array of column names in the desired order.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls `_checkArray(columns)` to validate the input as an array.
                  * - Ensures that each column in `columns` exists in the `DataModel` using `_checkColumn(column)`.
                  * - Constructs a new column order by placing unspecified columns at the end.
                  * - Updates `_cols` with the new column order.
                  * - Returns the modified `DataModel<T>` instance for method chaining.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - Uses `<K extends keyof T>` to ensure that `columns` only contain valid keys of `T`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with reordered columns.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15544,14 +15544,14 @@ function createHison(): Hison {
                  * Sorts the columns of the `DataModel` in ascending (A-Z) order.
                  * The sorting is applied alphabetically based on column names.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls the native `Array.sort()` method on `_cols` to rearrange columns in ascending order.
                  * - Returns the modified `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The modified `DataModel` instance with columns sorted in ascending order.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
                  * 
@@ -15571,14 +15571,14 @@ function createHison(): Hison {
                  * Sorts the columns of the `DataModel` in descending (Z-A) order.
                  * The sorting is applied alphabetically based on column names.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls the native `Array.sort()` method on `_cols` with a custom comparator to sort columns in descending order.
                  * - Returns the modified `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The modified `DataModel` instance with columns sorted in descending order.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
                  * 
@@ -15606,14 +15606,14 @@ function createHison(): Hison {
                  * Reverses the order of columns in the `DataModel`.
                  * The column order is flipped without sorting alphabetically.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls the native `Array.reverse()` method on `_cols` to reverse the column order.
                  * - Returns the modified `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The modified `DataModel` instance with reversed column order.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
                  * 
@@ -15633,11 +15633,11 @@ function createHison(): Hison {
                  * Sorts the rows of the `DataModel` in ascending order based on the specified column.
                  * Optionally supports integer-based sorting for numerical values.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(`K`)**: The column name to sort by.
                  * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Validates `column` using `_getValidColValue(column)`.
                  * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
                  * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
@@ -15647,13 +15647,13 @@ function createHison(): Hison {
                  * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
                  * - Throws an error if a non-numeric value is encountered in integer sorting mode.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in ascending order.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15715,11 +15715,11 @@ function createHison(): Hison {
                  * Sorts the rows of the `DataModel` in descending order based on the specified column.
                  * Optionally supports integer-based sorting for numerical values.
                  *
-                 * ## Parameters
+                 * ### Parameters
                  * - `column` **(`K`)**: The column name to sort by.
                  * - `isIntegerOrder` **(`boolean`, optional, default = `false`)**: If `true`, treats values as integers for sorting.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Validates `column` using `_getValidColValue(column)`.
                  * - Ensures `column` exists in the `DataModel` with `_checkColumn(column)`.
                  * - Validates `isIntegerOrder` using `_checkBoolean(isIntegerOrder)`.
@@ -15729,13 +15729,13 @@ function createHison(): Hison {
                  * - If `isIntegerOrder` is `true`, parses values as integers before sorting.
                  * - Throws an error if a non-numeric value is encountered in integer sorting mode.
                  *
-                 * ## Type Safety
+                 * ### Type Safety
                  * - Uses `<K extends keyof T>` to ensure `column` is a valid key of `T`.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`InterfaceDataModel<T>`**: The modified `DataModel<T>` instance with rows sorted in descending order.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * interface User {
                  *     id: number;
@@ -15797,14 +15797,14 @@ function createHison(): Hison {
                  * Reverses the order of rows in the `DataModel`.
                  * This method flips the row order without sorting by a specific column.
                  *
-                 * ## Behavior
+                 * ### Behavior
                  * - Calls the native `Array.reverse()` method on `_rows` to reverse the row order.
                  * - Returns the modified `DataModel` instance for method chaining.
                  *
-                 * ## Returns
+                 * ### Returns
                  * - **`DataModel`**: The modified `DataModel` instance with reversed row order.
                  *
-                 * ## Example Usage
+                 * ### Example Usage
                  * ```typescript
                  * const dataModel = new hison.data.DataModel([
                  *     { id: 1, name: "Alice" },
@@ -15835,7 +15835,7 @@ function createHison(): Hison {
              * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy** 
              * while integrating **WebSocket communication** for real-time data updates.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **LRU Cache for API Responses**: Stores API responses with a configurable limit, reducing redundant network requests.
              * - **WebSocket Support**: Maintains a persistent WebSocket connection for real-time data updates.
              * - **Cache Management Methods**: Supports cache operations (`get`, `put`, `remove`, `clear`, etc.).
@@ -15843,13 +15843,13 @@ function createHison(): Hison {
              * - **Flexible Configuration**: Uses `CustomOption` settings for cache limits and WebSocket parameters.
              * - **Validation Methods**: Ensures proper data types for cache keys and event listeners.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - **API responses are stored in an LRUCache instance**, avoiding redundant network calls.
              * - **When a WebSocket connection is established**, data updates can be received in real-time.
              * - **Cache data can be accessed and managed using `get`, `put`, `remove`, and `clear` methods.**
              * - **WebSocket event handlers can be set up for real-time notifications.**
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Create a CachingModule instance with a cache limit of 20
              * const cachingModule = new hison.link.CachingModule(20);
@@ -15865,22 +15865,22 @@ function createHison(): Hison {
              * cachingModule.onmessage = event => console.log("New Message:", event.data);
              * ```
              *
-             * ## **Internal Structure**
+             * ### **Internal Structure**
              * - **Uses `LRUCache`** to manage cached responses with a defined limit.
              * - **Maintains a WebSocket connection** to receive real-time data updates.
              * - **Supports configurable options via `CustomOption`**, such as WebSocket endpoint and cache size.
              * - **Provides utility methods** for cache validation, data retrieval, and event handling.
              *
-             * ## **Related Components**
+             * ### **Related Components**
              * - **`LRUCache`**: Handles the caching logic for API responses.
              * - **`WebSocket`**: Establishes a real-time connection for live data updates.
              * - **`CustomOption`**: Provides configurable options for WebSocket and cache settings.
              * - **`ApiLink`**: Uses this module to fetch and store API responses efficiently.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This module **returns an instance of `CachingModule`**, which allows cache operations and WebSocket event management.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Reducing unnecessary API calls** by storing frequently accessed responses.
              * - **Receiving real-time updates** from the server without polling.
              * - **Efficiently managing API response data** in web applications.
@@ -15893,17 +15893,17 @@ function createHison(): Hison {
                  * The constructor sets up the **WebSocket connection** for real-time updates and 
                  * **instantiates an `LRUCache`** to manage API response caching.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `cachingLimit` *(optional, number)* - The maximum number of items the cache can store.  
                  *   - **Default:** `customOption.cachingLimit`
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Establishes a WebSocket connection** using the protocol, domain, and endpoint specified in `CustomOption`.
                  * 2. **Configures WebSocket event handlers** (`onopen`, `onmessage`, `onclose`, `onerror`).
                  * 3. **Creates an LRUCache instance** with the specified caching limit.
                  * 4. **Marks this instance as a valid caching module** using `_isCachingModule = true`.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating a caching module with a default caching limit
                  * const cachingModule = new hison.link.CachingModule();
@@ -15912,7 +15912,7 @@ function createHison(): Hison {
                  * const customCachingModule = new hison.link.CachingModule(50);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_webSocket`** *(WebSocket)* - The WebSocket connection instance.
                  * - **`_LRUCache`** *(LRUCache)* - The LRU-based cache for storing API responses.
                  * - **`_isCachingModule`** *(boolean)* - A flag indicating whether this instance is a caching module.
@@ -15957,17 +15957,17 @@ function createHison(): Hison {
                  * is recognized as a `CachingModule`. This is useful for validating whether 
                  * an instance supports caching functionalities.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - `true` if this instance is a caching module.
                  * - `false` if caching is not enabled.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * console.log(cachingModule.getIsCachingModule()); // true
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_isCachingModule`** *(boolean)* - Stores the module's caching capability status.
                  *
                  * @returns {boolean} `true` if this instance is a caching module.
@@ -15982,14 +15982,14 @@ function createHison(): Hison {
                  * that the key is a valid string and then delegates the check to the underlying 
                  * `LRUCache` instance.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `key` *(string)* - The key to check in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - `true` if the cache contains the specified key.
                  * - `false` if the key is not found in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
@@ -15997,7 +15997,7 @@ function createHison(): Hison {
                  * console.log(cachingModule.hasKey("user456")); // false
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`_checkTypeString(key)`** - Ensures the key is a valid string before performing the cache check.
                  * - **`_LRUCache.hasKey(key)`** - The internal method that checks the existence of the key in the cache.
                  *
@@ -16014,16 +16014,16 @@ function createHison(): Hison {
                  * This method fetches the cached API response associated with the specified `key`.
                  * Before accessing the cache, it validates that the key is a string.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `key` *(string)* - The key of the cached data.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The cached API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  * - If the key does not exist in the cache, `null` is returned.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16034,7 +16034,7 @@ function createHison(): Hison {
                  * cachingModule.get("user123").then(data => console.log(data));
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`put(key, value)`** - Stores API responses in the cache.
                  * - **`hasKey(key)`** - Checks if a key exists in the cache.
                  * - **`remove(key)`** - Removes a key from the cache.
@@ -16052,18 +16052,18 @@ function createHison(): Hison {
                  * This method saves the provided `value` (API response) in the cache with the specified `key`.
                  * Before storing the data, it validates that the `key` is a string.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `key` *(string)* - The cache key under which the response will be stored.
                  * - `value` *(Promise<{ data: any; response: Response }>)*
                  *   - A promise resolving to an object containing:
                  *     - `data` *(any)* - The API response data.
                  *     - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If the `key` already exists, the old value is **replaced** with the new one.
                  * - If the cache reaches its limit, the **least recently used (LRU) entry is removed**.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16071,7 +16071,7 @@ function createHison(): Hison {
                  * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`get(key)`** - Retrieves cached data for a given key.
                  * - **`hasKey(key)`** - Checks if a key exists in the cache.
                  * - **`remove(key)`** - Removes a specific key from the cache.
@@ -16089,14 +16089,14 @@ function createHison(): Hison {
                  * This method deletes the cached API response associated with the given `key`.
                  * Before performing the removal, it ensures that the `key` is a valid string.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `key` *(string)* - The cache key to be removed.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If the specified `key` exists in the cache, it is deleted.
                  * - If the `key` does not exist, no action is taken.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16110,7 +16110,7 @@ function createHison(): Hison {
                  * console.log(cachingModule.hasKey("user123")); // false
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`put(key, value)`** - Stores API responses in the cache.
                  * - **`get(key)`** - Retrieves cached data for a given key.
                  * - **`clear()`** - Removes all cached entries.
@@ -16126,7 +16126,7 @@ function createHison(): Hison {
                  *
                  * This method returns the entire cache as a record where each key corresponds to a cached API response.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Record<string, Promise<{ data: any; response: Response }>>` representing all cached entries.
                  * - Each entry consists of:
                  *   - `key` *(string)* - The cache key.
@@ -16134,7 +16134,7 @@ function createHison(): Hison {
                  *     - `data` *(any)* - The API response data.
                  *     - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16146,7 +16146,7 @@ function createHison(): Hison {
                  * console.log(cachingModule.getAll());
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`put(key, value)`** - Stores API responses in the cache.
                  * - **`get(key)`** - Retrieves cached data for a given key.
                  * - **`getKeys()`** - Retrieves all cache keys.
@@ -16162,10 +16162,10 @@ function createHison(): Hison {
                  *
                  * This method returns an array of all keys currently stored in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - An array of strings representing the cache keys.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16177,7 +16177,7 @@ function createHison(): Hison {
                  * console.log(cachingModule.getKeys()); // ["user123", "posts"]
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`put(key, value)`** - Stores API responses in the cache.
                  * - **`get(key)`** - Retrieves cached data for a given key.
                  * - **`getAll()`** - Retrieves all cached data as a key-value object.
@@ -16193,11 +16193,11 @@ function createHison(): Hison {
                  *
                  * This method removes all entries from the cache, resetting it to an empty state.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - All cached responses are permanently deleted.
                  * - The cache size is reset to zero.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16212,7 +16212,7 @@ function createHison(): Hison {
                  * console.log(cachingModule.getKeys()); // []
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`put(key, value)`** - Stores API responses in the cache.
                  * - **`get(key)`** - Retrieves cached data for a given key.
                  * - **`getAll()`** - Retrieves all cached data as a key-value object.
@@ -16228,15 +16228,15 @@ function createHison(): Hison {
                  *
                  * This method assigns a custom event handler to be executed when the WebSocket connection is successfully opened.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `func` *(function | null)* - A callback function to handle the WebSocket `open` event.
                  *   - If `null` is provided, the event handler is cleared.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Ensures that the provided function is valid before assigning it as the event handler.
                  * - When the WebSocket connection is established, the specified function is invoked.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16246,7 +16246,7 @@ function createHison(): Hison {
                  * };
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
                  * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
                  * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -16263,15 +16263,15 @@ function createHison(): Hison {
                  * This method assigns a custom event handler to be executed whenever a message is received 
                  * through the WebSocket connection.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `func` *(function | null)* - A callback function to handle incoming WebSocket messages.
                  *   - If `null` is provided, the event handler is cleared.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Ensures that the provided function is valid before assigning it as the event handler.
                  * - When a message is received, the specified function is invoked with the event data.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16281,7 +16281,7 @@ function createHison(): Hison {
                  * };
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
                  * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
                  * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -16297,15 +16297,15 @@ function createHison(): Hison {
                  *
                  * This method assigns a custom event handler to be executed when the WebSocket connection is closed.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `func` *(function | null)* - A callback function to handle the WebSocket `close` event.
                  *   - If `null` is provided, the event handler is cleared.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Ensures that the provided function is valid before assigning it as the event handler.
                  * - When the WebSocket connection is closed, the specified function is invoked with the event data.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16315,7 +16315,7 @@ function createHison(): Hison {
                  * };
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
                  * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
                  * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -16331,17 +16331,17 @@ function createHison(): Hison {
                  *
                  * This method assigns a custom event handler to be executed when a WebSocket error occurs.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `func` *(function | null)* - A callback function to handle WebSocket errors.
                  *   - If `null` is provided, the event handler is cleared.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Ensures that the provided function is valid before assigning it as the event handler.
                  * - When an error occurs in the WebSocket connection, the specified function is invoked with the event data.
                  * - **Note:** The implementation currently assigns the function to `onclose` instead of `onerror`,
                  *   which may require correction.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16351,7 +16351,7 @@ function createHison(): Hison {
                  * };
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
                  * - **`onmessage(func)`** - Registers a handler for incoming WebSocket messages.
                  * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
@@ -16367,16 +16367,16 @@ function createHison(): Hison {
                  *
                  * This method returns an integer representing the current status of the WebSocket connection.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - `1` → The WebSocket connection is open.
                  * - `0` → The WebSocket connection is in the process of connecting.
                  * - `-1` → The WebSocket connection is closed or unavailable.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Internally calls `_checkWebSocketConnection()` to determine the WebSocket state.
                  * - Useful for monitoring connection status and handling reconnection logic if needed.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const cachingModule = new hison.link.CachingModule();
                  * 
@@ -16385,7 +16385,7 @@ function createHison(): Hison {
                  * console.log(status); // Output: 1 (open), 0 (connecting), or -1 (closed)
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`onopen(func)`** - Registers a handler for WebSocket connection open events.
                  * - **`onclose(func)`** - Registers a handler for WebSocket disconnection events.
                  * - **`onerror(func)`** - Registers a handler for WebSocket error events.
@@ -16402,19 +16402,19 @@ function createHison(): Hison {
              * The `ApiGet` class is responsible for sending HTTP GET requests to a specified API resource. 
              * It integrates with `ApiLink` to handle request execution, event emissions, and optional response caching.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP GET requests** using `ApiLink`.
              * - **Supports response caching** via an optional `CachingModule`.
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows setting event listeners** for request completion, errors, and other key events.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiGet` stores the API resource path and an optional `CachingModule` instance.
              * - The `call()` method triggers a GET request to the specified resource path.
              * - If caching is enabled, previously stored responses may be returned instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiGet without caching
              * const apiGet = new hison.link.ApiGet("/users");
@@ -16434,15 +16434,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-based request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiGet`, which provides methods for executing GET requests and managing request events.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Fetching data from a REST API** with minimal setup.
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -16454,13 +16454,13 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making GET requests to a specified resource path.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `resourcePath` *(optional, string)* - The API resource path for the GET request.
                  *   - **Default:** `''` (empty string)
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
                  * 2. **Creates an `EventEmitter` instance.**
@@ -16470,7 +16470,7 @@ function createHison(): Hison {
                  * 4. **Stores the API resource path.**
                  *    - Defines the endpoint for the GET request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiGet instance without caching
                  * const apiGet = new hison.link.ApiGet("/users");
@@ -16480,7 +16480,7 @@ function createHison(): Hison {
                  * const cachedApiGet = new hison.link.ApiGet("/users", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_resourcePath`** *(string)* - Stores the API resource path.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
                  * - **`_eventEmitter`** *(EventEmitter)* - Handles event-based request monitoring.
@@ -16506,27 +16506,27 @@ function createHison(): Hison {
                  * It also **invokes a pre-request hook** (`hison.setBeforeGetRequst`) and **emits a request-start event** 
                  * (`"requestStarted_GET"`) before execution.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or query parameters.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`hison.setBeforeGetRequst((resourcePath, options) => {})`**
                  *   - A customizable hook executed **before sending the GET request**.
                  *   - If it returns `false`, the request is **prevented from execution**.
                  *   - **Use Case:** Validating request parameters or implementing conditional request logic.
                  *
-                 * ## **Event Emission**
+                 * ### **Event Emission**
                  * - **`"requestStarted_GET"` Event**
                  *   - This event is emitted **before the GET request is executed**.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
                  * - If the data is not cached, it makes an HTTP GET request to `_resourcePath`.
                  * - Before executing the request:
@@ -16534,7 +16534,7 @@ function createHison(): Hison {
                  *   - The **event `"requestStarted_GET"`** is emitted.
                  * - Once the request is completed, the response is returned and optionally stored in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGet = new hison.link.ApiGet("/users");
                  * 
@@ -16558,7 +16558,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -16574,18 +16574,18 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the specified resource without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - The method delegates the request execution to `ApiLink.head()`.
                  * - The response body is **not** included in the result, only headers are returned.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGet = new hison.link.ApiGet("/users");
                  * 
@@ -16600,7 +16600,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(options)`** - Sends a GET request to retrieve full response data.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -16616,18 +16616,18 @@ function createHison(): Hison {
                  * This method retrieves the list of allowed HTTP methods for the specified resource 
                  * without performing an actual data operation.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - The method delegates the request execution to `ApiLink.options()`.
                  * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGet = new hison.link.ApiGet("/users");
                  * 
@@ -16642,7 +16642,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(options)`** - Sends a GET request to retrieve full response data.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -16658,17 +16658,17 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a GET request.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string)* - The name of the event to listen for.
                  * - `eventFunc` *(function)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_GET"` - Triggered when a GET request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGet = new hison.link.ApiGet("/users");
                  * 
@@ -16683,7 +16683,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(options)`** - Sends a GET request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -16699,20 +16699,20 @@ function createHison(): Hison {
              * The `ApiPost` class is responsible for sending HTTP POST requests to a specified service command.
              * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP POST requests** using `ApiLink`.
              * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
              * - **Supports response caching** via an optional `CachingModule`.
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiPost` requires a `serviceCmd` that specifies the business logic endpoint.
              * - The `call()` method sends a POST request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiPost
              * const apiPost = new hison.link.ApiPost("UserService.createUser");
@@ -16736,15 +16736,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiPost`, providing methods for executing POST requests and managing request events.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to a REST API** with structured payloads.
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -16756,14 +16756,14 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making POST requests to a specified service command.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `serviceCmd` *(string, required)* - The **service command** that determines the target business logic on the server.
                  *   - **Example:** `"UserService.createUser"`
                  *   - If no `serviceCmd` is provided, an error is thrown.
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
                  * 2. **Creates an `EventEmitter` instance.**
@@ -16773,7 +16773,7 @@ function createHison(): Hison {
                  * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the POST request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiPost instance without caching
                  * const apiPost = new hison.link.ApiPost("UserService.createUser");
@@ -16783,7 +16783,7 @@ function createHison(): Hison {
                  * const cachedApiPost = new hison.link.ApiPost("UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_serviceCmd`** *(string)* - Stores the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
                  * - **`_eventEmitter`** *(EventEmitter)* - Handles event-based request monitoring.
@@ -16809,30 +16809,30 @@ function createHison(): Hison {
                  * This method sends a POST request using `ApiLink`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`hison.setBeforePostRequst((requestData, options) => {})`**
                  *   - A customizable hook executed **before sending the POST request**.
                  *   - If it returns `false`, the request is **prevented from execution**.
                  *   - **Use Case:** Validating request parameters, modifying request data dynamically.
                  *
-                 * ## **Event Emission**
+                 * ### **Event Emission**
                  * - **`"requestStarted_POST"` Event**
                  *   - This event is emitted **before the POST request is executed**.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
                  * - If the data is not cached, it makes an HTTP POST request to `_serviceCmd`.
                  * - Before executing the request:
@@ -16840,7 +16840,7 @@ function createHison(): Hison {
                  *   - The **event `"requestStarted_POST"`** is emitted.
                  * - Once the request is completed, the response is returned and optionally stored in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPost = new hison.link.ApiPost("UserService.createUser");
                  * 
@@ -16865,7 +16865,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -16882,18 +16882,18 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the API without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
                  * - The response body is **not** included in the result; only headers are returned.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPost = new hison.link.ApiPost("UserService.createUser");
                  * 
@@ -16908,7 +16908,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -16924,18 +16924,18 @@ function createHison(): Hison {
                  * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
                  * It is useful for checking which HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
                  * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPost = new hison.link.ApiPost("UserService.createUser");
                  * 
@@ -16950,7 +16950,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -16966,21 +16966,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a POST request.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_POST"` - Triggered when a POST request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"POST"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPost = new hison.link.ApiPost("UserService.createUser");
                  * 
@@ -16995,7 +16995,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a POST request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -17011,20 +17011,20 @@ function createHison(): Hison {
              * The `ApiPut` class is responsible for sending HTTP PUT requests to a specified service command.
              * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP PUT requests** using `ApiLink`.
              * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
              * - **Supports response caching** via an optional `CachingModule`.
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiPut` requires a `serviceCmd` that specifies the business logic endpoint.
              * - The `call()` method sends a PUT request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiPut
              * const apiPut = new hison.link.ApiPut("UserService.createUser");
@@ -17048,15 +17048,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiPut`, providing methods for executing PUT requests and managing request events.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to a REST API** with structured payloads.
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -17068,14 +17068,14 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making PUT requests to a specified service command.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `serviceCmd` *(string, required)* - The **service command** that determines the target business logic on the server.
                  *   - **Example:** `"UserService.createUser"`
                  *   - If no `serviceCmd` is provided, an error is thrown.
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
                  * 2. **Creates an `EventEmitter` instance.**
@@ -17085,7 +17085,7 @@ function createHison(): Hison {
                  * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the PUT request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiPut instance without caching
                  * const apiPut = new hison.link.ApiPut("UserService.createUser");
@@ -17095,7 +17095,7 @@ function createHison(): Hison {
                  * const cachedApiPut = new hison.link.ApiPut("UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_serviceCmd`** *(string)* - Stores the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
                  * - **`_eventEmitter`** *(EventEmitter)* - Handles event-based request monitoring.
@@ -17121,30 +17121,30 @@ function createHison(): Hison {
                  * This method sends a PUT request using `ApiLink`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`hison.setBeforePutRequst((requestData, options) => {})`**
                  *   - A customizable hook executed **before sending the PUT request**.
                  *   - If it returns `false`, the request is **prevented from execution**.
                  *   - **Use Case:** Validating request parameters, modifying request data dynamically.
                  *
-                 * ## **Event Emission**
+                 * ### **Event Emission**
                  * - **`"requestStarted_PUT"` Event**
                  *   - This event is emitted **before the PUT request is executed**.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
                  * - If the data is not cached, it makes an HTTP PUT request to `_serviceCmd`.
                  * - Before executing the request:
@@ -17152,7 +17152,7 @@ function createHison(): Hison {
                  *   - The **event `"requestStarted_PUT"`** is emitted.
                  * - Once the request is completed, the response is returned and optionally stored in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPut = new hison.link.ApiPut("UserService.createUser");
                  * 
@@ -17177,7 +17177,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -17194,18 +17194,18 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the API without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
                  * - The response body is **not** included in the result; only headers are returned.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPut = new hison.link.ApiPut("UserService.createUser");
                  * 
@@ -17220,7 +17220,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -17236,18 +17236,18 @@ function createHison(): Hison {
                  * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
                  * It is useful for checking which HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PUT", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
                  * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPut = new hison.link.ApiPut("UserService.createUser");
                  * 
@@ -17262,7 +17262,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -17278,21 +17278,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a PUT request.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_PUT"` - Triggered when a PUT request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PUT"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPut = new hison.link.ApiPut("UserService.createUser");
                  * 
@@ -17307,7 +17307,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PUT request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -17323,20 +17323,20 @@ function createHison(): Hison {
              * The `ApiPatch` class is responsible for sending HTTP PATCH requests to a specified service command.
              * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP PATCH requests** using `ApiLink`.
              * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
              * - **Supports response caching** via an optional `CachingModule`.
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiPatch` requires a `serviceCmd` that specifies the business logic endpoint.
              * - The `call()` method sends a PATCH request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiPatch
              * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
@@ -17360,15 +17360,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiPatch`, providing methods for executing PATCH requests and managing request events.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to a REST API** with structured payloads.
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -17380,14 +17380,14 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making PATCH requests to a specified service command.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `serviceCmd` *(string, required)* - The **service command** that determines the target business logic on the server.
                  *   - **Example:** `"UserService.createUser"`
                  *   - If no `serviceCmd` is provided, an error is thrown.
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
                  * 2. **Creates an `EventEmitter` instance.**
@@ -17397,7 +17397,7 @@ function createHison(): Hison {
                  * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the PATCH request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiPatch instance without caching
                  * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
@@ -17407,7 +17407,7 @@ function createHison(): Hison {
                  * const cachedApiPatch = new hison.link.ApiPatch("UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_serviceCmd`** *(string)* - Stores the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
                  * - **`_eventEmitter`** *(EventEmitter)* - Handles event-based request monitoring.
@@ -17433,30 +17433,30 @@ function createHison(): Hison {
                  * This method sends a PATCH request using `ApiLink`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`hison.setBeforePatchRequst((requestData, options) => {})`**
                  *   - A customizable hook executed **before sending the PATCH request**.
                  *   - If it returns `false`, the request is **prevented from execution**.
                  *   - **Use Case:** Validating request parameters, modifying request data dynamically.
                  *
-                 * ## **Event Emission**
+                 * ### **Event Emission**
                  * - **`"requestStarted_PATCH"` Event**
                  *   - This event is emitted **before the PATCH request is executed**.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
                  * - If the data is not cached, it makes an HTTP PATCH request to `_serviceCmd`.
                  * - Before executing the request:
@@ -17464,7 +17464,7 @@ function createHison(): Hison {
                  *   - The **event `"requestStarted_PATCH"`** is emitted.
                  * - Once the request is completed, the response is returned and optionally stored in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
                  * 
@@ -17489,7 +17489,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -17506,18 +17506,18 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the API without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
                  * - The response body is **not** included in the result; only headers are returned.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
                  * 
@@ -17532,7 +17532,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -17548,18 +17548,18 @@ function createHison(): Hison {
                  * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
                  * It is useful for checking which HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PATCH", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
                  * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
                  * 
@@ -17574,7 +17574,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -17590,21 +17590,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a PATCH request.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_PATCH"` - Triggered when a PATCH request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PATCH"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
                  * 
@@ -17619,7 +17619,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PATCH request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -17635,20 +17635,20 @@ function createHison(): Hison {
              * The `ApiDelete` class is responsible for sending HTTP DELETE requests to a specified service command.
              * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP DELETE requests** using `ApiLink`.
              * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
              * - **Supports response caching** via an optional `CachingModule`.
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiDelete` requires a `serviceCmd` that specifies the business logic endpoint.
              * - The `call()` method sends a DELETE request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiDelete
              * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
@@ -17672,15 +17672,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiDelete`, providing methods for executing DELETE requests and managing request events.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to a REST API** with structured payloads.
              * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -17692,14 +17692,14 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making DELETE requests to a specified service command.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `serviceCmd` *(string, required)* - The **service command** that determines the target business logic on the server.
                  *   - **Example:** `"UserService.createUser"`
                  *   - If no `serviceCmd` is provided, an error is thrown.
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Checks if a valid `CachingModule` is provided.**
                  *    - If caching is enabled, `_cachingModule` is assigned.
                  * 2. **Creates an `EventEmitter` instance.**
@@ -17709,7 +17709,7 @@ function createHison(): Hison {
                  * 4. **Stores the `serviceCmd`.**
                  *    - Defines the service endpoint for the DELETE request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiDelete instance without caching
                  * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
@@ -17719,7 +17719,7 @@ function createHison(): Hison {
                  * const cachedApiDelete = new hison.link.ApiDelete("UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_serviceCmd`** *(string)* - Stores the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
                  * - **`_eventEmitter`** *(EventEmitter)* - Handles event-based request monitoring.
@@ -17745,30 +17745,30 @@ function createHison(): Hison {
                  * This method sends a DELETE request using `ApiLink`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`hison.setBeforeDeleteRequst((requestData, options) => {})`**
                  *   - A customizable hook executed **before sending the DELETE request**.
                  *   - If it returns `false`, the request is **prevented from execution**.
                  *   - **Use Case:** Validating request parameters, modifying request data dynamically.
                  *
-                 * ## **Event Emission**
+                 * ### **Event Emission**
                  * - **`"requestStarted_DELETE"` Event**
                  *   - This event is emitted **before the DELETE request is executed**.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
                  * - If the data is not cached, it makes an HTTP DELETE request to `_serviceCmd`.
                  * - Before executing the request:
@@ -17776,7 +17776,7 @@ function createHison(): Hison {
                  *   - The **event `"requestStarted_DELETE"`** is emitted.
                  * - Once the request is completed, the response is returned and optionally stored in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
                  * 
@@ -17801,7 +17801,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -17818,18 +17818,18 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the API without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.head()`, targeting `customOption.controllerPath`.
                  * - The response body is **not** included in the result; only headers are returned.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
                  * 
@@ -17844,7 +17844,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -17860,18 +17860,18 @@ function createHison(): Hison {
                  * This method retrieves the list of allowed HTTP methods for the API without performing an actual data operation.
                  * It is useful for checking which HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "DELETE", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the request execution to `ApiLink.options()`, targeting `customOption.controllerPath`.
                  * - The response includes the `Allow` header, which specifies the permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
                  * 
@@ -17886,7 +17886,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -17902,21 +17902,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a DELETE request.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_DELETE"` - Triggered when a DELETE request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"DELETE"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
                  * 
@@ -17931,7 +17931,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a DELETE request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -17947,20 +17947,20 @@ function createHison(): Hison {
              * The `ApiGetUrl` class is responsible for sending HTTP GET requests to a provided URL.
              * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP GET requests** using `ApiLink`.
              * - **Accepts a direct URL** instead of using a predefined API resource path.
              * - **Supports response caching** via an optional `CachingModule`.
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiGetUrl` requires a valid URL.
              * - The `call()` method triggers a GET request to the specified URL.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiGetUrl without caching
              * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
@@ -17980,15 +17980,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiGetUrl`, which provides methods for executing GET requests to a specific URL.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Fetching data from an external API** by specifying a full URL.
              * - **Using cached responses** to reduce redundant API calls.
              * - **Handling event-driven request monitoring** via `onEventEmit`.
@@ -18000,13 +18000,13 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making GET requests to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `url` *(string, required)* - The full URL to which the GET request will be sent.
                  *   - If no `url` is provided, an error is thrown (`"Please enter the request URL."`).
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Validates the `url`.**
                  *    - If it is missing, an error is thrown (`"Please enter the request URL."`).
                  * 2. **Checks if a valid `CachingModule` is provided.**
@@ -18018,7 +18018,7 @@ function createHison(): Hison {
                  * 5. **Stores the `url`.**
                  *    - Defines the endpoint for the GET request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiGetUrl instance without caching
                  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
@@ -18028,7 +18028,7 @@ function createHison(): Hison {
                  * const cachedApiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_url`** *(string)* - Stores the URL for the request.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
                  * - **`_eventEmitter`** *(EventEmitter)* - Handles event-based request monitoring.
@@ -18055,33 +18055,33 @@ function createHison(): Hison {
                  * This method sends a GET request using `ApiLink.getURL()`, optionally applying caching if a `CachingModule` is provided.
                  * It also **emits a request-start event** (`"requestStarted_GET"`) before execution.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or query parameters.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`"requestStarted_GET"` Event**
                  *   - This event is emitted **before the GET request is executed**.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Caching Mechanism**
+                 * ### **Caching Mechanism**
                  * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
                  * - If cached data is found, it is returned **without making a new network request**.
                  * - If no cached data exists, a new GET request is executed, and the response may be stored in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.getURL(this._url, options)`, which:
                  *   - Emits `"requestStarted_GET"` before making the request.
                  *   - Checks if the requested data is cached and returns it if available.
                  *   - If not cached, makes an HTTP GET request to `_url`.
                  *   - Returns the response and optionally stores it in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
                  * 
@@ -18096,7 +18096,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -18112,20 +18112,20 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the specified URL without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.head(this._url, options)`, which:
                  *   - Sends an HTTP HEAD request to `_url`.
                  *   - Extracts and returns the response headers.
                  *   - Does **not** include the response body.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
                  * 
@@ -18140,7 +18140,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(options)`** - Sends a GET request to retrieve full response data.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -18157,20 +18157,20 @@ function createHison(): Hison {
                  * without performing an actual data operation. It is useful for checking which 
                  * HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.options(this._url, options)`, which:
                  *   - Sends an HTTP OPTIONS request to `_url`.
                  *   - Extracts the `Allow` header from the response.
                  *   - Parses and returns the list of permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
                  * 
@@ -18185,7 +18185,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(options)`** - Sends a GET request to retrieve full response data.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -18201,21 +18201,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a GET request to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_GET"` - Triggered when a GET request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"GET"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
                  * 
@@ -18230,7 +18230,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(options)`** - Sends a GET request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -18246,7 +18246,7 @@ function createHison(): Hison {
              * The `ApiPostUrl` class is responsible for sending HTTP POST requests to a provided URL.
              * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP POST requests** using `ApiLink`.
              * - **Accepts a direct URL** instead of using a predefined service command.
              * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -18254,13 +18254,13 @@ function createHison(): Hison {
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiPostUrl` requires a valid URL and an optional `serviceCmd`.
              * - The `call()` method sends a POST request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiPostUrl
              * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
@@ -18284,15 +18284,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiPostUrl`, which provides methods for executing POST requests to a specific URL.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to an external API** using a full URL.
              * - **Passing a `serviceCmd` for structured request routing**.
              * - **Using cached responses** to reduce redundant API calls.
@@ -18305,7 +18305,7 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making POST requests to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `url` *(string, required)* - The full URL to which the POST request will be sent.
                  *   - If no `url` is provided, an error is thrown (`"Please enter the request URL."`).
                  * - `serviceCmd` *(optional, string)* - A **service command** that can be used to specify 
@@ -18315,7 +18315,7 @@ function createHison(): Hison {
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Validates the `url`.**
                  *    - If it is missing, an error is thrown (`"Please enter the request URL."`).
                  * 2. **Checks if a valid `CachingModule` is provided.**
@@ -18327,7 +18327,7 @@ function createHison(): Hison {
                  * 5. **Stores the `url` and `serviceCmd`.**
                  *    - Defines the endpoint and optional service command for the POST request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiPostUrl instance without caching
                  * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
@@ -18337,7 +18337,7 @@ function createHison(): Hison {
                  * const cachedApiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_url`** *(string)* - Stores the URL for the request.
                  * - **`_serviceCmd`** *(string)* - Specifies the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
@@ -18368,37 +18368,37 @@ function createHison(): Hison {
                  * This method sends a POST request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`"requestStarted_POST"` Event**
                  *   - This event is emitted **before the POST request is executed**.
                  *   - It includes the `serviceCmd`, request options, and request data.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Caching Mechanism**
+                 * ### **Caching Mechanism**
                  * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
                  * - If cached data is found, it is returned **without making a new network request**.
                  * - If no cached data exists, a new POST request is executed, and the response may be stored in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
                  *   - Emits `"requestStarted_POST"` before making the request.
                  *   - Checks if the requested data is cached and returns it if available.
                  *   - If not cached, makes an HTTP POST request to `_url` with the provided `serviceCmd`.
                  *   - Returns the response and optionally stores it in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18417,7 +18417,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -18434,20 +18434,20 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the specified URL without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.headURL(this._url, options)`, which:
                  *   - Sends an HTTP HEAD request to `_url`.
                  *   - Extracts and returns the response headers.
                  *   - Does **not** include the response body.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18462,7 +18462,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -18479,20 +18479,20 @@ function createHison(): Hison {
                  * without performing an actual data operation. It is useful for checking which 
                  * HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "POST", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.options(this._url, options)`, which:
                  *   - Sends an HTTP OPTIONS request to `_url`.
                  *   - Extracts the `Allow` header from the response.
                  *   - Parses and returns the list of permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18507,7 +18507,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a POST request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -18523,21 +18523,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a POST request to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_POST"` - Triggered when a POST request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"POST"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18552,7 +18552,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a POST request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -18568,7 +18568,7 @@ function createHison(): Hison {
              * The `ApiPutUrl` class is responsible for sending HTTP PUT requests to a provided URL.
              * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP PUT requests** using `ApiLink`.
              * - **Accepts a direct URL** instead of using a predefined service command.
              * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -18576,13 +18576,13 @@ function createHison(): Hison {
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiPutUrl` requires a valid URL and an optional `serviceCmd`.
              * - The `call()` method sends a PUT request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiPutUrl
              * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
@@ -18606,15 +18606,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiPutUrl`, which provides methods for executing PUT requests to a specific URL.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to an external API** using a full URL.
              * - **Passing a `serviceCmd` for structured request routing**.
              * - **Using cached responses** to reduce redundant API calls.
@@ -18627,7 +18627,7 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making PUT requests to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `url` *(string, required)* - The full URL to which the PUT request will be sent.
                  *   - If no `url` is provided, an error is thrown (`"Please enter the request URL."`).
                  * - `serviceCmd` *(optional, string)* - A **service command** that can be used to specify 
@@ -18637,7 +18637,7 @@ function createHison(): Hison {
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Validates the `url`.**
                  *    - If it is missing, an error is thrown (`"Please enter the request URL."`).
                  * 2. **Checks if a valid `CachingModule` is provided.**
@@ -18649,7 +18649,7 @@ function createHison(): Hison {
                  * 5. **Stores the `url` and `serviceCmd`.**
                  *    - Defines the endpoint and optional service command for the PUT request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiPutUrl instance without caching
                  * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
@@ -18659,7 +18659,7 @@ function createHison(): Hison {
                  * const cachedApiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_url`** *(string)* - Stores the URL for the request.
                  * - **`_serviceCmd`** *(string)* - Specifies the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
@@ -18690,37 +18690,37 @@ function createHison(): Hison {
                  * This method sends a PUT request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`"requestStarted_PUT"` Event**
                  *   - This event is emitted **before the PUT request is executed**.
                  *   - It includes the `serviceCmd`, request options, and request data.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Caching Mechanism**
+                 * ### **Caching Mechanism**
                  * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
                  * - If cached data is found, it is returned **without making a new network request**.
                  * - If no cached data exists, a new PUT request is executed, and the response may be stored in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
                  *   - Emits `"requestStarted_PUT"` before making the request.
                  *   - Checks if the requested data is cached and returns it if available.
                  *   - If not cached, makes an HTTP PUT request to `_url` with the provided `serviceCmd`.
                  *   - Returns the response and optionally stores it in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18739,7 +18739,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -18756,20 +18756,20 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the specified URL without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.headURL(this._url, options)`, which:
                  *   - Sends an HTTP HEAD request to `_url`.
                  *   - Extracts and returns the response headers.
                  *   - Does **not** include the response body.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18784,7 +18784,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -18801,20 +18801,20 @@ function createHison(): Hison {
                  * without performing an actual data operation. It is useful for checking which 
                  * HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PUT", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.options(this._url, options)`, which:
                  *   - Sends an HTTP OPTIONS request to `_url`.
                  *   - Extracts the `Allow` header from the response.
                  *   - Parses and returns the list of permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18829,7 +18829,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PUT request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -18845,21 +18845,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a PUT request to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_PUT"` - Triggered when a PUT request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PUT"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -18874,7 +18874,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PUT request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -18890,7 +18890,7 @@ function createHison(): Hison {
              * The `ApiPatchUrl` class is responsible for sending HTTP PATCH requests to a provided URL.
              * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP PATCH requests** using `ApiLink`.
              * - **Accepts a direct URL** instead of using a predefined service command.
              * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -18898,13 +18898,13 @@ function createHison(): Hison {
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiPatchUrl` requires a valid URL and an optional `serviceCmd`.
              * - The `call()` method sends a PATCH request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiPatchUrl
              * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
@@ -18928,15 +18928,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiPatchUrl`, which provides methods for executing PATCH requests to a specific URL.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to an external API** using a full URL.
              * - **Passing a `serviceCmd` for structured request routing**.
              * - **Using cached responses** to reduce redundant API calls.
@@ -18949,7 +18949,7 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making PATCH requests to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `url` *(string, required)* - The full URL to which the PATCH request will be sent.
                  *   - If no `url` is provided, an error is thrown (`"Please enter the request URL."`).
                  * - `serviceCmd` *(optional, string)* - A **service command** that can be used to specify 
@@ -18959,7 +18959,7 @@ function createHison(): Hison {
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Validates the `url`.**
                  *    - If it is missing, an error is thrown (`"Please enter the request URL."`).
                  * 2. **Checks if a valid `CachingModule` is provided.**
@@ -18971,7 +18971,7 @@ function createHison(): Hison {
                  * 5. **Stores the `url` and `serviceCmd`.**
                  *    - Defines the endpoint and optional service command for the PATCH request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiPatchUrl instance without caching
                  * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
@@ -18981,7 +18981,7 @@ function createHison(): Hison {
                  * const cachedApiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_url`** *(string)* - Stores the URL for the request.
                  * - **`_serviceCmd`** *(string)* - Specifies the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
@@ -19012,37 +19012,37 @@ function createHison(): Hison {
                  * This method sends a PATCH request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`"requestStarted_PATCH"` Event**
                  *   - This event is emitted **before the PATCH request is executed**.
                  *   - It includes the `serviceCmd`, request options, and request data.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Caching Mechanism**
+                 * ### **Caching Mechanism**
                  * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
                  * - If cached data is found, it is returned **without making a new network request**.
                  * - If no cached data exists, a new PATCH request is executed, and the response may be stored in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
                  *   - Emits `"requestStarted_PATCH"` before making the request.
                  *   - Checks if the requested data is cached and returns it if available.
                  *   - If not cached, makes an HTTP PATCH request to `_url` with the provided `serviceCmd`.
                  *   - Returns the response and optionally stores it in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19061,7 +19061,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -19078,20 +19078,20 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the specified URL without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.headURL(this._url, options)`, which:
                  *   - Sends an HTTP HEAD request to `_url`.
                  *   - Extracts and returns the response headers.
                  *   - Does **not** include the response body.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19106,7 +19106,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -19123,20 +19123,20 @@ function createHison(): Hison {
                  * without performing an actual data operation. It is useful for checking which 
                  * HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "PATCH", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.options(this._url, options)`, which:
                  *   - Sends an HTTP OPTIONS request to `_url`.
                  *   - Extracts the `Allow` header from the response.
                  *   - Parses and returns the list of permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19151,7 +19151,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PATCH request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -19167,21 +19167,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a PATCH request to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_PATCH"` - Triggered when a PATCH request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"PATCH"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19196,7 +19196,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a PATCH request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
@@ -19212,7 +19212,7 @@ function createHison(): Hison {
              * The `ApiDeleteUrl` class is responsible for sending HTTP DELETE requests to a provided URL.
              * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
              *
-             * ## **Key Features**
+             * ### **Key Features**
              * - **Executes HTTP DELETE requests** using `ApiLink`.
              * - **Accepts a direct URL** instead of using a predefined service command.
              * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
@@ -19220,13 +19220,13 @@ function createHison(): Hison {
              * - **Emits request lifecycle events** using `EventEmitter`.
              * - **Allows event listeners** for monitoring request execution.
              *
-             * ## **How It Works**
+             * ### **How It Works**
              * - When instantiated, `ApiDeleteUrl` requires a valid URL and an optional `serviceCmd`.
              * - The `call()` method sends a DELETE request with the provided request data.
              * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
-             * ## **Example Usage**
+             * ### **Example Usage**
              * ```typescript
              * // Creating an instance of ApiDeleteUrl
              * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
@@ -19250,15 +19250,15 @@ function createHison(): Hison {
              * });
              * ```
              *
-             * ## **Internal Components**
+             * ### **Internal Components**
              * - **`ApiLink`**: Handles request execution and response processing.
              * - **`EventEmitter`**: Manages event-driven request handling.
              * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
              *
-             * ## **Return Value**
+             * ### **Return Value**
              * - This class returns an instance of `ApiDeleteUrl`, which provides methods for executing DELETE requests to a specific URL.
              *
-             * ## **Typical Use Cases**
+             * ### **Typical Use Cases**
              * - **Sending data to an external API** using a full URL.
              * - **Passing a `serviceCmd` for structured request routing**.
              * - **Using cached responses** to reduce redundant API calls.
@@ -19271,7 +19271,7 @@ function createHison(): Hison {
                  * The constructor sets up the **API request configuration** and **event handling mechanisms** 
                  * required for making DELETE requests to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `url` *(string, required)* - The full URL to which the DELETE request will be sent.
                  *   - If no `url` is provided, an error is thrown (`"Please enter the request URL."`).
                  * - `serviceCmd` *(optional, string)* - A **service command** that can be used to specify 
@@ -19281,7 +19281,7 @@ function createHison(): Hison {
                  * - `cachingModule` *(optional, CachingModule)* - A caching module to store and retrieve API responses.
                  *   - If provided, responses may be retrieved from the cache instead of making a new request.
                  *
-                 * ## **Initialization Process**
+                 * ### **Initialization Process**
                  * 1. **Validates the `url`.**
                  *    - If it is missing, an error is thrown (`"Please enter the request URL."`).
                  * 2. **Checks if a valid `CachingModule` is provided.**
@@ -19293,7 +19293,7 @@ function createHison(): Hison {
                  * 5. **Stores the `url` and `serviceCmd`.**
                  *    - Defines the endpoint and optional service command for the DELETE request.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * // Creating an ApiDeleteUrl instance without caching
                  * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
@@ -19303,7 +19303,7 @@ function createHison(): Hison {
                  * const cachedApiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
                  * ```
                  *
-                 * ## **Related Properties**
+                 * ### **Related Properties**
                  * - **`_url`** *(string)* - Stores the URL for the request.
                  * - **`_serviceCmd`** *(string)* - Specifies the service command for request routing.
                  * - **`_cachingModule`** *(CachingModule | null)* - Manages response caching.
@@ -19334,37 +19334,37 @@ function createHison(): Hison {
                  * This method sends a DELETE request using `ApiLink.postURL()`, encapsulating request data in a `DataWrapper`
                  * and invoking necessary pre-request hooks and event emissions.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `requestData` *(any, required)* - The data to be sent in the request.
                  *   - If it is a `DataWrapper`, it is sent as-is.
                  *   - If it is a standard object, it is converted to a JSON payload.
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers or timeout settings.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Pre-Request Handling**
+                 * ### **Pre-Request Handling**
                  * - **`"requestStarted_DELETE"` Event**
                  *   - This event is emitted **before the DELETE request is executed**.
                  *   - It includes the `serviceCmd`, request options, and request data.
                  *   - Can be used for logging, request tracking, or debugging.
                  *
-                 * ## **Caching Mechanism**
+                 * ### **Caching Mechanism**
                  * - If a `CachingModule` is used, the method first checks if the requested data is available in the cache.
                  * - If cached data is found, it is returned **without making a new network request**.
                  * - If no cached data exists, a new DELETE request is executed, and the response may be stored in the cache.
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing:
                  *   - `data` *(any)* - The API response data.
                  *   - `response` *(Response)* - The original HTTP response object.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.postURL(this._url, requestData, this._serviceCmd, options)`, which:
                  *   - Emits `"requestStarted_DELETE"` before making the request.
                  *   - Checks if the requested data is cached and returns it if available.
                  *   - If not cached, makes an HTTP DELETE request to `_url` with the provided `serviceCmd`.
                  *   - Returns the response and optionally stores it in the cache.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19383,7 +19383,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`head(options)`** - Sends an HTTP HEAD request for metadata retrieval.
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
@@ -19400,20 +19400,20 @@ function createHison(): Hison {
                  * This method retrieves only the headers from the specified URL without downloading the response body.
                  * It is useful for checking metadata such as content type, content length, and caching information.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an object containing HTTP headers as key-value pairs.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.headURL(this._url, options)`, which:
                  *   - Sends an HTTP HEAD request to `_url`.
                  *   - Extracts and returns the response headers.
                  *   - Does **not** include the response body.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19428,7 +19428,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
                  * - **`options(options)`** - Sends an OPTIONS request to check allowed HTTP methods.
                  *
@@ -19445,20 +19445,20 @@ function createHison(): Hison {
                  * without performing an actual data operation. It is useful for checking which 
                  * HTTP methods are permitted for a specific endpoint.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `options` *(optional, Record<string, any>)* - Additional request options such as headers.
                  *   - **Default:** `{}` (empty object)
                  *
-                 * ## **Return Value**
+                 * ### **Return Value**
                  * - A `Promise` resolving to an array of allowed HTTP methods (e.g., `["GET", "DELETE", "OPTIONS"]`).
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Calls `this._apiLink.options(this._url, options)`, which:
                  *   - Sends an HTTP OPTIONS request to `_url`.
                  *   - Extracts the `Allow` header from the response.
                  *   - Parses and returns the list of permitted HTTP methods.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19473,7 +19473,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a DELETE request to execute an API operation.
                  * - **`head(options)`** - Sends a HEAD request to retrieve response headers.
                  *
@@ -19489,21 +19489,21 @@ function createHison(): Hison {
                  * This method allows attaching a callback function to be executed when a specified event 
                  * occurs during the execution of a DELETE request to a specified URL.
                  *
-                 * ## **Parameters**
+                 * ### **Parameters**
                  * - `eventName` *(string, required)* - The name of the event to listen for.
                  * - `eventFunc` *(function, required)* - The callback function to be executed when the event occurs.
                  *
-                 * ## **Supported Events**
+                 * ### **Supported Events**
                  * - `"requestStarted_DELETE"` - Triggered when a DELETE request begins.
                  * - `"requestCompleted_Response"` - Triggered when the API response is received.
                  * - `"requestCompleted_Data"` - Triggered when response data is successfully processed.
                  * - `"requestError"` - Triggered when an error occurs during the request.
                  *
-                 * ## **Behavior**
+                 * ### **Behavior**
                  * - Delegates the event registration to `ApiLink.onEventEmit()`, specifying `"DELETE"` as the method type.
                  * - The provided `eventFunc` is executed whenever the specified event is emitted.
                  *
-                 * ## **Example Usage**
+                 * ### **Example Usage**
                  * ```typescript
                  * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
                  * 
@@ -19518,7 +19518,7 @@ function createHison(): Hison {
                  * });
                  * ```
                  *
-                 * ## **Related Methods**
+                 * ### **Related Methods**
                  * - **`call(requestData, options)`** - Sends a DELETE request, triggering events during execution.
                  *
                  * @param {string} eventName - The name of the event to listen for.
