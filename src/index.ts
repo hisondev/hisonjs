@@ -1,6 +1,6 @@
 /**
- * The `Hison` object serves as the central interface for the `hisondev` solution, 
- * providing a comprehensive set of tools for handling configuration, security, 
+ * The `Hison` object serves as the central interface for the `hisondev` solution,
+ * providing a comprehensive set of tools for handling configuration, security,
  * data manipulation, and communication.
  *
  * The `Hison` object is designed to streamline development by offering:
@@ -121,13 +121,10 @@
  * It is designed to improve development efficiency while offering customization and security controls.
  */
 export interface Hison {
-    //====================================================================================
-    //option utils
-    //====================================================================================
     /**
      * Sets the default format for displaying dates.
      *
-     * This method updates the `dateFormat` property in `customOption`, 
+     * This method updates the `dateFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting date values.
      *
      * - The new format will be applied globally to all date-related operations.
@@ -145,7 +142,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying time.
      *
-     * This method updates the `timeFormat` property in `customOption`, 
+     * This method updates the `timeFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting time values.
      *
      * - The new format will be applied globally to all time-related operations.
@@ -163,7 +160,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying date and time.
      *
-     * This method updates the `datetimeFormat` property in `customOption`, 
+     * This method updates the `datetimeFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting datetime values.
      *
      * - The new format will be applied globally to all datetime-related operations.
@@ -181,7 +178,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the year.
      *
-     * This method updates the `yearFormat` property in `customOption`, 
+     * This method updates the `yearFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting year values.
      *
      * - The new format will be applied globally to all year-related operations.
@@ -199,7 +196,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the month.
      *
-     * This method updates the `monthFormat` property in `customOption`, 
+     * This method updates the `monthFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting month values.
      *
      * - The new format will be applied globally to all month-related operations.
@@ -217,7 +214,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the full month name.
      *
-     * This method updates the `monthNameFormat` property in `customOption`, 
+     * This method updates the `monthNameFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting month names.
      *
      * - The new format will be applied globally to all month-related operations.
@@ -235,7 +232,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying year and month.
      *
-     * This method updates the `yearMonthFormat` property in `customOption`, 
+     * This method updates the `yearMonthFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting year-month values.
      *
      * - The new format will be applied globally to all year-month-related operations.
@@ -253,7 +250,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the day of the month.
      *
-     * This method updates the `dayFormat` property in `customOption`, 
+     * This method updates the `dayFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting day values.
      *
      * - The new format will be applied globally to all day-related operations.
@@ -271,7 +268,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the day of the week.
      *
-     * This method updates the `dayOfWeekFormat` property in `customOption`, 
+     * This method updates the `dayOfWeekFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting day-of-week values.
      *
      * - The new format will be applied globally to all day-of-week-related operations.
@@ -289,7 +286,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the hour.
      *
-     * This method updates the `hourFormat` property in `customOption`, 
+     * This method updates the `hourFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting hour values.
      *
      * - The new format will be applied globally to all hour-related operations.
@@ -307,7 +304,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the hour and minute.
      *
-     * This method updates the `hourMinuteFormat` property in `customOption`, 
+     * This method updates the `hourMinuteFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting time values.
      *
      * - The new format will be applied globally to all hour-minute-related operations.
@@ -325,7 +322,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the minute.
      *
-     * This method updates the `minuteFormat` property in `customOption`, 
+     * This method updates the `minuteFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting minute values.
      *
      * - The new format will be applied globally to all minute-related operations.
@@ -343,7 +340,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying the second.
      *
-     * This method updates the `secondFormat` property in `customOption`, 
+     * This method updates the `secondFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for parsing and formatting second values.
      *
      * - The new format will be applied globally to all second-related operations.
@@ -361,7 +358,7 @@ export interface Hison {
     /**
      * Sets the default format for displaying numbers.
      *
-     * This method updates the `numberFormat` property in `customOption`, 
+     * This method updates the `numberFormat` property in `customOption`,
      * which is used throughout the `hisondev` solution for formatting numeric values.
      *
      * - The new format will be applied globally to all number-related operations.
@@ -379,7 +376,7 @@ export interface Hison {
     /**
      * Sets the byte size for characters with a char code less than or equal to `0x7FF`.
      *
-     * This method updates the `LESSOREQ_0X7FF_BYTE` property in `customOption`, 
+     * This method updates the `LESSOREQ_0X7FF_BYTE` property in `customOption`,
      * which determines the number of bytes required to encode characters in this range.
      *
      * - The new value will be applied globally to all character encoding operations.
@@ -397,7 +394,7 @@ export interface Hison {
     /**
      * Sets the byte size for characters with a char code less than or equal to `0xFFFF`.
      *
-     * This method updates the `LESSOREQ_0XFFFF_BYTE` property in `customOption`, 
+     * This method updates the `LESSOREQ_0XFFFF_BYTE` property in `customOption`,
      * which determines the number of bytes required to encode characters in this range.
      *
      * - The new value will be applied globally to all character encoding operations.
@@ -415,7 +412,7 @@ export interface Hison {
     /**
      * Sets the byte size for characters with a char code greater than `0xFFFF`.
      *
-     * This method updates the `GREATER_0XFFFF_BYTE` property in `customOption`, 
+     * This method updates the `GREATER_0XFFFF_BYTE` property in `customOption`,
      * which determines the number of bytes required to encode characters in this range.
      *
      * - The new value will be applied globally to all character encoding operations.
@@ -566,14 +563,10 @@ export interface Hison {
      * @returns The byte size for `charCode > 0xFFFF`.
      */
     getCharByteGreater65535(): number;
-
-    //====================================================================================
-    //option shield
-    //====================================================================================
     /**
      * Sets the security service URL used to enforce access restrictions.
      *
-     * This method updates the `shieldURL` property in `customOption`, 
+     * This method updates the `shieldURL` property in `customOption`,
      * which is used throughout the `hisondev` solution to validate access to the system.
      *
      * - If set, the system verifies whether the current location matches the specified URL.
@@ -592,7 +585,7 @@ export interface Hison {
     /**
      * Sets the list of IP addresses that are allowed to bypass security restrictions.
      *
-     * This method updates the `exposeIpList` property in `customOption`, 
+     * This method updates the `exposeIpList` property in `customOption`,
      * which is used throughout the `hisondev` solution to define a whitelist of trusted IPs.
      *
      * - Only IPs in this list will be granted access when security restrictions are enabled.
@@ -610,7 +603,7 @@ export interface Hison {
     /**
      * Sets whether the `Hison` instance should be frozen to prevent modifications.
      *
-     * This method updates the `isFreeze` property in `customOption`, 
+     * This method updates the `isFreeze` property in `customOption`,
      * which determines whether the `Hison` object and its properties should be deeply frozen.
      *
      * - If `true`, `Object.freeze()` is applied to prevent modifications.
@@ -628,7 +621,7 @@ export interface Hison {
     /**
      * Sets whether the browser's back navigation is allowed.
      *
-     * This method updates the `isPossibleGoBack` property in `customOption`, 
+     * This method updates the `isPossibleGoBack` property in `customOption`,
      * which determines if users can navigate back in their browser history.
      *
      * - If `false`, a mechanism is implemented to prevent the user from navigating back.
@@ -646,10 +639,10 @@ export interface Hison {
     /**
      * Sets whether developer tools can be opened.
      *
-     * This method updates the `isPossibleOpenDevTool` property in `customOption`, 
+     * This method updates the `isPossibleOpenDevTool` property in `customOption`,
      * which determines if browser developer tools should be restricted.
      *
-     * - If `false`, an event listener is added to detect developer mode access 
+     * - If `false`, an event listener is added to detect developer mode access
      *   (e.g., F12 key, browser dev tools, resizing).
      * - Default value: `false`
      * - Example usage: `setIsPossibleOpenDevTool(true);` (Allows developer tools to be opened)
@@ -701,15 +694,11 @@ export interface Hison {
      * @returns `true` if developer tools can be opened, otherwise `false`.
      */
     getIsPossibleOpenDevTool(): boolean;
-    
-    //====================================================================================
-    //option data
-    //====================================================================================
     /**
      * Sets the function used to convert special values before they are inserted into the `DataModel`.
      *
-     * This method updates the `convertValue` property in `customOption`, 
-     * allowing developers to define a custom transformation for specific objects like `Date` 
+     * This method updates the `convertValue` property in `customOption`,
+     * allowing developers to define a custom transformation for specific objects like `Date`
      * before they are stored in a `DataModel`. By default, values are inserted as-is.
      *
      * - The new function will be applied globally to all `DataModel` insertions.
@@ -746,14 +735,10 @@ export interface Hison {
      * @param func The function used to transform values before they are stored in `DataModel`.
      */
     setConvertValue(func: ConvertValue): void;
-
-    //====================================================================================
-    //option link
-    //====================================================================================
     /**
      * Sets the default protocol for API communication.
      *
-     * This method updates the `protocol` property in `customOption`, 
+     * This method updates the `protocol` property in `customOption`,
      * which is used throughout the `hisondev` solution to construct request URLs.
      *
      * - The new protocol will be applied globally to all API requests.
@@ -771,7 +756,7 @@ export interface Hison {
     /**
      * Sets the default domain for API requests.
      *
-     * This method updates the `domain` property in `customOption`, 
+     * This method updates the `domain` property in `customOption`,
      * which is used throughout the `hisondev` solution to construct request URLs.
      *
      * - The new domain will be applied globally to all API requests.
@@ -789,7 +774,7 @@ export interface Hison {
     /**
      * Sets the default controller path for API requests.
      *
-     * This method updates the `controllerPath` property in `customOption`, 
+     * This method updates the `controllerPath` property in `customOption`,
      * which is used throughout the `hisondev` solution to construct request URLs.
      *
      * - The new controller path will be applied globally to all API requests.
@@ -807,7 +792,7 @@ export interface Hison {
     /**
      * Sets the default timeout duration for API requests.
      *
-     * This method updates the `timeout` property in `customOption`, 
+     * This method updates the `timeout` property in `customOption`,
      * which determines the maximum time (in milliseconds) an API request can take before being aborted.
      *
      * - The new timeout will be applied globally to all API requests.
@@ -824,7 +809,7 @@ export interface Hison {
     /**
      * Sets the default protocol for WebSocket communication.
      *
-     * This method updates the `webSocketProtocol` property in `customOption`, 
+     * This method updates the `webSocketProtocol` property in `customOption`,
      * which is used throughout the `hisondev` solution to establish WebSocket connections.
      *
      * - The new protocol will be applied globally to all WebSocket connections.
@@ -842,7 +827,7 @@ export interface Hison {
     /**
      * Sets the default WebSocket endpoint for real-time communication.
      *
-     * This method updates the `webSocketEndPoint` property in `customOption`, 
+     * This method updates the `webSocketEndPoint` property in `customOption`,
      * which is used throughout the `hisondev` solution to establish WebSocket connections.
      *
      * - The new endpoint will be applied globally to all WebSocket connections.
@@ -860,7 +845,7 @@ export interface Hison {
     /**
      * Sets the caching limit for stored API responses.
      *
-     * This method updates the `cachingLimit` property in `customOption`, 
+     * This method updates the `cachingLimit` property in `customOption`,
      * which determines the maximum number of cached API responses before older ones are removed.
      *
      * - The new caching limit will be applied globally to all API request caching.
@@ -933,7 +918,7 @@ export interface Hison {
     /**
      * Sets the hook function that executes before making a `GET` request.
      *
-     * This method updates the `beforeGetRequst` property in `customOption`, 
+     * This method updates the `beforeGetRequst` property in `customOption`,
      * allowing developers to intercept or modify `GET` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -959,7 +944,7 @@ export interface Hison {
     /**
      * Sets the hook function that executes before making a `POST` request.
      *
-     * This method updates the `beforePostRequst` property in `customOption`, 
+     * This method updates the `beforePostRequst` property in `customOption`,
      * allowing developers to intercept or modify `POST` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -985,7 +970,7 @@ export interface Hison {
     /**
      * Sets the hook function that executes before making a `PUT` request.
      *
-     * This method updates the `beforePutRequst` property in `customOption`, 
+     * This method updates the `beforePutRequst` property in `customOption`,
      * allowing developers to intercept or modify `PUT` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -1011,7 +996,7 @@ export interface Hison {
     /**
      * Sets the hook function that executes before making a `PATCH` request.
      *
-     * This method updates the `beforePatchRequst` property in `customOption`, 
+     * This method updates the `beforePatchRequst` property in `customOption`,
      * allowing developers to intercept or modify `PATCH` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -1037,7 +1022,7 @@ export interface Hison {
     /**
      * Sets the hook function that executes before making a `DELETE` request.
      *
-     * This method updates the `beforeDeleteRequst` property in `customOption`, 
+     * This method updates the `beforeDeleteRequst` property in `customOption`,
      * allowing developers to intercept or modify `DELETE` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -1063,7 +1048,7 @@ export interface Hison {
     /**
      * Sets the function that intercepts and processes API responses before returning them to the caller.
      *
-     * This method updates the `interceptApiResult` property in `customOption`, 
+     * This method updates the `interceptApiResult` property in `customOption`,
      * allowing developers to handle API responses globally before they are processed.
      *
      * - If the function returns `false`, the response will be ignored.
@@ -1089,7 +1074,7 @@ export interface Hison {
     /**
      * Sets the function that intercepts and processes API errors before returning them to the caller.
      *
-     * This method updates the `interceptApiError` property in `customOption`, 
+     * This method updates the `interceptApiError` property in `customOption`,
      * allowing developers to handle API errors globally before they are processed.
      *
      * - If the function returns `false`, the error will be ignored.
@@ -1112,10 +1097,6 @@ export interface Hison {
      * @param func A function to execute when an API error occurs. Returning `false` cancels further error handling.
      */
     setInterceptApiError(func: InterceptApiError): void;
-
-    //====================================================================================
-    //utils
-    //====================================================================================
     /**
      * Provides a collection of utility functions for validation, formatting, and data manipulation within `Hison`.
      *
@@ -1213,7 +1194,7 @@ export interface Hison {
          * isAlpha("Hello123"); // false
          * isAlpha("!@#"); // false
          */
-        isAlpha(str: string): boolean
+        isAlpha(str: string): boolean;
         /**
          * Checks if the given string contains only alphabetic characters (A-Z, a-z) and numbers (0-9).
          *
@@ -1228,7 +1209,7 @@ export interface Hison {
          * isAlphaNumber("Hello!"); // false
          * isAlphaNumber("123"); // true
          */
-        isAlphaNumber(str: string): boolean
+        isAlphaNumber(str: string): boolean;
         /**
          * Checks if the given string contains only numeric characters (0-9).
          *
@@ -1243,7 +1224,7 @@ export interface Hison {
          * isNumber("123a"); // false
          * isNumber("!@#"); // false
          */
-        isNumber(str: string): boolean
+        isNumber(str: string): boolean;
         /**
          * Checks if the given string contains only numeric characters (0-9) and symbols.
          *
@@ -1258,7 +1239,7 @@ export interface Hison {
          * isNumberSymbols("123ABC"); // false
          * isNumberSymbols("!@#$%^"); // true
          */
-        isNumberSymbols(str: string): boolean
+        isNumberSymbols(str: string): boolean;
         /**
          * Checks if the given string contains any symbols.
          *
@@ -1273,7 +1254,7 @@ export interface Hison {
          * isIncludeSymbols("123"); // false
          * isIncludeSymbols("password@123"); // true
          */
-        isIncludeSymbols(str: string): boolean
+        isIncludeSymbols(str: string): boolean;
         /**
          * Checks if the given string contains only lowercase alphabetic characters (a-z).
          *
@@ -1288,7 +1269,7 @@ export interface Hison {
          * isLowerAlpha("Hello"); // false
          * isLowerAlpha("hello123"); // false
          */
-        isLowerAlpha(str: string): boolean
+        isLowerAlpha(str: string): boolean;
         /**
          * Checks if the given string contains only lowercase alphabetic characters (a-z) and numbers (0-9).
          *
@@ -1303,7 +1284,7 @@ export interface Hison {
          * isLowerAlphaAndNumber("Hello123"); // false
          * isLowerAlphaAndNumber("hello!"); // false
          */
-        isLowerAlphaAndNumber(str: string): boolean
+        isLowerAlphaAndNumber(str: string): boolean;
         /**
          * Checks if the given string contains only uppercase alphabetic characters (A-Z).
          *
@@ -1318,7 +1299,7 @@ export interface Hison {
          * isUpperAlpha("Hello"); // false
          * isUpperAlpha("HELLO123"); // false
          */
-        isUpperAlpha(str: string): boolean
+        isUpperAlpha(str: string): boolean;
         /**
          * Checks if the given string contains only uppercase alphabetic characters (A-Z) and numbers (0-9).
          *
@@ -1333,7 +1314,7 @@ export interface Hison {
          * isUpperAlphaNumber("Hello123"); // false
          * isUpperAlphaNumber("HELLO!"); // false
          */
-        isUpperAlphaNumber(str: string): boolean
+        isUpperAlphaNumber(str: string): boolean;
         /**
          * Checks if the given value is a numeric value.
          *
@@ -1676,7 +1657,7 @@ export interface Hison {
          * Formats a given date or datetime according to the specified format.
          *
          * - Accepts a `DateTimeObject`, `DateObject`, or a string representation of a date/datetime.
-         * - If no format is provided, it defaults to `CustomOption.dateFormat` for dates 
+         * - If no format is provided, it defaults to `CustomOption.dateFormat` for dates
          *   and `CustomOption.datetimeFormat` for datetimes.
          * - Supports various formats such as:
          *   - `'yyyy-MM-dd'` → `"2025-02-05"`
@@ -2407,12 +2388,11 @@ export interface Hison {
          * arrCopy[1][0] = 99;
          * console.log(arr[1][0]); // 2 (original array remains unchanged)
          */
-        deepCopyObject(object: any, visited?: { source: any, copy: any }[]): any;
-    }
-    
-    //====================================================================================
-    //shield
-    //====================================================================================
+        deepCopyObject(object: any, visited?: {
+            source: any;
+            copy: any;
+        }[]): any;
+    };
     /**
      * Enforces security policies on the given `Hison` instance, including access restrictions and object immutability.
      *
@@ -2435,10 +2415,10 @@ export interface Hison {
      * ### Security Features & Execution Flow
      *
      * ### 1. **Validation of `hison` Parameter**
-     * - If `hison` is not provided, an error is thrown:  
+     * - If `hison` is not provided, an error is thrown:
      *   `"Invalid argument: 'hison' is required."`
      * - Ensures that the input is a valid `Hison` instance before executing security functions.
-     * - If `hison.constructor !== Hison`, an error is thrown:  
+     * - If `hison.constructor !== Hison`, an error is thrown:
      *   `"Invalid argument: 'hison' must be an instance of Hison."`
      *
      * ### 2. **Object Freezing (`isFreeze`)**
@@ -2526,10 +2506,6 @@ export interface Hison {
          */
         excute(hison: Hison): void;
     };
-    
-    //====================================================================================
-    //data
-    //====================================================================================
     /**
      * The `hison.data` module provides core data management structures within the `hisondev` ecosystem.
      * It includes:
@@ -2537,7 +2513,7 @@ export interface Hison {
      * - **`DataWrapper`**: A key-value based data storage container.
      * - **`DataModel`**: A structured table-like data model for handling tabular data.
      *
-     * These components enable **efficient data storage, retrieval, validation, and transformation** 
+     * These components enable **efficient data storage, retrieval, validation, and transformation**
      * while maintaining type safety and structural consistency.
      *
      * ### Core Features
@@ -2588,7 +2564,7 @@ export interface Hison {
      * ```
      *
      * ### Related Functions
-     * - **`hison.setConvertValue(func)`**: 
+     * - **`hison.setConvertValue(func)`**:
      *   - Allows defining a **custom value transformation function** for `DataModel`.
      *   - Useful for formatting **Date objects** or handling special types before insertion.
      *   - Example:
@@ -2644,7 +2620,7 @@ export interface Hison {
          * - `T` represents the shape of each row in the `DataModel`.
          * - By specifying `T`, developers can enforce type safety for row values.
          * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
-         * 
+         *
          * ### Core Features:
          * - **Column and Row Management:**
          *   - Supports dynamic addition and removal of columns and rows.
@@ -2675,22 +2651,22 @@ export interface Hison {
          *     name: string;
          *     age: number;
          * }
-         * 
+         *
          * // Creating a DataModel with a defined type
          * const dataModel: InterfaceDataModel<User> = new hison.data.DataModel<User>([
          *     { id: 1, name: "Alice", age: 25 },
          *     { id: 2, name: "Bob", age: 30 }
          * ]);
-         * 
+         *
          * // Add a new column (TypeScript enforces type constraints)
          * dataModel.addColumn("gender");
-         * 
+         *
          * // Set a default value for a column
          * dataModel.setColumnSameValue("gender", "Unknown");
-         * 
+         *
          * // Apply a formatting function to the age column
          * dataModel.setColumnSameFormat("age", (value) => `${value} years old`);
-         * 
+         *
          * // Get filtered rows where age is greater than 25
          * const filtered = dataModel.filterRows(row => row.age > 25);
          * console.log(filtered);
@@ -2701,10 +2677,6 @@ export interface Hison {
          */
         DataModel: new <T extends Record<string, any> = Record<string, any>>(data?: T[] | T) => InterfaceDataModel<T>;
     };
-
-    //====================================================================================
-    //link
-    //====================================================================================
     /**
      * The `hison.link` object provides core communication modules for interacting with the hisondev platform.
      * It serves as a central hub for API requests, caching, and WebSocket communication.
@@ -2727,7 +2699,7 @@ export interface Hison {
      * // Creating an API request
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Sending a POST request
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
      * apiPost.call(requestData).then(response => {
@@ -2757,7 +2729,7 @@ export interface Hison {
         /**
          * **`CachingModule` - A module for API response caching and real-time WebSocket updates.**
          *
-         * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy** 
+         * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy**
          * while integrating **WebSocket communication** for real-time data updates.
          *
          * ### **Key Features**
@@ -2778,13 +2750,13 @@ export interface Hison {
          * ```typescript
          * // Create a CachingModule instance with a cache limit of 20
          * const cachingModule = new hison.link.CachingModule(20);
-         * 
+         *
          * // Store API response in the cache
          * cachingModule.put("users", fetch("/api/users").then(response => response.json()));
-         * 
+         *
          * // Retrieve cached data
          * cachingModule.get("users").then(data => console.log(data));
-         * 
+         *
          * // Register WebSocket event handlers
          * cachingModule.onopen = () => console.log("WebSocket Connected");
          * cachingModule.onmessage = event => console.log("New Message:", event.data);
@@ -2813,36 +2785,44 @@ export interface Hison {
          */
         CachingModule: new (cachingLimit?: number) => InterfaceCachingModule;
         /**
-         * **`ApiGet` - A class for handling HTTP GET requests within the `hison.link` module.**
+         * **`ApiGet<T>` - A generic class for handling HTTP GET requests within the `hison.link` module.**
          *
-         * The `ApiGet` class is responsible for sending HTTP GET requests to a specified API resource. 
-         * It integrates with `ApiLink` to handle request execution, event emissions, and optional response caching.
-         *
+         * The `ApiGet<T>` class is responsible for sending HTTP GET requests to a specified API resource.
+         * It allows defining a **custom response type** using the generic parameter `T`, providing strong typing for API responses.
+         * 
          * ### **Key Features**
          * - **Executes HTTP GET requests** using `ApiLink`.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
-         * - **Allows setting event listeners** for request completion, errors, and other key events.
+         * - **Allows defining the expected response type** via the generic parameter `T` (default: `InterfaceDataWrapper`).
          *
          * ### **How It Works**
-         * - When instantiated, `ApiGet` stores the API resource path and an optional `CachingModule` instance.
-         * - The `call()` method triggers a GET request to the specified resource path.
+         * - When instantiated, `ApiGet<T>` stores the API resource path and an optional `CachingModule` instance.
+         * - The `call()` method triggers a GET request and returns a `Promise<{ data: T; response: Response } | null>`.
          * - If caching is enabled, previously stored responses may be returned instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiGet without caching
+         * // Default usage (response type: InterfaceDataWrapper)
          * const apiGet = new hison.link.ApiGet("/users");
-         * 
-         * // Sending a GET request
          * apiGet.call().then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response?.data); // Type: InterfaceDataWrapper
+         * });
+         *
+         * // Specifying a custom response type (User[])
+         * interface User {
+         *     id: number;
+         *     name: string;
+         * }
+         * const apiGetUsers = new hison.link.ApiGet<User[]>("/users");
+         * apiGetUsers.call().then(response => {
+         *     console.log(response?.data); // Type: User[]
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiGet = new hison.link.ApiGet("/users", cachingModule);
+         * const cachedApiGet = new hison.link.ApiGet<User[]>("/users", cachingModule);
          * 
          * // Handling request events
          * cachedApiGet.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2856,36 +2836,40 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiGet`, which provides methods for executing GET requests and managing request events.
+         * - This class returns an instance of `ApiGet<T>`, which provides methods for executing GET requests and managing request events.
          *
          * ### **Typical Use Cases**
-         * - **Fetching data from a REST API** with minimal setup.
+         * - **Fetching data from a REST API** with strong type support.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
-         */
-        ApiGet: new (resourcePath?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGet;
-        /**
-         * **`ApiPost` - A class for handling HTTP POST requests within the `hison.link` module.**
          *
-         * The `ApiPost` class is responsible for sending HTTP POST requests to a specified service command.
+         * @template T - The expected response data type (default: `InterfaceDataWrapper`).
+         */
+        ApiGet: new <T = InterfaceDataWrapper>(resourcePath?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGet<T>;
+        /**
+         * **`ApiPost<T>` - A class for handling HTTP POST requests within the `hison.link` module.**
+         *
+         * The `ApiPost<T>` class is responsible for sending HTTP POST requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+         * The response type can be customized using the generic parameter `T`, with a default type of `InterfaceDataWrapper`.
          *
          * ### **Key Features**
          * - **Executes HTTP POST requests** using `ApiLink`.
-         * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
+         * - **Encapsulates request data in `DataWrapper`**, ensuring structured payloads with a `cmd` field for service routing.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
-         * - **Allows event listeners** for monitoring request execution.
+         * - **Allows event listeners** to monitor request execution.
+         * - **Flexible response typing** via **`T`**, allowing the user to define the expected response data structure.
          *
          * ### **How It Works**
-         * - When instantiated, `ApiPost` requires a `serviceCmd` that specifies the business logic endpoint.
+         * - When instantiated, `ApiPost<T>` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a POST request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPost
+         * // Creating an instance of ApiPost (default response type: InterfaceDataWrapper)
          * const apiPost = new hison.link.ApiPost("UserService.createUser");
          *
          * // Creating request data
@@ -2894,12 +2878,24 @@ export interface Hison {
          * 
          * // Sending a POST request
          * apiPost.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data); // Type: InterfaceDataWrapper
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
          * const cachedApiPost = new hison.link.ApiPost("UserService.createUser", cachingModule);
+         *
+         * // Specifying a custom response type
+         * interface CreateUserResponse {
+         *     userId: number;
+         *     username: string;
+         * }
+         * const apiPostTyped = new hison.link.ApiPost<CreateUserResponse>("UserService.createUser");
+         *
+         * apiPostTyped.call(requestData).then(response => {
+         *     console.log(response.data.userId); // Type: number
+         *     console.log(response.data.username); // Type: string
+         * });
          *
          * // Handling request events
          * cachedApiPost.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2913,16 +2909,19 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPost`, providing methods for executing POST requests and managing request events.
+         * - This class returns an instance of `ApiPost<T>`, which provides methods for executing POST requests and managing request events.
+         * - The response type **defaults to `InterfaceDataWrapper`** but can be customized by specifying a different type `T`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiPost: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
+        ApiPost: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost<T>;
         /**
-         * **`ApiPut` - A class for handling HTTP PUT requests within the `hison.link` module.**
+         * **`ApiPut<T>` - A class for handling HTTP PUT requests within the `hison.link` module.**
          *
          * The `ApiPut` class is responsible for sending HTTP PUT requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
@@ -2933,17 +2932,24 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types (`T`)** to enable type-safe API responses.
          *
          * ### **How It Works**
-         * - When instantiated, `ApiPut` requires a `serviceCmd` that specifies the business logic endpoint.
+         * - When instantiated, `ApiPut<T>` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a PUT request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPut
-         * const apiPut = new hison.link.ApiPut("UserService.createUser");
+         * // Defining a custom response type
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     updatedUserId: number;
+         * }
+         *
+         * // Creating an instance of ApiPut with a custom response type
+         * const apiPut = new hison.link.ApiPut<UpdateUserResponse>("UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -2951,12 +2957,13 @@ export interface Hison {
          * 
          * // Sending a PUT request
          * apiPut.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data.success); // Type: boolean
+         *     console.log(response.data.updatedUserId); // Type: number
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPut = new hison.link.ApiPut("UserService.createUser", cachingModule);
+         * const cachedApiPut = new hison.link.ApiPut<UpdateUserResponse>("UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPut.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2970,19 +2977,22 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPut`, providing methods for executing PUT requests and managing request events.
+         * - This class returns an instance of `ApiPut<T>`, providing methods for executing PUT requests and managing request events.
+         * - The `T` type parameter allows users to define the expected response structure.
          *
          * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiPut: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
+        ApiPut: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut<T>;
         /**
          * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
          *
          * The `ApiPatch` class is responsible for sending HTTP PATCH requests to a specified service command.
-         * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+         * It supports **strongly typed responses** using generics (`T`), allowing precise response data handling.
          *
          * ### **Key Features**
          * - **Executes HTTP PATCH requests** using `ApiLink`.
@@ -2990,30 +3000,38 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Utilizes generics (`T`)** to enable type-safe response handling.
          *
          * ### **How It Works**
          * - When instantiated, `ApiPatch` requires a `serviceCmd` that specifies the business logic endpoint.
-         * - The `call()` method sends a PATCH request with the provided request data.
+         * - The `call<T>()` method sends a PATCH request and expects a response of type `T`.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPatch
-         * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
+         * // Defining a custom response type
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     updatedFields: string[];
+         * }
+         *
+         * // Creating an instance of ApiPatch with a custom response type
+         * const apiPatch = new hison.link.ApiPatch<UpdateUserResponse>("UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
          * requestData.putString("username", "Alice");
          * 
-         * // Sending a PATCH request
+         * // Sending a PATCH request with a typed response
          * apiPatch.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data.success); // Type: boolean
+         *     console.log(response.data.updatedFields); // Type: string[]
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPatch = new hison.link.ApiPatch("UserService.createUser", cachingModule);
+         * const cachedApiPatch = new hison.link.ApiPatch("UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPatch.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -3027,16 +3045,18 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPatch`, providing methods for executing PATCH requests and managing request events.
+         * - This class returns an instance of `ApiPatch<T>`, providing methods for executing PATCH requests and managing request events.
          *
          * ### **Typical Use Cases**
-         * - **Sending data to a REST API** with structured payloads.
+         * - **Applying partial updates** to a REST API.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiPatch: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
+        ApiPatch: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch<T>;
         /**
-         * **`ApiDelete` - A class for handling HTTP DELETE requests within the `hison.link` module.**
+         * **`ApiDelete<T>` - A class for handling HTTP DELETE requests within the `hison.link` module.**
          *
          * The `ApiDelete` class is responsible for sending HTTP DELETE requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
@@ -3047,30 +3067,39 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types (`T`)**, allowing for **strongly typed responses**.
          *
          * ### **How It Works**
-         * - When instantiated, `ApiDelete` requires a `serviceCmd` that specifies the business logic endpoint.
+         * - When instantiated, `ApiDelete<T>` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a DELETE request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
+         * - The **generic type `T` defines the response data structure**, ensuring **type safety**.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiDelete
-         * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
+         * // Define a response type
+         * interface DeleteUserResponse {
+         *     success: boolean;
+         *     deletedId: string;
+         * }
+         *
+         * // Creating an instance of ApiDelete with a typed response
+         * const apiDelete = new hison.link.ApiDelete<DeleteUserResponse>("UserService.deleteUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
-         * requestData.putString("username", "Alice");
+         * requestData.putString("userId", "12345");
          * 
          * // Sending a DELETE request
          * apiDelete.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data.success); // Type: boolean
+         *     console.log(response.data.deletedId); // Type: string
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiDelete = new hison.link.ApiDelete("UserService.createUser", cachingModule);
+         * const cachedApiDelete = new hison.link.ApiDelete("UserService.deleteUser", cachingModule);
          *
          * // Handling request events
          * cachedApiDelete.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -3084,14 +3113,16 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiDelete`, providing methods for executing DELETE requests and managing request events.
+         * - This class returns an instance of `ApiDelete<T>`, providing methods for executing DELETE requests and managing request events.
          *
          * ### **Typical Use Cases**
-         * - **Sending data to a REST API** with structured payloads.
+         * - **Deleting data from a REST API** in a structured and type-safe way.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiDelete: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
+        ApiDelete: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete<T>;
         /**
          * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
          *
@@ -3104,12 +3135,14 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types (`T`)** with a default value of `any` to accommodate diverse API responses.
          *
          * ### **How It Works**
          * - When instantiated, `ApiGetUrl` requires a valid URL.
          * - The `call()` method triggers a GET request to the specified URL.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
+         * - The response data type can be explicitly defined using `T` (default: `any`).
          *
          * ### **Example Usage**
          * ```typescript
@@ -3118,7 +3151,7 @@ export interface Hison {
          * 
          * // Sending a GET request
          * apiGetUrl.call().then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data); // Response data (any type by default)
          * });
          *
          * // Creating an instance with caching
@@ -3129,6 +3162,18 @@ export interface Hison {
          * cachedApiGetUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("GET request completed!", data);
          * });
+         * 
+         * // Defining a specific response type using generics
+         * interface UserResponse {
+         *     id: number;
+         *     name: string;
+         *     email: string;
+         * }
+         * const typedApiGetUrl = new hison.link.ApiGetUrl<UserResponse>("https://api.example.com/user/1");
+         * 
+         * typedApiGetUrl.call().then(response => {
+         *     console.log(response.data.name); // `name` is inferred as a string
+         * });
          * ```
          *
          * ### **Internal Components**
@@ -3138,13 +3183,15 @@ export interface Hison {
          *
          * ### **Return Value**
          * - This class returns an instance of `ApiGetUrl`, which provides methods for executing GET requests to a specific URL.
+         * - The response type is determined by the generic parameter `T` (default: `any`).
          *
          * ### **Typical Use Cases**
          * - **Fetching data from an external API** by specifying a full URL.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         * - **Explicitly defining the response structure** using TypeScript generics.
          */
-        ApiGetUrl: new (url: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGetUrl;
+        ApiGetUrl: new <T = any>(url: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGetUrl<T>;
         /**
          * **`ApiPostUrl` - A class for handling HTTP POST requests to a specified URL.**
          *
@@ -3154,21 +3201,22 @@ export interface Hison {
          * ### **Key Features**
          * - **Executes HTTP POST requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined service command.
-         * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
+         * - **Supports an optional `serviceCmd` parameter**, allowing structured routing on the server.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Uses a generic type `T` (default: `any`)** to specify the expected response data format.
          *
          * ### **How It Works**
          * - When instantiated, `ApiPostUrl` requires a valid URL and an optional `serviceCmd`.
          * - The `call()` method sends a POST request with the provided request data.
-         * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
-         * - Event listeners can be attached to monitor the request lifecycle.
+         * - If caching is enabled, previously stored responses may be returned instead of making a new request.
+         * - Event listeners can be attached to track request execution and completion.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPostUrl
-         * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
+         * // Creating an instance of ApiPostUrl for a direct POST request
+         * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3179,7 +3227,15 @@ export interface Hison {
          *     console.log(response.data); // Response data
          * });
          *
-         * // Creating an instance with caching
+         * // Creating an instance with a service command for structured routing
+         * const apiPostUrlWithCmd = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
+         * 
+         * // Sending a POST request with service command
+         * apiPostUrlWithCmd.call(requestData).then(response => {
+         *     console.log(response.data);
+         * });
+         * 
+         * // Creating an instance with caching enabled
          * const cachingModule = new hison.link.CachingModule(20);
          * const cachedApiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
          *
@@ -3195,28 +3251,46 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPostUrl`, which provides methods for executing POST requests to a specific URL.
+         * - This class returns an instance of `ApiPostUrl`, providing methods for executing POST requests to a specific URL.
+         * - The response data type is determined by `T`, with a default of `any`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface UserResponse {
+         *     id: number;
+         *     name: string;
+         *     email: string;
+         * }
+         * 
+         * const typedApiPostUrl = new hison.link.ApiPostUrl<UserResponse>("https://api.example.com/users");
+         * 
+         * typedApiPostUrl.call(requestData).then(response => {
+         *     console.log(response.data.name); // `name` is inferred as a string
+         * });
+         * ```
          */
-        ApiPostUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPostUrl;
+        ApiPostUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPostUrl<T>;
         /**
          * **`ApiPutUrl` - A class for handling HTTP PUT requests to a specified URL.**
          *
          * The `ApiPutUrl` class is responsible for sending HTTP PUT requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+         * This class supports a generic type `T`, allowing users to define the expected response type.
          *
          * ### **Key Features**
-         * - **Executes HTTP PUT requests** using `ApiLink`.
+         * - **Executes HTTP PUT requests** using `ApiLink.putURL()`.
          * - **Accepts a direct URL** instead of using a predefined service command.
          * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Provides type safety for response data** using a generic `T` (default: `any`).
          *
          * ### **How It Works**
          * - When instantiated, `ApiPutUrl` requires a valid URL and an optional `serviceCmd`.
@@ -3227,7 +3301,7 @@ export interface Hison {
          * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPutUrl
-         * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
+         * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3240,11 +3314,27 @@ export interface Hison {
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+         * const cachedApiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPutUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("PUT request completed!", data);
+         * });
+         * ```
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     message: string;
+         * }
+         *
+         * const apiPutUrl = new hison.link.ApiPutUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
+         * 
+         * apiPutUrl.call(requestData).then(response => {
+         *     if (response) {
+         *         console.log(response.data.message); // `message` is inferred as a string
+         *     }
          * });
          * ```
          *
@@ -3254,7 +3344,10 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPutUrl`, which provides methods for executing PUT requests to a specific URL.
+         * - A `Promise` resolving to an object containing:
+         *   - `data` *(T)* - The API response data (typed based on the provided generic `T`, default: `any`).
+         *   - `response` *(Response)* - The original HTTP response object.
+         * - If an error occurs, it returns `null`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
@@ -3262,7 +3355,7 @@ export interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPutUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPutUrl;
+        ApiPutUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPutUrl<T>;
         /**
          * **`ApiPatchUrl` - A class for handling HTTP PATCH requests to a specified URL.**
          *
@@ -3283,10 +3376,16 @@ export interface Hison {
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
+         * ### **Return Value**
+         * - A `Promise` resolving to an object containing:
+         *   - `data` *(T)* - The API response data (typed based on the provided generic `T`, default: `any`).
+         *   - `response` *(Response)* - The original HTTP response object.
+         * - If an error occurs, it returns `null`.
+         *
          * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPatchUrl
-         * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
+         * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3294,16 +3393,34 @@ export interface Hison {
          * 
          * // Sending a PATCH request
          * apiPatchUrl.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     if (response) {
+         *         console.log(response.data); // Response data
+         *     }
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+         * const cachedApiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPatchUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("PATCH request completed!", data);
+         * });
+         * ```
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     message: string;
+         * }
+         *
+         * const apiPatchUrl = new hison.link.ApiPatchUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
+         * 
+         * apiPatchUrl.call(requestData).then(response => {
+         *     if (response) {
+         *         console.log(response.data.message); // `message` is inferred as a string
+         *     }
          * });
          * ```
          *
@@ -3312,16 +3429,13 @@ export interface Hison {
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ### **Return Value**
-         * - This class returns an instance of `ApiPatchUrl`, which provides methods for executing PATCH requests to a specific URL.
-         *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPatchUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatchUrl;
+        ApiPatchUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatchUrl<T>;
         /**
          * **`ApiDeleteUrl` - A class for handling HTTP DELETE requests to a specified URL.**
          *
@@ -3335,6 +3449,7 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types** for type-safe API responses.
          *
          * ### **How It Works**
          * - When instantiated, `ApiDeleteUrl` requires a valid URL and an optional `serviceCmd`.
@@ -3345,7 +3460,7 @@ export interface Hison {
          * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiDeleteUrl
-         * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
+         * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.deleteUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3353,16 +3468,34 @@ export interface Hison {
          * 
          * // Sending a DELETE request
          * apiDeleteUrl.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     if (response) {
+         *         console.log(response.data); // Response data
+         *     }
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+         * const cachedApiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.deleteUser", cachingModule);
          *
          * // Handling request events
          * cachedApiDeleteUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("DELETE request completed!", data);
+         * });
+         * ```
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface DeleteResponse {
+         *     success: boolean;
+         *     message: string;
+         * }
+         *
+         * const apiDeleteUrl = new hison.link.ApiDeleteUrl<DeleteResponse>("https://api.example.com/users", "UserService.deleteUser");
+         * 
+         * apiDeleteUrl.call(requestData).then(response => {
+         *     if (response) {
+         *         console.log(response.data.message); // `message` is inferred as a string
+         *     }
          * });
          * ```
          *
@@ -3372,7 +3505,10 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiDeleteUrl`, which provides methods for executing DELETE requests to a specific URL.
+         * - **A `Promise` resolving to an object with the following properties:**
+         *   - `data` *(T)* - The API response data, where `T` is the specified generic type (default: `any`).
+         *   - `response` *(Response)* - The original HTTP response object.
+         * - If an error occurs, it returns `null`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
@@ -3380,12 +3516,9 @@ export interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiDeleteUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDeleteUrl;
-    }
+        ApiDeleteUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDeleteUrl<T>;
+    };
 }
-//====================================================================================
-//utils interface, type
-//====================================================================================
 /**
  * Represents a date structure with year, month, and day properties.
  *
@@ -3420,62 +3553,102 @@ export interface TimeObject {
  * - Includes year, month, day, hour, minute, and second properties.
  * - All properties can be `null` if no value is set.
  */
-export interface DateTimeObject extends DateObject, TimeObject {}
+export interface DateTimeObject extends DateObject, TimeObject {
+}
 /**
  * Enum representing the full names of the months (`January` to `December`).
  *
  * - Values range from `1` to `12`, corresponding to the month number.
  */
-export enum MonthFullName {
-    January = 1, February, March, April, May, June, July, August, September, October, November, December
+export declare enum MonthFullName {
+    January = 1,
+    February = 2,
+    March = 3,
+    April = 4,
+    May = 5,
+    June = 6,
+    July = 7,
+    August = 8,
+    September = 9,
+    October = 10,
+    November = 11,
+    December = 12
 }
 /**
  * Enum representing the abbreviated names of the months (`Jan` to `Dec`).
  *
  * - Values range from `1` to `12`, corresponding to the month number.
  */
-export enum MonthShortName {
-    Jan = 1, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+export declare enum MonthShortName {
+    Jan = 1,
+    Feb = 2,
+    Mar = 3,
+    Apr = 4,
+    May = 5,
+    Jun = 6,
+    Jul = 7,
+    Aug = 8,
+    Sep = 9,
+    Oct = 10,
+    Nov = 11,
+    Dec = 12
 }
 /**
  * Enum representing the full English names of the days of the week (`Sunday` to `Saturday`).
  *
  * - Values range from `0` to `6`, where `0 = Sunday`, `1 = Monday`, ..., `6 = Saturday`.
  */
-export enum DayOfWeekFullName {
-    Sun = 0, Mon, Tue, Wed, Thu, Fri, Sat
+export declare enum DayOfWeekFullName {
+    Sun = 0,
+    Mon = 1,
+    Tue = 2,
+    Wed = 3,
+    Thu = 4,
+    Fri = 5,
+    Sat = 6
 }
 /**
  * Enum representing the abbreviated English names of the days of the week (`Sun` to `Sat`).
  *
  * - Values range from `0` to `6`, where `0 = Sun`, `1 = Mon`, ..., `6 = Sat`.
  */
-export enum DayOfWeekShortName {
-    Sunday = 0, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+export declare enum DayOfWeekShortName {
+    Sunday = 0,
+    Monday = 1,
+    Tuesday = 2,
+    Wednesday = 3,
+    Thursday = 4,
+    Friday = 5,
+    Saturday = 6
 }
 /**
  * Enum representing the full Korean names of the days of the week (`일요일` to `토요일`).
  *
  * - Values range from `0` to `6`, where `0 = 일요일`, `1 = 월요일`, ..., `6 = 토요일`.
  */
-export enum DayOfWeekFullNameKR {
-    일 = 0, 월, 화, 수, 목, 금, 토
+export declare enum DayOfWeekFullNameKR {
+    일 = 0,
+    월 = 1,
+    화 = 2,
+    수 = 3,
+    목 = 4,
+    금 = 5,
+    토 = 6
 }
 /**
  * Enum representing the abbreviated Korean names of the days of the week (`일` to `토`).
  *
  * - Values range from `0` to `6`, where `0 = 일`, `1 = 월`, ..., `6 = 토`.
  */
-export enum DayOfWeekShortNameKR {
-    일요일 = 0, 월요일, 화요일, 수요일, 목요일, 금요일, 토요일
+export declare enum DayOfWeekShortNameKR {
+    일요일 = 0,
+    월요일 = 1,
+    화요일 = 2,
+    수요일 = 3,
+    목요일 = 4,
+    금요일 = 5,
+    토요일 = 6
 }
-//====================================================================================
-//shield interface, type
-//====================================================================================
-
-//====================================================================================
-//data interface, type
-//====================================================================================
 /**
  * Converts special values into a predefined format before they are inserted into the DataModel.
  * This function allows for custom handling of values like Date, or other special values, to ensure
@@ -3506,16 +3679,16 @@ export enum DayOfWeekShortNameKR {
  * //Inserting a Date object into DataModel
  * const dm = newDataModel([{key:'key1',value:new Date()},{key:'key2',value:new Date()}]);
  * //The value will be in 'yyyy-MM-dd hh:mm:ss' format
- * 
- * Note: 
- * 1. Special values not processed by convertValue are stored in the DataModel as references. 
+ *
+ * Note:
+ * 1. Special values not processed by convertValue are stored in the DataModel as references.
  *    Changes to the original object will also reflect in the DataModel.
  * 2. After customizing the handling of special values, ensure to return the object for all other cases.
  *    This ensures that undefined values are still stored in the DataModel.
  */
 export interface ConvertValue {
     (value: any): any;
-};
+}
 /**
  * The `DataWrapper` class provides a flexible key-value storage container
  * within the `hisondev` solution. It allows storing various data types,
@@ -3573,7 +3746,7 @@ export interface InterfaceDataWrapper {
     getIsDataWrapper(): boolean;
     /**
      * Creates and returns a deep copy of the current `DataWrapper` instance.
-     * This method ensures that all stored key-value pairs are fully cloned, 
+     * This method ensures that all stored key-value pairs are fully cloned,
      * preventing unintended modifications between the original and copied instances.
      *
      * ### Implementation Details
@@ -3589,7 +3762,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * const clonedWrapper = dataWrapper.clone();
-     * 
+     *
      * console.log(clonedWrapper.getString("name")); // Output: "Alice"
      * console.log(clonedWrapper !== dataWrapper);   // Output: true (Cloned instance is independent)
      *
@@ -3597,7 +3770,7 @@ export interface InterfaceDataWrapper {
      * const originalNested = new hison.data.DataModel([{ id: 1, value: "Test" }]);
      * const dataWrapperWithModel = new hison.data.DataWrapper({ nested: originalNested });
      * const clonedWrapperWithModel = dataWrapperWithModel.clone();
-     * 
+     *
      * console.log(clonedWrapperWithModel.getDataModel("nested") !== originalNested); // Output: true
      * ```
      *
@@ -3606,7 +3779,7 @@ export interface InterfaceDataWrapper {
     clone(): InterfaceDataWrapper | null;
     /**
      * Removes all stored key-value pairs in the `DataWrapper`, resetting it to an empty state.
-     * 
+     *
      * ### Behavior
      * - Clears the internal storage by setting `_data` to an empty object.
      * - Returns the same `DataWrapper` instance for method chaining.
@@ -3618,7 +3791,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ key1: "value1", key2: "value2" });
      * console.log(dataWrapper.size()); // Output: 2
-     * 
+     *
      * dataWrapper.clear();
      * console.log(dataWrapper.size()); // Output: 0
      * ```
@@ -3643,7 +3816,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
-     * 
+     *
      * console.log(dataWrapper.getSerialized());
      * // Output: '{"users":[{"id":1,"name":"Alice"}],"status":"active"}'
      * ```
@@ -3669,7 +3842,7 @@ export interface InterfaceDataWrapper {
      * - If the key does not exist, returns `null`.
      *
      * ### Returns
-     * - **`InterfaceDataModel<T> | string | null`**: 
+     * - **`InterfaceDataModel<T> | string | null`**:
      *   - A deep copy of the `DataModel<T>` if stored under the key.
      *   - The string value if a string was stored under the key.
      *   - `null` if the key does not exist.
@@ -3725,7 +3898,7 @@ export interface InterfaceDataWrapper {
      * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ status: "active", count: 5 });
-     * 
+     *
      * console.log(dataWrapper.getString("status")); // Output: "active"
      * console.log(dataWrapper.getString("nonExistentKey")); // Output: null
      *
@@ -3763,11 +3936,11 @@ export interface InterfaceDataWrapper {
      *     id: number;
      *     name: string;
      * }
-     * 
+     *
      * const userModel = new hison.data.DataModel<User>([{ id: 1, name: "Alice" }]);
      * const dataWrapper = new hison.data.DataWrapper();
      * dataWrapper.put("users", userModel);
-     * 
+     *
      * // Retrieving with type inference
      * const clonedDataModel = dataWrapper.getDataModel<User>("users");
      * console.log(clonedDataModel.getRowCount()); // Output: 1
@@ -3801,11 +3974,11 @@ export interface InterfaceDataWrapper {
      * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
-     * 
+     *
      * // Storing a string value
      * dataWrapper.put("status", "active");
      * console.log(dataWrapper.getString("status")); // Output: "active"
-     * 
+     *
      * // Storing a DataModel instance
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * dataWrapper.put("users", dataModel);
@@ -3823,7 +3996,7 @@ export interface InterfaceDataWrapper {
      *
      * ### Parameters
      * - `key` **(string)**: The key under which the value will be stored.
-     * - `value` **(string | number | boolean | bigint | symbol | null)**: The value to be stored, 
+     * - `value` **(string | number | boolean | bigint | symbol | null)**: The value to be stored,
      *   restricted to types that can be converted to a string.
      *
      * ### Behavior
@@ -3838,7 +4011,7 @@ export interface InterfaceDataWrapper {
      * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
-     * 
+     *
      * // Storing a string value
      * dataWrapper.putString("status", "active");
      * console.log(dataWrapper.getString("status")); // Output: "active"
@@ -3877,11 +4050,11 @@ export interface InterfaceDataWrapper {
      * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
-     * 
+     *
      * // Creating and storing a DataModel
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * dataWrapper.putDataModel("users", dataModel);
-     * 
+     *
      * console.log(dataWrapper.getDataModel("users").getRowCount()); // Output: 1
      *
      * // Throws an error: "Please insert only values of data-model type."
@@ -3911,7 +4084,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * const dataWrapper = new hison.data.DataWrapper({ users: dataModel, status: "active" });
-     * 
+     *
      * console.log(dataWrapper.getObject());
      * // Output: { users: { cols: ["id", "name"], rows: [{ id: 1, name: "Alice" }] }, status: "active" }
      * ```
@@ -3935,7 +4108,7 @@ export interface InterfaceDataWrapper {
      * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
-     * 
+     *
      * console.log(dataWrapper.containsKey("name")); // Output: true
      * console.log(dataWrapper.containsKey("nonExistentKey")); // Output: false
      * ```
@@ -3958,7 +4131,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper();
      * console.log(dataWrapper.isEmpty()); // Output: true
-     * 
+     *
      * dataWrapper.put("status", "active");
      * console.log(dataWrapper.isEmpty()); // Output: false
      * ```
@@ -3987,9 +4160,9 @@ export interface InterfaceDataWrapper {
      * ### Example Usage
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: "25" });
-     * 
+     *
      * console.log(dataWrapper.containsKey("name")); // Output: true
-     * 
+     *
      * const removedValue = dataWrapper.remove("name");
      * console.log(removedValue); // Output: "Alice"
      * console.log(dataWrapper.containsKey("name")); // Output: false
@@ -4016,7 +4189,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * console.log(dataWrapper.size()); // Output: 2
-     * 
+     *
      * dataWrapper.put("status", "active");
      * console.log(dataWrapper.size()); // Output: 3
      * ```
@@ -4038,7 +4211,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * console.log(dataWrapper.keys()); // Output: ["name", "age"]
-     * 
+     *
      * dataWrapper.clear();
      * console.log(dataWrapper.keys()); // Output: []
      * ```
@@ -4062,7 +4235,7 @@ export interface InterfaceDataWrapper {
      * ```typescript
      * const dataWrapper = new hison.data.DataWrapper({ name: "Alice", age: 25 });
      * console.log(dataWrapper.values()); // Output: ["Alice", 25]
-     * 
+     *
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * dataWrapper.put("users", dataModel);
      * console.log(dataWrapper.values()); // Output: ["Alice", 25, <cloned DataModel>]
@@ -4071,7 +4244,7 @@ export interface InterfaceDataWrapper {
      * @returns {InterfaceDataModel<any>[] | string[]} An array of deep-copied values stored in the `DataWrapper`.
      */
     values(): InterfaceDataModel<any>[] | string[];
-};
+}
 /**
  * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
  * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
@@ -4080,7 +4253,7 @@ export interface InterfaceDataWrapper {
  * - `T` represents the shape of each row in the `DataModel`.
  * - By specifying `T`, developers can enforce type safety for row values.
  * - If no type is provided, `T` defaults to `Record<string, any>`, allowing dynamic structures.
- * 
+ *
  * ### Core Features:
  * - **Column and Row Management:**
  *   - Supports dynamic addition and removal of columns and rows.
@@ -4111,22 +4284,22 @@ export interface InterfaceDataWrapper {
  *     name: string;
  *     age: number;
  * }
- * 
+ *
  * // Creating a DataModel with a defined type
  * const dataModel: InterfaceDataModel<User> = new hison.data.DataModel<User>([
  *     { id: 1, name: "Alice", age: 25 },
  *     { id: 2, name: "Bob", age: 30 }
  * ]);
- * 
+ *
  * // Add a new column (TypeScript enforces type constraints)
  * dataModel.addColumn("gender");
- * 
+ *
  * // Set a default value for a column
  * dataModel.setColumnSameValue("gender", "Unknown");
- * 
+ *
  * // Apply a formatting function to the age column
  * dataModel.setColumnSameFormat("age", (value) => `${value} years old`);
- * 
+ *
  * // Get filtered rows where age is greater than 25
  * const filtered = dataModel.filterRows(row => row.age > 25);
  * console.log(filtered);
@@ -4154,7 +4327,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
     getIsDataModel(): boolean;
     /**
      * Creates and returns a deep copy of the current `DataModel` instance.
-     * The cloned instance contains independent copies of all stored rows, 
+     * The cloned instance contains independent copies of all stored rows,
      * ensuring that modifications in the cloned instance do not affect the original instance.
      *
      * ### Behavior
@@ -4168,7 +4341,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * const clonedModel = dataModel.clone();
-     * 
+     *
      * console.log(clonedModel.getRowCount()); // Output: 1
      * console.log(clonedModel !== dataModel); // Output: true (Cloned instance is independent)
      * ```
@@ -4178,7 +4351,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
     clone(): InterfaceDataModel<T>;
     /**
      * Removes all stored rows and columns from the `DataModel`, resetting it to an empty state.
-     * 
+     *
      * ### Behavior
      * - Clears the `_cols` array, removing all column definitions.
      * - Clears the `_rows` array, removing all stored data.
@@ -4191,7 +4364,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getRowCount()); // Output: 1
-     * 
+     *
      * dataModel.clear();
      * console.log(dataModel.getRowCount()); // Output: 0
      * console.log(dataModel.getColumns());  // Output: []
@@ -4217,7 +4390,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getSerialized());
      * // Output: '[{"id":1,"name":"Alice"},{"id":2,"name":"Bob"}]'
      * ```
@@ -4240,7 +4413,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name"]);
      * console.log(dataModel.isDeclare()); // Output: true
-     * 
+     *
      * const emptyModel = new hison.data.DataModel();
      * console.log(emptyModel.isDeclare()); // Output: false
      * ```
@@ -4263,7 +4436,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name"]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
-     * 
+     *
      * const emptyModel = new hison.data.DataModel();
      * console.log(emptyModel.getColumns()); // Output: []
      * ```
@@ -4299,13 +4472,13 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: "U1", age: 25 },
      *     { id: "U2", age: 30 }
      * ]);
-     * 
+     *
      * const ids = dataModel.getColumnValues("id");  // Inferred as string[]
      * console.log(ids); // Output: ["U1", "U2"]
-     * 
+     *
      * const ages = dataModel.getColumnValues("age"); // Inferred as number[]
      * console.log(ages); // Output: [25, 30]
-     * 
+     *
      * // Throws an error: "The column does not exist."
      * // console.log(dataModel.getColumnValues("name"));
      * ```
@@ -4338,7 +4511,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
-     * 
+     *
      * dataModel.addColumn("age");
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
      * console.log(dataModel.getRow(0)); // Output: { id: 1, name: "Alice", age: null }
@@ -4372,7 +4545,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
-     * 
+     *
      * dataModel.addColumns(["age", "email"]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age", "email"]
      * console.log(dataModel.getRow(0)); // Output: { id: 1, name: "Alice", age: null, email: null }
@@ -4386,7 +4559,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
     /**
      * Sets the same value for all rows in the specified column.
      * If the column does not exist, it is created before assigning values.
-     * 
+     *
      * Supports type safety when `T` is defined, while allowing dynamic usage when `T = Record<string, any>`.
      *
      * ### Parameters
@@ -4411,19 +4584,19 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     name: string;
      *     status?: string;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * // Set the same value for all rows in the "status" column
      * dataModel.setColumnSameValue("status", "active");
      * console.log(dataModel.getColumnValues("status")); // Output: ["active", "active"]
-     * 
+     *
      * // If the column does not exist, it is created automatically
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "status"]
-     * 
+     *
      * // With default `Record<string, any>`, dynamic columns can be added without strict typing
      * const flexibleModel = new hison.data.DataModel();
      * flexibleModel.setColumnSameValue("newField", 123);
@@ -4460,16 +4633,16 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     id: number;
      *     price: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<Product>([
      *     { id: 1, price: 1000 },
      *     { id: 2, price: 2000 }
      * ]);
-     * 
+     *
      * // Format the "price" column by adding a currency symbol
      * dataModel.setColumnSameFormat("price", value => `$${value}`);
      * console.log(dataModel.getColumnValues("price")); // Output: ["$1000", "$2000"]
-     * 
+     *
      * // With default `Record<string, any>`, any column can be formatted dynamically
      * const flexibleModel = new hison.data.DataModel();
      * flexibleModel.setColumnSameFormat("randomColumn", value => `formatted-${value}`);
@@ -4501,7 +4674,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getRow(0)); // Output: { id: 1, name: "Alice" }
      *
      * // Throws an error if the index is out of bounds
@@ -4533,7 +4706,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * const rowDataModel = dataModel.getRowAsDataModel(0);
      * console.log(rowDataModel.getRowCount()); // Output: 1
      * console.log(rowDataModel.getColumns()); // Output: ["id", "name"]
@@ -4577,20 +4750,20 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * }
      *
      * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
-     * 
+     *
      * // Add an empty row
      * dataModel.addRow();
      * console.log(dataModel.getRowCount()); // Output: 1
      * console.log(dataModel.getRow(0)); // Output: { id: null, name: null }
-     * 
+     *
      * // Add a row with data
      * dataModel.addRow({ id: 1, name: "Alice" });
      * console.log(dataModel.getRow(1)); // Output: { id: 1, name: "Alice" }
-     * 
+     *
      * // Insert a row at index 1
      * dataModel.addRow(1, { id: 2, name: "Bob" });
      * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
-     * 
+     *
      * // Throws an error: "Please define the column first."
      * // new hison.data.DataModel<User>().addRow();
      * ```
@@ -4628,19 +4801,19 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     id: number;
      *     name: string;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
-     * console.log(dataModel.getRows()); 
+     *
+     * console.log(dataModel.getRows());
      * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
-     * 
-     * console.log(dataModel.getRows(1, 2)); 
+     *
+     * console.log(dataModel.getRows(1, 2));
      * // Output: [{ id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
-     * 
+     *
      * // Throws an error if startRow or endRow is out of bounds
      * // console.log(dataModel.getRows(5));
      * ```
@@ -4675,7 +4848,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
+     *
      * const newModel = dataModel.getRowsAsDataModel(1, 2);
      * console.log(newModel.getRowCount()); // Output: 2
      * console.log(newModel.getRow(0)); // Output: { id: 2, name: "Bob" }
@@ -4717,15 +4890,15 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     id: number;
      *     name: string;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
-     * 
+     *
      * // Add multiple rows
      * dataModel.addRows([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getRowCount()); // Output: 2
      * console.log(dataModel.getRow(1)); // Output: { id: 2, name: "Bob" }
      * ```
@@ -4766,7 +4939,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getObject());
      * // Output:
      * // {
@@ -4781,7 +4954,13 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * @returns {{ cols: (keyof T)[], rows: T[], colCount: number, rowCount: number, isDeclare: boolean }}
      *          A structured object representing the `DataModel` structure.
      */
-    getObject(): { cols: (keyof T)[]; rows: T[]; colCount: number; rowCount: number; isDeclare: boolean; };
+    getObject(): {
+        cols: (keyof T)[];
+        rows: T[];
+        colCount: number;
+        rowCount: number;
+        isDeclare: boolean;
+    };
     /**
      * Retrieves a deep copy of the value at the specified row index and column name.
      * Ensures type safety when `T` is specified, while maintaining flexibility for dynamic structures.
@@ -4804,15 +4983,15 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     id: string;
      *     age: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: "U1", age: 25 },
      *     { id: "U2", age: 30 }
      * ]);
-     * 
+     *
      * console.log(dataModel.getValue(0, "age")); // Output: 25 (type: number)
      * console.log(dataModel.getValue(0, "id"));  // Output: "U1" (type: string)
-     * 
+     *
      * // With default `Record<string, any>`, any column can be accessed.
      * const flexibleModel = new hison.data.DataModel();
      * console.log(flexibleModel.getValue(0, "randomColumn")); // No TypeScript error
@@ -4860,7 +5039,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * dataModel.setValue(0, "name", "Charlie");
      * console.log(dataModel.getValue(0, "name")); // Output: "Charlie"
      *
@@ -4891,10 +5070,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * - Iterates through all rows and removes the specified column.
      * - Updates `_cols` to exclude the removed column.
      * - Returns the current `DataModel` instance for method chaining.
-     * 
+     *
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
-     * 
+     *
      * ### Type Safety
      * - Uses `<K extends keyof T>` to ensure that `column` is a valid key of `T`.
      * - Prevents attempts to remove a column that does not exist in the defined type.
@@ -4914,9 +5093,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 }
      * ]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
-     * 
+     *
      * dataModel.removeColumn("age");
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
      *
@@ -4941,10 +5120,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * - Iterates through the `columns` array and calls `removeColumn(column)` for each entry.
      * - If any column does not exist, `removeColumn` will throw an error.
      * - Returns the current `DataModel` instance for method chaining.
-     * 
+     *
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
-     * 
+     *
      * ### Returns
      * - **`InterfaceDataModel<T>`**: The current instance after removing the specified columns.
      *
@@ -4961,9 +5140,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice", age: 25, city: "New York" },
      *     { id: 2, name: "Bob", age: 30, city: "Los Angeles" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age", "city"]
-     * 
+     *
      * dataModel.removeColumns(["age", "city"]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
      *
@@ -5003,9 +5182,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getRowCount()); // Output: 3
-     * 
+     *
      * const removedRow = dataModel.removeRow(1);
      * console.log(removedRow); // Output: { id: 2, name: "Bob" }
      * console.log(dataModel.getRowCount()); // Output: 2
@@ -5032,7 +5211,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
      * console.log(dataModel.getColumnCount()); // Output: 3
-     * 
+     *
      * dataModel.removeColumn("age");
      * console.log(dataModel.getColumnCount()); // Output: 2
      * ```
@@ -5055,9 +5234,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getRowCount()); // Output: 2
-     * 
+     *
      * dataModel.addRow({ id: 3, name: "Charlie" });
      * console.log(dataModel.getRowCount()); // Output: 3
      * ```
@@ -5088,7 +5267,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * }
      *
      * const dataModel = new hison.data.DataModel<User>(["id", "name"]);
-     * 
+     *
      * console.log(dataModel.hasColumn("name")); // Output: true
      * console.log(dataModel.hasColumn("age"));  // TypeScript Error: Argument of type '"age"' is not assignable to parameter of type '"id" | "name"'.
      * ```
@@ -5109,10 +5288,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * - Identifies and removes columns that are **not** included in the provided `columns` list.
      * - Calls `removeColumns()` to eliminate those columns from the dataset.
      * - Returns the modified `DataModel` instance for method chaining.
-     * 
+     *
      * ⚠ **Note:** If `T` is explicitly defined, TypeScript does not recognize dynamically removed columns.
      * To modify columns dynamically, use `DataModel` with its default type `Record<string, any>`.
-     * 
+     *
      * ### Returns
      * - **`InterfaceDataModel<T>`**: The modified `DataModel` instance with only the specified columns retained.
      *
@@ -5128,9 +5307,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 }
      * ]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
-     * 
+     *
      * // Keep only "id" and "name" columns
      * dataModel.setValidColumns(["id", "name"]);
      * console.log(dataModel.getColumns()); // Output: ["id", "name"]
@@ -5170,7 +5349,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: null },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
+     *
      * console.log(dataModel.isNotNullColumn("id"));   // Output: true
      * console.log(dataModel.isNotNullColumn("name")); // Output: false
      *
@@ -5211,10 +5390,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: null },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
+     *
      * console.log(dataModel.findFirstRowNullColumn("name"));
      * // Output: { id: 2, name: null }
-     * 
+     *
      * console.log(dataModel.findFirstRowNullColumn("id"));
      * // Output: null (no null values in the "id" column)
      *
@@ -5254,7 +5433,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Alice" }
      * ]);
-     * 
+     *
      * console.log(dataModel.isNotDuplColumn("id")); // Output: true
      * console.log(dataModel.isNotDuplColumn("name")); // Output: false
      *
@@ -5295,10 +5474,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Alice" }
      * ]);
-     * 
+     *
      * console.log(dataModel.findFirstRowDuplColumn("name"));
      * // Output: { id: 3, name: "Alice" } (the second occurrence of "Alice")
-     * 
+     *
      * console.log(dataModel.findFirstRowDuplColumn("id"));
      * // Output: null (no duplicate values in the "id" column)
      *
@@ -5339,11 +5518,11 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, age: 30 },
      *     { id: 3, age: "invalid" as any }
      * ]);
-     * 
+     *
      * // Check if all values in "age" column are valid numbers
      * console.log(dataModel.isValidValue("age", value => typeof value === "number"));
      * // Output: false
-     * 
+     *
      * console.log(dataModel.isValidValue("id", value => typeof value === "number"));
      * // Output: true
      *
@@ -5386,11 +5565,11 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, age: "invalid" as any },
      *     { id: 3, age: 30 }
      * ]);
-     * 
+     *
      * // Find the first row where "age" contains a non-numeric value
      * console.log(dataModel.findFirstRowInvalidValue("age", value => typeof value === "number"));
      * // Output: { id: 2, age: "invalid" }
-     * 
+     *
      * console.log(dataModel.findFirstRowInvalidValue("id", value => typeof value === "number"));
      * // Output: null (all values in "id" are valid)
      *
@@ -5434,17 +5613,17 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     name: string;
      *     age: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
      * ]);
-     * 
+     *
      * // Search for row indexes where age is 25
      * console.log(dataModel.searchRowIndexes({ age: 25 }));
      * // Output: [0, 2]
-     * 
+     *
      * // Search for row indexes where age is NOT 25
      * console.log(dataModel.searchRowIndexes({ age: 25 }, true));
      * // Output: [1]
@@ -5487,17 +5666,17 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     name: string;
      *     age: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
      * ]);
-     * 
+     *
      * // Search for rows where age is 25
      * console.log(dataModel.searchRows({ age: 25 }));
      * // Output: [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 25 }]
-     * 
+     *
      * // Search for rows where age is NOT 25
      * console.log(dataModel.searchRows({ age: 25 }, true));
      * // Output: [{ id: 2, name: "Bob", age: 30 }]
@@ -5540,19 +5719,19 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     name: string;
      *     age: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
      * ]);
-     * 
+     *
      * // Search for rows where age is 25 and return them as a new DataModel
      * const filteredModel = dataModel.searchRowsAsDataModel({ age: 25 });
      * console.log(filteredModel.getRowCount()); // Output: 2
      * console.log(filteredModel.getRows());
      * // Output: [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 25 }]
-     * 
+     *
      * // Search for rows where age is NOT 25
      * const excludedModel = dataModel.searchRowsAsDataModel({ age: 25 }, true);
      * console.log(excludedModel.getRows());
@@ -5566,13 +5745,13 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      */
     searchRowsAsDataModel<K extends keyof T>(condition: Record<K, T[K]>, isNegative?: boolean): InterfaceDataModel<T>;
     /**
-     * Searches for rows that match a given condition and **modifies** the original `DataModel` 
-     * by removing matched or unmatched rows. Unlike `searchRowsAsDataModel`, this method directly 
+     * Searches for rows that match a given condition and **modifies** the original `DataModel`
+     * by removing matched or unmatched rows. Unlike `searchRowsAsDataModel`, this method directly
      * updates the existing dataset instead of returning a new instance.
      *
      * ### Parameters
      * - `condition` **(`Record<K, T[K]>`)**: An object representing the key-value conditions to match.
-     * - `isNegative` **(`boolean`, optional, default = `false`)**: 
+     * - `isNegative` **(`boolean`, optional, default = `false`)**:
      *   - If `false` (default), removes rows that **do not** match the condition.
      *   - If `true`, removes rows that **do** match the condition.
      *
@@ -5600,18 +5779,18 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     name: string;
      *     age: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice", age: 25 },
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 25 }
      * ]);
-     * 
+     *
      * // Keep only rows where age is 25
      * dataModel.searchAndModify({ age: 25 });
      * console.log(dataModel.getRows());
      * // Output: [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 25 }]
-     * 
+     *
      * // Remove rows where age is 25
      * dataModel.searchAndModify({ age: 25 }, true);
      * console.log(dataModel.getRows());
@@ -5646,7 +5825,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 22 }
      * ]);
-     * 
+     *
      * // Get indexes of rows where age is greater than 25
      * const rowIndexes = dataModel.filterRowIndexes(row => row.age > 25);
      * console.log(rowIndexes); // Output: [1]
@@ -5680,7 +5859,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 22 }
      * ]);
-     * 
+     *
      * // Filter rows where age is greater than 25
      * const filteredRows = dataModel.filterRows(row => row.age > 25);
      * console.log(filteredRows);
@@ -5715,7 +5894,7 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 22 }
      * ]);
-     * 
+     *
      * // Create a new DataModel containing only rows where age is greater than 25
      * const filteredDataModel = dataModel.filterRowsAsDataModel(row => row.age > 25);
      * console.log(filteredDataModel.getRowCount()); // Output: 1
@@ -5750,10 +5929,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob", age: 30 },
      *     { id: 3, name: "Charlie", age: 22 }
      * ]);
-     * 
+     *
      * // Remove all rows where age is 25 or below
      * dataModel.filterAndModify(row => row.age > 25);
-     * 
+     *
      * console.log(dataModel.getRowCount()); // Output: 1
      * console.log(dataModel.getRow(0)); // Output: { id: 2, name: "Bob", age: 30 }
      * ```
@@ -5790,11 +5969,11 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     name: string;
      *     age: number;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>(["id", "name", "age"]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
-     * 
+     *
      * // Change column order
      * dataModel.setColumnSorting(["age", "name"]);
      * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
@@ -5819,9 +5998,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
-     * 
+     *
      * dataModel.sortColumnAscending();
      * console.log(dataModel.getColumns()); // Output: ["age", "id", "name"]
      * ```
@@ -5843,9 +6022,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["name", "id", "age"]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
-     * 
+     *
      * dataModel.sortColumnDescending();
      * console.log(dataModel.getColumns()); // Output: ["name", "id", "age"]
      * ```
@@ -5867,9 +6046,9 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * ### Example Usage
      * ```typescript
      * const dataModel = new hison.data.DataModel(["id", "name", "age"]);
-     * 
+     *
      * console.log(dataModel.getColumns()); // Output: ["id", "name", "age"]
-     * 
+     *
      * dataModel.sortColumnReverse();
      * console.log(dataModel.getColumns()); // Output: ["age", "name", "id"]
      * ```
@@ -5907,18 +6086,18 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     id: number;
      *     name: string;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 3, name: "Charlie" },
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * // Sort rows by "id" in ascending order
      * dataModel.sortRowAscending("id");
      * console.log(dataModel.getRows());
      * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
-     * 
+     *
      * // Sort rows numerically by "id"
      * dataModel.sortRowAscending("id", true);
      * ```
@@ -5959,18 +6138,18 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     id: number;
      *     name: string;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 3, name: "Charlie" },
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" }
      * ]);
-     * 
+     *
      * // Sort rows by "id" in descending order
      * dataModel.sortRowDescending("id");
      * console.log(dataModel.getRows());
      * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
-     * 
+     *
      * // Sort rows numerically by "id"
      * dataModel.sortRowDescending("id", true);
      * ```
@@ -5999,10 +6178,10 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
+     *
      * console.log(dataModel.getRows());
      * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
-     * 
+     *
      * dataModel.sortRowReverse();
      * console.log(dataModel.getRows());
      * // Output: [{ id: 3, name: "Charlie" }, { id: 2, name: "Bob" }, { id: 1, name: "Alice" }]
@@ -6011,67 +6190,70 @@ export interface InterfaceDataModel<T extends Record<string, any> = Record<strin
      * @returns {InterfaceDataModel<T>} The modified `DataModel` instance with reversed row order.
      */
     sortRowReverse(): InterfaceDataModel<T>;
-};
+}
 /**
  * Defines a function signature for formatting values in a `DataModel` column.
- * 
+ *
  * - This function takes a value as input and returns a transformed version of it.
  * - Used in `DataModel.setColumnSameFormat()` to apply consistent formatting across a column.
- * 
+ *
  * ### Example Usage
  * ```typescript
  * const formatCurrency: DataModelFormatter = (value) => `$${value.toFixed(2)}`;
  * console.log(formatCurrency(1000)); // "$1000.00"
  * ```
- * 
+ *
  * @callback DataModelFormatter
  * @param value The original value from the `DataModel` column.
  * @returns The formatted value.
  */
-export interface DataModelFormatter{(value: any): any;};
+export interface DataModelFormatter {
+    (value: any): any;
+}
 /**
  * Defines a function signature for validating values in a `DataModel` column.
- * 
+ *
  * - This function takes a value as input and returns a boolean indicating validity.
  * - Used in `DataModel.isValidValue()` to check if all column values meet the validation criteria.
- * 
+ *
  * ### Example Usage
  * ```typescript
  * const isNumber: DataModelValidator = (value) => typeof value === "number";
  * console.log(isNumber(123)); // true
  * console.log(isNumber("text")); // false
  * ```
- * 
+ *
  * @callback DataModelValidator
  * @param value The value from the `DataModel` column to validate.
  * @returns `true` if the value is valid, otherwise `false`.
  */
-export interface DataModelValidator{(value: any): boolean;};
+export interface DataModelValidator {
+    (value: any): boolean;
+}
 /**
  * Defines a function signature for filtering rows in a `DataModel`.
- * 
+ *
  * - This function takes a row (as an object) and returns `true` if it should be included.
  * - Used in `DataModel.filterRowIndexes()` to filter row indexes based on the given condition.
- * 
+ *
  * ### Example Usage
  * ```typescript
  * const filterByAge: DataModelFillter = (row) => row.age > 25;
  * console.log(filterByAge({ age: 30 })); // true
  * console.log(filterByAge({ age: 22 })); // false
  * ```
- * 
+ *
  * @callback DataModelFillter
  * @param row A record representing a row in the `DataModel`.
  * @returns `true` if the row matches the filter criteria, otherwise `false`.
  */
-export interface DataModelFillter{(row: Record<string, any>): boolean;};
-//====================================================================================
-//link interface, type
-//====================================================================================
+export interface DataModelFillter {
+    (row: Record<string, any>): boolean;
+}
 /**
  * **`CachingModule` - A module for API response caching and real-time WebSocket updates.**
  *
- * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy** 
+ * The `CachingModule` provides a caching mechanism for API responses using an **LRU (Least Recently Used) strategy**
  * while integrating **WebSocket communication** for real-time data updates.
  *
  * ### **Key Features**
@@ -6092,13 +6274,13 @@ export interface DataModelFillter{(row: Record<string, any>): boolean;};
  * ```typescript
  * // Create a CachingModule instance with a cache limit of 20
  * const cachingModule = new hison.link.CachingModule(20);
- * 
+ *
  * // Store API response in the cache
  * cachingModule.put("users", fetch("/api/users").then(response => response.json()));
- * 
+ *
  * // Retrieve cached data
  * cachingModule.get("users").then(data => console.log(data));
- * 
+ *
  * // Register WebSocket event handlers
  * cachingModule.onopen = () => console.log("WebSocket Connected");
  * cachingModule.onmessage = event => console.log("New Message:", event.data);
@@ -6129,8 +6311,8 @@ export interface InterfaceCachingModule {
     /**
      * **Checks whether this instance is a valid caching module.**
      *
-     * This method returns a boolean flag indicating whether the current instance 
-     * is recognized as a `CachingModule`. This is useful for validating whether 
+     * This method returns a boolean flag indicating whether the current instance
+     * is recognized as a `CachingModule`. This is useful for validating whether
      * an instance supports caching functionalities.
      *
      * ### **Return Value**
@@ -6152,8 +6334,8 @@ export interface InterfaceCachingModule {
     /**
      * **Checks if the cache contains a specific key.**
      *
-     * This method verifies if the specified `key` exists in the LRU cache. It ensures 
-     * that the key is a valid string and then delegates the check to the underlying 
+     * This method verifies if the specified `key` exists in the LRU cache. It ensures
+     * that the key is a valid string and then delegates the check to the underlying
      * `LRUCache` instance.
      *
      * ### **Parameters**
@@ -6197,10 +6379,10 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Store API response in the cache
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
-     * 
+     *
      * // Retrieve cached data
      * cachingModule.get("user123").then(data => console.log(data));
      * ```
@@ -6213,7 +6395,10 @@ export interface InterfaceCachingModule {
      * @param {string} key - The cache key to retrieve.
      * @returns {Promise<{ data: T; response: Response }>} | null
      */
-    get<T = any>(key: string): Promise<{ data: T; response: Response; }> | null;
+    get<T = any>(key: string): Promise<{
+        data: T;
+        response: Response;
+    }> | null;
     /**
      * **Stores API response data in the cache.**
      *
@@ -6234,7 +6419,7 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Store an API response in the cache
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
      * ```
@@ -6247,11 +6432,14 @@ export interface InterfaceCachingModule {
      * @param {string} key - The cache key under which the response will be stored.
      * @param {Promise<{ data: any; response: Response }>} value - The API response to be cached.
      */
-    put(key: string, value: Promise<{ data: any; response: Response; }>): void;
+    put(key: string, value: Promise<{
+        data: any;
+        response: Response;
+    }>): void;
     /**
      * **Removes a key from the cache and returns its value.**
      *
-     * Retrieves the cached response for `key` before deleting it.  
+     * Retrieves the cached response for `key` before deleting it.
      * If the key does not exist, returns `null`.
      *
      * ### **Parameters**
@@ -6266,13 +6454,13 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Store an API response in the cache
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
-     * 
+     *
      * // Remove and retrieve cached data
      * cachingModule.remove("user123").then(data => console.log(data));
-     * 
+     *
      * // Verify key removal
      * console.log(cachingModule.hasKey("user123")); // false
      * ```
@@ -6285,11 +6473,14 @@ export interface InterfaceCachingModule {
      * @param {string} key - The cache key to remove.
      * @returns {Promise<{ data: T; response: Response; }> | null} The cached response before removal, or `null` if not found.
      */
-    remove<T = any>(key: string): Promise<{ data: T; response: Response; }> | null;
+    remove<T = any>(key: string): Promise<{
+        data: T;
+        response: Response;
+    }> | null;
     /**
      * **Retrieves all cached data as a key-value object.**
      *
-     * Returns the entire cache as a `Record<string, Promise<{ data: T; response: Response }>>`,  
+     * Returns the entire cache as a `Record<string, Promise<{ data: T; response: Response }>>`,
      * where each key corresponds to a cached API response.
      *
      * ### **Return Value**
@@ -6302,11 +6493,11 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Store multiple API responses in the cache
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
      * cachingModule.put("posts", fetch("/api/posts").then(response => response.json()));
-     * 
+     *
      * // Retrieve all cached data
      * console.log(cachingModule.getAll());
      * ```
@@ -6319,7 +6510,10 @@ export interface InterfaceCachingModule {
      *
      * @returns {Record<string, Promise<{ data: T; response: Response }>>} An object containing all cached responses.
      */
-    getAll<T = any>(): Record<string, Promise<{ data: T; response: Response; }>>;
+    getAll<T = any>(): Record<string, Promise<{
+        data: T;
+        response: Response;
+    }>>;
     /**
      * **Retrieves all cache keys.**
      *
@@ -6331,11 +6525,11 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Store multiple API responses in the cache
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
      * cachingModule.put("posts", fetch("/api/posts").then(response => response.json()));
-     * 
+     *
      * // Retrieve all cache keys
      * console.log(cachingModule.getKeys()); // ["user123", "posts"]
      * ```
@@ -6361,14 +6555,14 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Store multiple API responses in the cache
      * cachingModule.put("user123", fetch("/api/user/123").then(response => response.json()));
      * cachingModule.put("posts", fetch("/api/posts").then(response => response.json()));
-     * 
+     *
      * // Clear all cached data
      * cachingModule.clear();
-     * 
+     *
      * // Verify that the cache is empty
      * console.log(cachingModule.getKeys()); // []
      * ```
@@ -6398,7 +6592,7 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Register a WebSocket open event handler
      * cachingModule.onopen = (event) => {
      *     console.log("WebSocket connected:", event);
@@ -6416,7 +6610,7 @@ export interface InterfaceCachingModule {
     /**
      * **Registers an event handler for the WebSocket `message` event.**
      *
-     * This method assigns a custom event handler to be executed whenever a message is received 
+     * This method assigns a custom event handler to be executed whenever a message is received
      * through the WebSocket connection.
      *
      * ### **Parameters**
@@ -6430,7 +6624,7 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Register a WebSocket message event handler
      * cachingModule.onmessage = (event) => {
      *     console.log("Received WebSocket message:", event.data);
@@ -6461,7 +6655,7 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Register a WebSocket close event handler
      * cachingModule.onclose = (event) => {
      *     console.log("WebSocket closed:", event);
@@ -6494,7 +6688,7 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Register a WebSocket error event handler
      * cachingModule.onerror = (event) => {
      *     console.error("WebSocket error:", event);
@@ -6526,7 +6720,7 @@ export interface InterfaceCachingModule {
      * ### **Example Usage**
      * ```typescript
      * const cachingModule = new hison.link.CachingModule();
-     * 
+     *
      * // Check WebSocket connection status
      * const status = cachingModule.isWebSocketConnection();
      * console.log(status); // Output: 1 (open), 0 (connecting), or -1 (closed)
@@ -6540,13 +6734,13 @@ export interface InterfaceCachingModule {
      * @returns {number} The WebSocket connection status (`1`: open, `0`: connecting, `-1`: closed).
      */
     isWebSocketConnection(): number;
-};
+}
 /**
  * **`ApiGet<T>` - A generic class for handling HTTP GET requests within the `hison.link` module.**
  *
  * The `ApiGet<T>` class is responsible for sending HTTP GET requests to a specified API resource.
  * It allows defining a **custom response type** using the generic parameter `T`, providing strong typing for API responses.
- * 
+ *
  * ### **Key Features**
  * - **Executes HTTP GET requests** using `ApiLink`.
  * - **Supports response caching** via an optional `CachingModule`.
@@ -6580,7 +6774,7 @@ export interface InterfaceCachingModule {
  * // Creating an instance with caching
  * const cachingModule = new hison.link.CachingModule(20);
  * const cachedApiGet = new hison.link.ApiGet<User[]>("/users", cachingModule);
- * 
+ *
  * // Handling request events
  * cachedApiGet.onEventEmit("requestCompleted_Data", (data, response) => {
  *     console.log("GET request completed!", data);
@@ -6645,7 +6839,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      * apiGet.call().then(response => {
      *     console.log(response?.data); // Type: InterfaceDataWrapper
      * });
-     * 
+     *
      * // Specifying a custom response type (User[])
      * interface User {
      *     id: number;
@@ -6670,7 +6864,10 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
      */
-    call(options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
      * **Sends an HTTP HEAD request to the specified resource path.**
      *
@@ -6691,7 +6888,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
-     * 
+     *
      * // Sending a HEAD request
      * apiGet.head().then(headers => {
      *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -6714,7 +6911,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
     /**
      * **Sends an HTTP OPTIONS request to the specified resource path.**
      *
-     * This method retrieves the list of allowed HTTP methods for the specified resource 
+     * This method retrieves the list of allowed HTTP methods for the specified resource
      * without performing an actual data operation.
      *
      * ### **Parameters**
@@ -6731,7 +6928,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
-     * 
+     *
      * // Sending an OPTIONS request
      * apiGet.options().then(allowedMethods => {
      *     console.log(allowedMethods); // e.g., ["GET", "POST", "OPTIONS"]
@@ -6754,7 +6951,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
     /**
      * **Registers an event listener for API request lifecycle events.**
      *
-     * This method allows attaching a callback function to be executed when a specified event 
+     * This method allows attaching a callback function to be executed when a specified event
      * occurs during the execution of a GET request.
      *
      * ### **Parameters**
@@ -6770,12 +6967,12 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiGet = new hison.link.ApiGet("/users");
-     * 
+     *
      * // Register an event listener for when the request completes
      * apiGet.onEventEmit("requestCompleted_Data", (data, response) => {
      *     console.log("GET request completed!", data);
      * });
-     * 
+     *
      * // Register an event listener for request errors
      * apiGet.onEventEmit("requestError", (error) => {
      *     console.error("GET request failed:", error);
@@ -6789,7 +6986,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
      */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiPost<T>` - A class for handling HTTP POST requests within the `hison.link` module.**
  *
@@ -6819,7 +7016,7 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a POST request
  * apiPost.call(requestData).then(response => {
  *     console.log(response.data); // Type: InterfaceDataWrapper
@@ -6908,25 +7105,25 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      *     userId: number;
      *     username: string;
      * }
-     * 
+     *
      * // Creating an instance of ApiPost with a custom response type
      * const apiPost = new hison.link.ApiPost<CreateUserResponse>("UserService.createUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Customizing the before-request hook to modify data before sending
      * customOption.link.beforePostRequst = (requestData, options) => {
      *     requestData.putString("timestamp", Date.now().toString());
      *     return true;
      * };
-     * 
+     *
      * // Listening to the "requestStarted_POST" event
      * apiPost.onEventEmit("requestStarted_POST", (requestData, options) => {
      *     console.log("POST request started with data:", requestData);
      * });
-     * 
+     *
      * // Sending a POST request
      * apiPost.call(requestData).then(response => {
      *     console.log(response.data.userId); // Type: number
@@ -6943,7 +7140,10 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -6964,7 +7164,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
-     * 
+     *
      * // Sending a HEAD request
      * apiPost.head().then(headers => {
      *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -7004,7 +7204,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
-     * 
+     *
      * // Sending an OPTIONS request
      * apiPost.options().then(allowedMethods => {
      *     console.log(allowedMethods); // e.g., ["GET", "POST", "OPTIONS"]
@@ -7027,7 +7227,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
     /**
      * **Registers an event listener for API request lifecycle events.**
      *
-     * This method allows attaching a callback function to be executed when a specified event 
+     * This method allows attaching a callback function to be executed when a specified event
      * occurs during the execution of a POST request.
      *
      * ### **Parameters**
@@ -7047,12 +7247,12 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPost = new hison.link.ApiPost("UserService.createUser");
-     * 
+     *
      * // Register an event listener for when the request completes
      * apiPost.onEventEmit("requestCompleted_Data", (data, response) => {
      *     console.log("POST request completed!", data);
      * });
-     * 
+     *
      * // Register an event listener for request errors
      * apiPost.onEventEmit("requestError", (error) => {
      *     console.error("POST request failed:", error);
@@ -7066,7 +7266,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
      */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiPut<T>` - A class for handling HTTP PUT requests within the `hison.link` module.**
  *
@@ -7101,7 +7301,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a PUT request
  * apiPut.call(requestData).then(response => {
  *     console.log(response.data.success); // Type: boolean
@@ -7182,22 +7382,22 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
      *
      * // Creating an instance of ApiPut with a custom response type
      * const apiPut = new hison.link.ApiPut<UpdateUserResponse>("UserService.updateUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Customizing the before-request hook to modify data before sending
      * customOption.link.beforePutRequest = (requestData, options) => {
      *     requestData.putString("timestamp", Date.now().toString());
      *     return true;
      * };
-     * 
+     *
      * // Listening to the "requestStarted_PUT" event
      * apiPut.onEventEmit("requestStarted_PUT", (requestData, options) => {
      *     console.log("PUT request started with data:", requestData);
      * });
-     * 
+     *
      * // Sending a PUT request with a typed response
      * apiPut.call(requestData).then(response => {
      *     console.log(response.data.success); // Type: boolean
@@ -7214,7 +7414,10 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7235,7 +7438,7 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
-     * 
+     *
      * // Sending a HEAD request
      * apiPut.head().then(headers => {
      *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -7275,7 +7478,7 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
-     * 
+     *
      * // Sending an OPTIONS request
      * apiPut.options().then(allowedMethods => {
      *     console.log(allowedMethods); // e.g., ["GET", "PUT", "OPTIONS"]
@@ -7298,7 +7501,7 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
     /**
      * **Registers an event listener for API request lifecycle events.**
      *
-     * This method allows attaching a callback function to be executed when a specified event 
+     * This method allows attaching a callback function to be executed when a specified event
      * occurs during the execution of a PUT request.
      *
      * ### **Parameters**
@@ -7318,12 +7521,12 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPut = new hison.link.ApiPut("UserService.createUser");
-     * 
+     *
      * // Register an event listener for when the request completes
      * apiPut.onEventEmit("requestCompleted_Data", (data, response) => {
      *     console.log("PUT request completed!", data);
      * });
-     * 
+     *
      * // Register an event listener for request errors
      * apiPut.onEventEmit("requestError", (error) => {
      *     console.error("PUT request failed:", error);
@@ -7337,7 +7540,7 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
      * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
      */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
  *
@@ -7372,7 +7575,7 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a PATCH request with a typed response
  * apiPatch.call(requestData).then(response => {
  *     console.log(response.data.success); // Type: boolean
@@ -7453,22 +7656,22 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
      *
      * // Creating an ApiPatch instance with a typed response
      * const apiPatch = new hison.link.ApiPatch<UpdateUserResponse>("UserService.updateUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Customizing the before-request hook to modify data before sending
      * customOption.link.beforePatchRequest = (requestData, options) => {
      *     requestData.putString("timestamp", Date.now().toString());
      *     return true;
      * };
-     * 
+     *
      * // Listening to the "requestStarted_PATCH" event
      * apiPatch.onEventEmit("requestStarted_PATCH", (requestData, options) => {
      *     console.log("PATCH request started with data:", requestData);
      * });
-     * 
+     *
      * // Sending a PATCH request with a typed response
      * apiPatch.call(requestData).then(response => {
      *     console.log(response.data.success); // Type: boolean
@@ -7485,7 +7688,10 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7506,7 +7712,7 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
-     * 
+     *
      * // Sending a HEAD request
      * apiPatch.head().then(headers => {
      *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -7546,7 +7752,7 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
-     * 
+     *
      * // Sending an OPTIONS request
      * apiPatch.options().then(allowedMethods => {
      *     console.log(allowedMethods); // e.g., ["GET", "PATCH", "OPTIONS"]
@@ -7569,7 +7775,7 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
     /**
      * **Registers an event listener for API request lifecycle events.**
      *
-     * This method allows attaching a callback function to be executed when a specified event 
+     * This method allows attaching a callback function to be executed when a specified event
      * occurs during the execution of a PATCH request.
      *
      * ### **Parameters**
@@ -7589,12 +7795,12 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
      * ### **Example Usage**
      * ```typescript
      * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
-     * 
+     *
      * // Register an event listener for when the request completes
      * apiPatch.onEventEmit("requestCompleted_Data", (data, response) => {
      *     console.log("PATCH request completed!", data);
      * });
-     * 
+     *
      * // Register an event listener for request errors
      * apiPatch.onEventEmit("requestError", (error) => {
      *     console.error("PATCH request failed:", error);
@@ -7608,7 +7814,7 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
      * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
      */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiDelete<T>` - A class for handling HTTP DELETE requests within the `hison.link` module.**
  *
@@ -7644,7 +7850,7 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("userId", "12345");
- * 
+ *
  * // Sending a DELETE request
  * apiDelete.call(requestData).then(response => {
  *     console.log(response.data.success); // Type: boolean
@@ -7722,22 +7928,22 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
      * }
      *
      * const apiDelete = new hison.link.ApiDelete<DeleteUserResponse>("UserService.deleteUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("userId", "12345");
-     * 
+     *
      * // Customizing the before-request hook to modify data before sending
      * customOption.link.beforeDeleteRequest = (requestData, options) => {
      *     requestData.putString("timestamp", Date.now().toString());
      *     return true;
      * };
-     * 
+     *
      * // Listening to the "requestStarted_DELETE" event
      * apiDelete.onEventEmit("requestStarted_DELETE", (requestData, options) => {
      *     console.log("DELETE request started with data:", requestData);
      * });
-     * 
+     *
      * // Sending a DELETE request
      * apiDelete.call(requestData).then(response => {
      *     console.log(response.data.success); // Type: boolean
@@ -7753,7 +7959,10 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
     * **Sends an HTTP HEAD request to the API controller path.**
     *
@@ -7774,7 +7983,7 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
     * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
-    * 
+    *
     * // Sending a HEAD request
     * apiDelete.head().then(headers => {
     *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -7814,7 +8023,7 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
     * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
-    * 
+    *
     * // Sending an OPTIONS request
     * apiDelete.options().then(allowedMethods => {
     *     console.log(allowedMethods); // e.g., ["GET", "DELETE", "OPTIONS"]
@@ -7837,7 +8046,7 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
     /**
     * **Registers an event listener for API request lifecycle events.**
     *
-    * This method allows attaching a callback function to be executed when a specified event 
+    * This method allows attaching a callback function to be executed when a specified event
     * occurs during the execution of a DELETE request.
     *
     * ### **Parameters**
@@ -7857,12 +8066,12 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
     * ### **Example Usage**
     * ```typescript
     * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
-    * 
+    *
     * // Register an event listener for when the request completes
     * apiDelete.onEventEmit("requestCompleted_Data", (data, response) => {
     *     console.log("DELETE request completed!", data);
     * });
-    * 
+    *
     * // Register an event listener for request errors
     * apiDelete.onEventEmit("requestError", (error) => {
     *     console.error("DELETE request failed:", error);
@@ -7876,7 +8085,7 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
  *
@@ -7902,7 +8111,7 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
  * ```typescript
  * // Creating an instance of ApiGetUrl without caching
  * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
- * 
+ *
  * // Sending a GET request
  * apiGetUrl.call().then(response => {
  *     console.log(response.data); // Response data (any type by default)
@@ -7911,12 +8120,12 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
  * // Creating an instance with caching
  * const cachingModule = new hison.link.CachingModule(20);
  * const cachedApiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users", cachingModule);
- * 
+ *
  * // Handling request events
  * cachedApiGetUrl.onEventEmit("requestCompleted_Data", (data, response) => {
  *     console.log("GET request completed!", data);
  * });
- * 
+ *
  * // Defining a specific response type using generics
  * interface UserResponse {
  *     id: number;
@@ -7924,7 +8133,7 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
  *     email: string;
  * }
  * const typedApiGetUrl = new hison.link.ApiGetUrl<UserResponse>("https://api.example.com/user/1");
- * 
+ *
  * typedApiGetUrl.call().then(response => {
  *     console.log(response.data.name); // `name` is inferred as a string
  * });
@@ -7982,17 +8191,17 @@ export interface InterfaceApiGetUrl<T = any> {
      * ### **Example Usage**
      * ```typescript
      * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
-     * 
+     *
      * // Listening to the "requestStarted_GET" event
      * apiGetUrl.onEventEmit("requestStarted_GET", (url, options) => {
      *     console.log(`GET request started for: ${url}`);
      * });
-     * 
+     *
      * // Sending a GET request with inferred response type (`any` by default)
      * apiGetUrl.call().then(response => {
      *     console.log(response.data); // Response data
      * });
-     * 
+     *
      * // Defining a specific response type
      * interface User {
      *     id: number;
@@ -8000,7 +8209,7 @@ export interface InterfaceApiGetUrl<T = any> {
      *     email: string;
      * }
      * const typedApiGetUrl = new hison.link.ApiGetUrl<User>("https://api.example.com/user/1");
-     * 
+     *
      * typedApiGetUrl.call().then(response => {
      *     console.log(response.data.name); // `name` is inferred as a string
      * });
@@ -8013,7 +8222,10 @@ export interface InterfaceApiGetUrl<T = any> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
      */
-    call(options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8036,7 +8248,7 @@ export interface InterfaceApiGetUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
-    * 
+    *
     * // Sending a HEAD request
     * apiGetUrl.head().then(headers => {
     *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -8059,8 +8271,8 @@ export interface InterfaceApiGetUrl<T = any> {
     /**
     * **Sends an HTTP OPTIONS request to the specified URL.**
     *
-    * This method retrieves the list of allowed HTTP methods for the specified URL 
-    * without performing an actual data operation. It is useful for checking which 
+    * This method retrieves the list of allowed HTTP methods for the specified URL
+    * without performing an actual data operation. It is useful for checking which
     * HTTP methods are permitted for a specific endpoint.
     *
     * ### **Parameters**
@@ -8079,7 +8291,7 @@ export interface InterfaceApiGetUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
-    * 
+    *
     * // Sending an OPTIONS request
     * apiGetUrl.options().then(allowedMethods => {
     *     console.log(allowedMethods); // e.g., ["GET", "POST", "OPTIONS"]
@@ -8102,7 +8314,7 @@ export interface InterfaceApiGetUrl<T = any> {
     /**
     * **Registers an event listener for API request lifecycle events.**
     *
-    * This method allows attaching a callback function to be executed when a specified event 
+    * This method allows attaching a callback function to be executed when a specified event
     * occurs during the execution of a GET request to a specified URL.
     *
     * ### **Parameters**
@@ -8122,12 +8334,12 @@ export interface InterfaceApiGetUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiGetUrl = new hison.link.ApiGetUrl("https://api.example.com/users");
-    * 
+    *
     * // Register an event listener for when the request completes
     * apiGetUrl.onEventEmit("requestCompleted_Data", (data, response) => {
     *     console.log("GET request completed!", data);
     * });
-    * 
+    *
     * // Register an event listener for request errors
     * apiGetUrl.onEventEmit("requestError", (error) => {
     *     console.error("GET request failed:", error);
@@ -8141,7 +8353,7 @@ export interface InterfaceApiGetUrl<T = any> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiPostUrl` - A class for handling HTTP POST requests to a specified URL.**
  *
@@ -8171,7 +8383,7 @@ export interface InterfaceApiGetUrl<T = any> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a POST request
  * apiPostUrl.call(requestData).then(response => {
  *     console.log(response.data); // Response data
@@ -8179,12 +8391,12 @@ export interface InterfaceApiGetUrl<T = any> {
  *
  * // Creating an instance with a service command for structured routing
  * const apiPostUrlWithCmd = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
- * 
+ *
  * // Sending a POST request with service command
  * apiPostUrlWithCmd.call(requestData).then(response => {
  *     console.log(response.data);
  * });
- * 
+ *
  * // Creating an instance with caching enabled
  * const cachingModule = new hison.link.CachingModule(20);
  * const cachedApiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
@@ -8217,9 +8429,9 @@ export interface InterfaceApiGetUrl<T = any> {
  *     name: string;
  *     email: string;
  * }
- * 
+ *
  * const typedApiPostUrl = new hison.link.ApiPostUrl<UserResponse>("https://api.example.com/users");
- * 
+ *
  * typedApiPostUrl.call(requestData).then(response => {
  *     console.log(response.data.name); // `name` is inferred as a string
  * });
@@ -8267,16 +8479,16 @@ export interface InterfaceApiPostUrl<T = any> {
      * ```typescript
      * // Creating an instance of ApiPostUrl with a service command
      * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Listening to the "requestStarted_POST" event
      * apiPostUrl.onEventEmit("requestStarted_POST", (serviceCmd, options, requestData) => {
      *     console.log(`POST request started for service: ${serviceCmd}`, requestData);
      * });
-     * 
+     *
      * // Sending a POST request
      * apiPostUrl.call(requestData).then(response => {
      *     console.log(response.data); // Response data
@@ -8290,9 +8502,9 @@ export interface InterfaceApiPostUrl<T = any> {
      *     name: string;
      *     email: string;
      * }
-     * 
+     *
      * const apiPostUrl = new hison.link.ApiPostUrl<UserResponse>("https://api.example.com/users");
-     * 
+     *
      * apiPostUrl.call(requestData).then(response => {
      *     if (response) {
      *         console.log(response.data.name); // `name` is inferred as a string
@@ -8308,7 +8520,10 @@ export interface InterfaceApiPostUrl<T = any> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8331,7 +8546,7 @@ export interface InterfaceApiPostUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending a HEAD request
     * apiPostUrl.head().then(headers => {
     *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -8354,8 +8569,8 @@ export interface InterfaceApiPostUrl<T = any> {
     /**
     * **Sends an HTTP OPTIONS request to the specified URL.**
     *
-    * This method retrieves the list of allowed HTTP methods for the specified URL 
-    * without performing an actual data operation. It is useful for checking which 
+    * This method retrieves the list of allowed HTTP methods for the specified URL
+    * without performing an actual data operation. It is useful for checking which
     * HTTP methods are permitted for a specific endpoint.
     *
     * ### **Parameters**
@@ -8374,7 +8589,7 @@ export interface InterfaceApiPostUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending an OPTIONS request
     * apiPostUrl.options().then(allowedMethods => {
     *     console.log(allowedMethods); // e.g., ["GET", "POST", "OPTIONS"]
@@ -8397,7 +8612,7 @@ export interface InterfaceApiPostUrl<T = any> {
     /**
     * **Registers an event listener for API request lifecycle events.**
     *
-    * This method allows attaching a callback function to be executed when a specified event 
+    * This method allows attaching a callback function to be executed when a specified event
     * occurs during the execution of a POST request to a specified URL.
     *
     * ### **Parameters**
@@ -8417,12 +8632,12 @@ export interface InterfaceApiPostUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Register an event listener for when the request completes
     * apiPostUrl.onEventEmit("requestCompleted_Data", (data, response) => {
     *     console.log("POST request completed!", data);
     * });
-    * 
+    *
     * // Register an event listener for request errors
     * apiPostUrl.onEventEmit("requestError", (error) => {
     *     console.error("POST request failed:", error);
@@ -8436,7 +8651,7 @@ export interface InterfaceApiPostUrl<T = any> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiPutUrl` - A class for handling HTTP PUT requests to a specified URL.**
  *
@@ -8467,7 +8682,7 @@ export interface InterfaceApiPostUrl<T = any> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a PUT request
  * apiPutUrl.call(requestData).then(response => {
  *     console.log(response.data); // Response data
@@ -8491,7 +8706,7 @@ export interface InterfaceApiPostUrl<T = any> {
  * }
  *
  * const apiPutUrl = new hison.link.ApiPutUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
- * 
+ *
  * apiPutUrl.call(requestData).then(response => {
  *     if (response) {
  *         console.log(response.data.message); // `message` is inferred as a string
@@ -8557,16 +8772,16 @@ export interface InterfaceApiPutUrl<T = any> {
      * ### **Example Usage**
      * ```typescript
      * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.updateUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Listening to the "requestStarted_PUT" event
      * apiPutUrl.onEventEmit("requestStarted_PUT", (serviceCmd, options, requestData) => {
      *     console.log(`PUT request started for service: ${serviceCmd}`, requestData);
      * });
-     * 
+     *
      * // Sending a PUT request
      * apiPutUrl.call(requestData).then(response => {
      *     if (response) {
@@ -8583,7 +8798,7 @@ export interface InterfaceApiPutUrl<T = any> {
      * }
      *
      * const apiPutUrl = new hison.link.ApiPutUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
-     * 
+     *
      * apiPutUrl.call(requestData).then(response => {
      *     if (response) {
      *         console.log(response.data.message); // `message` is inferred as a string
@@ -8599,7 +8814,10 @@ export interface InterfaceApiPutUrl<T = any> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8622,7 +8840,7 @@ export interface InterfaceApiPutUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending a HEAD request
     * apiPutUrl.head().then(headers => {
     *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -8645,8 +8863,8 @@ export interface InterfaceApiPutUrl<T = any> {
     /**
     * **Sends an HTTP OPTIONS request to the specified URL.**
     *
-    * This method retrieves the list of allowed HTTP methods for the specified URL 
-    * without performing an actual data operation. It is useful for checking which 
+    * This method retrieves the list of allowed HTTP methods for the specified URL
+    * without performing an actual data operation. It is useful for checking which
     * HTTP methods are permitted for a specific endpoint.
     *
     * ### **Parameters**
@@ -8665,7 +8883,7 @@ export interface InterfaceApiPutUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending an OPTIONS request
     * apiPutUrl.options().then(allowedMethods => {
     *     console.log(allowedMethods); // e.g., ["GET", "PUT", "OPTIONS"]
@@ -8688,7 +8906,7 @@ export interface InterfaceApiPutUrl<T = any> {
     /**
     * **Registers an event listener for API request lifecycle events.**
     *
-    * This method allows attaching a callback function to be executed when a specified event 
+    * This method allows attaching a callback function to be executed when a specified event
     * occurs during the execution of a PUT request to a specified URL.
     *
     * ### **Parameters**
@@ -8708,12 +8926,12 @@ export interface InterfaceApiPutUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Register an event listener for when the request completes
     * apiPutUrl.onEventEmit("requestCompleted_Data", (data, response) => {
     *     console.log("PUT request completed!", data);
     * });
-    * 
+    *
     * // Register an event listener for request errors
     * apiPutUrl.onEventEmit("requestError", (error) => {
     *     console.error("PUT request failed:", error);
@@ -8727,7 +8945,7 @@ export interface InterfaceApiPutUrl<T = any> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiPatchUrl` - A class for handling HTTP PATCH requests to a specified URL.**
  *
@@ -8762,7 +8980,7 @@ export interface InterfaceApiPutUrl<T = any> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a PATCH request
  * apiPatchUrl.call(requestData).then(response => {
  *     if (response) {
@@ -8788,7 +9006,7 @@ export interface InterfaceApiPutUrl<T = any> {
  * }
  *
  * const apiPatchUrl = new hison.link.ApiPatchUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
- * 
+ *
  * apiPatchUrl.call(requestData).then(response => {
  *     if (response) {
  *         console.log(response.data.message); // `message` is inferred as a string
@@ -8848,16 +9066,16 @@ export interface InterfaceApiPatchUrl<T = any> {
      * ### **Example Usage**
      * ```typescript
      * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.updateUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Listening to the "requestStarted_PATCH" event
      * apiPatchUrl.onEventEmit("requestStarted_PATCH", (serviceCmd, options, requestData) => {
      *     console.log(`PATCH request started for service: ${serviceCmd}`, requestData);
      * });
-     * 
+     *
      * // Sending a PATCH request
      * apiPatchUrl.call(requestData).then(response => {
      *     if (response) {
@@ -8874,7 +9092,7 @@ export interface InterfaceApiPatchUrl<T = any> {
      * }
      *
      * const apiPatchUrl = new hison.link.ApiPatchUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
-     * 
+     *
      * apiPatchUrl.call(requestData).then(response => {
      *     if (response) {
      *         console.log(response.data.message); // `message` is inferred as a string
@@ -8890,7 +9108,10 @@ export interface InterfaceApiPatchUrl<T = any> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8913,7 +9134,7 @@ export interface InterfaceApiPatchUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending a HEAD request
     * apiPatchUrl.head().then(headers => {
     *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -8936,8 +9157,8 @@ export interface InterfaceApiPatchUrl<T = any> {
     /**
     * **Sends an HTTP OPTIONS request to the specified URL.**
     *
-    * This method retrieves the list of allowed HTTP methods for the specified URL 
-    * without performing an actual data operation. It is useful for checking which 
+    * This method retrieves the list of allowed HTTP methods for the specified URL
+    * without performing an actual data operation. It is useful for checking which
     * HTTP methods are permitted for a specific endpoint.
     *
     * ### **Parameters**
@@ -8956,7 +9177,7 @@ export interface InterfaceApiPatchUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending an OPTIONS request
     * apiPatchUrl.options().then(allowedMethods => {
     *     console.log(allowedMethods); // e.g., ["GET", "PATCH", "OPTIONS"]
@@ -8979,7 +9200,7 @@ export interface InterfaceApiPatchUrl<T = any> {
     /**
     * **Registers an event listener for API request lifecycle events.**
     *
-    * This method allows attaching a callback function to be executed when a specified event 
+    * This method allows attaching a callback function to be executed when a specified event
     * occurs during the execution of a PATCH request to a specified URL.
     *
     * ### **Parameters**
@@ -8999,12 +9220,12 @@ export interface InterfaceApiPatchUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Register an event listener for when the request completes
     * apiPatchUrl.onEventEmit("requestCompleted_Data", (data, response) => {
     *     console.log("PATCH request completed!", data);
     * });
-    * 
+    *
     * // Register an event listener for request errors
     * apiPatchUrl.onEventEmit("requestError", (error) => {
     *     console.error("PATCH request failed:", error);
@@ -9018,7 +9239,7 @@ export interface InterfaceApiPatchUrl<T = any> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * **`ApiDeleteUrl` - A class for handling HTTP DELETE requests to a specified URL.**
  *
@@ -9048,7 +9269,7 @@ export interface InterfaceApiPatchUrl<T = any> {
  * // Creating request data
  * const requestData = new hison.data.DataWrapper();
  * requestData.putString("username", "Alice");
- * 
+ *
  * // Sending a DELETE request
  * apiDeleteUrl.call(requestData).then(response => {
  *     if (response) {
@@ -9074,7 +9295,7 @@ export interface InterfaceApiPatchUrl<T = any> {
  * }
  *
  * const apiDeleteUrl = new hison.link.ApiDeleteUrl<DeleteResponse>("https://api.example.com/users", "UserService.deleteUser");
- * 
+ *
  * apiDeleteUrl.call(requestData).then(response => {
  *     if (response) {
  *         console.log(response.data.message); // `message` is inferred as a string
@@ -9140,16 +9361,16 @@ export interface InterfaceApiDeleteUrl<T = any> {
      * ### **Example Usage**
      * ```typescript
      * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.deleteUser");
-     * 
+     *
      * // Creating request data
      * const requestData = new hison.data.DataWrapper();
      * requestData.putString("username", "Alice");
-     * 
+     *
      * // Listening to the "requestStarted_DELETE" event
      * apiDeleteUrl.onEventEmit("requestStarted_DELETE", (serviceCmd, options, requestData) => {
      *     console.log(`DELETE request started for service: ${serviceCmd}`, requestData);
      * });
-     * 
+     *
      * // Sending a DELETE request
      * apiDeleteUrl.call(requestData).then(response => {
      *     if (response) {
@@ -9166,7 +9387,7 @@ export interface InterfaceApiDeleteUrl<T = any> {
      * }
      *
      * const apiDeleteUrl = new hison.link.ApiDeleteUrl<DeleteResponse>("https://api.example.com/users", "UserService.deleteUser");
-     * 
+     *
      * apiDeleteUrl.call(requestData).then(response => {
      *     if (response) {
      *         console.log(response.data.message); // `message` is inferred as a string
@@ -9182,7 +9403,10 @@ export interface InterfaceApiDeleteUrl<T = any> {
      * @param {Record<string, any>} [options={}] - Additional request options.
      * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
      */
-    call(requestData: any, options?: Record<string, any>): Promise<{ data: T; response: Response; } | null>;
+    call(requestData: any, options?: Record<string, any>): Promise<{
+        data: T;
+        response: Response;
+    } | null>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -9205,7 +9429,7 @@ export interface InterfaceApiDeleteUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending a HEAD request
     * apiDeleteUrl.head().then(headers => {
     *     console.log(headers["content-type"]); // e.g., "application/json"
@@ -9228,8 +9452,8 @@ export interface InterfaceApiDeleteUrl<T = any> {
     /**
     * **Sends an HTTP OPTIONS request to the specified URL.**
     *
-    * This method retrieves the list of allowed HTTP methods for the specified URL 
-    * without performing an actual data operation. It is useful for checking which 
+    * This method retrieves the list of allowed HTTP methods for the specified URL
+    * without performing an actual data operation. It is useful for checking which
     * HTTP methods are permitted for a specific endpoint.
     *
     * ### **Parameters**
@@ -9248,7 +9472,7 @@ export interface InterfaceApiDeleteUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Sending an OPTIONS request
     * apiDeleteUrl.options().then(allowedMethods => {
     *     console.log(allowedMethods); // e.g., ["GET", "DELETE", "OPTIONS"]
@@ -9271,7 +9495,7 @@ export interface InterfaceApiDeleteUrl<T = any> {
     /**
     * **Registers an event listener for API request lifecycle events.**
     *
-    * This method allows attaching a callback function to be executed when a specified event 
+    * This method allows attaching a callback function to be executed when a specified event
     * occurs during the execution of a DELETE request to a specified URL.
     *
     * ### **Parameters**
@@ -9291,12 +9515,12 @@ export interface InterfaceApiDeleteUrl<T = any> {
     * ### **Example Usage**
     * ```typescript
     * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
-    * 
+    *
     * // Register an event listener for when the request completes
     * apiDeleteUrl.onEventEmit("requestCompleted_Data", (data, response) => {
     *     console.log("DELETE request completed!", data);
     * });
-    * 
+    *
     * // Register an event listener for request errors
     * apiDeleteUrl.onEventEmit("requestError", (error) => {
     *     console.error("DELETE request failed:", error);
@@ -9310,7 +9534,7 @@ export interface InterfaceApiDeleteUrl<T = any> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-};
+}
 /**
  * Defines a function type for handling API GET requests before they are sent.
  * This allows developers to modify request options or cancel the request.
@@ -9332,7 +9556,9 @@ export interface InterfaceApiDeleteUrl<T = any> {
  * });
  * ```
  */
-export interface BeforeGetRequst {(resourcePath?: string, options?: Record<string, any>): boolean | void;};
+export interface BeforeGetRequst {
+    (resourcePath?: string, options?: Record<string, any>): boolean | void;
+}
 /**
  * Defines a function type for handling API POST requests before they are sent.
  * This allows modifying request data, headers, or preventing the request.
@@ -9353,7 +9579,9 @@ export interface BeforeGetRequst {(resourcePath?: string, options?: Record<strin
  * });
  * ```
  */
-export interface BeforePostRequst {(requestDw?: any, options?: Record<string, any>): boolean | void;};
+export interface BeforePostRequst {
+    (requestDw?: any, options?: Record<string, any>): boolean | void;
+}
 /**
  * Defines a function type for handling API PUT requests before they are sent.
  * Similar to `BeforePostRequst`, this allows modifying request payload or settings.
@@ -9373,7 +9601,9 @@ export interface BeforePostRequst {(requestDw?: any, options?: Record<string, an
  * });
  * ```
  */
-export interface BeforePutRequst {(requestDw?: any, options?: Record<string, any>): boolean | void;};
+export interface BeforePutRequst {
+    (requestDw?: any, options?: Record<string, any>): boolean | void;
+}
 /**
  * Defines a function type for handling API PATCH requests before they are sent.
  * This allows modifying partial update data before execution.
@@ -9393,7 +9623,9 @@ export interface BeforePutRequst {(requestDw?: any, options?: Record<string, any
  * });
  * ```
  */
-export interface BeforePatchRequst {(requestDw?: any, options?: Record<string, any>): boolean | void;};
+export interface BeforePatchRequst {
+    (requestDw?: any, options?: Record<string, any>): boolean | void;
+}
 /**
  * Defines a function type for handling API DELETE requests before they are sent.
  * This allows validating or modifying delete operations before execution.
@@ -9413,7 +9645,9 @@ export interface BeforePatchRequst {(requestDw?: any, options?: Record<string, a
  * });
  * ```
  */
-export interface BeforeDeleteRequst {(requestDw?: any, options?: Record<string, any>): boolean | void;};
+export interface BeforeDeleteRequst {
+    (requestDw?: any, options?: Record<string, any>): boolean | void;
+}
 /**
  * Defines a function type for intercepting API response results.
  * This allows modifying API responses before they are returned to the caller.
@@ -9434,7 +9668,9 @@ export interface BeforeDeleteRequst {(requestDw?: any, options?: Record<string, 
  * });
  * ```
  */
-export interface InterceptApiResult {(result: any | undefined, response: Response): boolean | void;};
+export interface InterceptApiResult {
+    (result: any | undefined, response: Response): boolean | void;
+}
 /**
  * Defines a function type for handling API errors before they are propagated.
  * This allows logging or modifying error responses before they are thrown.
@@ -9453,4 +9689,6 @@ export interface InterceptApiResult {(result: any | undefined, response: Respons
  * });
  * ```
  */
-export interface InterceptApiError {(error: any): boolean | void;};
+export interface InterceptApiError {
+    (error: any): boolean | void;
+}
