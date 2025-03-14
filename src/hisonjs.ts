@@ -9,7 +9,6 @@ import {
     DayOfWeekShortName,
     DayOfWeekFullNameKR,
     DayOfWeekShortNameKR,
-    ConvertValue,
     InterfaceDataWrapper,
     InterfaceDataModel,
     DataModelFormatter,
@@ -25,14 +24,7 @@ import {
     InterfaceApiPostUrl,
     InterfaceApiPutUrl,
     InterfaceApiPatchUrl,
-    InterfaceApiDeleteUrl,
-    BeforeGetRequst,
-    BeforePostRequst,
-    BeforePutRequst,
-    BeforePatchRequst,
-    BeforeDeleteRequst,
-    InterceptApiResult,
-    InterceptApiError
+    InterfaceApiDeleteUrl
 } from '.'
 
 //====================================================================================
@@ -480,7 +472,7 @@ function createHison(): Hison {
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforeGetRequst(resourcePath: string, options: Record<string, any>): boolean | void {return true;},
+            beforeGetRequest(resourcePath: string, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `POST` request.
              *
@@ -489,44 +481,227 @@ function createHison(): Hison {
              * - If it returns `false`, the request will be canceled.
              * - Default implementation returns `true`.
              *
-             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param requestData The `DataWrapper` object containing the request data.
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforePostRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePostRequest(requestData: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `PUT` request.
              *
              * - If it returns `false`, the request will be canceled.
              * - Default implementation returns `true`.
              *
-             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param requestData The `DataWrapper` object containing the request data.
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforePutRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePutRequest(requestData: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `PATCH` request.
              *
              * - If it returns `false`, the request will be canceled.
              * - Default implementation returns `true`.
              *
-             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param requestData The `DataWrapper` object containing the request data.
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforePatchRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforePatchRequest(requestData: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
             /**
              * Hook function executed before making a `DELETE` request.
              *
              * - If it returns `false`, the request will be canceled.
              * - Default implementation returns `true`.
              *
-             * @param requestDw The `DataWrapper` object containing the request data.
+             * @param requestData The `DataWrapper` object containing the request data.
              * @param options Additional request options.
              * @returns `boolean | void` (Returning `false` cancels the request)
              */
-            beforeDeleteRequst(requestDw: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
+            beforeDeleteRequest(requestData: InterfaceDataWrapper, options: Record<string, any>): boolean | void {return true;},
+            /**
+             * Hook function executed after completing a `GET` request.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterGetRequest(responseData: { data: InterfaceDataWrapper; response: Response }): boolean | void {return true;},
+            /**
+             * Hook function executed after completing a `POST` request.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterPostRequest(responseData: { data: InterfaceDataWrapper; response: Response }): boolean | void {return true;},
+            /**
+             * Hook function executed after completing a `PUT` request.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterPutRequest(responseData: { data: InterfaceDataWrapper; response: Response }): boolean | void {return true;},
+            /**
+             * Hook function executed after completing a `PATCH` request.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterPatchRequest(responseData: { data: InterfaceDataWrapper; response: Response }): boolean | void {return true;},
+            /**
+             * Hook function executed after completing a `DELETE` request.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterDeleteRequest(responseData: { data: InterfaceDataWrapper; response: Response }): boolean | void {return true;},
+            /**
+             * Hook function executed before making a `GET` request to a specified URL.
+             *
+             * This function allows modifying request parameters or canceling the request.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param url The API endpoint being requested.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
+            beforeGetUrlRequest(url: string, options: Record<string, any>): boolean | void { return true; },
+            /**
+             * Hook function executed before making a `POST` request to a specified URL.
+             *
+             * This function allows modifying the request before it is sent.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param url The API endpoint being requested.
+             * @param requestData The data being sent in the request.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
+            beforePostUrlRequest(url: string, requestData: any, options: Record<string, any>): boolean | void { return true; },
+            /**
+             * Hook function executed before making a `PUT` request to a specified URL.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param url The API endpoint being requested.
+             * @param requestData The data being sent in the request.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
+            beforePutUrlRequest(url: string, requestData: any, options: Record<string, any>): boolean | void { return true; },
+            /**
+             * Hook function executed before making a `PATCH` request to a specified URL.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param url The API endpoint being requested.
+             * @param requestData The data being sent in the request.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
+            beforePatchUrlRequest(url: string, requestData: any, options: Record<string, any>): boolean | void { return true; },
+            /**
+             * Hook function executed before making a `DELETE` request to a specified URL.
+             *
+             * - If it returns `false`, the request will be canceled.
+             * - Default implementation returns `true`.
+             *
+             * @param url The API endpoint being requested.
+             * @param requestData The data being sent in the request.
+             * @param options Additional request options.
+             * @returns `boolean | void` (Returning `false` cancels the request)
+             */
+            beforeDeleteUrlRequest(url: string, requestData: any, options: Record<string, any>): boolean | void { return true; },
+            /**
+             * Hook function executed after completing a `GET` request to a specified URL.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterGetUrlRequest(responseData: { data: any; response: Response }): boolean | void { return true; },
+            /**
+             * Hook function executed after completing a `POST` request to a specified URL.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterPostUrlRequest(responseData: { data: any; response: Response }): boolean | void { return true; },
+            /**
+             * Hook function executed after completing a `PUT` request to a specified URL.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterPutUrlRequest(responseData: { data: any; response: Response }): boolean | void { return true; },
+            /**
+             * Hook function executed after completing a `PATCH` request to a specified URL.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterPatchUrlRequest(responseData: { data: any; response: Response }): boolean | void { return true; },
+            /**
+             * Hook function executed after completing a `DELETE` request to a specified URL.
+             *
+             * This function allows post-processing of the API response.
+             *
+             * - If it returns `false`, the response will be nullified.
+             * - Default implementation does nothing.
+             *
+             * @param responseData The response object containing `data` and `response`.
+             * @returns `boolean | void` (Returning `false` nullifies the response)
+             */
+            afterDeleteUrlRequest(responseData: { data: any; response: Response }): boolean | void { return true; },
             /**
              * Intercepts and processes API responses before returning them to the caller.
              *
@@ -636,7 +811,7 @@ function createHison(): Hison {
         };
         private _eventEmitter: EventEmitter;
         private _cachingModule: InterfaceCachingModule | null = null;
-        private _getRsultDataWrapper = (resultData: any): any => {
+        private _getResultDataWrapper = (resultData: any): any => {
             let data = null;
             if(resultData && resultData.constructor === Object && resultData.DATAWRAPPER === 'TRUE'
             ) {
@@ -653,15 +828,15 @@ function createHison(): Hison {
             }
             return data;
         };
-        private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; } | null> => {
+        private _getCachingResult = async (resourcePath: string): Promise<{ data: any; response: Response; }> => {
             if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) {
                 const result = await this._cachingModule.get(resourcePath);
                 if(result && customOption.link.interceptApiResult(result.data, result.response) !== false) {
                     return result;
                 };
-                return null;
+                return { data : null, response: result.response };
             }
-            return null;
+            return { data : null, response: new Response() };
         };
         private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string | null, requestData: any): Promise<any>[] => {
             if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) { //1
@@ -709,8 +884,8 @@ function createHison(): Hison {
             if(timeoutPromise) fecthArr.push(timeoutPromise);
             return fecthArr;
         };
-        private _request = async (fecthInfo: any[], cachingKey: string) => {
-            const result = await Promise.race(fecthInfo)
+        private _request = async (methodName: string, fecthInfo: any[], cachingKey: string): Promise<{ data: any; response: Response; }> => {
+            const result: { data: any; response: Response; } = await Promise.race(fecthInfo)
             .then((response: Response) => {
                 this._eventEmitter.emit('requestCompleted_Response', response);
                 const contentType = response.headers.get('Content-Type');
@@ -724,54 +899,77 @@ function createHison(): Hison {
             })
             .then(rtn => {
                 const resultData = rtn.data;
-                const data = this._getRsultDataWrapper(resultData);
+                const data = this._getResultDataWrapper(resultData);
                 this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
                 if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(cachingKey, Promise.resolve({ data: data, response: rtn.response }));
-                if(customOption.link.interceptApiResult(data, rtn.response) === false) return null;
+                if(customOption.link.interceptApiResult(data, rtn.response) === false) return { data: null, response: rtn.response };
+                switch (methodName) {
+                    case 'GET':
+                        if(customOption.link.afterGetRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'POST':
+                        if(customOption.link.afterPostRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'PUT':
+                        if(customOption.link.afterPutRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'PATCH':
+                        if(customOption.link.afterPatchRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'DELETE':
+                        if(customOption.link.afterDeleteRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'GETURL':
+                        if(customOption.link.afterGetUrlRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'POSTURL':
+                        if(customOption.link.afterPostUrlRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'PUTURL':
+                        if(customOption.link.afterPutUrlRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'PATCHURL':
+                        if(customOption.link.afterPatchUrlRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    case 'DELETEURL':
+                        if(customOption.link.afterDeleteUrlRequest({ data: data, response: rtn.response }) === false) return { data: null, response: rtn.response };
+                    default:
+                        break;
+                }
                 return { data: data, response: rtn.response };
             })
             .catch(error => {
                 this._eventEmitter.emit('requestError', error);
-                if(customOption.link.interceptApiError(error) === false) return null;
+                if(customOption.link.interceptApiError(error) === false) return { data: error, response: new Response() };
                 return error;
             });
-        
             return result;
         };
-        get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
-            if(customOption.link.beforeGetRequst(resourcePath, options) === false) return Promise.resolve(null);
+        get = (resourcePath: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(customOption.link.beforeGetRequest(resourcePath, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
             if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
-            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + resourcePath, options, null, null), resourcePath);
+            return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + resourcePath, options, null, null), resourcePath);
         };
-        post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
-            if(customOption.link.beforePostRequst(requestData, options) === false) return Promise.resolve(null);
+        post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(customOption.link.beforePostRequest(requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
-            if(customOption.link.beforePutRequst(requestData, options) === false) return Promise.resolve(null);
+        put = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(customOption.link.beforePutRequest(requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
-            if(customOption.link.beforePatchRequst(requestData, options) === false) return Promise.resolve(null);
+        patch = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(customOption.link.beforePatchRequest(requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
-        delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; } | null> => {
-            if(customOption.link.beforeDeleteRequst(requestData, options) === false) return Promise.resolve(null);
+        delete = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
+            if(customOption.link.beforeDeleteRequest(requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
+            return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
         };
         head = async (resourcePath: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
             const url = customOption.link.protocol + customOption.link.domain + resourcePath;
@@ -808,34 +1006,39 @@ function createHison(): Hison {
                 });
         };
         getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforeGetUrlRequest(url, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'GET';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, url, options);
             if(this._cachingModule && this._cachingModule.hasKey(url)) return this._getCachingResult(url);
-            return this._request(this._getFetch(METHOD_NAME, url, options, null, null), url);
+            return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, null, null), url);
         };
         postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforePostUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'POST';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
+            return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforePutUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'PUT';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
+            return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforePatchUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'PATCH';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
+            return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+            if(customOption.link.beforeDeleteUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
             const METHOD_NAME = 'DELETE';
             this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
             if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
-            return this._request(this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
+            return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
         };
         headURL = async (url: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
             return fetch(url, { method: 'HEAD', ...options })
@@ -7285,7 +7488,7 @@ function createHison(): Hison {
              *
              * ### **How It Works**
              * - When instantiated, `ApiGet<T>` stores the API resource path and an optional `CachingModule` instance.
-             * - The `call()` method triggers a GET request and returns a `Promise<{ data: T; response: Response } | null>`.
+             * - The `call()` method triggers a GET request and returns a `Promise<{ data: T; response: Response }>`.
              * - If caching is enabled, previously stored responses may be returned instead of making a new request.
              * - Event listeners can be attached to monitor the request lifecycle.
              *
@@ -7449,9 +7652,9 @@ function createHison(): Hison {
                  *
                  * @template T - The expected response data type.
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.get(this._resourcePath, options);
                 };
                 /**
@@ -7720,7 +7923,7 @@ function createHison(): Hison {
                  *   - **Default:** `{}` (empty object)
                  *
                  * ### **Pre-Request Handling**
-                 * - **`hison.setBeforePostRequst((requestData, options) => {})`**
+                 * - **`hison.setBeforePostRequest((requestData, options) => {})`**
                  *   - A customizable hook executed **before sending the POST request**.
                  *   - If it returns `false`, the request is **prevented from execution**.
                  *   - **Use Case:** Validating request parameters, modifying request data dynamically.
@@ -7739,7 +7942,7 @@ function createHison(): Hison {
                  * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
                  * - If the data is not cached, it makes an HTTP POST request to `_serviceCmd`.
                  * - Before executing the request:
-                 *   - The **before-request hook (`beforePostRequst`)** is checked.
+                 *   - The **before-request hook (`beforePostRequest`)** is checked.
                  *   - The **event `"requestStarted_POST"`** is emitted.
                  * - Once the request is completed, the response is returned and optionally stored in the cache.
                  *
@@ -7759,7 +7962,7 @@ function createHison(): Hison {
                  * requestData.putString("username", "Alice");
                  * 
                  * // Customizing the before-request hook to modify data before sending
-                 * customOption.link.beforePostRequst = (requestData, options) => {
+                 * customOption.link.beforePostRequest = (requestData, options) => {
                  *     requestData.putString("timestamp", Date.now().toString());
                  *     return true;
                  * };
@@ -7785,7 +7988,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.post(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -8117,7 +8320,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.put(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -8449,7 +8652,7 @@ function createHison(): Hison {
                  * @param {Record<string, any>} [options={}] - Additional request options.
                  * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.patch(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -8776,9 +8979,9 @@ function createHison(): Hison {
                  *
                  * @param {any} requestData - The data to be sent in the request.
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.delete(requestData, this._serviceCmd, options);
                 };
                 /**
@@ -9099,9 +9302,9 @@ function createHison(): Hison {
                  * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
                  *
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.getURL(this._url, options);
                 };
                 /**
@@ -9465,9 +9668,9 @@ function createHison(): Hison {
                  *
                  * @param {any} requestData - The data to be sent in the request.
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response; }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.postURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -9827,9 +10030,9 @@ function createHison(): Hison {
                  *
                  * @param {any} requestData - The data to be sent in the request.
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.putURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -10189,9 +10392,9 @@ function createHison(): Hison {
                  *
                  * @param {any} requestData - The data to be sent in the request.
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response; }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.patchURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -10552,9 +10755,9 @@ function createHison(): Hison {
                  *
                  * @param {any} requestData - The data to be sent in the request.
                  * @param {Record<string, any>} [options={}] - Additional request options.
-                 * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
+                 * @returns {Promise<{ data: T; response: Response; }>} A promise resolving to the API response.
                  */
-                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; } | null> => {
+                call = (requestData: any, options: Record<string, any> = {}): Promise<{ data: T; response: Response; }> => {
                     return this._apiLink.deleteURL(this._url, requestData, this._serviceCmd, options);
                 };
                 /**
@@ -10741,7 +10944,7 @@ function createHison(): Hison {
         getIsFreeze(): boolean {return customOption.shield.isFreeze;},
         getIsPossibleGoBack(): boolean {return customOption.shield.isPossibleGoBack;},
         getIsPossibleOpenDevTool(): boolean {return customOption.shield.isPossibleOpenDevTool;},
-        setConvertValue(func: ConvertValue) {customOption.data.convertValue = func;},
+        setConvertValue(func: (value: any) => any) {customOption.data.convertValue = func;},
         setProtocol(str: string) {customOption.link.protocol = str;},
         setDomain(str: string) {customOption.link.domain = str;},
         setControllerPath(str: string) {customOption.link.controllerPath = str;},
@@ -10756,13 +10959,28 @@ function createHison(): Hison {
         getWebSocketProtocol(): string {return customOption.link.webSocketProtocol;},
         getWebSocketEndPoint(): string {return customOption.link.webSocketEndPoint;},
         getCachingLimit(): number {return customOption.link.cachingLimit;},
-        setBeforeGetRequst(func: BeforeGetRequst) {customOption.link.beforeGetRequst = func;},
-        setBeforePostRequst(func: BeforePostRequst) {customOption.link.beforePostRequst = func},
-        setBeforePutRequst(func: BeforePutRequst) {customOption.link.beforePutRequst = func},
-        setBeforePatchRequst(func: BeforePatchRequst) {customOption.link.beforePatchRequst = func},
-        setBeforeDeleteRequst(func: BeforeDeleteRequst) {customOption.link.beforeDeleteRequst = func},
-        setInterceptApiResult(func: InterceptApiResult) {customOption.link.interceptApiResult = func},
-        setInterceptApiError(func: InterceptApiError) {customOption.link.interceptApiError = func},
+        setBeforeGetRequest(func: (resourcePath?: string, options?: Record<string, any>) => boolean | void) {customOption.link.beforeGetRequest = func;},
+        setBeforePostRequest(func: <T = InterfaceDataWrapper>(requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforePostRequest = func},
+        setBeforePutRequest(func: <T = InterfaceDataWrapper>(requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforePutRequest = func},
+        setBeforePatchRequest(func: <T = InterfaceDataWrapper>(requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforePatchRequest = func},
+        setBeforeDeleteRequest(func: <T = InterfaceDataWrapper>(requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforeDeleteRequest = func},
+        setAfterGetRequest(func: <T = InterfaceDataWrapper>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterGetRequest = func;},
+        setAfterPostRequest(func: <T = InterfaceDataWrapper>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterPostRequest = func},
+        setAfterPutRequest(func: <T = InterfaceDataWrapper>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterPutRequest = func},
+        setAfterPatchRequest(func: <T = InterfaceDataWrapper>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterPatchRequest = func},
+        setAfterDeleteRequest(func: <T = InterfaceDataWrapper>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterDeleteRequest = func},
+        setBeforeGetUrlRequest(func: (url?: string, options?: Record<string, any>) => boolean | void) {customOption.link.beforeGetUrlRequest = func;},
+        setBeforePostUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforePostUrlRequest = func},
+        setBeforePutUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforePutUrlRequest = func},
+        setBeforePatchUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforePatchUrlRequest = func},
+        setBeforeDeleteUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void) {customOption.link.beforeDeleteUrlRequest = func},
+        setAfterGetUrlRequest(func: <T = any>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterGetUrlRequest = func;},
+        setAfterPostUrlRequest(func: <T = any>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterPostUrlRequest = func},
+        setAfterPutUrlRequest(func: <T = any>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterPutUrlRequest = func},
+        setAfterPatchUrlRequest(func: <T = any>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterPatchUrlRequest = func},
+        setAfterDeleteUrlRequest(func: <T = any>(responseData?: { data: T; response: Response }) => boolean | void) {customOption.link.afterDeleteUrlRequest = func},
+        setInterceptApiResult(func: (result: any | undefined, response: Response) => boolean | void) {customOption.link.interceptApiResult = func},
+        setInterceptApiError(func: (error: any) => boolean | void) {customOption.link.interceptApiError = func},
         utils : {
             isAlpha(str: string): boolean { return hison.utils.isAlpha(str) },
             isAlphaNumber(str: string): boolean { return hison.utils.isAlphaNumber(str) },
