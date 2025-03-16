@@ -734,7 +734,7 @@ export interface Hison {
      *
      * @param func The function used to transform values before they are stored in `DataModel`.
      */
-    setConvertValue(func: ConvertValue): void;
+    setConvertValue(func: (value: any) => any): void;
     /**
      * Sets the default protocol for API communication.
      *
@@ -918,7 +918,7 @@ export interface Hison {
     /**
      * Sets the hook function that executes before making a `GET` request.
      *
-     * This method updates the `beforeGetRequst` property in `customOption`,
+     * This method updates the `beforeGetRequest` property in `customOption`,
      * allowing developers to intercept or modify `GET` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -926,13 +926,13 @@ export interface Hison {
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
      * ### Related Property
-     * - **`beforeGetRequst`**: A hook function executed before a `GET` request.
+     * - **`beforeGetRequest`**: A hook function executed before a `GET` request.
      *   - Default: Returns `true`
      *   - Used in `ApiGet.call()` to determine if a request should proceed.
      *
      * ### Example Usage:
      * ```typescript
-     * setBeforeGetRequst((resourcePath, options) => {
+     * setBeforeGetRequest((resourcePath, options) => {
      *     console.log("GET request intercepted:", resourcePath);
      *     return resourcePath.startsWith("/secure/") ? false : true;
      * });
@@ -940,11 +940,11 @@ export interface Hison {
      *
      * @param func A function to execute before a `GET` request. Returning `false` cancels the request.
      */
-    setBeforeGetRequst(func: BeforeGetRequst): void;
+    setBeforeGetRequest(func: (resourcePath?: string, options?: Record<string, any>) => boolean | void): void;
     /**
      * Sets the hook function that executes before making a `POST` request.
      *
-     * This method updates the `beforePostRequst` property in `customOption`,
+     * This method updates the `beforePostRequest` property in `customOption`,
      * allowing developers to intercept or modify `POST` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -952,13 +952,13 @@ export interface Hison {
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
      * ### Related Property
-     * - **`beforePostRequst`**: A hook function executed before a `POST` request.
+     * - **`beforePostRequest`**: A hook function executed before a `POST` request.
      *   - Default: Returns `true`
      *   - Used in `ApiPost.call()` to determine if a request should proceed.
      *
      * ### Example Usage:
      * ```typescript
-     * setBeforePostRequst((requestDw, options) => {
+     * setBeforePostRequest((requestDw, options) => {
      *     console.log("POST request intercepted:", requestDw);
      *     return requestDw.hasOwnProperty("secureData") ? false : true;
      * });
@@ -966,11 +966,11 @@ export interface Hison {
      *
      * @param func A function to execute before a `POST` request. Returning `false` cancels the request.
      */
-    setBeforePostRequst(func: BeforePostRequst): void;
+    setBeforePostRequest(func: <T = InterfaceDataWrapper>(requestData?: any, options?: Record<string, any>) => boolean | void): void;
     /**
      * Sets the hook function that executes before making a `PUT` request.
      *
-     * This method updates the `beforePutRequst` property in `customOption`,
+     * This method updates the `beforePutRequest` property in `customOption`,
      * allowing developers to intercept or modify `PUT` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -978,13 +978,13 @@ export interface Hison {
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
      * ### Related Property
-     * - **`beforePutRequst`**: A hook function executed before a `PUT` request.
+     * - **`beforePutRequest`**: A hook function executed before a `PUT` request.
      *   - Default: Returns `true`
      *   - Used in `ApiPut.call()` to determine if a request should proceed.
      *
      * ### Example Usage:
      * ```typescript
-     * setBeforePutRequst((requestDw, options) => {
+     * setBeforePutRequest((requestDw, options) => {
      *     console.log("PUT request intercepted:", requestDw);
      *     return requestDw.hasOwnProperty("readOnly") ? false : true;
      * });
@@ -992,11 +992,11 @@ export interface Hison {
      *
      * @param func A function to execute before a `PUT` request. Returning `false` cancels the request.
      */
-    setBeforePutRequst(func: BeforePutRequst): void;
+    setBeforePutRequest(func: <T = InterfaceDataWrapper>(requestData?: any, options?: Record<string, any>) => boolean | void): void;
     /**
      * Sets the hook function that executes before making a `PATCH` request.
      *
-     * This method updates the `beforePatchRequst` property in `customOption`,
+     * This method updates the `beforePatchRequest` property in `customOption`,
      * allowing developers to intercept or modify `PATCH` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -1004,13 +1004,13 @@ export interface Hison {
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
      * ### Related Property
-     * - **`beforePatchRequst`**: A hook function executed before a `PATCH` request.
+     * - **`beforePatchRequest`**: A hook function executed before a `PATCH` request.
      *   - Default: Returns `true`
      *   - Used in `ApiPatch.call()` to determine if a request should proceed.
      *
      * ### Example Usage:
      * ```typescript
-     * setBeforePatchRequst((requestDw, options) => {
+     * setBeforePatchRequest((requestDw, options) => {
      *     console.log("PATCH request intercepted:", requestDw);
      *     return requestDw.hasOwnProperty("lockedField") ? false : true;
      * });
@@ -1018,11 +1018,11 @@ export interface Hison {
      *
      * @param func A function to execute before a `PATCH` request. Returning `false` cancels the request.
      */
-    setBeforePatchRequst(func: BeforePatchRequst): void;
+    setBeforePatchRequest(func: <T = InterfaceDataWrapper>(requestData?: any, options?: Record<string, any>) => boolean | void): void;
     /**
      * Sets the hook function that executes before making a `DELETE` request.
      *
-     * This method updates the `beforeDeleteRequst` property in `customOption`,
+     * This method updates the `beforeDeleteRequest` property in `customOption`,
      * allowing developers to intercept or modify `DELETE` requests before they are sent.
      *
      * - If the function returns `false`, the request will be canceled.
@@ -1030,13 +1030,13 @@ export interface Hison {
      * - Default behavior: Returns `true`, allowing the request to proceed.
      *
      * ### Related Property
-     * - **`beforeDeleteRequst`**: A hook function executed before a `DELETE` request.
+     * - **`beforeDeleteRequest`**: A hook function executed before a `DELETE` request.
      *   - Default: Returns `true`
      *   - Used in `ApiDelete.call()` to determine if a request should proceed.
      *
      * ### Example Usage:
      * ```typescript
-     * setBeforeDeleteRequst((requestDw, options) => {
+     * setBeforeDeleteRequest((requestDw, options) => {
      *     console.log("DELETE request intercepted:", requestDw);
      *     return requestDw.hasOwnProperty("protected") ? false : true;
      * });
@@ -1044,7 +1044,427 @@ export interface Hison {
      *
      * @param func A function to execute before a `DELETE` request. Returning `false` cancels the request.
      */
-    setBeforeDeleteRequst(func: BeforeDeleteRequst): void;
+    setBeforeDeleteRequest(func: <T = InterfaceDataWrapper>(requestData?: any, options?: Record<string, any>) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `GET` request.
+     *
+     * This method updates the `afterGetRequest` property in `customOption`,
+     * allowing developers to post-process `GET` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `GET` requests.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterGetRequest`**: A hook function executed after a `GET` request.
+     *   - Default: Returns `true`
+     *   - Used in `ApiGet.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterGetRequest(({ data, response }) => {
+     *     console.log("GET response intercepted:", data);
+     *     return data.status !== "error";
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `GET` request. Returning `false` nullifies the response.
+     */
+    setAfterGetRequest(func: <T = InterfaceDataWrapper>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `POST` request.
+     *
+     * This method updates the `afterPostRequest` property in `customOption`,
+     * allowing developers to post-process `POST` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `POST` requests.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterPostRequest`**: A hook function executed after a `POST` request.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPost.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterPostRequest(({ data, response }) => {
+     *     console.log("POST response intercepted:", data);
+     *     return data.success === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `POST` request. Returning `false` nullifies the response.
+     */
+    setAfterPostRequest(func: <T = InterfaceDataWrapper>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `PUT` request.
+     *
+     * This method updates the `afterPutRequest` property in `customOption`,
+     * allowing developers to post-process `PUT` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `PUT` requests.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterPutRequest`**: A hook function executed after a `PUT` request.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPut.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterPutRequest(({ data, response }) => {
+     *     console.log("PUT response intercepted:", data);
+     *     return data.updated === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `PUT` request. Returning `false` nullifies the response.
+     */
+    setAfterPutRequest(func: <T = InterfaceDataWrapper>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `PATCH` request.
+     *
+     * This method updates the `afterPatchRequest` property in `customOption`,
+     * allowing developers to post-process `PATCH` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `PATCH` requests.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterPatchRequest`**: A hook function executed after a `PATCH` request.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPatch.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterPatchRequest(({ data, response }) => {
+     *     console.log("PATCH response intercepted:", data);
+     *     return data.patched === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `PATCH` request. Returning `false` nullifies the response.
+     */
+    setAfterPatchRequest(func: <T = InterfaceDataWrapper>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `DELETE` request.
+     *
+     * This method updates the `afterDeleteRequest` property in `customOption`,
+     * allowing developers to post-process `DELETE` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `DELETE` requests.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterDeleteRequest`**: A hook function executed after a `DELETE` request.
+     *   - Default: Returns `true`
+     *   - Used in `ApiDelete.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterDeleteRequest(({ data, response }) => {
+     *     console.log("DELETE response intercepted:", data);
+     *     return data.deleted === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `DELETE` request. Returning `false` nullifies the response.
+     */
+    setAfterDeleteRequest(func: <T = InterfaceDataWrapper>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes before making a `GET` request to a specified URL.
+     *
+     * This method updates the `beforeGetUrlRequest` property in `customOption`,
+     * allowing developers to intercept or modify `GET` requests before they are sent.
+     *
+     * - If the function returns `false`, the request will be canceled.
+     * - The new function will be applied globally to all `GET` requests made via `ApiGetUrl`.
+     * - Default behavior: Returns `true`, allowing the request to proceed.
+     *
+     * ### Related Property
+     * - **`beforeGetUrlRequest`**: A hook function executed before a `GET` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiGetUrl.call()` to determine if a request should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setBeforeGetUrlRequest((url, options) => {
+     *     console.log("GET URL request intercepted:", url);
+     *     return url?.includes("restricted") ? false : true;
+     * });
+     * ```
+     *
+     * @param func A function to execute before a `GET` request. Returning `false` cancels the request.
+     */
+    setBeforeGetUrlRequest(func: (url?: string, options?: Record<string, any>) => boolean | void): void;
+    /**
+     * Sets the hook function that executes before making a `POST` request to a specified URL.
+     *
+     * This method updates the `beforePostUrlRequest` property in `customOption`,
+     * allowing developers to intercept or modify `POST` requests before they are sent.
+     *
+     * - If the function returns `false`, the request will be canceled.
+     * - The new function will be applied globally to all `POST` requests made via `ApiPostUrl`.
+     * - Default behavior: Returns `true`, allowing the request to proceed.
+     *
+     * ### Related Property
+     * - **`beforePostUrlRequest`**: A hook function executed before a `POST` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPostUrl.call()` to determine if a request should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setBeforePostUrlRequest((url, requestData, options) => {
+     *     console.log("POST URL request intercepted:", url, requestData);
+     *     return requestData && requestData.isValid ? true : false;
+     * });
+     * ```
+     *
+     * @param func A function to execute before a `POST` request. Returning `false` cancels the request.
+     */
+    setBeforePostUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void): void;
+    /**
+     * Sets the hook function that executes before making a `PUT` request to a specified URL.
+     *
+     * This method updates the `beforePutUrlRequest` property in `customOption`,
+     * allowing developers to intercept or modify `PUT` requests before they are sent.
+     *
+     * - If the function returns `false`, the request will be canceled.
+     * - The new function will be applied globally to all `PUT` requests made via `ApiPutUrl`.
+     * - Default behavior: Returns `true`, allowing the request to proceed.
+     *
+     * ### Related Property
+     * - **`beforePutUrlRequest`**: A hook function executed before a `PUT` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPutUrl.call()` to determine if a request should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setBeforePutUrlRequest((url, requestData, options) => {
+     *     console.log("PUT URL request intercepted:", url, requestData);
+     *     return options?.allowUpdate ? true : false;
+     * });
+     * ```
+     *
+     * @param func A function to execute before a `PUT` request. Returning `false` cancels the request.
+     */
+    setBeforePutUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void): void;
+    /**
+     * Sets the hook function that executes before making a `PATCH` request to a specified URL.
+     *
+     * This method updates the `beforePatchUrlRequest` property in `customOption`,
+     * allowing developers to intercept or modify `PATCH` requests before they are sent.
+     *
+     * - If the function returns `false`, the request will be canceled.
+     * - The new function will be applied globally to all `PATCH` requests made via `ApiPatchUrl`.
+     * - Default behavior: Returns `true`, allowing the request to proceed.
+     *
+     * ### Related Property
+     * - **`beforePatchUrlRequest`**: A hook function executed before a `PATCH` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPatchUrl.call()` to determine if a request should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setBeforePatchUrlRequest((url, requestData, options) => {
+     *     console.log("PATCH URL request intercepted:", url, requestData);
+     *     return requestData?.isPatchable ? true : false;
+     * });
+     * ```
+     *
+     * @param func A function to execute before a `PATCH` request. Returning `false` cancels the request.
+     */
+    setBeforePatchUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void): void;
+    /**
+     * Sets the hook function that executes before making a `DELETE` request to a specified URL.
+     *
+     * This method updates the `beforeDeleteUrlRequest` property in `customOption`,
+     * allowing developers to intercept or modify `DELETE` requests before they are sent.
+     *
+     * - If the function returns `false`, the request will be canceled.
+     * - The new function will be applied globally to all `DELETE` requests made via `ApiDeleteUrl`.
+     * - Default behavior: Returns `true`, allowing the request to proceed.
+     *
+     * ### Related Property
+     * - **`beforeDeleteUrlRequest`**: A hook function executed before a `DELETE` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiDeleteUrl.call()` to determine if a request should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setBeforeDeleteUrlRequest((url, requestData, options) => {
+     *     console.log("DELETE URL request intercepted:", url, requestData);
+     *     return options?.confirmDelete ? true : false;
+     * });
+     * ```
+     *
+     * @param func A function to execute before a `DELETE` request. Returning `false` cancels the request.
+     */
+    setBeforeDeleteUrlRequest(func: <T = any>(url?: string, requestData?: T, options?: Record<string, any>) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `GET` request to a specified URL.
+     *
+     * This method updates the `afterGetUrlRequest` property in `customOption`,
+     * allowing developers to post-process `GET` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `GET` requests made via `ApiGetUrl`.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterGetUrlRequest`**: A hook function executed after a `GET` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiGetUrl.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterGetUrlRequest(({ data, response }) => {
+     *     console.log("GET URL response intercepted:", data);
+     *     return data.status !== "error";
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `GET` request. Returning `false` nullifies the response.
+     */
+    setAfterGetUrlRequest(func: <T = any>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `POST` request to a specified URL.
+     *
+     * This method updates the `afterPostUrlRequest` property in `customOption`,
+     * allowing developers to post-process `POST` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `POST` requests made via `ApiPostUrl`.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterPostUrlRequest`**: A hook function executed after a `POST` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPostUrl.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterPostUrlRequest(({ data, response }) => {
+     *     console.log("POST URL response intercepted:", data);
+     *     return data.success === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `POST` request. Returning `false` nullifies the response.
+     */
+    setAfterPostUrlRequest(func: <T = any>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `PUT` request to a specified URL.
+     *
+     * This method updates the `afterPutUrlRequest` property in `customOption`,
+     * allowing developers to post-process `PUT` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `PUT` requests made via `ApiPutUrl`.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterPutUrlRequest`**: A hook function executed after a `PUT` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPutUrl.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterPutUrlRequest(({ data, response }) => {
+     *     console.log("PUT URL response intercepted:", data);
+     *     return data.updated === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `PUT` request. Returning `false` nullifies the response.
+     */
+    setAfterPutUrlRequest(func: <T = any>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `PATCH` request to a specified URL.
+     *
+     * This method updates the `afterPatchUrlRequest` property in `customOption`,
+     * allowing developers to post-process `PATCH` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `PATCH` requests made via `ApiPatchUrl`.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterPatchUrlRequest`**: A hook function executed after a `PATCH` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiPatchUrl.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterPatchUrlRequest(({ data, response }) => {
+     *     console.log("PATCH URL response intercepted:", data);
+     *     return data.patched === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `PATCH` request. Returning `false` nullifies the response.
+     */
+    setAfterPatchUrlRequest(func: <T = any>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
+    /**
+     * Sets the hook function that executes after completing a `DELETE` request to a specified URL.
+     *
+     * This method updates the `afterDeleteUrlRequest` property in `customOption`,
+     * allowing developers to post-process `DELETE` request responses.
+     *
+     * - If the function returns `false`, the response will be nullified.
+     * - The new function will be applied globally to all `DELETE` requests made via `ApiDeleteUrl`.
+     * - Default behavior: Returns `true`, allowing the response to proceed.
+     *
+     * ### Related Property
+     * - **`afterDeleteUrlRequest`**: A hook function executed after a `DELETE` request to a URL.
+     *   - Default: Returns `true`
+     *   - Used in `ApiDeleteUrl.call()` to determine if a response should proceed.
+     *
+     * ### Example Usage:
+     * ```typescript
+     * setAfterDeleteUrlRequest(({ data, response }) => {
+     *     console.log("DELETE URL response intercepted:", data);
+     *     return data.deleted === true;
+     * });
+     * ```
+     *
+     * @param func A function to execute after a `DELETE` request. Returning `false` nullifies the response.
+     */
+    setAfterDeleteUrlRequest(func: <T = any>(responseData?: {
+        data: T;
+        response: Response;
+    }) => boolean | void): void;
     /**
      * Sets the function that intercepts and processes API responses before returning them to the caller.
      *
@@ -1070,7 +1490,7 @@ export interface Hison {
      *
      * @param func A function to execute after receiving an API response. Returning `false` cancels further processing.
      */
-    setInterceptApiResult(func: InterceptApiResult): void;
+    setInterceptApiResult(func: (result: any | undefined, response: Response) => boolean | void): void;
     /**
      * Sets the function that intercepts and processes API errors before returning them to the caller.
      *
@@ -1096,7 +1516,7 @@ export interface Hison {
      *
      * @param func A function to execute when an API error occurs. Returning `false` cancels further error handling.
      */
-    setInterceptApiError(func: InterceptApiError): void;
+    setInterceptApiError(func: (error: any) => boolean | void): void;
     /**
      * Provides a collection of utility functions for validation, formatting, and data manipulation within `Hison`.
      *
@@ -2785,36 +3205,44 @@ export interface Hison {
          */
         CachingModule: new (cachingLimit?: number) => InterfaceCachingModule;
         /**
-         * **`ApiGet` - A class for handling HTTP GET requests within the `hison.link` module.**
+         * **`ApiGet<T>` - A generic class for handling HTTP GET requests within the `hison.link` module.**
          *
-         * The `ApiGet` class is responsible for sending HTTP GET requests to a specified API resource.
-         * It integrates with `ApiLink` to handle request execution, event emissions, and optional response caching.
+         * The `ApiGet<T>` class is responsible for sending HTTP GET requests to a specified API resource.
+         * It allows defining a **custom response type** using the generic parameter `T`, providing strong typing for API responses.
          *
          * ### **Key Features**
          * - **Executes HTTP GET requests** using `ApiLink`.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
-         * - **Allows setting event listeners** for request completion, errors, and other key events.
+         * - **Allows defining the expected response type** via the generic parameter `T` (default: `InterfaceDataWrapper`).
          *
          * ### **How It Works**
-         * - When instantiated, `ApiGet` stores the API resource path and an optional `CachingModule` instance.
-         * - The `call()` method triggers a GET request to the specified resource path.
+         * - When instantiated, `ApiGet<T>` stores the API resource path and an optional `CachingModule` instance.
+         * - The `call()` method triggers a GET request and returns a `Promise<{ data: T; response: Response }>`.
          * - If caching is enabled, previously stored responses may be returned instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiGet without caching
+         * // Default usage (response type: InterfaceDataWrapper)
          * const apiGet = new hison.link.ApiGet("/users");
-         *
-         * // Sending a GET request
          * apiGet.call().then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response?.data); // Type: InterfaceDataWrapper
+         * });
+         *
+         * // Specifying a custom response type (User[])
+         * interface User {
+         *     id: number;
+         *     name: string;
+         * }
+         * const apiGetUsers = new hison.link.ApiGet<User[]>("/users");
+         * apiGetUsers.call().then(response => {
+         *     console.log(response?.data); // Type: User[]
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiGet = new hison.link.ApiGet("/users", cachingModule);
+         * const cachedApiGet = new hison.link.ApiGet<User[]>("/users", cachingModule);
          *
          * // Handling request events
          * cachedApiGet.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2828,36 +3256,40 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiGet`, which provides methods for executing GET requests and managing request events.
+         * - This class returns an instance of `ApiGet<T>`, which provides methods for executing GET requests and managing request events.
          *
          * ### **Typical Use Cases**
-         * - **Fetching data from a REST API** with minimal setup.
+         * - **Fetching data from a REST API** with strong type support.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
-         */
-        ApiGet: new (resourcePath?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGet;
-        /**
-         * **`ApiPost` - A class for handling HTTP POST requests within the `hison.link` module.**
          *
-         * The `ApiPost` class is responsible for sending HTTP POST requests to a specified service command.
+         * @template T - The expected response data type (default: `InterfaceDataWrapper`).
+         */
+        ApiGet: new <T = InterfaceDataWrapper>(resourcePath?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGet<T>;
+        /**
+         * **`ApiPost<T>` - A class for handling HTTP POST requests within the `hison.link` module.**
+         *
+         * The `ApiPost<T>` class is responsible for sending HTTP POST requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+         * The response type can be customized using the generic parameter `T`, with a default type of `InterfaceDataWrapper`.
          *
          * ### **Key Features**
          * - **Executes HTTP POST requests** using `ApiLink`.
-         * - **Encapsulates request data in `DataWrapper`** with a `cmd` field that directs the request to the appropriate service.
+         * - **Encapsulates request data in `DataWrapper`**, ensuring structured payloads with a `cmd` field for service routing.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
-         * - **Allows event listeners** for monitoring request execution.
+         * - **Allows event listeners** to monitor request execution.
+         * - **Flexible response typing** via **`T`**, allowing the user to define the expected response data structure.
          *
          * ### **How It Works**
-         * - When instantiated, `ApiPost` requires a `serviceCmd` that specifies the business logic endpoint.
+         * - When instantiated, `ApiPost<T>` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a POST request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPost
+         * // Creating an instance of ApiPost (default response type: InterfaceDataWrapper)
          * const apiPost = new hison.link.ApiPost("UserService.createUser");
          *
          * // Creating request data
@@ -2866,12 +3298,24 @@ export interface Hison {
          *
          * // Sending a POST request
          * apiPost.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data); // Type: InterfaceDataWrapper
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
          * const cachedApiPost = new hison.link.ApiPost("UserService.createUser", cachingModule);
+         *
+         * // Specifying a custom response type
+         * interface CreateUserResponse {
+         *     userId: number;
+         *     username: string;
+         * }
+         * const apiPostTyped = new hison.link.ApiPost<CreateUserResponse>("UserService.createUser");
+         *
+         * apiPostTyped.call(requestData).then(response => {
+         *     console.log(response.data.userId); // Type: number
+         *     console.log(response.data.username); // Type: string
+         * });
          *
          * // Handling request events
          * cachedApiPost.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2885,16 +3329,19 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPost`, providing methods for executing POST requests and managing request events.
+         * - This class returns an instance of `ApiPost<T>`, which provides methods for executing POST requests and managing request events.
+         * - The response type **defaults to `InterfaceDataWrapper`** but can be customized by specifying a different type `T`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiPost: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost;
+        ApiPost: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPost<T>;
         /**
-         * **`ApiPut` - A class for handling HTTP PUT requests within the `hison.link` module.**
+         * **`ApiPut<T>` - A class for handling HTTP PUT requests within the `hison.link` module.**
          *
          * The `ApiPut` class is responsible for sending HTTP PUT requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
@@ -2905,17 +3352,24 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types (`T`)** to enable type-safe API responses.
          *
          * ### **How It Works**
-         * - When instantiated, `ApiPut` requires a `serviceCmd` that specifies the business logic endpoint.
+         * - When instantiated, `ApiPut<T>` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a PUT request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPut
-         * const apiPut = new hison.link.ApiPut("UserService.createUser");
+         * // Defining a custom response type
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     updatedUserId: number;
+         * }
+         *
+         * // Creating an instance of ApiPut with a custom response type
+         * const apiPut = new hison.link.ApiPut<UpdateUserResponse>("UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -2923,12 +3377,13 @@ export interface Hison {
          *
          * // Sending a PUT request
          * apiPut.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data.success); // Type: boolean
+         *     console.log(response.data.updatedUserId); // Type: number
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPut = new hison.link.ApiPut("UserService.createUser", cachingModule);
+         * const cachedApiPut = new hison.link.ApiPut<UpdateUserResponse>("UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPut.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2942,19 +3397,22 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPut`, providing methods for executing PUT requests and managing request events.
+         * - This class returns an instance of `ApiPut<T>`, providing methods for executing PUT requests and managing request events.
+         * - The `T` type parameter allows users to define the expected response structure.
          *
          * ### **Typical Use Cases**
          * - **Sending data to a REST API** with structured payloads.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiPut: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut;
+        ApiPut: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPut<T>;
         /**
          * **`ApiPatch` - A class for handling HTTP PATCH requests within the `hison.link` module.**
          *
          * The `ApiPatch` class is responsible for sending HTTP PATCH requests to a specified service command.
-         * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
+         * It supports **strongly typed responses** using generics (`T`), allowing precise response data handling.
          *
          * ### **Key Features**
          * - **Executes HTTP PATCH requests** using `ApiLink`.
@@ -2962,30 +3420,38 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Utilizes generics (`T`)** to enable type-safe response handling.
          *
          * ### **How It Works**
          * - When instantiated, `ApiPatch` requires a `serviceCmd` that specifies the business logic endpoint.
-         * - The `call()` method sends a PATCH request with the provided request data.
+         * - The `call<T>()` method sends a PATCH request and expects a response of type `T`.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPatch
-         * const apiPatch = new hison.link.ApiPatch("UserService.createUser");
+         * // Defining a custom response type
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     updatedFields: string[];
+         * }
+         *
+         * // Creating an instance of ApiPatch with a custom response type
+         * const apiPatch = new hison.link.ApiPatch<UpdateUserResponse>("UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
          * requestData.putString("username", "Alice");
          *
-         * // Sending a PATCH request
+         * // Sending a PATCH request with a typed response
          * apiPatch.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data.success); // Type: boolean
+         *     console.log(response.data.updatedFields); // Type: string[]
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPatch = new hison.link.ApiPatch("UserService.createUser", cachingModule);
+         * const cachedApiPatch = new hison.link.ApiPatch("UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPatch.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -2999,16 +3465,18 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPatch`, providing methods for executing PATCH requests and managing request events.
+         * - This class returns an instance of `ApiPatch<T>`, providing methods for executing PATCH requests and managing request events.
          *
          * ### **Typical Use Cases**
-         * - **Sending data to a REST API** with structured payloads.
+         * - **Applying partial updates** to a REST API.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiPatch: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch;
+        ApiPatch: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatch<T>;
         /**
-         * **`ApiDelete` - A class for handling HTTP DELETE requests within the `hison.link` module.**
+         * **`ApiDelete<T>` - A class for handling HTTP DELETE requests within the `hison.link` module.**
          *
          * The `ApiDelete` class is responsible for sending HTTP DELETE requests to a specified service command.
          * It integrates with `ApiLink` to execute requests, emit events, and optionally utilize caching.
@@ -3019,30 +3487,39 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types (`T`)**, allowing for **strongly typed responses**.
          *
          * ### **How It Works**
-         * - When instantiated, `ApiDelete` requires a `serviceCmd` that specifies the business logic endpoint.
+         * - When instantiated, `ApiDelete<T>` requires a `serviceCmd` that specifies the business logic endpoint.
          * - The `call()` method sends a DELETE request with the provided request data.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
+         * - The **generic type `T` defines the response data structure**, ensuring **type safety**.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiDelete
-         * const apiDelete = new hison.link.ApiDelete("UserService.createUser");
+         * // Define a response type
+         * interface DeleteUserResponse {
+         *     success: boolean;
+         *     deletedId: string;
+         * }
+         *
+         * // Creating an instance of ApiDelete with a typed response
+         * const apiDelete = new hison.link.ApiDelete<DeleteUserResponse>("UserService.deleteUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
-         * requestData.putString("username", "Alice");
+         * requestData.putString("userId", "12345");
          *
          * // Sending a DELETE request
          * apiDelete.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data.success); // Type: boolean
+         *     console.log(response.data.deletedId); // Type: string
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiDelete = new hison.link.ApiDelete("UserService.createUser", cachingModule);
+         * const cachedApiDelete = new hison.link.ApiDelete("UserService.deleteUser", cachingModule);
          *
          * // Handling request events
          * cachedApiDelete.onEventEmit("requestCompleted_Data", (data, response) => {
@@ -3056,14 +3533,16 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiDelete`, providing methods for executing DELETE requests and managing request events.
+         * - This class returns an instance of `ApiDelete<T>`, providing methods for executing DELETE requests and managing request events.
          *
          * ### **Typical Use Cases**
-         * - **Sending data to a REST API** with structured payloads.
+         * - **Deleting data from a REST API** in a structured and type-safe way.
          * - **Using `DataWrapper` to encapsulate request parameters** for standardized processing.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * @template T - The expected response data type (defaults to `InterfaceDataWrapper`).
          */
-        ApiDelete: new (serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete;
+        ApiDelete: new <T = InterfaceDataWrapper>(serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDelete<T>;
         /**
          * **`ApiGetUrl` - A class for handling HTTP GET requests to a specified URL.**
          *
@@ -3076,12 +3555,14 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types (`T`)** with a default value of `any` to accommodate diverse API responses.
          *
          * ### **How It Works**
          * - When instantiated, `ApiGetUrl` requires a valid URL.
          * - The `call()` method triggers a GET request to the specified URL.
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
+         * - The response data type can be explicitly defined using `T` (default: `any`).
          *
          * ### **Example Usage**
          * ```typescript
@@ -3090,7 +3571,7 @@ export interface Hison {
          *
          * // Sending a GET request
          * apiGetUrl.call().then(response => {
-         *     console.log(response.data); // Response data
+         *     console.log(response.data); // Response data (any type by default)
          * });
          *
          * // Creating an instance with caching
@@ -3101,6 +3582,18 @@ export interface Hison {
          * cachedApiGetUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("GET request completed!", data);
          * });
+         *
+         * // Defining a specific response type using generics
+         * interface UserResponse {
+         *     id: number;
+         *     name: string;
+         *     email: string;
+         * }
+         * const typedApiGetUrl = new hison.link.ApiGetUrl<UserResponse>("https://api.example.com/user/1");
+         *
+         * typedApiGetUrl.call().then(response => {
+         *     console.log(response.data.name); // `name` is inferred as a string
+         * });
          * ```
          *
          * ### **Internal Components**
@@ -3110,13 +3603,15 @@ export interface Hison {
          *
          * ### **Return Value**
          * - This class returns an instance of `ApiGetUrl`, which provides methods for executing GET requests to a specific URL.
+         * - The response type is determined by the generic parameter `T` (default: `any`).
          *
          * ### **Typical Use Cases**
          * - **Fetching data from an external API** by specifying a full URL.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         * - **Explicitly defining the response structure** using TypeScript generics.
          */
-        ApiGetUrl: new (url: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGetUrl;
+        ApiGetUrl: new <T = any>(url: string, cachingModule?: InterfaceCachingModule) => InterfaceApiGetUrl<T>;
         /**
          * **`ApiPostUrl` - A class for handling HTTP POST requests to a specified URL.**
          *
@@ -3126,21 +3621,22 @@ export interface Hison {
          * ### **Key Features**
          * - **Executes HTTP POST requests** using `ApiLink`.
          * - **Accepts a direct URL** instead of using a predefined service command.
-         * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
+         * - **Supports an optional `serviceCmd` parameter**, allowing structured routing on the server.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Uses a generic type `T` (default: `any`)** to specify the expected response data format.
          *
          * ### **How It Works**
          * - When instantiated, `ApiPostUrl` requires a valid URL and an optional `serviceCmd`.
          * - The `call()` method sends a POST request with the provided request data.
-         * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
-         * - Event listeners can be attached to monitor the request lifecycle.
+         * - If caching is enabled, previously stored responses may be returned instead of making a new request.
+         * - Event listeners can be attached to track request execution and completion.
          *
          * ### **Example Usage**
          * ```typescript
-         * // Creating an instance of ApiPostUrl
-         * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
+         * // Creating an instance of ApiPostUrl for a direct POST request
+         * const apiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3151,7 +3647,15 @@ export interface Hison {
          *     console.log(response.data); // Response data
          * });
          *
-         * // Creating an instance with caching
+         * // Creating an instance with a service command for structured routing
+         * const apiPostUrlWithCmd = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser");
+         *
+         * // Sending a POST request with service command
+         * apiPostUrlWithCmd.call(requestData).then(response => {
+         *     console.log(response.data);
+         * });
+         *
+         * // Creating an instance with caching enabled
          * const cachingModule = new hison.link.CachingModule(20);
          * const cachedApiPostUrl = new hison.link.ApiPostUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
          *
@@ -3167,28 +3671,46 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPostUrl`, which provides methods for executing POST requests to a specific URL.
+         * - This class returns an instance of `ApiPostUrl`, providing methods for executing POST requests to a specific URL.
+         * - The response data type is determined by `T`, with a default of `any`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface UserResponse {
+         *     id: number;
+         *     name: string;
+         *     email: string;
+         * }
+         *
+         * const typedApiPostUrl = new hison.link.ApiPostUrl<UserResponse>("https://api.example.com/users");
+         *
+         * typedApiPostUrl.call(requestData).then(response => {
+         *     console.log(response.data.name); // `name` is inferred as a string
+         * });
+         * ```
          */
-        ApiPostUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPostUrl;
+        ApiPostUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPostUrl<T>;
         /**
          * **`ApiPutUrl` - A class for handling HTTP PUT requests to a specified URL.**
          *
          * The `ApiPutUrl` class is responsible for sending HTTP PUT requests to a provided URL.
          * It integrates with `ApiLink` to execute the request, handle events, and optionally cache responses.
+         * This class supports a generic type `T`, allowing users to define the expected response type.
          *
          * ### **Key Features**
-         * - **Executes HTTP PUT requests** using `ApiLink`.
+         * - **Executes HTTP PUT requests** using `ApiLink.putURL()`.
          * - **Accepts a direct URL** instead of using a predefined service command.
          * - **Supports passing a `serviceCmd` parameter**, which can be used to specify business logic on the server.
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Provides type safety for response data** using a generic `T` (default: `any`).
          *
          * ### **How It Works**
          * - When instantiated, `ApiPutUrl` requires a valid URL and an optional `serviceCmd`.
@@ -3199,7 +3721,7 @@ export interface Hison {
          * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPutUrl
-         * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser");
+         * const apiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3212,11 +3734,27 @@ export interface Hison {
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+         * const cachedApiPutUrl = new hison.link.ApiPutUrl("https://api.example.com/users", "UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPutUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("PUT request completed!", data);
+         * });
+         * ```
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     message: string;
+         * }
+         *
+         * const apiPutUrl = new hison.link.ApiPutUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
+         *
+         * apiPutUrl.call(requestData).then(response => {
+         *     if (response) {
+         *         console.log(response.data.message); // `message` is inferred as a string
+         *     }
          * });
          * ```
          *
@@ -3226,7 +3764,10 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiPutUrl`, which provides methods for executing PUT requests to a specific URL.
+         * - A `Promise` resolving to an object containing:
+         *   - `data` *(T)* - The API response data (typed based on the provided generic `T`, default: `any`).
+         *   - `response` *(Response)* - The original HTTP response object.
+         * - If an error occurs, it returns `null`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
@@ -3234,7 +3775,7 @@ export interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPutUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPutUrl;
+        ApiPutUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPutUrl<T>;
         /**
          * **`ApiPatchUrl` - A class for handling HTTP PATCH requests to a specified URL.**
          *
@@ -3255,10 +3796,16 @@ export interface Hison {
          * - If caching is enabled, responses may be retrieved from the cache instead of making a new request.
          * - Event listeners can be attached to monitor the request lifecycle.
          *
+         * ### **Return Value**
+         * - A `Promise` resolving to an object containing:
+         *   - `data` *(T)* - The API response data (typed based on the provided generic `T`, default: `any`).
+         *   - `response` *(Response)* - The original HTTP response object.
+         * - If an error occurs, it returns `null`.
+         *
          * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiPatchUrl
-         * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser");
+         * const apiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.updateUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3266,16 +3813,34 @@ export interface Hison {
          *
          * // Sending a PATCH request
          * apiPatchUrl.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     if (response) {
+         *         console.log(response.data); // Response data
+         *     }
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+         * const cachedApiPatchUrl = new hison.link.ApiPatchUrl("https://api.example.com/users", "UserService.updateUser", cachingModule);
          *
          * // Handling request events
          * cachedApiPatchUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("PATCH request completed!", data);
+         * });
+         * ```
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface UpdateUserResponse {
+         *     success: boolean;
+         *     message: string;
+         * }
+         *
+         * const apiPatchUrl = new hison.link.ApiPatchUrl<UpdateUserResponse>("https://api.example.com/users", "UserService.updateUser");
+         *
+         * apiPatchUrl.call(requestData).then(response => {
+         *     if (response) {
+         *         console.log(response.data.message); // `message` is inferred as a string
+         *     }
          * });
          * ```
          *
@@ -3284,16 +3849,13 @@ export interface Hison {
          * - **`EventEmitter`**: Manages event-driven request handling.
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
-         * ### **Return Value**
-         * - This class returns an instance of `ApiPatchUrl`, which provides methods for executing PATCH requests to a specific URL.
-         *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
          * - **Passing a `serviceCmd` for structured request routing**.
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiPatchUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatchUrl;
+        ApiPatchUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiPatchUrl<T>;
         /**
          * **`ApiDeleteUrl` - A class for handling HTTP DELETE requests to a specified URL.**
          *
@@ -3307,6 +3869,7 @@ export interface Hison {
          * - **Supports response caching** via an optional `CachingModule`.
          * - **Emits request lifecycle events** using `EventEmitter`.
          * - **Allows event listeners** for monitoring request execution.
+         * - **Supports generic response types** for type-safe API responses.
          *
          * ### **How It Works**
          * - When instantiated, `ApiDeleteUrl` requires a valid URL and an optional `serviceCmd`.
@@ -3317,7 +3880,7 @@ export interface Hison {
          * ### **Example Usage**
          * ```typescript
          * // Creating an instance of ApiDeleteUrl
-         * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser");
+         * const apiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.deleteUser");
          *
          * // Creating request data
          * const requestData = new hison.data.DataWrapper();
@@ -3325,16 +3888,34 @@ export interface Hison {
          *
          * // Sending a DELETE request
          * apiDeleteUrl.call(requestData).then(response => {
-         *     console.log(response.data); // Response data
+         *     if (response) {
+         *         console.log(response.data); // Response data
+         *     }
          * });
          *
          * // Creating an instance with caching
          * const cachingModule = new hison.link.CachingModule(20);
-         * const cachedApiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.createUser", cachingModule);
+         * const cachedApiDeleteUrl = new hison.link.ApiDeleteUrl("https://api.example.com/users", "UserService.deleteUser", cachingModule);
          *
          * // Handling request events
          * cachedApiDeleteUrl.onEventEmit("requestCompleted_Data", (data, response) => {
          *     console.log("DELETE request completed!", data);
+         * });
+         * ```
+         *
+         * ### **Type-Safe Example**
+         * ```typescript
+         * interface DeleteResponse {
+         *     success: boolean;
+         *     message: string;
+         * }
+         *
+         * const apiDeleteUrl = new hison.link.ApiDeleteUrl<DeleteResponse>("https://api.example.com/users", "UserService.deleteUser");
+         *
+         * apiDeleteUrl.call(requestData).then(response => {
+         *     if (response) {
+         *         console.log(response.data.message); // `message` is inferred as a string
+         *     }
          * });
          * ```
          *
@@ -3344,7 +3925,10 @@ export interface Hison {
          * - **`CachingModule` (optional)**: Stores and retrieves cached API responses.
          *
          * ### **Return Value**
-         * - This class returns an instance of `ApiDeleteUrl`, which provides methods for executing DELETE requests to a specific URL.
+         * - **A `Promise` resolving to an object with the following properties:**
+         *   - `data` *(T)* - The API response data, where `T` is the specified generic type (default: `any`).
+         *   - `response` *(Response)* - The original HTTP response object.
+         * - If an error occurs, it returns `null`.
          *
          * ### **Typical Use Cases**
          * - **Sending data to an external API** using a full URL.
@@ -3352,7 +3936,7 @@ export interface Hison {
          * - **Using cached responses** to reduce redundant API calls.
          * - **Handling event-driven request monitoring** via `onEventEmit`.
          */
-        ApiDeleteUrl: new (url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDeleteUrl;
+        ApiDeleteUrl: new <T = any>(url: string, serviceCmd?: string, cachingModule?: InterfaceCachingModule) => InterfaceApiDeleteUrl<T>;
     };
 }
 /**
@@ -3484,46 +4068,6 @@ export declare enum DayOfWeekShortNameKR {
     목요일 = 4,
     금요일 = 5,
     토요일 = 6
-}
-/**
- * Converts special values into a predefined format before they are inserted into the DataModel.
- * This function allows for custom handling of values like Date, or other special values, to ensure
- * they are stored in the DataModel in a consistent and predictable format. By default, it returns the value as is.
- *
- * @param {any} value - The value to be converted. This can be a special value like Date or any other value.
- * @returns {any} Returns the converted value.
- *
- * @example
- * //When set the hison.data.convertValue
- * hison.data.convertValue = function(value) {
- *     if (value instanceof Date) {
- *          let year = value.getFullYear();
- *          let month = value.getMonth() + 1;
- *          let day = value.getDate();
- *          let hour = value.getHours();
- *          let minute = value.getMinutes();
- *          let second = value.getSeconds();
- *          month = month < 10 ? '0' + month : month;
- *          day = day < 10 ? '0' + day : day;
- *          hour = hour < 10 ? '0' + hour : hour;
- *          minute = minute < 10 ? '0' + minute : minute;
- *          second = second < 10 ? '0' + second : second;
- *          return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
- *     }
- *     return value;
- * };
- * //Inserting a Date object into DataModel
- * const dm = newDataModel([{key:'key1',value:new Date()},{key:'key2',value:new Date()}]);
- * //The value will be in 'yyyy-MM-dd hh:mm:ss' format
- *
- * Note:
- * 1. Special values not processed by convertValue are stored in the DataModel as references.
- *    Changes to the original object will also reflect in the DataModel.
- * 2. After customizing the handling of special values, ensure to return the object for all other cases.
- *    This ensures that undefined values are still stored in the DataModel.
- */
-export interface ConvertValue {
-    (value: any): any;
 }
 /**
  * The `DataWrapper` class provides a flexible key-value storage container
@@ -6585,7 +7129,7 @@ export interface InterfaceCachingModule {
  *
  * ### **How It Works**
  * - When instantiated, `ApiGet<T>` stores the API resource path and an optional `CachingModule` instance.
- * - The `call()` method triggers a GET request and returns a `Promise<{ data: T; response: Response } | null>`.
+ * - The `call()` method triggers a GET request and returns a `Promise<{ data: T; response: Response }>`.
  * - If caching is enabled, previously stored responses may be returned instead of making a new request.
  * - Event listeners can be attached to monitor the request lifecycle.
  *
@@ -6698,12 +7242,12 @@ export interface InterfaceApiGet<T = InterfaceDataWrapper> {
      *
      * @template T - The expected response data type.
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
     call(options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
      * **Sends an HTTP HEAD request to the specified resource path.**
      *
@@ -6911,7 +7455,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      *   - **Default:** `{}` (empty object)
      *
      * ### **Pre-Request Handling**
-     * - **`hison.setBeforePostRequst((requestData, options) => {})`**
+     * - **`hison.setBeforePostRequest((requestData, options) => {})`**
      *   - A customizable hook executed **before sending the POST request**.
      *   - If it returns `false`, the request is **prevented from execution**.
      *   - **Use Case:** Validating request parameters, modifying request data dynamically.
@@ -6930,7 +7474,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * - If a `CachingModule` is used, it first checks if the requested data is available in the cache.
      * - If the data is not cached, it makes an HTTP POST request to `_serviceCmd`.
      * - Before executing the request:
-     *   - The **before-request hook (`beforePostRequst`)** is checked.
+     *   - The **before-request hook (`beforePostRequest`)** is checked.
      *   - The **event `"requestStarted_POST"`** is emitted.
      * - Once the request is completed, the response is returned and optionally stored in the cache.
      *
@@ -6950,7 +7494,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
      * requestData.putString("username", "Alice");
      *
      * // Customizing the before-request hook to modify data before sending
-     * customOption.link.beforePostRequst = (requestData, options) => {
+     * customOption.link.beforePostRequest = (requestData, options) => {
      *     requestData.putString("timestamp", Date.now().toString());
      *     return true;
      * };
@@ -6979,7 +7523,7 @@ export interface InterfaceApiPost<T = InterfaceDataWrapper> {
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7253,7 +7797,7 @@ export interface InterfaceApiPut<T = InterfaceDataWrapper> {
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7527,7 +8071,7 @@ export interface InterfaceApiPatch<T = InterfaceDataWrapper> {
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
      * **Sends an HTTP HEAD request to the API controller path.**
      *
@@ -7793,12 +8337,12 @@ export interface InterfaceApiDelete<T = InterfaceDataWrapper> {
      *
      * @param {any} requestData - The data to be sent in the request.
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
     * **Sends an HTTP HEAD request to the API controller path.**
     *
@@ -8056,12 +8600,12 @@ export interface InterfaceApiGetUrl<T = any> {
      * - **`options(options)`** - Sends an HTTP OPTIONS request to retrieve allowed methods.
      *
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
     call(options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8354,12 +8898,12 @@ export interface InterfaceApiPostUrl<T = any> {
      *
      * @param {any} requestData - The data to be sent in the request.
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response; }>} A promise resolving to the API response.
      */
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8648,12 +9192,12 @@ export interface InterfaceApiPutUrl<T = any> {
      *
      * @param {any} requestData - The data to be sent in the request.
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response }>} A promise resolving to the API response.
      */
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -8942,12 +9486,12 @@ export interface InterfaceApiPatchUrl<T = any> {
      *
      * @param {any} requestData - The data to be sent in the request.
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response; }>} A promise resolving to the API response.
      */
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -9237,12 +9781,12 @@ export interface InterfaceApiDeleteUrl<T = any> {
      *
      * @param {any} requestData - The data to be sent in the request.
      * @param {Record<string, any>} [options={}] - Additional request options.
-     * @returns {Promise<{ data: T; response: Response; } | null>} A promise resolving to the API response.
+     * @returns {Promise<{ data: T; response: Response; }>} A promise resolving to the API response.
      */
     call(requestData: any, options?: Record<string, any>): Promise<{
         data: T;
         response: Response;
-    } | null>;
+    }>;
     /**
     * **Sends an HTTP HEAD request to the specified URL.**
     *
@@ -9370,161 +9914,4 @@ export interface InterfaceApiDeleteUrl<T = any> {
     * @param {(...args: any[]) => void} eventFunc - The callback function to be executed when the event occurs.
     */
     onEventEmit(eventName: string, eventFunc: (...args: any[]) => void): void;
-}
-/**
- * Defines a function type for handling API GET requests before they are sent.
- * This allows developers to modify request options or cancel the request.
- *
- * ### Parameters
- * - `resourcePath` *(optional, string)*: The API endpoint URL for the GET request.
- * - `options` *(optional, Record<string, any>)*: Additional request options, such as headers or timeout settings.
- *
- * ### Return Value
- * - Returns `false` to prevent the GET request from being executed.
- * - Returns `void` or `true` to proceed with the request.
- *
- * ### Example Usage
- * ```typescript
- * hison.setBeforeGetRequst((resourcePath, options) => {
- *     console.log("Preparing GET request to:", resourcePath);
- *     options.headers = { Authorization: "Bearer token" };
- *     return true;
- * });
- * ```
- */
-export interface BeforeGetRequst {
-    (resourcePath?: string, options?: Record<string, any>): boolean | void;
-}
-/**
- * Defines a function type for handling API POST requests before they are sent.
- * This allows modifying request data, headers, or preventing the request.
- *
- * ### Parameters
- * - `requestDw` *(optional, any)*: The request payload.
- * - `options` *(optional, Record<string, any>)*: Additional request options.
- *
- * ### Return Value
- * - Returns `false` to cancel the POST request.
- * - Returns `void` or `true` to proceed with the request.
- *
- * ### Example Usage
- * ```typescript
- * hison.setBeforePostRequst((requestDw, options) => {
- *     requestDw.putString("timestamp", Date.now().toString());
- *     return true;
- * });
- * ```
- */
-export interface BeforePostRequst {
-    (requestDw?: any, options?: Record<string, any>): boolean | void;
-}
-/**
- * Defines a function type for handling API PUT requests before they are sent.
- * Similar to `BeforePostRequst`, this allows modifying request payload or settings.
- *
- * ### Parameters
- * - `requestDw` *(optional, any)*: The request payload.
- * - `options` *(optional, Record<string, any>)*: Additional request options.
- *
- * ### Return Value
- * - Returns `false` to cancel the PUT request.
- * - Returns `void` or `true` to proceed.
- *
- * ### Example Usage
- * ```typescript
- * hison.setBeforePutRequst((requestDw, options) => {
- *     requestDw.putString("modified", "true");
- * });
- * ```
- */
-export interface BeforePutRequst {
-    (requestDw?: any, options?: Record<string, any>): boolean | void;
-}
-/**
- * Defines a function type for handling API PATCH requests before they are sent.
- * This allows modifying partial update data before execution.
- *
- * ### Parameters
- * - `requestDw` *(optional, any)*: The request payload.
- * - `options` *(optional, Record<string, any>)*: Additional request options.
- *
- * ### Return Value
- * - Returns `false` to cancel the PATCH request.
- * - Returns `void` or `true` to proceed.
- *
- * ### Example Usage
- * ```typescript
- * hison.setBeforePatchRequst((requestDw, options) => {
- *     requestDw.putString("lastUpdated", new Date().toISOString());
- * });
- * ```
- */
-export interface BeforePatchRequst {
-    (requestDw?: any, options?: Record<string, any>): boolean | void;
-}
-/**
- * Defines a function type for handling API DELETE requests before they are sent.
- * This allows validating or modifying delete operations before execution.
- *
- * ### Parameters
- * - `requestDw` *(optional, any)*: The request payload.
- * - `options` *(optional, Record<string, any>)*: Additional request options.
- *
- * ### Return Value
- * - Returns `false` to cancel the DELETE request.
- * - Returns `void` or `true` to proceed.
- *
- * ### Example Usage
- * ```typescript
- * hison.setBeforeDeleteRequst((requestDw, options) => {
- *     if (!requestDw.hasKey("id")) return false;
- * });
- * ```
- */
-export interface BeforeDeleteRequst {
-    (requestDw?: any, options?: Record<string, any>): boolean | void;
-}
-/**
- * Defines a function type for intercepting API response results.
- * This allows modifying API responses before they are returned to the caller.
- *
- * ### Parameters
- * - `result` *(DataWrapper | undefined)*: The API response data wrapped in `DataWrapper`.
- * - `response` *(Response)*: The original HTTP response object.
- *
- * ### Return Value
- * - Returns `false` to prevent the response from being processed further.
- * - Returns `void` or `true` to allow normal response handling.
- *
- * ### Example Usage
- * ```typescript
- * hison.setInterceptApiResult((result, response) => {
- *     console.log("Received API result:", result);
- *     return true;
- * });
- * ```
- */
-export interface InterceptApiResult {
-    (result: any | undefined, response: Response): boolean | void;
-}
-/**
- * Defines a function type for handling API errors before they are propagated.
- * This allows logging or modifying error responses before they are thrown.
- *
- * ### Parameters
- * - `error` *(any)*: The error object thrown by the API request.
- *
- * ### Return Value
- * - Returns `false` to suppress the error.
- * - Returns `void` or `true` to propagate the error as normal.
- *
- * ### Example Usage
- * ```typescript
- * hison.setInterceptApiError((error) => {
- *     console.error("API error occurred:", error);
- * });
- * ```
- */
-export interface InterceptApiError {
-    (error: any): boolean | void;
 }

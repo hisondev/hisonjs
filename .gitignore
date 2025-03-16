@@ -5,7 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # 빌드 아웃풋
-#dist/
+dist/
 *.log
 
 # 환경 설정 파일
