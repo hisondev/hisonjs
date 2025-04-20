@@ -1,27 +1,27 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/hisonjs.ts',
+  entry: './src/index.ts',
   output: {
-    filename: 'hisonjs.bundle.js',
+    filename: 'index.bundle.js',
     path: path.resolve(__dirname, 'dist'),
     library: 'hisonjs',
     libraryTarget: 'umd',
     globalObject: 'this',
-    libraryExport: 'default',
+    libraryExport: 'default'
   },
   resolve: {
-    extensions: ['.ts']
+    extensions: ['.ts', '.js']
   },
   module: {
     rules: [
       {
-        test: /\.ts$/, // .ts 파일 처리
+        test: /\.ts$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
   },
   mode: 'production',
-  devtool: 'source-map',  // Add this line to generate source maps
+  devtool: 'source-map',
 };

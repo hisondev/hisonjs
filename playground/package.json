@@ -1,0 +1,15 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "hisonjs": "file:../hisonjs-1.1.4.tgz"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "dev": "ts-node-esm index.ts"
+  }
+}
