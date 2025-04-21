@@ -1,5 +1,5 @@
 import type { DateObject, DateTimeObject, TimeObject } from "./types";
-import { DayOfWeekFullName, DayOfWeekFullNameKR, DayOfWeekShortName, DayOfWeekShortNameKR, MonthFullName, MonthShortName } from "./enums";
+import { AllDateTimeFormat, CountDateType, DateTimeFormat, DayFormat, DayOfWeekFormat, DayOfWeekFullName, DayOfWeekFullNameKR, DayOfWeekShortName, DayOfWeekShortNameKR, HourFormat, HourMinuteFormat, MinuteFormat, MonthFormat, MonthFullName, MonthShortName, SecondFormat, TimeFormat, YearFormat, YearMonthFormat } from "./enums";
 import { customOption, hisonCore } from "./core";
 
 export const getUtils = () => {
@@ -641,16 +641,19 @@ export const getUtils = () => {
          * @returns The updated datetime as an object or formatted string.
          *
          * @example
-         * addDate("2024-02-05", 1, "d"); // { y: 2024, M: 2, d: 6 }
-         * addDate("2024-02-05", -1, "M"); // { y: 2024, M: 1, d: 5 }
-         * addDate("2024-02-05 14:30:00", 2, "h"); // { y: 2024, M: 2, d: 5, h: 16, m: 30, s: 0 }
+         * addDate("2024-02-05", 1, CountDateType.d); // { y: 2024, M: 2, d: 6 }
+         * addDate("2024-02-05", -1, CountDateType.M); // { y: 2024, M: 1, d: 5 }
+         * addDate("2024-02-05 14:30:00", 2, CountDateType.h); // { y: 2024, M: 2, d: 5, h: 16, m: 30, s: 0 }
          * addDate("2024-02-05", 1, "d", "yyyy-MM-dd"); // "2024-02-06"
          */
-        addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0, addType: string = '', format: string = ''): DateTimeObject | string {
+        addDate(datetime: DateTimeObject | DateObject | string, addValue: string | number = 0,
+            addType?: keyof typeof CountDateType,
+            format?: keyof typeof AllDateTimeFormat): DateTimeObject | string {
             const datetimeObj: DateTimeObject = hisonCore.utils.isObject(datetime) ? hisonCore.utils.deepCopyObject(datetime) : hisonCore.utils.getDatetimeObject(datetime as string);
             if (!format) {
                 if (datetimeObj.h === undefined || datetimeObj.h === null) {
-                    format = customOption.utils.dateFormat
+                    format = customOption.utils.dateFormat;
+                    
                 }
                 else {
                     format = customOption.utils.datetimeFormat;
@@ -727,14 +730,15 @@ export const getUtils = () => {
          * @returns The difference between the two dates in the specified unit.
          *
          * @example
-         * getDateDiff("2024-02-01", "2024-03-01", "M"); // 1
-         * getDateDiff("2024-02-01", "2025-02-01", "y"); // 1
-         * getDateDiff("2024-02-01", "2024-02-10", "d"); // 9
-         * getDateDiff("2024-02-01 14:00:00", "2024-02-01 16:30:00", "h"); // 2
+         * getDateDiff("2024-02-01", "2024-03-01", CountDateType.M); // 1
+         * getDateDiff("2024-02-01", "2025-02-01", CountDateType.y); // 1
+         * getDateDiff("2024-02-01", "2024-02-10", CountDateType.d); // 9
+         * getDateDiff("2024-02-01 14:00:00", "2024-02-01 16:30:00", CountDateType.h); // 2
          * getDateDiff("2024-02-01 14:00:00", "2024-02-01 14:45:00", "m"); // 45
          * getDateDiff("2024-02-01 14:00:00", "2024-02-01 14:00:30", "s"); // 30
          */
-        getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, diffType: string = ''): number {
+        getDateDiff(datetime1: DateTimeObject | DateObject | string, datetime2: DateTimeObject | DateObject | string, 
+            diffType?: keyof typeof CountDateType): number {
             const datetimeObj1: DateTimeObject = hisonCore.utils.isObject(datetime1) ? hisonCore.utils.deepCopyObject(datetime1) : hisonCore.utils.getDatetimeObject(datetime1 as string);
             const datetimeObj2: DateTimeObject = hisonCore.utils.isObject(datetime2) ? hisonCore.utils.deepCopyObject(datetime2) : hisonCore.utils.getDatetimeObject(datetime2 as string);
                         
@@ -827,15 +831,16 @@ export const getUtils = () => {
          * @throws Error if the provided date is invalid.
          *
          * @example
-         * getDateWithFormat("2025-02-05", "yyyy/MM/dd"); // "2025/02/05"
-         * getDateWithFormat("2025-02-05 14:30:45", "MMMM dd, yyyy"); // "February 5, 2025"
-         * getDateWithFormat({ y: 2025, M: 2, d: 5 }, "MM-dd-yyyy"); // "02-05-2025"
+         * getDateWithFormat("2025-02-05", AllDateTimeFormat[yyyy/MM/dd]); // "2025/02/05"
+         * getDateWithFormat("2025-02-05 14:30:45", AllDateTimeFormat[MMMM dd, yyyy]); // "February 5, 2025"
+         * getDateWithFormat({ y: 2025, M: 2, d: 5 }, AllDateTimeFormat[MM-dd-yyyy]); // "02-05-2025"
          */
-        getDateWithFormat(datetime: DateTimeObject | DateObject | string, format: string = ''): string {
+        getDateWithFormat(datetime: DateTimeObject | DateObject | string,
+            format?: keyof typeof AllDateTimeFormat): string {
             const datetimeObj = hisonCore.utils.isObject(datetime) ? hisonCore.utils.deepCopyObject(datetime) : hisonCore.utils.getDatetimeObject(datetime as string);
             if (!format) {
                 if (datetimeObj.h === undefined || datetimeObj.h === null) {
-                    format = customOption.utils.dateFormat
+                    format = customOption.utils.dateFormat;
                 }
                 else {
                     format = customOption.utils.datetimeFormat;
@@ -1153,7 +1158,7 @@ export const getUtils = () => {
          * getDayOfWeek("2025-02-05", "kdy"); // "수"
          * getDayOfWeek("2025-02-05", "kday"); // "수요일"
          */
-        getDayOfWeek(date: DateObject | string, dayType: string = customOption.utils.dayOfWeekFormat): string {
+        getDayOfWeek(date: DateObject | string, dayType: keyof typeof DayOfWeekFormat = customOption.utils.dayOfWeekFormat): string {
             const dateObj: DateObject = hisonCore.utils.isObject(date) ? date as DateObject : hisonCore.utils.getDateObject(date as string);
             if (!hisonCore.utils.isDate(dateObj)) throw new Error(`ER0011 Invalid format.\n=>${JSON.stringify(date)}`);
             if (dateObj.y === null || dateObj.M === null || dateObj.d === null) {
@@ -1239,7 +1244,7 @@ export const getUtils = () => {
          * getSysYear("yyyy"); // "2025"
          * getSysYear("yy"); // "25"
          */
-        getSysYear(format: string = customOption.utils.yearFormat): string {
+        getSysYear(format: keyof typeof YearFormat = customOption.utils.yearFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'yy':
@@ -1268,7 +1273,7 @@ export const getUtils = () => {
          * getSysMonth("MMMM"); // "February"
          * getSysMonth("MMM"); // "Feb"
          */
-        getSysMonth(format: string = customOption.utils.monthFormat): string {
+        getSysMonth(format: keyof typeof MonthFormat = customOption.utils.monthFormat): string {
             const currentDate = new Date();
             const sysMonth = currentDate.getMonth() + 1;
             switch (format.toLowerCase()) {
@@ -1302,7 +1307,7 @@ export const getUtils = () => {
          * getSysYearMonth("MMMM yyyy"); // "February 2025"
          * getSysYearMonth("MMM yyyy"); // "Feb 2025"
          */
-        getSysYearMonth(format: string = customOption.utils.yearMonthFormat): string {
+        getSysYearMonth(format: keyof typeof YearMonthFormat = customOption.utils.yearMonthFormat): string {
             const currentDate = new Date();
             return hisonCore.utils.getDateWithFormat( {y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : 1 }, format);
         },
@@ -1322,7 +1327,7 @@ export const getUtils = () => {
          * getSysDay(); // "5" (default format for the 5th day)
          * getSysDay("dd"); // "05"
          */
-        getSysDay(format: string = customOption.utils.dayFormat): string {
+        getSysDay(format: keyof typeof DayFormat = customOption.utils.dayFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'dd':
@@ -1352,27 +1357,37 @@ export const getUtils = () => {
          * getSysDayOfWeek("kdy"); // "수"
          * getSysDayOfWeek("kday"); // "수요일"
          */
-        getSysDayOfWeek(format: string = customOption.utils.dayOfWeekFormat): string {
+        getSysDayOfWeek(format: keyof typeof DayOfWeekFormat = customOption.utils.dayOfWeekFormat): string {
             const currentDate = new Date();
             return hisonCore.utils.getDayOfWeek({ y : currentDate.getFullYear(), M : currentDate.getMonth() + 1, d : currentDate.getDate()}, format);
         },
         /**
-         * Returns the current system hour in the specified format.
+         * Returns the current system hour in 24-hour format, optionally formatted with leading zero.
          *
-         * - Uses `CustomOption.hourFormat` as the default format.
-         * - Supports the following formats:
-         *   - `'h'` → Hour without leading zero (`"5"` for 5 AM/PM).
-         *   - `'hh'` → Hour with leading zero (`"05"` for 5 AM/PM).
-         * - If an unsupported format is provided, it defaults to `'h'`.
+         * ### Behavior
+         * - Retrieves the hour part of the system time using 24-hour convention (0–23).
+         * - Formatting depends on the provided `format` parameter:
+         *   - `'h'`  → Hour without leading zero (e.g., `"5"` for 5 AM, `"13"` for 1 PM).
+         *   - `'hh'` → Hour with leading zero if necessary (e.g., `"05"` for 5 AM, `"13"` for 1 PM).
+         * - If the provided `format` is not supported, it defaults to `'h'` behavior.
          *
-         * @param format The desired output format (optional). Default: `'h'`
-         * @returns The current hour as a string in the specified format.
+         * ### Format Source
+         * - If `format` is omitted, it uses the default value from `customOption.utils.hourFormat`.
+         *
+         * ### Important Notes
+         * - This method **does not** convert the hour to 12-hour (AM/PM) format.
+         * - Always based on **24-hour system** (`0–23`).
+         *
+         * @param format The desired hour format. Either `'h'` or `'hh'`. Defaults to `'h'`.
+         * @returns The current hour as a string formatted according to the specified format.
          *
          * @example
-         * getSysHour(); // "5" (default format)
-         * getSysHour("hh"); // "05"
+         * getSysHour();         // "5"  (default 'h' format)
+         * getSysHour("hh");      // "05" (leading zero)
+         * getSysHour("h");       // "5"  (no leading zero)
+         * getSysHour("hh");      // "13" (for 1 PM)
          */
-        getSysHour(format: string = customOption.utils.hourFormat): string {
+        getSysHour(format: keyof typeof HourFormat = customOption.utils.hourFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'hh':
@@ -1397,7 +1412,7 @@ export const getUtils = () => {
          * getSysHourMinute(); // "14:30" (default format)
          * getSysHourMinute("hhmm"); // "1430"
          */
-        getSysHourMinute(format: string = customOption.utils.hourMinuteFormat): string {
+        getSysHourMinute(format: keyof typeof HourMinuteFormat = customOption.utils.hourMinuteFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'hhmm':
@@ -1422,7 +1437,7 @@ export const getUtils = () => {
          * getSysMinute(); // "5" (default format)
          * getSysMinute("mm"); // "05"
          */
-        getSysMinute(format: string = customOption.utils.minuteFormat): string {
+        getSysMinute(format: keyof typeof MinuteFormat = customOption.utils.minuteFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'mm':
@@ -1447,7 +1462,7 @@ export const getUtils = () => {
          * getSysSecond(); // "5" (default format)
          * getSysSecond("ss"); // "05"
          */
-        getSysSecond(format: string = customOption.utils.secondFormat): string {
+        getSysSecond(format: keyof typeof SecondFormat = customOption.utils.secondFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'ss':
@@ -1472,7 +1487,7 @@ export const getUtils = () => {
          * getSysTime(); // "14:30:15" (default format)
          * getSysTime("hhmmss"); // "143015"
          */
-        getSysTime(format: string = customOption.utils.timeFormat): string {
+        getSysTime(format: keyof typeof TimeFormat = customOption.utils.timeFormat): string {
             const currentDate = new Date();
             switch (format.toLowerCase()) {
                 case 'hhmmss':
@@ -1499,7 +1514,7 @@ export const getUtils = () => {
          * getSysDate("yyyy/MM/dd"); // "2025/02/05"
          * getSysDate("MMMM dd, yyyy"); // "February 5, 2025"
          */
-        getSysDate(format: string = customOption.utils.datetimeFormat): string {
+        getSysDate(format: keyof typeof AllDateTimeFormat = customOption.utils.datetimeFormat): string {
             const currentDate = new Date();
             return hisonCore.utils.getDateWithFormat(
                 {
@@ -1813,8 +1828,10 @@ export const getUtils = () => {
          *
          * - Uses `CustomOption.numberFormat` as the default format if none is provided.
          * - Supports various number formatting patterns, including:
-         *   - `"#,###"` → `"1,234"` (comma-separated thousands).
-         *   - `"#,##0"` → `"1,234"` (ensures at least one digit).
+         *   - `"#,###"` → `"1,234"`, '' (comma-separated thousands).
+         *   - `"#,##0"` → `"1,234"`, '0' (ensures at least one digit).
+         *   - `"#"` → `"1234"`, ''
+         *   - `"0"` → `"1234"`, '0'
          *   - `".##"` → `"0.1"` (no grouping).
          *   - `".00"` → `"0.10"` (ensures at least one digit).
          * - Supports decimal formatting and percentage notation (`"%"`).
