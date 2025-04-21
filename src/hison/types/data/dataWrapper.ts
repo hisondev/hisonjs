@@ -190,7 +190,7 @@ export interface InterfaceDataWrapper {
      * @param {string} key The key to retrieve the associated value.
      * @returns {InterfaceDataModel<T> | string | null} A deep copy of the stored value, or `null` if the key is not found.
      */
-    get<T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null;
+    get<T extends Record<string, any> = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null;
     /**
      * Retrieves the string value associated with the specified key from the `DataWrapper`.
      * Ensures that the retrieved value is explicitly a string before returning it.
@@ -265,7 +265,7 @@ export interface InterfaceDataWrapper {
      * @returns {InterfaceDataModel<T>} A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
      * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel<T>`.
      */
-    getDataModel<T = Record<string, any>>(key: string): InterfaceDataModel<T>;
+    getDataModel<T extends Record<string, any> = Record<string, any>>(key: string): InterfaceDataModel<T>;
     /**
      * Inserts or updates a key-value pair in the `DataWrapper`.
      * Allows storing primitive values, strings, and `DataModel` instances.
@@ -486,7 +486,7 @@ export interface InterfaceDataWrapper {
      * @returns {InterfaceDataModel<T> | string | null} The removed value if it existed, otherwise `null`.
      * @throws {Error} If `key` is not a string.
      */
-    remove<T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null;
+    remove<T extends Record<string, any> = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null;
     /**
      * Returns the number of key-value pairs stored in the `DataWrapper`.
      *
