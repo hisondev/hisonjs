@@ -120,7 +120,7 @@ export class ApiPost<T = InterfaceDataWrapper> implements InterfaceApiPost<T> {
      * @param {CachingModule} [cachingModule=null] - An optional caching module.
      * @throws {Error} If `serviceCmd` is not provided.
      */
-    constructor(serviceCmd: string | null = null, cachingModule: InterfaceCachingModule | null = null) {
+    constructor(serviceCmd: string = '', cachingModule: InterfaceCachingModule | null = null) {
         if (cachingModule && cachingModule.getIsCachingModule && cachingModule.getIsCachingModule()) this._cachingModule = cachingModule;
         this._eventEmitter = new EventEmitter();
         this._apiLink = new ApiLink(this._eventEmitter, this._cachingModule);
