@@ -34,11 +34,11 @@ export class ApiLink {
             if(result && customOption.link.interceptApiResult(result.data, result.response) !== false) {
                 return result;
             };
-            return { data : null, response: result.response };
+            return { data : null, response: result!.response };
         }
         return { data : null, response: new Response() };
     };
-    private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string | null, requestData: any): Promise<any>[] => {
+    private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string, requestData: any): Promise<any>[] => {
         if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) { //1
             if (serviceCmd) requestData.putString('cmd', serviceCmd);
             requestData = requestData.getSerialized();
@@ -84,7 +84,7 @@ export class ApiLink {
         if(timeoutPromise) fecthArr.push(timeoutPromise);
         return fecthArr;
     };
-    private _request = async (methodName: string, fecthInfo: any[], cachingKey: string): Promise<{ data: any; response: Response; }> => {
+    private _request = async (methodName: string, fecthInfo: any[], cachingKey: string | null): Promise<{ data: any; response: Response; }> => {
         const result: { data: any; response: Response; } = await Promise.race(fecthInfo)
         .then((response: Response) => {
             this._eventEmitter.emit('requestCompleted_Response', response);
@@ -101,7 +101,7 @@ export class ApiLink {
             const resultData = rtn.data;
             const data = this._getResultDataWrapper(resultData);
             this._eventEmitter.emit('requestCompleted_Data', { data: data, response: rtn.response });
-            if(this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(cachingKey, Promise.resolve({ data: data, response: rtn.response }));
+            if(cachingKey && this._cachingModule && this._cachingModule.isWebSocketConnection() === 1) this._cachingModule.put(cachingKey, Promise.resolve({ data: data, response: rtn.response }));
             if(customOption.link.interceptApiResult(data, rtn.response) === false) return { data: null, response: rtn.response };
             switch (methodName) {
                 case 'GET':
@@ -141,7 +141,7 @@ export class ApiLink {
         const METHOD_NAME = 'GET';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, resourcePath, options);
         if(this._cachingModule && this._cachingModule.hasKey(resourcePath)) return this._getCachingResult(resourcePath);
-        return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + resourcePath, options, null, null), resourcePath);
+        return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + resourcePath, options, '', null), resourcePath);
     };
     post = async (requestData: any, serviceCmd: string, options: Record<string, any> = {}): Promise<{ data: any; response: Response; }> => {
         if(customOption.link.beforePostRequest(requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
@@ -168,7 +168,7 @@ export class ApiLink {
         if(customOption.link.beforeDeleteRequest(requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
         const METHOD_NAME = 'DELETE';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
-        if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
+        if(serviceCmd && this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(serviceCmd);
         return this._request(METHOD_NAME, this._getFetch(METHOD_NAME, customOption.link.protocol + customOption.link.domain + customOption.link.controllerPath, options, serviceCmd, requestData), serviceCmd);
     };
     head = async (resourcePath: string, options: Record<string, any> = {}): Promise<Record<string, string>> => {
@@ -205,35 +205,35 @@ export class ApiLink {
                 return Promise.reject(error);
             });
     };
-    getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+    getURL = (url: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
         if(customOption.link.beforeGetUrlRequest(url, options) === false) return Promise.resolve({ data: null, response: new Response() });
         const METHOD_NAME = 'GET';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, url, options);
         if(this._cachingModule && this._cachingModule.hasKey(url)) return this._getCachingResult(url);
-        return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, null, null), url);
+        return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, '', null), url);
     };
-    postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+    postURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
         if(customOption.link.beforePostUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
         const METHOD_NAME = 'POST';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
         if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
         return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
     };
-    putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+    putURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
         if(customOption.link.beforePutUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
         const METHOD_NAME = 'PUT';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
         if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
         return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
     };
-    patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+    patchURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
         if(customOption.link.beforePatchUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
         const METHOD_NAME = 'PATCH';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
         if(this._cachingModule && this._cachingModule.hasKey(serviceCmd)) return this._getCachingResult(url + serviceCmd);
         return this._request(METHOD_NAME + 'URL', this._getFetch(METHOD_NAME, url, options, serviceCmd, requestData), url + serviceCmd);
     };
-    deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; } | null> => {
+    deleteURL = async (url: string, requestData: any, serviceCmd: string, options: Record<string, any> ={}): Promise<{ data: any; response: Response; }> => {
         if(customOption.link.beforeDeleteUrlRequest(url, requestData, options) === false) return Promise.resolve({ data: null, response: new Response() });
         const METHOD_NAME = 'DELETE';
         this._eventEmitter.emit('requestStarted_' + METHOD_NAME, serviceCmd, options, requestData);
