@@ -159,7 +159,7 @@ export interface Data {
      * console.log(dataWrapper.getSerialized());
      * ```
      */
-    DataWrapper: new <T>(keyOrObject?: Record<string, InterfaceDataModel<T> | string> | string, value?: InterfaceDataModel<T> | string) => InterfaceDataWrapper;
+    DataWrapper: new <T extends Record<string, any>>(keyOrObject?: Record<string, InterfaceDataModel<T> | string> | string, value?: InterfaceDataModel<T> | string) => InterfaceDataWrapper;
     /**
      * The `InterfaceDataModel<T>` interface defines the structure for managing tabular data within the `hisondev` solution.
      * It is designed to store, manipulate, and retrieve data efficiently while ensuring type consistency and validation.
