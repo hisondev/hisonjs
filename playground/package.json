@@ -1,15 +1,20 @@
 {
-  "name": "playground",
-  "version": "1.0.0",
-  "type": "module",
+  "name": "vanillagrid2-playground",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "hisonjs": "file:../hisonjs-1.1.4.tgz"
+    "hisonjs": "^1.1.5",
+    "vue": "^3.4.0",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "typescript": "^4.9.5",
-    "ts-node": "^10.9.1"
-  },
-  "scripts": {
-    "dev": "ts-node-esm index.ts"
+    "@vitejs/plugin-vue": "^5.2.3",
+    "typescript": "^5.0.4",
+    "vite": "^6.2.3"
   }
 }
