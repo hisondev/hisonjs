@@ -2370,7 +2370,7 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
                 newColumns.push(column)
             }
         }
-        this._cols = newColumns;
+        this._cols = newColumns as string[];
         return this;
     };
     /**
