@@ -1,27 +1,33 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
   entry: './src/index.ts',
   output: {
-    filename: 'index.bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    library: 'hisonjs',
-    libraryTarget: 'umd',
-    globalObject: 'this',
-    libraryExport: 'default'
-  },
-  resolve: {
-    extensions: ['.ts', '.js']
+    filename: 'Hisonjs.bundle.js',
+    path: path.resolve(process.cwd(), 'dist'),
+    library: {
+      name: 'Hisonjs',
+      type: 'umd'
+    },
+    globalObject: "typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this",
+    umdNamedDefine: true
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
         exclude: /node_modules/,
-      },
-    ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-typescript']
+          }
+        }
+      }
+    ]
   },
-  mode: 'production',
-  devtool: 'source-map',
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
+  mode: 'production'
 };
