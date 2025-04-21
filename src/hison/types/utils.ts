@@ -639,7 +639,7 @@ export interface Utils {
      * getDayOfWeek("2025-02-05", "kdy"); // "수"
      * getDayOfWeek("2025-02-05", "kday"); // "수요일"
      */
-    getDayOfWeek(date: DateObject | string, dayType?: string): string;
+    getDayOfWeek(date: DateObject | string, dayOfWeekType?: string): string;
     /**
      * Returns the last day of the month for a given date.
      *
@@ -761,20 +761,30 @@ export interface Utils {
      */
     getSysDayOfWeek(dayType?: string): string;
     /**
-     * Returns the current system hour in the specified format.
+     * Returns the current system hour in 24-hour format, optionally formatted with leading zero.
      *
-     * - Uses `CustomOption.hourFormat` as the default format.
-     * - Supports the following formats:
-     *   - `'h'` → Hour without leading zero (`"5"` for 5 AM/PM).
-     *   - `'hh'` → Hour with leading zero (`"05"` for 5 AM/PM).
-     * - If an unsupported format is provided, it defaults to `'h'`.
+     * ### Behavior
+     * - Retrieves the hour part of the system time using 24-hour convention (0–23).
+     * - Formatting depends on the provided `format` parameter:
+     *   - `'h'`  → Hour without leading zero (e.g., `"5"` for 5 AM, `"13"` for 1 PM).
+     *   - `'hh'` → Hour with leading zero if necessary (e.g., `"05"` for 5 AM, `"13"` for 1 PM).
+     * - If the provided `format` is not supported, it defaults to `'h'` behavior.
      *
-     * @param format The desired output format (optional). Default: `'h'`
-     * @returns The current hour as a string in the specified format.
+     * ### Format Source
+     * - If `format` is omitted, it uses the default value from `customOption.utils.hourFormat`.
+     *
+     * ### Important Notes
+     * - This method **does not** convert the hour to 12-hour (AM/PM) format.
+     * - Always based on **24-hour system** (`0–23`).
+     *
+     * @param format The desired hour format. Either `'h'` or `'hh'`. Defaults to `'h'`.
+     * @returns The current hour as a string formatted according to the specified format.
      *
      * @example
-     * getSysHour(); // "5" (default format)
-     * getSysHour("hh"); // "05"
+     * getSysHour();         // "5"  (default 'h' format)
+     * getSysHour("hh");      // "05" (leading zero)
+     * getSysHour("h");       // "5"  (no leading zero)
+     * getSysHour("hh");      // "13" (for 1 PM)
      */
     getSysHour(format?: string): string;
     /**
