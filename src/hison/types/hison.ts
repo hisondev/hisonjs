@@ -1,3 +1,4 @@
+import { AllDateTimeFormat, DateFormat, DateTimeFormat, DayFormat, DayOfWeekFormat, HourFormat, HourMinuteFormat, MinuteFormat, MonthFormat, SecondFormat, TimeFormat, YearFormat, YearMonthFormat } from "../enums";
 import type { Data, InterfaceDataWrapper } from "./data";
 import type { Link } from "./link";
 import type { Shield } from "./sheild";
@@ -151,7 +152,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new date format string.
      */
-    setDateFormat(str: string): void;
+    setDateFormat(str: keyof typeof DateFormat): void;
     /**
      * Sets the default format for displaying time.
      *
@@ -169,7 +170,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new time format string.
      */
-    setTimeFormat(str: string): void;
+    setTimeFormat(str: keyof typeof TimeFormat): void;
     /**
      * Sets the default format for displaying date and time.
      *
@@ -187,7 +188,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new datetime format string.
      */
-    setDatetimeFormat(str: string): void;
+    setDatetimeFormat(str: keyof typeof DateTimeFormat): void;
     /**
      * Sets the default format for displaying the year.
      *
@@ -205,7 +206,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new year format string.
      */
-    setYearFormat(str: string): void;
+    setYearFormat(str: keyof typeof YearFormat): void;
     /**
      * Sets the default format for displaying the month.
      *
@@ -223,25 +224,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new month format string.
      */
-    setMonthFormat(str: string): void;
-    /**
-     * Sets the default format for displaying the full month name.
-     *
-     * This method updates the `monthNameFormat` property in `customOption`, 
-     * which is used throughout the `hisondev` solution for parsing and formatting month names.
-     *
-     * - The new format will be applied globally to all month-related operations.
-     * - Default value: `'MMMM'`
-     * - Example output after setting format: `'Feb'` (for `'MMM'`)
-     *
-     * ### Related Property
-     * - **`monthNameFormat`**: Defines the default full month name format.
-     *   - Default: `'MMMM'`
-     *   - Example output: `'February'`
-     *
-     * @param str The new full month name format string.
-     */
-    setMonthNameFormat(str: string): void;
+    setMonthFormat(str: keyof typeof MonthFormat): void;
     /**
      * Sets the default format for displaying year and month.
      *
@@ -259,7 +242,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new year-month format string.
      */
-    setYearMonthFormat(str: string): void;
+    setYearMonthFormat(str: keyof typeof YearMonthFormat): void;
     /**
      * Sets the default format for displaying the day of the month.
      *
@@ -277,7 +260,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new day format string.
      */
-    setDayFormat(str: string): void;
+    setDayFormat(str: keyof typeof DayFormat): void;
     /**
      * Sets the default format for displaying the day of the week.
      *
@@ -295,7 +278,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new day-of-week format string.
      */
-    setDayOfWeekFormat(str: string): void;
+    setDayOfWeekFormat(str: keyof typeof DayOfWeekFormat): void;
     /**
      * Sets the default format for displaying the hour.
      *
@@ -313,7 +296,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new hour format string.
      */
-    setHourFormat(str: string): void;
+    setHourFormat(str: keyof typeof HourFormat): void;
     /**
      * Sets the default format for displaying the hour and minute.
      *
@@ -331,7 +314,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new hour-minute format string.
      */
-    setHourMinuteFormat(str: string): void;
+    setHourMinuteFormat(str: keyof typeof HourMinuteFormat): void;
     /**
      * Sets the default format for displaying the minute.
      *
@@ -349,7 +332,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new minute format string.
      */
-    setMinuteFormat(str: string): void;
+    setMinuteFormat(str: keyof typeof MinuteFormat): void;
     /**
      * Sets the default format for displaying the second.
      *
@@ -367,7 +350,7 @@ export interface Hison extends HisonCore{
      *
      * @param str The new second format string.
      */
-    setSecondFormat(str: string): void;
+    setSecondFormat(str: keyof typeof SecondFormat): void;
     /**
      * Sets the default format for displaying numbers.
      *
@@ -480,14 +463,6 @@ export interface Hison extends HisonCore{
      * @returns The current month format format string.
      */
     getMonthFormat(): string;
-    /**
-     * Returns the currently set default month name format.
-     *
-     * This method retrieves the value of `monthNameFormat` from `customOption`.
-     *
-     * @returns The current month name format string.
-     */
-    getMonthNameFormat(): string;
     /**
      * Returns the currently set default year month format.
      *
