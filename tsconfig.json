@@ -3,7 +3,7 @@
     "target": "ES5",
     "module": "ES6",
     "lib": ["es2019", "dom"],
-    "strict": false,
+    "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
