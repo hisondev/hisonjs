@@ -1,3 +1,5 @@
+import { DateFormat, DateTimeFormat, DayFormat, DayOfWeekFormat, HourFormat, HourMinuteFormat, MinuteFormat, MonthFormat, SecondFormat, TimeFormat, YearFormat, YearMonthFormat } from "../enums";
+
 export const utilsOption = {
     /**
      * The default format for displaying dates.
@@ -9,7 +11,7 @@ export const utilsOption = {
      * - Example output: `'2025-02-04'` (for February 4, 2025)
      * - Can be modified using `setDateFormat(format: string)`.
      */
-    dateFormat : 'yyyy-MM-dd',
+    dateFormat : DateFormat['yyyy-MM-dd'],
     /**
      * The default format for displaying time.
      *
@@ -20,7 +22,7 @@ export const utilsOption = {
      * - Example output: `'14:30:15'` (for 2:30:15 PM)
      * - Can be modified using `setTimeFormat(format: string)`.
      */
-    timeFormat : 'hh:mm:ss',
+    timeFormat : TimeFormat['hh:mm:ss'],
     /**
      * The default format for displaying date and time.
      *
@@ -31,7 +33,7 @@ export const utilsOption = {
      * - Example output: `'2025-02-04 14:30:15'` (for February 4, 2025, 2:30:15 PM)
      * - Can be modified using `setDatetimeFormat(format: string)`.
      */
-    datetimeFormat : 'yyyy-MM-dd hh:mm:ss',
+    datetimeFormat : DateTimeFormat['yyyy-MM-dd hh:mm:ss'],
     /**
      * The default format for displaying the year.
      *
@@ -41,7 +43,7 @@ export const utilsOption = {
      * - Example output: `'2025'` (for the year 2025)
      * - Can be modified using `setYearFormat(format: string)`.
      */
-    yearFormat : 'yyyy',
+    yearFormat : YearFormat.yyyy,
     /**
      * The default format for displaying the month.
      *
@@ -51,17 +53,7 @@ export const utilsOption = {
      * - Example output: `'2'` (for February)
      * - Can be modified using `setMonthFormat(format: string)`.
      */
-    monthFormat : 'M',
-    /**
-     * The default format for displaying the full month name.
-     *
-     * This format is used to represent the full name of a month in date-related operations.
-     *
-     * - Default value: `'MMMM'`
-     * - Example output: `'February'` (for the month of February)
-     * - Can be modified using `setMonthNameFormat(format: string)`.
-     */
-    monthNameFormat : 'MMMM',
+    monthFormat : MonthFormat.M,
     /**
      * The default format for displaying year and month.
      *
@@ -71,7 +63,7 @@ export const utilsOption = {
      * - Example output: `'2025-02'` (for February 2025)
      * - Can be modified using `setYearMonthFormat(format: string)`.
      */
-    yearMonthFormat : 'yyyy-MM',
+    yearMonthFormat : YearMonthFormat['yyyy-MM'],
     /**
      * The default format for displaying the day of the month.
      *
@@ -81,7 +73,7 @@ export const utilsOption = {
      * - Example output: `'4'` (for the 4th day of the month)
      * - Can be modified using `setDayFormat(format: string)`.
      */
-    dayFormat : 'd',
+    dayFormat : DayFormat.d,
     /**
      * The default format for displaying the day of the week.
      *
@@ -91,17 +83,29 @@ export const utilsOption = {
      * - Example output: `'3'` (where 3 could represent Wednesday depending on locale settings)
      * - Can be modified using `setDayOfWeekFormat(format: string)`.
      */
-    dayOfWeekFormat : 'd',
+    dayOfWeekFormat : DayOfWeekFormat.d,
     /**
-     * The default format for displaying the hour.
+     * Defines the default format for displaying the hour in 24-hour time operations.
      *
-     * This format is used to represent the hour component in time-related operations.
+     * ### Behavior
+     * - `'h'`  → Displays the hour without leading zero. (e.g., `"5"` for 5 AM, `"13"` for 1 PM)
+     * - `'hh'` → Displays the hour with leading zero if needed. (e.g., `"05"` for 5 AM, `"13"` for 1 PM)
      *
-     * - Default value: `'h'`
-     * - Example output: `'2'
-     * - Can be modified using `setHourFormat(format: string)`.
+     * ### Details
+     * - This format is used internally in time-related methods like `getSysHour()`.
+     * - If no specific format is provided when calling those methods, this default is used.
+     *
+     * ### Default Value
+     * - `'h'`
+     *
+     * ### Example Outputs
+     * - 5 AM → `'5'` with `'h'`, `'05'` with `'hh'`
+     * - 1 PM → `'13'` with `'h'` or `'hh'`
+     *
+     * ### Modification
+     * - Can be modified using the `setHourFormat(format: HourFormat)` method.
      */
-    hourFormat : 'h',
+    hourFormat : HourFormat.h,
     /**
      * The default format for displaying the hour and minute.
      *
@@ -111,7 +115,7 @@ export const utilsOption = {
      * - Example output: `'14:30'` (for 2:30 PM in 24-hour format)
      * - Can be modified using `setHourMinuteFormat(format: string)`.
      */
-    hourMinuteFormat : 'hh:mm',
+    hourMinuteFormat : HourMinuteFormat['hh:mm'],
     /**
      * The default format for displaying the minute.
      *
@@ -121,7 +125,7 @@ export const utilsOption = {
      * - Example output: `'5'` (for the 5th minute of the hour)
      * - Can be modified using `setMinuteFormat(format: string)`.
      */
-    minuteFormat : 'm',
+    minuteFormat : MinuteFormat.m,
     /**
      * The default format for displaying the second.
      *
@@ -131,7 +135,7 @@ export const utilsOption = {
      * - Example output: `'45'` (for the 45th second of the minute)
      * - Can be modified using `setSecondFormat(format: string)`.
      */
-    secondFormat : 's',
+    secondFormat : SecondFormat.s,
     /**
      * The default format for displaying numbers.
      *
