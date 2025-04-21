@@ -293,7 +293,7 @@ export class DataWrapper implements InterfaceDataWrapper {
      * @param {string} key The key to retrieve the associated value.
      * @returns {InterfaceDataModel<T = Record<string, any>> | string | null} A deep copy of the stored value, or `null` if the key is not found.
      */
-    get = <T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null => {
+    get = <T extends Record<string, any> = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null => {
         if (typeof key !== 'string') throw new Error('Keys must always be strings.');
         return this._data[key] ? hisonCore.utils.deepCopyObject(this._data[key]) : null;
     };
@@ -375,7 +375,7 @@ export class DataWrapper implements InterfaceDataWrapper {
      * @returns {InterfaceDataModel<T>} A cloned `DataModel<T>` instance retrieved from the `DataWrapper`.
      * @throws {Error} If the key is not a string or if the stored value is not a valid `DataModel<T>`.
      */
-    getDataModel = <T = Record<string, any>>(key: string): InterfaceDataModel<T> => {
+    getDataModel = <T extends Record<string, any> = Record<string, any>>(key: string): InterfaceDataModel<T> => {
         if (typeof key !== 'string') throw new Error('Keys must always be strings.');
         if (!this._data[key] || !(this._data[key] as InterfaceDataModel<T>).getIsDataModel || !(this._data[key] as InterfaceDataModel<T>).getIsDataModel()) throw new Error('The data does not contain the specified data-model value.');
         return (this._data[key] as InterfaceDataModel<T>).clone();
@@ -637,7 +637,7 @@ export class DataWrapper implements InterfaceDataWrapper {
      * @returns {InterfaceDataModel<T> | string | null} The removed value if it existed, otherwise `null`.
      * @throws {Error} If `key` is not a string.
      */
-    remove = <T = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null => {
+    remove = <T extends Record<string, any> = Record<string, any>>(key: string): InterfaceDataModel<T> | string | null => {
         if (typeof key !== 'string') throw new Error('Keys must always be strings.');
         let result: InterfaceDataModel<T> | string | null = null;
         if (this._data.hasOwnProperty(key)) {
