@@ -647,6 +647,36 @@ export interface Hison extends HisonCore{
      */
     setIsPossibleOpenDevTool(bool: boolean): void;
     /**
+     * Sets a custom function to be executed when developer tools are detected.
+     *
+     * This method allows developers to define the behavior when the browser's developer mode is detected.
+     * It provides flexibility to insert breakpoints (`debugger`), show alerts, or block execution dynamically.
+     *
+     * - Default behavior: No action (`() => {}`).
+     * - If a function is set via this method, it will be triggered during developer tool detection attempts.
+     *
+     * ---
+     * ### Usage Example
+     *
+     * ```typescript
+     * // Set a function that triggers a debugger breakpoint when devtools are detected
+     * hison.setDoDetectDevTool(() => {
+     *   debugger;
+     * });
+     * ```
+     *
+     * ### Notes
+     * - This function will be called when suspicious activities such as window resizing, focus/blur, or abnormal delays are detected.
+     * - It allows runtime anti-debugging behavior to be customizable instead of being hardcoded in the library.
+     * - If not set, no action will be taken even if developer tools are detected.
+     *
+     * ---
+     * @param func A function to execute when developer mode access is suspected.
+     *
+     * @see `customOption.shield.doDetectDevTool`
+     */
+    setDoDetectDevTool(func: (() => void)): void;
+    /**
      * Returns the currently set security service URL.
      *
      * This method retrieves the value of `shieldURL` from `customOption`.
