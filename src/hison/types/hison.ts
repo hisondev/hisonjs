@@ -1,13 +1,289 @@
-import { AllDateTimeFormat, DateFormat, DateTimeFormat, DayFormat, DayOfWeekFormat, HourFormat, HourMinuteFormat, MinuteFormat, MonthFormat, SecondFormat, TimeFormat, YearFormat, YearMonthFormat } from "../enums";
+import { DateFormat, DateTimeFormat, DayFormat, DayOfWeekFormat, HourFormat, HourMinuteFormat, MinuteFormat, MonthFormat, SecondFormat, TimeFormat, YearFormat, YearMonthFormat } from "../enums";
 import type { Data, InterfaceDataWrapper } from "./data";
 import type { Link } from "./link";
 import type { Shield } from "./sheild";
 import type { Utils } from "./utils";
 
 export interface HisonCore {
+    /**
+     * Provides a collection of utility functions for validation, formatting, and data manipulation within `Hison`.
+     *
+     * The `utils` module includes a wide range of helper functions designed to simplify working with strings, numbers,
+     * dates, and structured data. Additionally, it integrates with `CustomOption`, allowing developers to customize
+     * key configurations such as date formats, numeric precision, and byte encoding rules.
+     *
+     * ---
+     * ### Core Features & Functionality
+     *
+     * ### 1. **Configurable Utility Behaviors**
+     * - Many utility functions reference properties in `CustomOption`, which can be modified using `Hison`'s `set` methods.
+     * - Example: `getCutByteLength()` uses `customOption.GREATER_0XFFFF_BYTE`, which can be adjusted via:
+     *   ```typescript
+     *   hison.setCharByteGreater65535(5);
+     *   ```
+     * - This approach ensures adaptability to different encoding formats (e.g., UTF-8, UTF-16, UTF-32).
+     *
+     * ### 2. **String Validation & Manipulation**
+     * - **Character Type Checks**: `isAlpha()`, `isNumber()`, `isEmail()`, `isURL()` validate string content.
+     * - **String Formatting**: `getLpad()`, `getRpad()`, `getReplaceAll()` enable flexible formatting.
+     * - **Encoding & Decoding**: Supports `Base64` operations with `getEncodeBase64()` and `getDecodeBase64()`.
+     *
+     * ### 3. **Numeric Operations**
+     * - **Rounding & Truncation**: Functions like `getCeil()`, `getFloor()`, `getRound()`, and `getTrunc()` offer fine-grained control.
+     * - **Number Formatting**: `getNumberFormat()` applies formatting rules, which can be adjusted using:
+     *   ```typescript
+     *   hison.setNumberFormat("#,###.00");
+     *   ```
+     * - **Type Conversion**: `getToNumber()`, `getToFloat()`, `getToInteger()` ensure safe and predictable data transformation.
+     *
+     * ### 4. **Date & Time Processing**
+     * - **Parsing & Formatting**: Converts date/time strings to structured objects (`getDateObject()`, `getTimeObject()`).
+     * - **Date Arithmetic**: Supports adding and subtracting time values (`addDate()`, `getDateDiff()`).
+     * - **System Date/Time Retrieval**: Methods like `getSysDate()`, `getSysYear()`, and `getSysDayOfWeek()` return system values.
+     * - **Customizable Formats**: Date and time formats are configurable via:
+     *   ```typescript
+     *   hison.setDateFormat("MM/dd/yyyy");
+     *   hison.setTimeFormat("HH:mm:ss");
+     *   ```
+     *
+     * ### 5. **Data Structure Handling**
+     * - **Object & Array Validation**: `isArray()`, `isObject()`, and `deepCopyObject()` facilitate structured data manipulation.
+     * - **File Operations**: Extract metadata with `getFileExtension()` and `getFileName()`.
+     *
+     * ---
+     * ### Integration with `CustomOption`
+     * Many methods in `hison.utils` utilize configurable properties from `CustomOption.utils`. These properties can be modified
+     * using `Hison`'s setter methods to accommodate different project requirements.
+     *
+     * ### Example: Modifying Byte Length for Encoding
+     * - The default encoding size for characters is determined by:
+     *   - `LESSOREQ_0X7FF_BYTE` (default: `2`)
+     *   - `LESSOREQ_0XFFFF_BYTE` (default: `3`)
+     *   - `GREATER_0XFFFF_BYTE` (default: `4`)
+     * - These values impact functions like `getByteLength()` and `getCutByteLength()`.
+     * - Developers can modify these settings as follows:
+     *   ```typescript
+     *   hison.setCharByteLess2047(3);
+     *   hison.setCharByteLess65535(4);
+     *   hison.setCharByteGreater65535(5);
+     *   ```
+     *
+     * ---
+     * ### Related Utility Methods
+     * - `hison.utils.isAlpha(str: string): boolean` → Checks if a string contains only alphabetic characters.
+     * - `hison.utils.getDateWithFormat(datetime: DateTimeObject | string, format: string): string` → Formats a date.
+     * - `hison.utils.getByteLength(str: string): number` → Computes byte length using configurable encoding settings.
+     * - `hison.utils.getRound(num: number, precision: number): number` → Rounds a number to a specified precision.
+     *
+     * @example
+     * // Validate a string
+     * hison.utils.isNumber("12345"); // true
+     *
+     * // Format a date using a custom format
+     * hison.setDateFormat("MM/dd/yyyy");
+     * hison.utils.getDateWithFormat("2025-02-05", "MM/dd/yyyy"); // "02/05/2025"
+     *
+     * // Change default encoding settings
+     * hison.setCharByteGreater65535(5);
+     * console.log(hison.utils.getByteLength("𐍈")); // Uses updated byte length
+     */
     utils: Utils;
+    /**
+     * Enforces security policies on the given `Hison` instance, including access restrictions and object immutability.
+     *
+     * This function applies multiple layers of security to protect the `Hison` instance and enforce security policies:
+     * - **Object Freezing**: Prevents modification of the `Hison` object.
+     * - **Access Control by URL and IP**: Restricts access based on predefined security settings.
+     * - **Developer Tool Restrictions**: Detects and prevents unauthorized debugging or tampering.
+     * - **Back Navigation Prevention**: Blocks browser back navigation if enabled.
+     * - **Custom Developer Tool Detection**: Executes user-defined actions when developer mode is detected.
+     *
+     * @param hison The `Hison` object to secure and optionally freeze.
+     *
+     * @throws Error If `hison` is not provided.
+     * @throws Error If `hison` is not an instance of `Hison`.
+     *
+     * @remarks
+     * This function enhances security by enforcing strict runtime protections. It utilizes configuration settings from
+     * `customOption.shield` to determine the applied security policies.
+     *
+     * ---
+     * ### Security Features & Execution Flow
+     *
+     * ### 1. **Validation of `hison` Parameter**
+     * - If `hison` is not provided, an error is thrown:  
+     *   `"Invalid argument: 'hison' is required."`
+     * - Ensures that the input is a valid `Hison` instance before executing security functions.
+     *
+     * ### 2. **Object Freezing (`isFreeze`)**
+     * - If `customOption.shield.isFreeze` is `true`, the `Hison` object is **deeply frozen**.
+     * - Uses the `deepFreeze()` function to recursively apply `Object.freeze()`, preventing modifications.
+     *
+     * ### 3. **Access Control by URL (`shieldURL`)**
+     * - If `customOption.shield.shieldURL` is set:
+     *   - Ensures the current URL matches `shieldURL`.
+     *   - If the URL does not match, execution stops immediately.
+     *
+     * ### 4. **IP-Based Access Control (`exposeIpList`)**
+     * - If the request is **not from `localhost`**, it performs IP verification:
+     *   - Fetches the user's IP from `/ajax/getIp`.
+     *   - Compares the retrieved IP against `customOption.shield.exposeIpList`.
+     *   - If the IP is **not** in the list, additional restrictions are applied:
+     *     - **Back Navigation is Blocked** if `isPossibleGoBack` is `false`.
+     *     - **Developer Tools are Restricted** if `isPossibleOpenDevTool` is `false`.
+     *
+     * ### 5. **Back Navigation Prevention (`isPossibleGoBack`)**
+     * - If `customOption.shield.isPossibleGoBack` is `false`:
+     *   - Overrides the browser's back button functionality using `history.pushState()`.
+     *   - Registers an event listener to **prevent back navigation**.
+     *
+     * ### 6. **Developer Tool Restrictions (`isPossibleOpenDevTool`)**
+     * - If `customOption.shield.isPossibleOpenDevTool` is `false`:
+     *   - Blocks `F12` keypress to prevent opening developer tools.
+     *   - Uses `debugger` trick and event listeners (`resize`, `mousemove`, `focus`, `blur`) to detect dev tools.
+     *   - Displays a warning message and prevents further execution if dev tools are detected.
+     *
+     * ### 7. **Custom Developer Tool Detection (`doDetectDevTool`)**
+     * - A user-defined function can be set using `hison.setDoDetectDevTool(func)`.
+     * - This function is called when developer tools are suspected to be open (e.g., via window resize, focus, performance timing anomalies).
+     * - Typical usage includes inserting a `debugger` statement or forcibly stopping the application.
+     * - If no function is set, detection attempts will proceed without custom actions.
+     *
+     * ---
+     * ### Related Methods
+     * - `hison.setShieldURL(url: string)` → Sets the URL restriction for access control.
+     * - `hison.setExposeIpList(ipList: string[])` → Defines a whitelist of allowed IP addresses.
+     * - `hison.setIsFreeze(state: boolean)` → Enables or disables object freezing.
+     * - `hison.setIsPossibleGoBack(state: boolean)` → Enables or disables back navigation prevention.
+     * - `hison.setIsPossibleOpenDevTool(state: boolean)` → Enables or disables developer tool restrictions.
+     * - `hison.setDoDetectDevTool(func: () => void)` → Sets a custom function to execute when developer tools are detected.
+     *
+     * @example
+     * // Execute security features for the Hison instance
+     * shield.excute(hison);
+     *
+     * @example
+     * // Set a custom action when developer tools are detected
+     * hison.setDoDetectDevTool(() => {
+     *   debugger;
+     * });
+     */
     shield: Shield;
+    /**
+     * The `hison.data` module provides core data management structures within the `hisondev` ecosystem.
+     * It includes:
+     *
+     * - **`DataWrapper`**: A key-value based data storage container.
+     * - **`DataModel`**: A structured table-like data model for handling tabular data.
+     *
+     * These components enable **efficient data storage, retrieval, validation, and transformation** 
+     * while maintaining type safety and structural consistency.
+     *
+     * ### Core Features
+     *
+     * ### **1. Structured Data Management**
+     * - `DataWrapper` provides **key-value storage**, allowing easy organization of structured data.
+     * - `DataModel` offers **tabular data management**, ensuring **column consistency** across rows.
+     *
+     * ### **2. Data Transformation & Validation**
+     * - Supports **custom conversion logic** through `hison.setConvertValue()`, allowing pre-insertion transformations.
+     * - Allows setting a **`DataModelValidator`** to validate column values.
+     * - Supports **`DataModelFormatter`** for automatic column formatting.
+     *
+     * ### **3. Deep Copy & Serialization**
+     * - Ensures **data immutability** using **deep cloning** (`clone()`).
+     * - Supports **JSON serialization** for structured data transfer (`getSerialized()`).
+     *
+     * ### **4. Integration Between `DataWrapper` and `DataModel`**
+     * - `DataWrapper` can **store and retrieve** `DataModel` instances seamlessly.
+     * - Allows flexible conversion between **key-value storage** and **structured table data**.
+     *
+     * ### Example Usage
+     *
+     * ### **Using `DataWrapper` for Key-Value Storage**
+     * ```typescript
+     * const dataWrapper = new hison.data.DataWrapper({ username: "Alice", age: 30 });
+     * console.log(dataWrapper.getString("username")); // Output: "Alice"
+     * ```
+     *
+     * ### **Using `DataModel` for Tabular Data**
+     * ```typescript
+     * const dataModel = new hison.data.DataModel([
+     *     { id: 1, name: "Alice", age: 25 },
+     *     { id: 2, name: "Bob", age: 30 }
+     * ]);
+     *
+     * // Formatting and validation
+     * dataModel.setColumnSameFormat("age", (value) => `${value} years old`);
+     * dataModel.isValidValue("age", value => typeof value === "number");
+     * ```
+     *
+     * ### **Storing `DataModel` Inside `DataWrapper`**
+     * ```typescript
+     * const usersData = new hison.data.DataModel([{ id: 1, name: "Alice" }]);
+     * const dataWrapper = new hison.data.DataWrapper();
+     * dataWrapper.putDataModel("users", usersData);
+     * console.log(dataWrapper.getDataModel("users").getRowCount()); // Output: 1
+     * ```
+     *
+     * ### Related Functions
+     * - **`hison.setConvertValue(func)`**: 
+     *   - Allows defining a **custom value transformation function** for `DataModel`.
+     *   - Useful for formatting **Date objects** or handling special types before insertion.
+     *   - Example:
+     *   ```typescript
+     *   hison.setConvertValue((value) => value instanceof Date ? value.toISOString() : value);
+     *   ```
+     */
     data: Data;
+    /**
+     * The `hison.link` object provides core communication modules for interacting with the hisondev platform.
+     * It serves as a central hub for API requests, caching, and WebSocket communication.
+     *
+     * ### Key Components
+     * - **`CachingModule`**: Manages API response caching using an LRU (Least Recently Used) strategy.
+     * - **`ApiGet`, `ApiPost`, `ApiPut`, `ApiPatch`, `ApiDelete`**: Handle REST API calls by encapsulating request logic.
+     * - **`ApiGetUrl`, `ApiPostUrl`, `ApiPutUrl`, `ApiPatchUrl`, `ApiDeleteUrl`**: Similar to the above, but allow direct URL-based requests.
+     *
+     * These components simplify API integration and provide caching and event-driven request handling.
+     *
+     * ### How It Works
+     * - **API requests are wrapped in `DataWrapper` instances**, which store key-value data.
+     * - **The `cmd` property in `DataWrapper` determines the service path**, directing the request to the appropriate business logic on the server.
+     * - **`CachingModule` enables response caching**, reducing redundant network calls for frequently accessed resources.
+     * - **`EventEmitter` allows developers to listen for request events**, such as completion, errors, or specific triggers.
+     *
+     * ### Example Usage
+     * ```typescript
+     * // Creating an API request
+     * const requestData = new hison.data.DataWrapper();
+     * requestData.putString("username", "Alice");
+     * 
+     * // Sending a POST request
+     * const apiPost = new hison.link.ApiPost("UserService.createUser");
+     * apiPost.call(requestData).then(response => {
+     *     console.log(response.data); // Response from the server
+     * });
+     *
+     * // Handling request events
+     * apiPost.onEventEmit("requestCompleted_Data", (data, response) => {
+     *     console.log("Request completed!", data);
+     * });
+     *
+     * // Using caching for a GET request
+     * const cachingModule = new hison.link.CachingModule(20); // Set cache limit to 20
+     * const apiGet = new hison.link.ApiGet("/users", cachingModule);
+     * apiGet.call().then(response => {
+     *     console.log(response.data);
+     * });
+     * ```
+     *
+     * ### Internal Structure
+     * - **Uses `ApiLink` for handling network requests**.
+     * - **Utilizes `EventEmitter` for event-driven communication**.
+     * - **Supports WebSocket integration via `CachingModule`**.
+     * - **Compatible with `CustomOption` for flexible configuration**.
+     */
     link: Link;
 }
 
