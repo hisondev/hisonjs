@@ -180,6 +180,7 @@ export const createHison = (): Hison => {
         setIsFreeze(bool: boolean) {customOption.shield.isFreeze = bool;},
         setIsPossibleGoBack(bool: boolean) {customOption.shield.isPossibleGoBack = bool;},
         setIsPossibleOpenDevTool(bool: boolean) {customOption.shield.isPossibleOpenDevTool = bool;},
+        setDoDetectDevTool(func: (() => void)) {customOption.shield.doDetectDevTool = func;},
         getShieldURL(): string {return customOption.shield.shieldURL;},
         getExposeIpList(): string[] {return customOption.shield.exposeIpList;},
         getIsFreeze(): boolean {return customOption.shield.isFreeze;},
@@ -293,7 +294,7 @@ export const createHison = (): Hison => {
         },
         shield : {
             isHison: true,
-            excute(hison: Hison) { hison.shield.excute(hison) },
+            excute(hison: Hison) { hisonCore.shield.excute(hison) },
         },
         data: hisonCore.data,
         link: hisonCore.link,
