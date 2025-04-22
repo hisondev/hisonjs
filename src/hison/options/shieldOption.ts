@@ -48,4 +48,36 @@ export const shieldOption = {
      * - Used in `shield.excute(hison: Hison)`, where `shieldFuncCreateBlockDevMode()` is triggered.
      */
     isPossibleOpenDevTool : false,
+    /**
+     * A custom function that is executed when detecting that developer tools may be opened.
+     *
+     * This hook allows developers to define specific behaviors when the system detects that 
+     * the browser's developer tools are likely active.  
+     * 
+     * - By default, this function does nothing (`() => {}`).
+     * - Developers can customize it using `hison.setDoDetectDevTool(func)`.
+     * - Common custom actions include inserting a `debugger;`, showing alerts, or halting program flow.
+     *
+     * - Default value: `() => {}` (no action)
+     * - Used in `shield.excute(hison: Hison)` when attempting to detect devtool access.
+     *
+     * ---
+     * ### Example Usage
+     *
+     * ```typescript
+     * hison.setDoDetectDevTool(() => {
+     *   debugger; // Pause execution when devtools are detected
+     * });
+     * ```
+     *
+     * ### Notes
+     * - This function is triggered during events like `resize`, `mousemove`, `focus`, and `blur` to detect suspicious behavior.
+     * - It is up to the developer to define the action taken (e.g., throwing errors, stopping execution, etc.).
+     *
+     * @remarks
+     * This hook offers flexibility without enforcing a specific anti-debugging behavior at the library level.
+     * 
+     * @see `hison.setDoDetectDevTool(func: () => void)`
+     */
+    doDetectDevTool: () => {},
 };
