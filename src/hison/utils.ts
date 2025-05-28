@@ -855,7 +855,7 @@ export const getUtils = () => {
             const s = (datetimeObj.s || 0).toString().padStart(2, '0');
     
             if (!hisonCore.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-            if (!hisonCore.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
+            if (datetimeObj.h && !hisonCore.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
     
             const MMMM = hisonCore.utils.getMonthName(datetimeObj.M);
             const MMM = hisonCore.utils.getMonthName(datetimeObj.M, false);
