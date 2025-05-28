@@ -16,15 +16,28 @@ const { proxy } = getCurrentInstance()!;
 const hison: Hison = (proxy as any)!.$hison;
 
 const test1 = () => {
-    console.log(hison.utils.getSysDate(AllDateTimeFormat['MMMM dd yyyy hh:mm:ss']));
-    console.log(hison.utils.getNumberFormat(1234.1234));
-    console.log(hison.utils.getNumberFormat(1234.1234, '#,###.#####'));
-    console.log(hison.utils.getNumberFormat(1234.1234, '#.00000'));
-    console.log(hison.utils.getNumberFormat(0.1234, '0.00000'));
-    console.log(hison.utils.getNumberFormat(0.1234, '#.#####'));
+    try {
+        console.log(hison.utils.getSysDate(AllDateTimeFormat['MMMM dd yyyy hh:mm:ss']));
+        console.log(hison.utils.getNumberFormat(1234.1234));
+        console.log(hison.utils.getNumberFormat(1234.1234, '#,###.#####'));
+        console.log(hison.utils.getNumberFormat(1234.1234, '#.00000'));
+        console.log(hison.utils.getNumberFormat(0.1234, '0.00000'));
+        console.log(hison.utils.getNumberFormat(0.1234, '#.#####'));
+    } catch (error) {
+        console.log(error)
+    }
 };
 const test2 = () => {
-    alert('2');
+    try {
+        console.log(hison.utils.getDatetimeObject('20240228'))
+        console.log(hison.utils.getDateWithFormat('20240228 15:27:59', AllDateTimeFormat['MMMM dd yyyy hh:mm:ss']))
+        console.log(hison.utils.getDateWithFormat('20240229'))
+        console.log(hison.utils.getDateWithFormat('2025-03-19'))
+        console.log(hison.utils.getDateWithFormat('2025-03'))
+        console.log(hison.utils.getDateWithFormat('2024/02/29 111166'))
+    } catch (error) {
+        console.log(error)
+    }
 };
 const test3 = () => {
     alert('3');
