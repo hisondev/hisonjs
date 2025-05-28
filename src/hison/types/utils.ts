@@ -1077,8 +1077,10 @@ export interface Utils {
      *
      * - Uses `CustomOption.numberFormat` as the default format if none is provided.
      * - Supports various number formatting patterns, including:
-     *   - `"#,###"` → `"1,234"` (comma-separated thousands).
-     *   - `"#,##0"` → `"1,234"` (ensures at least one digit).
+     *   - `"#,###"` → `"1,234"`, '' (comma-separated thousands).
+     *   - `"#,##0"` → `"1,234"`, '0' (ensures at least one digit).
+     *   - `"#"` → `"1234"`, ''
+     *   - `"0"` → `"1234"`, '0'
      *   - `".##"` → `"0.1"` (no grouping).
      *   - `".00"` → `"0.10"` (ensures at least one digit).
      * - Supports decimal formatting and percentage notation (`"%"`).
