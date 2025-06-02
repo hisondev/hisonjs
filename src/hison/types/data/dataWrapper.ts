@@ -213,10 +213,6 @@ export interface InterfaceDataWrapper {
      * console.log(dataWrapper.getString("status")); // Output: "active"
      * console.log(dataWrapper.getString("nonExistentKey")); // Output: null
      *
-     * // Throws an error: "The data does not contain the specified string value."
-     * console.log(dataWrapper.getString("count"));
-     * ```
-     *
      * @param {string} key The key associated with the string value.
      * @returns {string | null} The associated string value, or `null` if not found.
      * @throws {Error} If the key is not a string or if the stored value is not a string.
