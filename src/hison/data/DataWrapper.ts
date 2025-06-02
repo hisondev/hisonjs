@@ -318,9 +318,6 @@ export class DataWrapper implements InterfaceDataWrapper {
      * 
      * console.log(dataWrapper.getString("status")); // Output: "active"
      * console.log(dataWrapper.getString("nonExistentKey")); // Output: null
-     *
-     * // Throws an error: "The data does not contain the specified string value."
-     * console.log(dataWrapper.getString("count"));
      * ```
      *
      * @param {string} key The key associated with the string value.
