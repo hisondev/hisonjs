@@ -1753,7 +1753,7 @@ export const getUtils = () => {
             str = hisonCore.utils.getToString(str);
             padStr = hisonCore.utils.getToString(padStr);
             length = hisonCore.utils.getToNumber(length);
-            if (str.length >= length) return str.substring(str.length, length - 1);
+            if (str.length >= length) return str.slice(-length);
             const pad = padStr.repeat((length - str.length) / padStr.length);
             return pad + str;
         },
