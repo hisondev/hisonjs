@@ -17,12 +17,9 @@ const hison: Hison = (proxy as any)!.$hison;
 
 const test1 = () => {
     try {
-        console.log(hison.utils.getSysDate(AllDateTimeFormat['MMMM dd yyyy hh:mm:ss']));
-        console.log(hison.utils.getNumberFormat(1234.1234));
-        console.log(hison.utils.getNumberFormat(1234.1234, '#,###.#####'));
-        console.log(hison.utils.getNumberFormat(1234.1234, '#.00000'));
-        console.log(hison.utils.getNumberFormat(0.1234, '0.00000'));
-        console.log(hison.utils.getNumberFormat(0.1234, '#.#####'));
+        console.log(hison.utils.formatDateDash(new Date));
+        console.log(hison.utils.formatDateCompact(new Date));
+        console.log(hison.utils.getDateWithFormat(new Date, AllDateTimeFormat['MMMM dd yyyy hh:mm:ss']));
     } catch (error) {
         console.log(error)
     }
@@ -34,7 +31,7 @@ const test2 = () => {
         console.log(hison.utils.getDateWithFormat('20240229'))
         console.log(hison.utils.getDateWithFormat('2025-03-19'))
         console.log(hison.utils.getDateWithFormat('2025-03'))
-        console.log(hison.utils.getDateWithFormat('2024/02/29 111166'))
+        console.log(hison.utils.getDateWithFormat('2024/02/29 111133'))
     } catch (error) {
         console.log(error)
     }
