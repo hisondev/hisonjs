@@ -1,6 +1,6 @@
 {
   "name": "hisonjs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "hisondev's client-side development support module",
   "main": "dist/Hisonjs.bundle.js",
   "module": "dist/Hisonjs.bundle.js",
