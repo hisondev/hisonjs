@@ -484,6 +484,40 @@ export const getUtils = () => {
             return true;
         },
         /**
+         * Converts a Date object to a string in 'YYYY-MM-DD' format.
+         * 
+         * Pads month and day values with leading zeros if necessary.
+         * This function is locale-independent and does not rely on toLocaleDateString.
+         * @param date A valid JavaScript Date object.
+         * @returns A string representing the date in 'YYYY-MM-DD' format.
+         * @example
+         * formatDateDash(new Date(2025, 5, 3)); // "2025-06-03"
+         * formatDateDash(new Date(2024, 0, 9)); // "2024-01-09"
+         */
+        formatDateDash(date: Date) {
+        const y = date.getFullYear()
+        const m = String(date.getMonth() + 1).padStart(2, '0')
+        const d = String(date.getDate()).padStart(2, '0')
+        return `${y}-${m}-${d}`
+        },
+        /**
+         * Converts a Date object to a compact string in 'YYYYMMDD' format.
+         * 
+         * Pads month and day values with leading zeros if necessary.
+         * Useful for filenames, database keys, or numeric date sorting.
+         * @param date A valid JavaScript Date object.
+         * @returns A string representing the date in 'YYYYMMDD' format.
+         * @example
+         * formatDateCompact(new Date(2025, 5, 3)); // "20250603"
+         * formatDateCompact(new Date(2024, 0, 9)); // "20240109"
+         */
+        formatDateCompact(date: Date) {
+        const y = date.getFullYear()
+        const m = String(date.getMonth() + 1).padStart(2, '0')
+        const d = String(date.getDate()).padStart(2, '0')
+        return `${y}${m}${d}`
+        },
+        /**
          * Extracts and returns the year, month, and day from a given date.
          *
          * - If the input is a `Date` object, it extracts the year, month, and day.
@@ -835,9 +869,16 @@ export const getUtils = () => {
          * getDateWithFormat("2025-02-05 14:30:45", AllDateTimeFormat[MMMM dd, yyyy]); // "February 5, 2025"
          * getDateWithFormat({ y: 2025, M: 2, d: 5 }, AllDateTimeFormat[MM-dd-yyyy]); // "02-05-2025"
          */
-        getDateWithFormat(datetime: DateTimeObject | DateObject | string,
+        getDateWithFormat(datetime: Date | DateTimeObject | DateObject | string,
             format?: keyof typeof AllDateTimeFormat): string {
-            const datetimeObj = hisonCore.utils.isObject(datetime) ? hisonCore.utils.deepCopyObject(datetime) : hisonCore.utils.getDatetimeObject(datetime as string);
+            let datetimeObj;
+            if (datetime instanceof Date && !isNaN(datetime.getTime())) {
+                datetimeObj = hisonCore.utils.getDatetimeObject(datetime)
+            }
+            else {
+                datetimeObj = hisonCore.utils.isObject(datetime) ? hisonCore.utils.deepCopyObject(datetime) : hisonCore.utils.getDatetimeObject(datetime as string);
+            }
+
             if (!format) {
                 if (datetimeObj.h === undefined || datetimeObj.h === null) {
                     format = customOption.utils.dateFormat;
