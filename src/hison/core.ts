@@ -245,6 +245,8 @@ export const createHison = (): Hison => {
             isEmail(str: string): boolean { return hisonCore.utils.isEmail(str) },
             isURL(str: string): boolean { return hisonCore.utils.isURL(str) },
             isValidMask(str: string, mask: string): boolean { return hisonCore.utils.isValidMask(str, mask) },
+            formatDateDash(date: Date): string { return hisonCore.utils.formatDateDash(date) },
+            formatDateCompact(date: Date): string { return hisonCore.utils.formatDateCompact(date) },
             getDateObject(date: Date | string): DateObject { return hisonCore.utils.getDateObject(date) },
             getTimeObject(time: Date | string): TimeObject { return hisonCore.utils.getTimeObject(time) },
             getDatetimeObject(datetime: Date | string): DateTimeObject | null { return hisonCore.utils.getDatetimeObject(datetime) },
