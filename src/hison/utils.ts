@@ -340,42 +340,43 @@ export const getUtils = () => {
          * Checks if the given value is a valid time.
          *
          * - Accepts a `TimeObject` or a string representation of a time.
-         * - Returns `true` if the time consists of valid hours, minutes, and seconds.
-         * - Returns `false` if any part of the time is invalid or improperly formatted.
+         * - Recognizes both standard times (00:00:00 ~ 23:59:59) and the special ISO 8601 time `24:00:00`.
+         * - Returns `true` if the time components (hours, minutes, seconds) are within valid ranges.
+         * - Returns `false` if any part is invalid, missing, or improperly formatted.
          *
-         * @param time The value to be checked (as a `TimeObject` or string).
+         * @param time The value to be checked (as a `TimeObject` or a parsable string).
          * @returns `true` if the value is a valid time, otherwise `false`.
          *
          * @example
          * isTime("14:30:59"); // true
          * isTime({ h: 23, m: 59, s: 59 }); // true
+         * isTime("24:00:00"); // true (ISO 8601 special case)
+         * isTime({ h: 24, m: 0, s: 0 }); // true
+         * isTime("24:00:01"); // false (invalid seconds with hour 24)
          * isTime("25:00:00"); // false (invalid hour)
          * isTime("12:60:00"); // false (invalid minute)
          * isTime("12:30:61"); // false (invalid second)
          */
         isTime(time: TimeObject | string | null): boolean {
-            if(!time) return false;
-            const timeObj: TimeObject = hisonCore.utils.isObject(time) ? time as TimeObject : hisonCore.utils.getTimeObject(time as string);
-    
-            let hh: number | null = timeObj.h;
-            let mm: number | null = timeObj.m;
-            let ss: number | null = timeObj.s;
-    
-            if (!hisonCore.utils.isInteger(hh) || !hisonCore.utils.isInteger(mm) || !hisonCore.utils.isInteger(ss)) {
-                return false;
-            }
-            /*
-            hh = parseInt(hh, 10);
-            mm = parseInt(mm, 10);
-            ss = parseInt(ss, 10);
-            */
-    
-            function isValidTimePart(time: number | null, max: number): boolean {
-                if(!time) return false;
-                return !isNaN(time) && time >= 0 && time <= max;
-            }
-        
-            return isValidTimePart(hh, 23) && isValidTimePart(mm, 59) && isValidTimePart(ss, 59);
+            if (time == null) return false;
+
+            const timeObj: TimeObject = hisonCore.utils.isObject(time)
+                ? time as TimeObject
+                : hisonCore.utils.getTimeObject(time as string);
+
+            const { h, m, s } = timeObj;
+
+            // null 체크와 정수 체크를 모두 수행
+            if (
+                h == null || m == null || s == null ||
+                !Number.isInteger(h) || !Number.isInteger(m) || !Number.isInteger(s)
+            ) return false;
+
+            // 여기부터 h, m, s는 number 타입 확정
+            const isNormalTime = h >= 0 && h <= 23 && m >= 0 && m <= 59 && s >= 0 && s <= 59;
+            const isSpecialMidnight = h === 24 && m === 0 && s === 0;
+
+            return isNormalTime || isSpecialMidnight;
         },
         /**
          * Checks if the given value is a valid datetime.
@@ -491,10 +492,10 @@ export const getUtils = () => {
          * @param date A valid JavaScript Date object.
          * @returns A string representing the date in 'YYYY-MM-DD' format.
          * @example
-         * formatDateDash(new Date(2025, 5, 3)); // "2025-06-03"
-         * formatDateDash(new Date(2024, 0, 9)); // "2024-01-09"
+         * getFormatDateDash(new Date(2025, 5, 3)); // "2025-06-03"
+         * getFormatDateDash(new Date(2024, 0, 9)); // "2024-01-09"
          */
-        formatDateDash(date: Date) {
+        getFormatDateDash(date: Date) {
         const y = date.getFullYear()
         const m = String(date.getMonth() + 1).padStart(2, '0')
         const d = String(date.getDate()).padStart(2, '0')
@@ -508,10 +509,10 @@ export const getUtils = () => {
          * @param date A valid JavaScript Date object.
          * @returns A string representing the date in 'YYYYMMDD' format.
          * @example
-         * formatDateCompact(new Date(2025, 5, 3)); // "20250603"
-         * formatDateCompact(new Date(2024, 0, 9)); // "20240109"
+         * getFormatDateCompact(new Date(2025, 5, 3)); // "20250603"
+         * getFormatDateCompact(new Date(2024, 0, 9)); // "20240109"
          */
-        formatDateCompact(date: Date) {
+        getFormatDateCompact(date: Date) {
         const y = date.getFullYear()
         const m = String(date.getMonth() + 1).padStart(2, '0')
         const d = String(date.getDate()).padStart(2, '0')
@@ -659,7 +660,49 @@ export const getUtils = () => {
             }
             return null;
         },
-    
+        /**
+         * Parses a supported date or datetime string and returns a JavaScript `Date` object.
+         *
+         * - Supports formats:
+         *   - `"YYYY-MM-DD"`
+         *   - `"YYYY/MM/DD"`
+         *   - `"YYYYMMDD"`
+         *   - `"YYYY-MM-DD HH:MM:SS"`
+         *   - `"YYYY/MM/DD HH:MM:SS"`
+         *   - `"YYYYMMDDHHMMSS"`
+         * - If the input is already a valid `Date` object, it returns it as-is.
+         * - If parsing fails, it returns `null`.
+         *
+         * @param datetime A date string, datetime string, or `Date` object.
+         * @returns A `Date` object representing the parsed datetime, or `null` if parsing fails.
+         *
+         * @example
+         * getJSDateObject("2024-02-05"); // new Date(2024, 1, 5)
+         * getJSDateObject("20240205"); // new Date(2024, 1, 5)
+         * getJSDateObject("2024-02-05 14:30:45"); // new Date(2024, 1, 5, 14, 30, 45)
+         * getJSDateObject("20240205143045"); // new Date(2024, 1, 5, 14, 30, 45)
+         * getJSDateObject(new Date()); // returns the same Date object
+         */
+        getJSDateObject(datetime: string | Date): Date | null {
+            if (datetime instanceof Date && !isNaN(datetime.getTime())) {
+                return datetime
+            }
+
+            datetime = hisonCore.utils.getToString(datetime).trim()
+
+            const { y, M, d } = hisonCore.utils.getDateObject(datetime)
+            const { h, m, s } = hisonCore.utils.getTimeObject(datetime)
+
+            // 날짜 파싱이 실패했을 경우
+            if (y === null || M === null || d === null) return null
+
+            // 시간 파싱 실패 시에는 0 처리
+            const hours = h ?? 0
+            const minutes = m ?? 0
+            const seconds = s ?? 0
+
+            return new Date(y, M - 1, d, hours, minutes, seconds)
+        },
         /**
          * Adds a specified amount of time to a given date or datetime.
          *
