@@ -465,10 +465,10 @@ export interface Utils {
      * @param date A valid JavaScript Date object.
      * @returns A string representing the date in 'YYYY-MM-DD' format.
      * @example
-     * formatDateDash(new Date(2025, 5, 3)); // "2025-06-03"
-     * formatDateDash(new Date(2024, 0, 9)); // "2024-01-09"
+     * getFormatDateDash(new Date(2025, 5, 3)); // "2025-06-03"
+     * getFormatDateDash(new Date(2024, 0, 9)); // "2024-01-09"
      */
-    formatDateDash(date: Date): string;
+    getFormatDateDash(date: Date): string;
     /**
      * Converts a Date object to a compact string in 'YYYYMMDD' format.
      * 
@@ -477,10 +477,10 @@ export interface Utils {
      * @param date A valid JavaScript Date object.
      * @returns A string representing the date in 'YYYYMMDD' format.
      * @example
-     * formatDateCompact(new Date(2025, 5, 3)); // "20250603"
-     * formatDateCompact(new Date(2024, 0, 9)); // "20240109"
+     * getFormatDateCompact(new Date(2025, 5, 3)); // "20250603"
+     * getFormatDateCompact(new Date(2024, 0, 9)); // "20240109"
      */
-    formatDateCompact(date: Date): string;
+    getFormatDateCompact(date: Date): string;
     /**
      * Extracts and returns the year, month, and day from a given date.
      *
@@ -544,6 +544,30 @@ export interface Utils {
      * getDatetimeObject("invalid"); // null
      */
     getDatetimeObject(datetime: Date | string): DateTimeObject | null;
+    /**
+     * Parses a supported date or datetime string and returns a JavaScript `Date` object.
+     *
+     * - Supports formats:
+     *   - `"YYYY-MM-DD"`
+     *   - `"YYYY/MM/DD"`
+     *   - `"YYYYMMDD"`
+     *   - `"YYYY-MM-DD HH:MM:SS"`
+     *   - `"YYYY/MM/DD HH:MM:SS"`
+     *   - `"YYYYMMDDHHMMSS"`
+     * - If the input is already a valid `Date` object, it returns it as-is.
+     * - If parsing fails, it returns `null`.
+     *
+     * @param datetime A date string, datetime string, or `Date` object.
+     * @returns A `Date` object representing the parsed datetime, or `null` if parsing fails.
+     *
+     * @example
+     * getJSDateObject("2024-02-05"); // new Date(2024, 1, 5)
+     * getJSDateObject("20240205"); // new Date(2024, 1, 5)
+     * getJSDateObject("2024-02-05 14:30:45"); // new Date(2024, 1, 5, 14, 30, 45)
+     * getJSDateObject("20240205143045"); // new Date(2024, 1, 5, 14, 30, 45)
+     * getJSDateObject(new Date()); // returns the same Date object
+     */
+    getJSDateObject(datetime: string | Date): Date | null;
     /**
      * Adds a specified amount of time to a given date or datetime.
      *
