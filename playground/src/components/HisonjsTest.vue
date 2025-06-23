@@ -17,9 +17,10 @@ const hison: Hison = (proxy as any)!.$hison;
 
 const test1 = () => {
     try {
-        console.log(hison.utils.formatDateDash(new Date));
-        console.log(hison.utils.formatDateCompact(new Date));
+        console.log('isTime',hison.utils.isTime('12:60:59'));
+        console.log(hison.utils.getFormatDateCompact(new Date));
         console.log(hison.utils.getDateWithFormat(new Date, AllDateTimeFormat['MMMM dd yyyy hh:mm:ss']));
+        console.log(hison.utils.getJSDateObject(hison.utils.getFormatDateCompact(new Date)));
     } catch (error) {
         console.log(error)
     }
