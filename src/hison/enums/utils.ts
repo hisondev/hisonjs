@@ -74,8 +74,14 @@ export enum DateFormat {
  * Time format including hours, minutes, and seconds
  */
 export enum TimeFormat {
-    'hh:mm:ss' = 'hh:mm:ss',
+    'hhmm' = 'hhmm',
+    'hh:mm' = 'hh:mm',
+    'HHmm' = 'HHmm',
+    'HH:mm' = 'HH:mm',
     'hhmmss' = 'hhmmss',
+    'hh:mm:ss' = 'hh:mm:ss',
+    'HHmmss' = 'HHmmss',
+    'HH:mm:ss' = 'HH:mm:ss',
 }
 /**
  * Date and time format including year, month, day, hour, minute, and second
@@ -119,6 +125,45 @@ export enum DateTimeFormat {
     'dd MMMM yyyy hh:mm:ss' = 'dd MMMM yyyy hh:mm:ss',
     'dd MMM yyyy hhmmss' = 'dd MMM yyyy hhmmss',
     'dd MMM yyyy hh:mm:ss' = 'dd MMM yyyy hh:mm:ss',
+
+    'yyyyMMdd HHmmss' = 'yyyyMMdd HHmmss',
+    'yyyyMMdd HH:mm:ss' = 'yyyyMMdd HH:mm:ss',
+    'yyyy-MM-dd HHmmss' = 'yyyy-MM-dd HHmmss',
+    'yyyy-MM-dd HH:mm:ss' = 'yyyy-MM-dd HH:mm:ss',
+    'yyyy/MM/dd HHmmss' = 'yyyy/MM/dd HHmmss',
+    'yyyy/MM/dd HH:mm:ss' = 'yyyy/MM/dd HH:mm:ss',
+    'yyyy. MM. dd HHmmss' = 'yyyy. MM. dd HHmmss',
+    'yyyy. MM. dd HH:mm:ss' = 'yyyy. MM. dd HH:mm:ss',
+    'yyyy MM dd HHmmss' = 'yyyy MM dd HHmmss',
+    'yyyy MM dd HH:mm:ss' = 'yyyy MM dd HH:mm:ss',
+    'MMddyyyy HHmmss' = 'MMddyyyy HHmmss',
+    'MMddyyyy HH:mm:ss' = 'MMddyyyy HH:mm:ss',
+    'MM-dd-yyyy HHmmss' = 'MM-dd-yyyy HHmmss',
+    'MM-dd-yyyy HH:mm:ss' = 'MM-dd-yyyy HH:mm:ss',
+    'MM/dd/yyyy HHmmss' = 'MM/dd/yyyy HHmmss',
+    'MM/dd/yyyy HH:mm:ss' = 'MM/dd/yyyy HH:mm:ss',
+    'MM. dd. yyyy HHmmss' = 'MM. dd. yyyy HHmmss',
+    'MM. dd. yyyy HH:mm:ss' = 'MM. dd. yyyy HH:mm:ss',
+    'MMMM dd yyyy HHmmss' = 'MMMM dd yyyy HHmmss',
+    'MMMM dd yyyy HH:mm:ss' = 'MMMM dd yyyy HH:mm:ss',
+    'MMMM dd, yyyy HHmmss' = 'MMMM dd, yyyy HHmmss',
+    'MMMM dd, yyyy HH:mm:ss' = 'MMMM dd, yyyy HH:mm:ss',
+    'MMM dd yyyy HHmmss' = 'MMM dd yyyy HHmmss',
+    'MMM dd yyyy HH:mm:ss' = 'MMM dd yyyy HH:mm:ss',
+    'MMM dd, yyyy HHmmss' = 'MMM dd, yyyy HHmmss',
+    'MMM dd, yyyy HH:mm:ss' = 'MMM dd, yyyy HH:mm:ss',
+    'ddMMyyyy HHmmss' = 'ddMMyyyy HHmmss',
+    'ddMMyyyy HH:mm:ss' = 'ddMMyyyy HH:mm:ss',
+    'dd-MM-yyyy HHmmss' = 'dd-MM-yyyy HHmmss',
+    'dd-MM-yyyy HH:mm:ss' = 'dd-MM-yyyy HH:mm:ss',
+    'dd/MM/yyyy HHmmss' = 'dd/MM/yyyy HHmmss',
+    'dd/MM/yyyy HH:mm:ss' = 'dd/MM/yyyy HH:mm:ss',
+    'dd. MM. yyyy HHmmss' = 'dd. MM. yyyy HHmmss',
+    'dd. MM. yyyy HH:mm:ss' = 'dd. MM. yyyy HH:mm:ss',
+    'dd MMMM yyyy HHmmss' = 'dd MMMM yyyy HHmmss',
+    'dd MMMM yyyy HH:mm:ss' = 'dd MMMM yyyy HH:mm:ss',
+    'dd MMM yyyy HHmmss' = 'dd MMM yyyy HHmmss',
+    'dd MMM yyyy HH:mm:ss' = 'dd MMM yyyy HH:mm:ss',
 }
 /**
  * Year format
