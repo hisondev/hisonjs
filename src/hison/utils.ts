@@ -644,9 +644,12 @@ export const getUtils = () => {
             if (typeof datetime === 'string') {
                 datetime = hisonCore.utils.getToString(datetime);
                 const datetimeArr = datetime.split(' ');
-                const dateObj = datetimeArr[0];
-                const timeObj = datetimeArr.length > 1 ? datetimeArr[1] as string : '';
-                return Object.assign({}, hisonCore.utils.getDateObject(dateObj), hisonCore.utils.getTimeObject(timeObj));
+                const dateStr = datetimeArr[0];
+                if (dateStr.includes(':') || dateStr.length === 6) {
+                    return Object.assign({}, hisonCore.utils.getDateObject(hisonCore.utils.getSysDate('yyyy-MM-dd')), hisonCore.utils.getTimeObject(dateStr));
+                }
+                const timeStr = datetimeArr.length > 1 ? datetimeArr[1] as string : '';
+                return Object.assign({}, hisonCore.utils.getDateObject(dateStr), hisonCore.utils.getTimeObject(timeStr));
             }
             if (datetime instanceof Date) {
                 return {
@@ -931,18 +934,33 @@ export const getUtils = () => {
                 }
             }
     
-            const y = datetimeObj.y.toString();
-            const M = (datetimeObj.M || 1).toString().padStart(2, '0');
-            const d = (datetimeObj.d || 1).toString().padStart(2, '0');
-            const h = (datetimeObj.h || 0).toString().padStart(2, '0');
-            const m = (datetimeObj.m || 0).toString().padStart(2, '0');
-            const s = (datetimeObj.s || 0).toString().padStart(2, '0');
+            let y = datetimeObj.y.toString();
+            let M = (datetimeObj.M || 1).toString().padStart(2, '0');
+            let d = (datetimeObj.d || 1).toString().padStart(2, '0');
+            let H = (datetimeObj.h || 0).toString().padStart(2, '0');
+            let h = ((datetimeObj.h !== 0) && ((datetimeObj.h % 12) === 0) ? 12 : (datetimeObj.h % 12)).toString().padStart(2, '0');
+            let m = (datetimeObj.m || 0).toString().padStart(2, '0');
+            let s = (datetimeObj.s || 0).toString().padStart(2, '0');
+            let MMMM, MMM;
     
-            if (!hisonCore.utils.isDate(y + M + d)) throw new Error(`ER0009 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-            if (datetimeObj.h && !hisonCore.utils.isTime(h + m + s)) throw new Error(`ER0010 Please enter a valid date.\n=>${JSON.stringify(datetime)}`);
-    
-            const MMMM = hisonCore.utils.getMonthName(datetimeObj.M);
-            const MMM = hisonCore.utils.getMonthName(datetimeObj.M, false);
+            if (!hisonCore.utils.isDate(y + M + d)) {
+                y = hisonCore.utils.getSysYear('yyyy')
+                M = hisonCore.utils.getSysMonth('MM')
+                d = hisonCore.utils.getSysDay('dd')
+                MMMM = hisonCore.utils.getMonthName(hisonCore.utils.getSysMonth('M'));
+                MMM = hisonCore.utils.getMonthName(hisonCore.utils.getSysMonth('M'), false);
+            }
+            else {
+                MMMM = hisonCore.utils.getMonthName(datetimeObj.M);
+                MMM = hisonCore.utils.getMonthName(datetimeObj.M, false);
+            }
+
+            if (!hisonCore.utils.isTime(H + m + s)) {
+                H = '00'
+                h = '00'
+                m = '00'
+                s = '00'
+            }
     
             switch (format) {
                 case 'yyyy':
@@ -1020,6 +1038,57 @@ export const getUtils = () => {
                     return y + ' ' + M + ' ' + d + ' ' + h + ':' + m;
                 case 'yyyy MM dd hh:mm:ss':
                     return y + ' ' + M + ' ' + d + ' ' + h + ':' + m + ':' + s;
+        
+                case 'yyyyMMdd HH':
+                    return y + M + d + ' ' + H;
+                case 'yyyyMMdd HHmm':
+                    return y + M + d + ' ' + H + m;
+                case 'yyyyMMdd HHmmss':
+                    return y + M + d + ' ' + H + m + s;
+                case 'yyyyMMdd HH:mm':
+                    return y + M + d + ' ' + H + ':' + m;
+                case 'yyyyMMdd HH:mm:ss':
+                    return y + M + d + ' ' + H + ':' + m + ':' + s;
+                case 'yyyy-MM-dd HH':
+                    return y + '-' + M + '-' + d + ' ' + H;
+                case 'yyyy-MM-dd HHmm':
+                    return y + '-' + M + '-' + d + ' ' + H + m;
+                case 'yyyy-MM-dd HHmmss':
+                    return y + '-' + M + '-' + d + ' ' + H + m + s;
+                case 'yyyy-MM-dd HH:mm':
+                    return y + '-' + M + '-' + d + ' ' + H + ':' + m;
+                case 'yyyy-MM-dd HH:mm:ss':
+                    return y + '-' + M + '-' + d + ' ' + H + ':' + m + ':' + s;
+                case 'yyyy/MM/dd HH':
+                    return y + '/' + M + '/' + d + ' ' + H;
+                case 'yyyy/MM/dd HHmm':
+                    return y + '/' + M + '/' + d + ' ' + H + m;
+                case 'yyyy/MM/dd HHmmss':
+                    return y + '/' + M + '/' + d + ' ' + H + m + s;
+                case 'yyyy/MM/dd HH:mm':
+                    return y + '/' + M + '/' + d + ' ' + H + ':' + m;
+                case 'yyyy/MM/dd HH:mm:ss':
+                    return y + '/' + M + '/' + d + ' ' + H + ':' + m + ':' + s;
+                case 'yyyy. MM. dd HH':
+                    return y + '. ' + M + '. ' + d + ' ' + H;
+                case 'yyyy. MM. dd HHmm':
+                    return y + '. ' + M + '. ' + d + ' ' + H + m;
+                case 'yyyy. MM. dd HHmmss':
+                    return y + '. ' + M + '. ' + d + ' ' + H + m + s;
+                case 'yyyy. MM. dd HH:mm':
+                    return y + '. ' + M + '. ' + d + ' ' + H + ':' + m;
+                case 'yyyy. MM. dd HH:mm:ss':
+                    return y + '. ' + M + '. ' + d + ' ' + H + ':' + m + ':' + s;
+                case 'yyyy MM dd HH':
+                    return y + ' ' + M + ' ' + d + ' ' + H;
+                case 'yyyy MM dd HHmm':
+                    return y + ' ' + M + ' ' + d + ' ' + H + m;
+                case 'yyyy MM dd HHmmss':
+                    return y + ' ' + M + ' ' + d + ' ' + H + m + s;
+                case 'yyyy MM dd HH:mm':
+                    return y + ' ' + M + ' ' + d + ' ' + H + ':' + m;
+                case 'yyyy MM dd HH:mm:ss':
+                    return y + ' ' + M + ' ' + d + ' ' + H + ':' + m + ':' + s;
         
                 case 'MMyyyy':
                     return M + y;
@@ -1137,6 +1206,87 @@ export const getUtils = () => {
                     return MMM + ' ' + d + ', ' + y + ' ' + h + ':' + m;
                 case 'MMM dd, yyyy hh:mm:ss':
                     return MMM + ' ' + d + ', ' + y + ' ' + h + ':' + m + ':' + s;
+
+                case 'MMddyyyy HH':
+                    return M + d + y + ' ' + H;
+                case 'MMddyyyy HHmm':
+                    return M + d + y + ' ' + H + m;
+                case 'MMddyyyy HHmmss':
+                    return M + d + y + ' ' + H + m + s;
+                case 'MMddyyyy HH:mm':
+                    return M + d + y + ' ' + H + ':' + m;
+                case 'MMddyyyy HH:mm:ss':
+                    return M + d + y + ' ' + H + ':' + m + ':' + s;
+                case 'MM-dd-yyyy HH':
+                    return M + '-' + d + '-' + y + ' ' + H;
+                case 'MM-dd-yyyy HHmm':
+                    return M + '-' + d + '-' + y + ' ' + H + m;
+                case 'MM-dd-yyyy HHmmss':
+                    return M + '-' + d + '-' + y + ' ' + H + m + s;
+                case 'MM-dd-yyyy HH:mm':
+                    return M + '-' + d + '-' + y + ' ' + H + ':' + m;
+                case 'MM-dd-yyyy HH:mm:ss':
+                    return M + '-' + d + '-' + y + ' ' + H + ':' + m + ':' + s;
+                case 'MM/dd/yyyy HH':
+                    return M + '/' + d + '/' + y + ' ' + H;
+                case 'MM/dd/yyyy HHmm':
+                    return M + '/' + d + '/' + y + ' ' + H + m;
+                case 'MM/dd/yyyy HHmmss':
+                    return M + '/' + d + '/' + y + ' ' + H + m + s;
+                case 'MM/dd/yyyy HH:mm':
+                    return M + '/' + d + '/' + y + ' ' + H + ':' + m;
+                case 'MM/dd/yyyy HH:mm:ss':
+                    return M + '/' + d + '/' + y + ' ' + H + ':' + m + ':' + s;
+                case 'MM. dd. yyyy HH':
+                    return M + '. ' + d + '. ' + y + ' ' + H;
+                case 'MM. dd. yyyy HHmm':
+                    return M + '. ' + d + '. ' + y + ' ' + H + m;
+                case 'MM. dd. yyyy HHmmss':
+                    return M + '. ' + d + '. ' + y + ' ' + H + m + s;
+                case 'MM. dd. yyyy HH:mm':
+                    return M + '. ' + d + '. ' + y + ' ' + H + ':' + m;
+                case 'MM. dd. yyyy HH:mm:ss':
+                    return M + '. ' + d + '. ' + y + ' ' + H + ':' + m + ':' + s;
+                case 'MMMM dd yyyy HH':
+                    return MMMM + ' ' + d + ' ' + y + ' ' + H;
+                case 'MMMM dd yyyy HHmm':
+                    return MMMM + ' ' + d + ' ' + y + ' ' + H + m;
+                case 'MMMM dd yyyy HHmmss':
+                    return MMMM + ' ' + d + ' ' + y + ' ' + H + m + s;
+                case 'MMMM dd yyyy HH:mm':
+                    return MMMM + ' ' + d + ' ' + y + ' ' + H + ':' + m;
+                case 'MMMM dd yyyy HH:mm:ss':
+                    return MMMM + ' ' + d + ' ' + y + ' ' + H + ':' + m + ':' + s;
+                case 'MMMM dd, yyyy HH':
+                    return MMMM + ' ' + d + ', ' + y + ' ' + H;
+                case 'MMMM dd, yyyy HHmm':
+                    return MMMM + ' ' + d + ', ' + y + ' ' + H + m;
+                case 'MMMM dd, yyyy HHmmss':
+                    return MMMM + ' ' + d + ', ' + y + ' ' + H + m + s;
+                case 'MMMM dd, yyyy HH:mm':
+                    return MMMM + ' ' + d + ', ' + y + ' ' + H + ':' + m;
+                case 'MMMM dd, yyyy HH:mm:ss':
+                    return MMMM + ' ' + d + ', ' + y + ' ' + H + ':' + m + ':' + s;
+                case 'MMM dd yyyy HH':
+                    return MMM + ' ' + d + ' ' + y + ' ' + H;
+                case 'MMM dd yyyy HHmm':
+                    return MMM + ' ' + d + ' ' + y + ' ' + H + m;
+                case 'MMM dd yyyy HHmmss':
+                    return MMM + ' ' + d + ' ' + y + ' ' + H + m + s;
+                case 'MMM dd yyyy HH:mm':
+                    return MMM + ' ' + d + ' ' + y + ' ' + H + ':' + m;
+                case 'MMM dd yyyy HH:mm:ss':
+                    return MMM + ' ' + d + ' ' + y + ' ' + H + ':' + m + ':' + s;
+                case 'MMM dd, yyyy HH':
+                    return MMM + ' ' + d + ', ' + y + ' ' + H;
+                case 'MMM dd, yyyy HHmm':
+                    return MMM + ' ' + d + ', ' + y + ' ' + H + m;
+                case 'MMM dd, yyyy HHmmss':
+                    return MMM + ' ' + d + ', ' + y + ' ' + H + m + s;
+                case 'MMM dd, yyyy HH:mm':
+                    return MMM + ' ' + d + ', ' + y + ' ' + H + ':' + m;
+                case 'MMM dd, yyyy HH:mm:ss':
+                    return MMM + ' ' + d + ', ' + y + ' ' + H + ':' + m + ':' + s;
         
                 case 'ddMMyyyy':
                     return d + M + y;
@@ -1211,6 +1361,84 @@ export const getUtils = () => {
                     return d + ' ' + MMM + ' ' + y + ' ' + h + ':' + m;
                 case 'dd MMM yyyy hh:mm:ss':
                     return d + ' ' + MMM + ' ' + y + ' ' + h + ':' + m + ':' + s;
+
+                case 'ddMMyyyy HH':
+                    return d + M + y + ' ' + H;
+                case 'ddMMyyyy HHmm':
+                    return d + M + y + ' ' + H + m;
+                case 'ddMMyyyy HHmmss':
+                    return d + M + y + ' ' + H + m + s;
+                case 'ddMMyyyy HH:mm':
+                    return d + M + y + ' ' + H + ':' + m;
+                case 'ddMMyyyy HH:mm:ss':
+                    return d + M + y + ' ' + H + ':' + m + ':' + s;
+                case 'dd-MM-yyyy HH':
+                    return d + '-' + M + '-' + y + ' ' + H;
+                case 'dd-MM-yyyy HHmm':
+                    return d + '-' + M + '-' + y + ' ' + H + m;
+                case 'dd-MM-yyyy HHmmss':
+                    return d + '-' + M + '-' + y + ' ' + H + m + s;
+                case 'dd-MM-yyyy HH:mm':
+                    return d + '-' + M + '-' + y + ' ' + H + ':' + m;
+                case 'dd-MM-yyyy HH:mm:ss':
+                    return d + '-' + M + '-' + y + ' ' + H + ':' + m + ':' + s;
+                case 'dd/MM/yyyy HH':
+                    return d + '/' + M + '/' + y + ' ' + H;
+                case 'dd/MM/yyyy HHmm':
+                    return d + '/' + M + '/' + y + ' ' + H + m;
+                case 'dd/MM/yyyy HHmmss':
+                    return d + '/' + M + '/' + y + ' ' + H + m + s;
+                case 'dd/MM/yyyy HH:mm':
+                    return d + '/' + M + '/' + y + ' ' + H + ':' + m;
+                case 'dd/MM/yyyy HH:mm:ss':
+                    return d + '/' + M + '/' + y + ' ' + H + ':' + m + ':' + s;
+                case 'dd. MM. yyyy HH':
+                    return d + '. ' + M + '. ' + y + ' ' + H;
+                case 'dd. MM. yyyy HHmm':
+                    return d + '. ' + M + '. ' + y + ' ' + H + m;
+                case 'dd. MM. yyyy HHmmss':
+                    return d + '. ' + M + '. ' + y + ' ' + H + m + s;
+                case 'dd. MM. yyyy HH:mm':
+                    return d + '. ' + M + '. ' + y + ' ' + H + ':' + m;
+                case 'dd. MM. yyyy HH:mm:ss':
+                    return d + '. ' + M + '. ' + y + ' ' + H + ':' + m + ':' + s;
+                case 'dd MMMM yyyy HH':
+                    return d + ' ' + MMMM + ' ' + y + ' ' + H;
+                case 'dd MMMM yyyy HHmm':
+                    return d + ' ' + MMMM + ' ' + y + ' ' + H + m;
+                case 'dd MMMM yyyy HHmmss':
+                    return d + ' ' + MMMM + ' ' + y + ' ' + H + m + s;
+                case 'dd MMMM yyyy HH:mm':
+                    return d + ' ' + MMMM + ' ' + y + ' ' + H + ':' + m;
+                case 'dd MMMM yyyy HH:mm:ss':
+                    return d + ' ' + MMMM + ' ' + y + ' ' + H + ':' + m + ':' + s;
+                case 'dd MMM yyyy HH':
+                    return d + ' ' + MMM + ' ' + y + ' ' + H;
+                case 'dd MMM yyyy HHmm':
+                    return d + ' ' + MMM + ' ' + y + ' ' + H + m;
+                case 'dd MMM yyyy HHmmss':
+                    return d + ' ' + MMM + ' ' + y + ' ' + H + m + s;
+                case 'dd MMM yyyy HH:mm':
+                    return d + ' ' + MMM + ' ' + y + ' ' + H + ':' + m;
+                case 'dd MMM yyyy HH:mm:ss':
+                    return d + ' ' + MMM + ' ' + y + ' ' + H + ':' + m + ':' + s;
+                    
+                case 'hhmm':
+                    return h + m;
+                case 'hh:mm':
+                    return h + ':' + m;
+                case 'HHmm':
+                    return H + m;
+                case 'HH:mm':
+                    return H + ':' + m;
+                case 'hhmmss':
+                    return h + m + s;
+                case 'hh:mm:ss':
+                    return h + ':' + m + ':' + s;
+                case 'HHmmss':
+                    return H + m + s;
+                case 'HH:mm:ss':
+                    return H + ':' + m + ':' + s;
         
                 default:
                     throw new Error(`ER0010 Invalid format.\n=>${JSON.stringify(format)}`);
