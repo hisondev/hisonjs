@@ -18,22 +18,22 @@ export const utilsOption = {
      * This format is used throughout the `hisondev` solution for parsing 
      * and formatting time values.
      *
-     * - Default value: `'hh:mm:ss'`
+     * - Default value: `'HH:mm:ss'`
      * - Example output: `'14:30:15'` (for 2:30:15 PM)
      * - Can be modified using `setTimeFormat(format: string)`.
      */
-    timeFormat : TimeFormat['hh:mm:ss'],
+    timeFormat : TimeFormat['HH:mm:ss'],
     /**
      * The default format for displaying date and time.
      *
      * This format is used throughout the `hisondev` solution for parsing 
      * and formatting datetime values.
      *
-     * - Default value: `'yyyy-MM-dd hh:mm:ss'`
+     * - Default value: `'yyyy-MM-dd HH:mm:ss'`
      * - Example output: `'2025-02-04 14:30:15'` (for February 4, 2025, 2:30:15 PM)
      * - Can be modified using `setDatetimeFormat(format: string)`.
      */
-    datetimeFormat : DateTimeFormat['yyyy-MM-dd hh:mm:ss'],
+    datetimeFormat : DateTimeFormat['yyyy-MM-dd HH:mm:ss'],
     /**
      * The default format for displaying the year.
      *
