@@ -1,5 +1,8 @@
 # hisonjs
 
+More detailed information can be found on the this.
+[Homepage](https://hisondev.github.io/)
+
 [![npm version](https://badge.fury.io/js/hisonjs.svg)](https://badge.fury.io/js/hisonjs)
 
 **hisonjs** is a powerful client-side library designed to be used with the **hisondev** backend solution for Java Spring. It provides robust utilities, security enhancements, structured data modeling, and API communication modules. 
