@@ -160,7 +160,7 @@ export interface HisonCore {
      *
      * @example
      * // Execute security features for the Hison instance
-     * shield.excute(hison);
+     * shield.execute(hison);
      *
      * @example
      * // Set a custom action when developer tools are detected
@@ -845,7 +845,7 @@ export interface Hison extends HisonCore{
      * ### Related Property
      * - **`shieldURL`**: Defines the security enforcement URL.
      *   - Default: `""`
-     *   - Used in `shield.excute(hison: Hison)` to validate URL access.
+     *   - Used in `shield.execute(hison: Hison)` to validate URL access.
      *
      * @param str The new security service URL.
      */
@@ -863,7 +863,7 @@ export interface Hison extends HisonCore{
      * ### Related Property
      * - **`exposeIpList`**: Defines the list of allowed IP addresses.
      *   - Default: `["0:0:0:0:0:0:0:1"]`
-     *   - Used in `shield.excute(hison: Hison)` to verify access permissions.
+     *   - Used in `shield.execute(hison: Hison)` to verify access permissions.
      *
      * @param arr An array of IP addresses to be added to the whitelist.
      */
@@ -881,7 +881,7 @@ export interface Hison extends HisonCore{
      * ### Related Property
      * - **`isFreeze`**: Determines if the `Hison` object should be frozen.
      *   - Default: `true`
-     *   - Used in `shield.excute(hison: Hison)`, where `deepFreeze(hison)` is applied.
+     *   - Used in `shield.execute(hison: Hison)`, where `deepFreeze(hison)` is applied.
      *
      * @param bool A boolean indicating whether the `Hison` instance should be frozen.
      */

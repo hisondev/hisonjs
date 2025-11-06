@@ -72,7 +72,7 @@ import type { Hison } from "./hison";
  *
  * @example
  * // Execute security features for the Hison instance
- * shield.excute(hison);
+ * shield.execute(hison);
  *
  * @example
  * // Set a custom action when developer tools are detected
@@ -152,14 +152,14 @@ export interface Shield {
      * ---
      * @example
      * // Basic usage to enforce security features
-     * hison.shield.excute(hison);
+     * hison.shield.execute(hison);
      *
      * @example
      * // Custom behavior when developer tools are opened
      * hison.setDoDetectDevTool(() => {
      *   debugger; // Force a breakpoint
      * });
-     * hison.shield.excute(hison);
+     * hison.shield.execute(hison);
      */
-    excute(hison: Hison): void;
+    execute(hison: Hison): void;
 };

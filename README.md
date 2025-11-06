@@ -17,7 +17,7 @@ More detailed information can be found on the this.
 ## 🔍 Key Features
 
 - **✨ Dynamic Configuration**: Flexibly modify global behavior using easy `hison.setXXX()` methods.
-- **🔐 Security Module**: Protect your app with `hison.shield.excute()` ➔ prevents unauthorized dev tools, URL/IP access restrictions, object immutability, etc.
+- **🔐 Security Module**: Protect your app with `hison.shield.execute()` ➔ prevents unauthorized dev tools, URL/IP access restrictions, object immutability, etc.
 - **📊 Data Modeling**: Use `DataModel` and `DataWrapper` to structure and validate frontend data just like **hisonjv's** `data-model` backend.
 - **🚜 API Communication**: Seamlessly interact with **api-link**-based Spring backend via `ApiPost`, `ApiGet`, and built-in caching (`CachingModule`).
 - **🤖 Custom Hooks**: Control API request/response lifecycle with pre/post hook functions.
@@ -79,7 +79,7 @@ hison.setExposeIpList(["192.168.1.1", "10.0.0.2"]);
 
 ### Step 2: Enforce Security
 ```typescript
-hison.shield.excute(hison);
+hison.shield.execute(hison);
 ```
 
 ### Step 3: Start Using Modules
@@ -149,7 +149,7 @@ hison.setProtocol("https://");
 hison.setDatetimeFormat("yyyy-MM-dd HH:mm:ss");
 
 // Enforce security
-hison.shield.excute(hison);
+hison.shield.execute(hison);
 
 // Use utilities
 console.log(hison.utils.getSysDate());

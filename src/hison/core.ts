@@ -297,7 +297,7 @@ export const createHison = (): Hison => {
         },
         shield : {
             isHison: true,
-            excute(hison: Hison) { hisonCore.shield.excute(hison) },
+            execute(hison: Hison) { hisonCore.shield.execute(hison) },
         },
         data: hisonCore.data,
         link: hisonCore.link,

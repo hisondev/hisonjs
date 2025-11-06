@@ -4,7 +4,7 @@ import { customOption } from "./core";
 export const getShield = () => {
     return {
         isHison: true,
-        excute(hison: Hison) {
+        execute(hison: Hison) {
             if (!hison) throw new Error("Invalid argument: 'hison' is required.");
             if (!hison.shield.isHison) throw new Error("Invalid argument: 'hison' must be an instance of Hison.");
 

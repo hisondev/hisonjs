@@ -11,7 +11,7 @@ hison.setDoDetectDevTool(() => {
     debugger;
 });
 console.log(hison.getIsPossibleOpenDevTool());
-hison.shield.excute(hison);
+hison.shield.execute(hison);
 app.config.globalProperties.$hison = hison;
 
 app.use(router).mount('#app');
