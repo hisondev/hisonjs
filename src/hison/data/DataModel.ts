@@ -943,8 +943,10 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
      * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
      *
      * ### Behavior
-     * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
+     * - If the `DataModel` has no rows, returns an empty array immediately.
+     * - Calls `_getValidRowIndex(startRow)` to validate the starting index.
      * - If `endRow` is `null`, retrieves rows from `startRow` to the last row.
+     * - If `endRow` is not `null`, calls `_getValidRowIndex(endRow)` to validate the ending index.
      * - Uses `_deepCopy()` to ensure the returned rows are independent copies.
      *
      * ### Returns
@@ -956,19 +958,19 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
      *     id: number;
      *     name: string;
      * }
-     * 
+     *
      * const dataModel = new hison.data.DataModel<User>([
      *     { id: 1, name: "Alice" },
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
-     * console.log(dataModel.getRows()); 
+     *
+     * console.log(dataModel.getRows());
      * // Output: [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
-     * 
-     * console.log(dataModel.getRows(1, 2)); 
+     *
+     * console.log(dataModel.getRows(1, 2));
      * // Output: [{ id: 2, name: "Bob" }, { id: 3, name: "Charlie" }]
-     * 
+     *
      * // Throws an error if startRow or endRow is out of bounds
      * // console.log(dataModel.getRows(5));
      * ```
@@ -979,12 +981,14 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
      * @throws {Error} If `startRow` or `endRow` is out of bounds.
      */
     getRows = (startRow: number = 0, endRow: number | null = null): T[] => {
+        if (this._rows.length === 0) return [];
+
         const sRow = this._getValidRowIndex(startRow);
-        if(sRow === 0 && endRow === null) return this._deepCopy(this._rows);
-        const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
-        const result = [];
-        for(let i = sRow; i <= eRow; i++) {
-            if(!this._rows[i]) break;
+        if (sRow === 0 && endRow === null) return this._deepCopy(this._rows);
+        const eRow = endRow !== null ? this._getValidRowIndex(endRow) : this._rows.length - 1;
+
+        const result: T[] = [];
+        for (let i = sRow; i <= eRow; i++) {
             result.push(this._deepCopy(this._rows[i]));
         }
         return result;
@@ -998,8 +1002,10 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
      * - `endRow` **(number, optional, default = `null`)**: The ending index of the row range (inclusive).
      *
      * ### Behavior
-     * - Calls `_getValidRowIndex(startRow)` and `_getValidRowIndex(endRow)` to validate row indices.
+     * - If the `DataModel` has no rows, returns a new empty `DataModel` instance.
+     * - Calls `_getValidRowIndex(startRow)` to validate the starting index.
      * - If `startRow` is `0` and `endRow` is `null`, returns a clone of the entire `DataModel`.
+     * - If `endRow` is not `null`, calls `_getValidRowIndex(endRow)` to validate the ending index.
      * - Uses `_deepCopy()` to ensure the returned rows are independent.
      * - Returns a new `DataModel` containing the selected rows.
      *
@@ -1013,7 +1019,7 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
      *     { id: 2, name: "Bob" },
      *     { id: 3, name: "Charlie" }
      * ]);
-     * 
+     *
      * const newModel = dataModel.getRowsAsDataModel(1, 2);
      * console.log(newModel.getRowCount()); // Output: 2
      * console.log(newModel.getRow(0)); // Output: { id: 2, name: "Bob" }
@@ -1029,12 +1035,14 @@ export class DataModel<T extends Record<string, any> = Record<string, any>> impl
      * @throws {Error} If `startRow` or `endRow` is out of bounds.
      */
     getRowsAsDataModel = (startRow: number = 0, endRow: number | null = null): InterfaceDataModel<T> => {
+        if (this._rows.length === 0) return new hisonCore.data.DataModel<T>([]);
+
         const sRow = this._getValidRowIndex(startRow);
-        if(sRow === 0 && endRow === null) return this.clone();
-        const eRow = endRow ? this._getValidRowIndex(endRow) : this._rows.length;
-        const result = [];
-        for(let i = sRow; i <= eRow; i++) {
-            if(!this._rows[i]) break;
+        if (sRow === 0 && endRow === null) return this.clone();
+        const eRow = endRow !== null ? this._getValidRowIndex(endRow) : this._rows.length - 1;
+
+        const result: T[] = [];
+        for (let i = sRow; i <= eRow; i++) {
             result.push(this._deepCopy(this._rows[i]));
         }
         return new hisonCore.data.DataModel<T>(result);
