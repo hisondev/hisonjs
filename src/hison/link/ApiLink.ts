@@ -38,13 +38,22 @@ export class ApiLink {
         }
         return { data : null, response: new Response() };
     };
-    private _getFetch = (methodName: string, requestPath: string, options: Record<string, any>, serviceCmd: string, requestData: any): Promise<any>[] => {
-        if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) { //1
+    private _getFetch = (
+    methodName: string,
+    requestPath: string,
+    options: Record<string, any>,
+    serviceCmd: string,
+    requestData: any
+    ): Promise<any>[] => {
+        if (serviceCmd && (requestData === null || requestData === undefined)) {
+            requestData = {};
+        }
+        if(requestData && requestData.getIsDataWrapper && requestData.getIsDataWrapper()) {
             if (serviceCmd) requestData.putString('cmd', serviceCmd);
             requestData = requestData.getSerialized();
-        } else if (requestData && requestData.getIsDataModel && requestData.getIsDataModel()){  //2
+        } else if (requestData && requestData.getIsDataModel && requestData.getIsDataModel()){
             requestData = requestData.getSerialized();
-        } else if (requestData && typeof requestData === 'object'){ //3
+        } else if (requestData && typeof requestData === 'object'){
             if (typeof requestData === 'string') {
                 try {
                     JSON.parse(requestData);
@@ -62,24 +71,29 @@ export class ApiLink {
                 requestData = JSON.stringify({ data: requestData });
             }
         }
+
         const fetchOptions: Record<string, any> = {
             method: methodName,
             headers: {'Content-Type': 'application/json'},
             body: requestData
         }
+
         if (options.constructor !== Object) {
             throw new Error('fetchOptions must be an object which contains key and value.');
         }
+
         let timeoutPromise = null;
         Object.keys(options).forEach(key => {
             if(key !== 'timeout') fetchOptions[key] = options[key];
         });
+
         if(options.timeout) {
             if (typeof options.timeout !== 'number' || options.timeout <= 0 || !Number.isInteger(options.timeout)) {
                 throw new Error('Timeout must be a positive integer.');
             }
             timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), options.timeout));
         }
+
         const fecthArr: Promise<any>[] = [fetch(requestPath, fetchOptions)];
         if(timeoutPromise) fecthArr.push(timeoutPromise);
         return fecthArr;
